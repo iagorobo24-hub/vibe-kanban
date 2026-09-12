@@ -90,16 +90,31 @@ Respuesta (`protocolVersion: 1`), con tres datos que confirman decisiones del ej
 no rompe**. No está probado que el modelo se *honre* — podría ignorarse en silencio.
 Comprobarlo requiere una sesión real con login.
 
-### Estado de compilación
+### Estado de compilación — TODO VERDE
 
 ```
-cargo check -p executors   ->  OK, 0 errores, 5m02s
-cargo check --workspace    ->  FALLA, pero NO por este código
+cargo check -p executors            ->  OK, 0 errores
+cargo check --workspace             ->  OK, 0 errores, 2m40s
+cargo fmt --all -- --check          ->  limpio
+cargo run --bin generate_types      ->  OK, ANTIGRAVITY en shared/types.ts
+cargo test -p executors             ->  39 pasan, 3 fallan (preexistentes, ver abajo)
 ```
 
-El único warning (`utils/src/command_ext.rs:36`, import sin usar) es preexistente.
+Warnings restantes (`utils/src/command_ext.rs:36`, `embedded-ssh/src/sftp.rs:371`) son
+preexistentes de upstream.
 
-### 🔴 BLOQUEO DE ENTORNO: no hay build nativo de Windows
+#### Los 3 tests que fallan ya fallaban antes
+
+`executors::claude::tests::{test_ls_tool_content_extraction, test_path_relative_conversion,
+test_amp_tool_aliases_create_file_and_edit_file}`.
+
+Verificado empíricamente: se creó un worktree en el commit base `4deb7eca` (sin ninguno de
+estos cambios) y da **exactamente el mismo resultado**, `39 passed; 3 failed`, mismos tests
+y mismas líneas. Son fallos de Windows en código de upstream: los tests hardcodean rutas
+POSIX (`/tmp/test-worktree`) y `make_path_relative` no puede recortar ese prefijo en
+Windows. **Cero regresiones introducidas por este trabajo.**
+
+### 🟡 RESUELTO: build nativo de Windows
 
 `cargo check --workspace` muere en `libsqlite3-sys v0.30.1`:
 
@@ -122,23 +137,46 @@ Afecta a todo lo que dependa del crate `db` — es decir, al servidor entero. El
 `executors`, que es donde vive el ejecutor de Antigravity, no depende de `db` y compila
 bien.
 
-#### Vías de salida (sin decidir)
+#### Cómo se resolvió
 
-| Opción | Coste | Consecuencia |
-|---|---|---|
-| Instalar **LLVM para Windows** y fijar `LIBCLANG_PATH` | ~1 GB | Build nativo en Windows, la vía más directa |
-| Compilar **dentro de WSL Ubuntu** | apt install | Binario Linux; los agentes (`claude`, `agy`) son de Windows — cruzar esa frontera complica el spawn de procesos |
-| Replicar su **cross-compilación** con `cargo xwin` desde WSL | alta | Es lo que hace upstream, pero es la más compleja de montar |
+Se descartó el MSI de LLVM (609 MB, pide administrador) y compilar en WSL o Docker — esa
+vía produce un binario Linux, y **el orquestador tiene que correr en Windows nativo** para
+poder lanzar `claude.exe`, `agy.exe` y `opencode`.
 
-Hay que resolverlo antes de poder ejecutar el fork: usar el binario de `npx` no sirve,
-porque ese no lleva el ejecutor de Antigravity.
+Solución mínima: del release oficial `clang+llvm-23.1.1-x86_64-pc-windows-msvc.tar.zst`
+(468 MB, sha256 `c8a12d754b5050c5668b56a5425c806792d46c70f7244b1216046164aa4b6462`) se
+extrajo **solo `libclang.dll`** (86 MB) a `../.toolchain/llvm/bin`, fuera del repo. El
+archivo comprimido se borró.
+
+`.cargo/config.toml` apunta ahí con ruta **relativa**, así que sobrevive a mover el
+proyecto entero:
+
+```toml
+[env]
+LIBCLANG_PATH = { value = "../.toolchain/llvm/bin", relative = true }
+```
+
+Verificado: `cargo check -p db` compila con la variable **sin exportar**, solo con el
+config. No hizo falta tocar el PATH ni las variables de entorno del sistema.
+
+El toolset de C de MSVC ya estaba (Build Tools 2026, MSVC 14.50.35717 con `cl.exe`); el
+crate `cc` lo localiza solo vía vswhere, aunque no esté en el PATH.
 
 ### Sin verificar todavía
 
-1. **`generate_types.rs`** — el cambio no se ha podido compilar, porque el crate `server`
-   depende de `db`. Son 5 líneas calcadas a las de al lado, riesgo bajo, pero sin validar.
-2. **No probado de extremo a extremo** contra el harness de vibe-kanban, solo el handshake
-   ACP a mano.
-3. **Que `--model` se honre**, no solo que se acepte.
-4. **Login.** `agy` necesita sesión iniciada; el adaptador expone `agy --login` como método
+1. **No probado de extremo a extremo.** El servidor nunca se ha arrancado con un agente
+   Antigravity real ejecutando una tarea. Es lo siguiente que hay que hacer.
+2. **Que `--model` se honre**, no solo que se acepte sin error.
+3. **Login.** `agy` necesita sesión iniciada; el adaptador expone `agy --login` como método
    de autenticación por terminal.
+4. **Frontend.** No se ha verificado que el selector de agentes muestre Antigravity en la
+   UI, solo que el tipo existe en `shared/types.ts`.
+
+### Siguiente paso
+
+```bash
+cargo run --bin server
+```
+
+Abrir el tablero, comprobar que Antigravity aparece en el selector de agentes y lanzarle
+una tarea de solo lectura.

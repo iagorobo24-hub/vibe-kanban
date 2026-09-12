@@ -23,3 +23,13 @@ rustflags = ["-C", "link-arg=/DEBUG:FASTLINK"]
 
 [target.aarch64-pc-windows-msvc]
 rustflags = ["-C", "link-arg=/DEBUG:FASTLINK"]
+
+# --- fork iago ---
+# libsqlite3-sys usa bindgen, que necesita libclang.dll. No viene con Visual Studio
+# Build Tools salvo marcando "C++ Clang tools for Windows", y upstream no compila en
+# Windows nativo (su CI cross-compila desde Ubuntu). Extraemos solo esa DLL del release
+# oficial de LLVM a ../.toolchain/llvm/bin.
+# `relative = true` resuelve la ruta desde el directorio padre de .cargo, asi que esto
+# sigue funcionando si mueves el proyecto entero.
+[env]
+LIBCLANG_PATH = { value = "../.toolchain/llvm/bin", relative = true }

@@ -34,10 +34,8 @@ use crate::{
 };
 
 /// Ruido de arranque del adaptador que no aporta nada al log del usuario.
-const SUPPRESSED_STDERR_PATTERNS: &[&str] = &[
-    "logging before google.Init",
-    "Fetching available models...",
-];
+const SUPPRESSED_STDERR_PATTERNS: &[&str] =
+    &["logging before google.Init", "Fetching available models..."];
 
 #[derive(Derivative, Clone, Serialize, Deserialize, TS, JsonSchema)]
 #[derivative(Debug, PartialEq)]
@@ -140,11 +138,7 @@ impl StandardCodingAgentExecutor for Antigravity {
 
     fn default_mcp_config_path(&self) -> Option<std::path::PathBuf> {
         // agy hereda el árbol de configuración de Gemini CLI.
-        dirs::home_dir().map(|home| {
-            home.join(".gemini")
-                .join("config")
-                .join("mcp_config.json")
-        })
+        dirs::home_dir().map(|home| home.join(".gemini").join("config").join("mcp_config.json"))
     }
 
     fn get_availability_info(&self) -> AvailabilityInfo {
