@@ -69,10 +69,76 @@ controlador en vez de a stdout: el adaptador no usa el modo print.
 - **Modelos** extraídos de `agy models` con el CLI 1.2.2. Por defecto
   `gemini-3.1-pro-high`.
 
+### Verificado contra el adaptador real (`agy-acp` 0.5.2, Apache-2.0)
+
+Handshake ACP ejecutado a mano:
+
+```sh
+printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1,"clientCapabilities":{}}}' \
+  | npx -y agy-acp
+```
+
+Respuesta (`protocolVersion: 1`), con tres datos que confirman decisiones del ejecutor:
+
+| Lo que responde | Qué valida |
+|---|---|
+| `sessionCapabilities.fork: {}` | `BaseAgentCapability::SessionFork` es correcto |
+| `mcpCapabilities: {http: false, sse: false}` | **solo MCP por stdio** — refuerza `Passthrough`; los servidores MCP HTTP no funcionarán por esta vía, independientemente del adaptador elegido |
+| `authMethods: [agy-login]` | el login es un flujo de terminal (`agy --login`), no algo que el ejecutor deba gestionar |
+
+`npx -y agy-acp --model gemini-3.1-pro-high` arranca limpio, exit 0 y sin stderr: **el flag
+no rompe**. No está probado que el modelo se *honre* — podría ignorarse en silencio.
+Comprobarlo requiere una sesión real con login.
+
+### Estado de compilación
+
+```
+cargo check -p executors   ->  OK, 0 errores, 5m02s
+cargo check --workspace    ->  FALLA, pero NO por este código
+```
+
+El único warning (`utils/src/command_ext.rs:36`, import sin usar) es preexistente.
+
+### 🔴 BLOQUEO DE ENTORNO: no hay build nativo de Windows
+
+`cargo check --workspace` muere en `libsqlite3-sys v0.30.1`:
+
+```
+Unable to find libclang: "couldn't find any valid shared libraries matching:
+['clang.dll', 'libclang.dll'], set the `LIBCLANG_PATH` environment variable"
+```
+
+`libsqlite3-sys` usa **bindgen**, que necesita `libclang.dll`. No está instalado en esta
+máquina, y no viene con Visual Studio Build Tools 2026 salvo que se marque el componente
+"C++ Clang tools for Windows".
+
+**Esto no es un problema nuestro: upstream no soporta compilación nativa en Windows.**
+Su CI (`.github/workflows/pre-release.yml`) **cross-compila desde Ubuntu** con
+`cargo xwin --cross-compiler clang-cl`, tras instalar por apt
+`clang libclang-dev lld llvm nasm cmake ninja-build`. Los binarios de Windows que
+distribuyen por npm salen de ahí, no de un build en Windows.
+
+Afecta a todo lo que dependa del crate `db` — es decir, al servidor entero. El crate
+`executors`, que es donde vive el ejecutor de Antigravity, no depende de `db` y compila
+bien.
+
+#### Vías de salida (sin decidir)
+
+| Opción | Coste | Consecuencia |
+|---|---|---|
+| Instalar **LLVM para Windows** y fijar `LIBCLANG_PATH` | ~1 GB | Build nativo en Windows, la vía más directa |
+| Compilar **dentro de WSL Ubuntu** | apt install | Binario Linux; los agentes (`claude`, `agy`) son de Windows — cruzar esa frontera complica el spawn de procesos |
+| Replicar su **cross-compilación** con `cargo xwin` desde WSL | alta | Es lo que hace upstream, pero es la más compleja de montar |
+
+Hay que resolverlo antes de poder ejecutar el fork: usar el binario de `npx` no sirve,
+porque ese no lleva el ejecutor de Antigravity.
+
 ### Sin verificar todavía
 
-1. **No compilado.** Falta `cargo check` del workspace.
-2. **No probado de extremo a extremo.** No se ha lanzado `npx agy-acp` contra el harness.
-3. **Paso de `--model`.** El README de `agy-acp` mapea su opción `model` al flag `--model`
-   de agy; no está confirmado que lo acepte como argumento de línea de comandos en vez de
-   como parámetro de sesión ACP. Si falla, el ajuste es en `build_command_builder()`.
+1. **`generate_types.rs`** — el cambio no se ha podido compilar, porque el crate `server`
+   depende de `db`. Son 5 líneas calcadas a las de al lado, riesgo bajo, pero sin validar.
+2. **No probado de extremo a extremo** contra el harness de vibe-kanban, solo el handshake
+   ACP a mano.
+3. **Que `--model` se honre**, no solo que se acepte.
+4. **Login.** `agy` necesita sesión iniciada; el adaptador expone `agy --login` como método
+   de autenticación por terminal.
