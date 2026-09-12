@@ -236,11 +236,57 @@ VK_SHARED_API_BASE=http://localhost:3000   # y se arranca el server local con es
 nombre a secas —misma convención que GestionaB2B— aterrizan ahí solos. No hacen falta
 `driver_opts` ni bind mounts.
 
-### Bloqueo actual
+### Estado: FUNCIONANDO
 
-Docker Desktop 4.90.0 está abierto pero el daemon no arranca: hay una ventana
-`app://dd/error-dialog` esperando desde las 18:52 y `com.docker.service` está parado.
-Arrancar ese servicio exige elevación. **Lo tiene que desbloquear el usuario.**
+```
+remote-db       Up (healthy)   0.0.0.0:5433->5432/tcp
+remote-server   Up (healthy)   127.0.0.1:3000->8081/tcp
+electric        Up (healthy)
+```
+
+`GET localhost:3000/v1/auth/methods` → `{"local_auth_enabled":true,"oauth_providers":[]}`
+
+El log de arranque confirma la auditoría de telemetría, sin tocar nada:
+
+```
+LOOPS_EMAIL_API_KEY not set. Email notifications will be disabled.
+PostHog analytics not configured
+Billing provider not configured
+GitHub App not configured
+```
+
+El servidor local arranca ahora con `Remote client initialized with URL: http://localhost:3000`
+en vez de `VK_SHARED_API_BASE not set`.
+
+### Tres tropiezos del montaje, y cómo se resolvieron
+
+1. **`ssh: [default]` en el build.** El compose pedía agente SSH para acceder a
+   `BloopAI/vibe-kanban-private`, de donde sale el paquete `billing`. Es
+   `optional = true` y solo entra vía `FEATURES`, que dejamos vacío, así que el requisito
+   se comentó en `docker-compose.yml`. **Confirmado: el build compila sin esa dependencia
+   privada.** Un `docker-compose.override.yml` no sirve — compose responde
+   `cannot override services.remote-server.build.ssh`.
+2. **`VIBEKANBAN_REMOTE_JWT_SECRET` debe ser base64 *estándar*** que decodifique a ≥32
+   bytes (`validate_jwt_secret` en `src/config.rs:448`). Un `token_urlsafe` de Python
+   falla, porque usa `-` y `_`.
+3. **`ELECTRIC_ROLE_PASSWORD` va dentro de una URI de Postgres**
+   (`postgresql://electric_sync:${...}@remote-db:5432/remote`). Con símbolos como `@`,
+   `#`, `+` o `=` Electric muere con *"invalid or missing username"*. Debe ser
+   alfanumérica.
+
+### Cómo entrar
+
+El login está en **http://localhost:3000** — formulario de email y contraseña, sin OAuth.
+Las credenciales están en `.env.remote` (`SELF_HOST_LOCAL_AUTH_EMAIL` / `_PASSWORD`).
+
+### Nota sobre Docker Desktop
+
+Si el daemon no arranca y el log muestra `Error 1920` al renombrar ficheros `.sock`, son
+sockets AF_UNIX huérfanos que Windows no deja borrar. No hace falta *"Reset to factory
+defaults"* — eso borraría todas las imágenes y volúmenes. Basta con renombrar el
+directorio padre (`%LOCALAPPDATA%\Docker\run`, `%LOCALAPPDATA%\docker-secrets-engine`) y
+reiniciar. Si el problema reaparece sobre ficheros recién creados, reiniciar Windows lo
+resuelve.
 
 ---
 
