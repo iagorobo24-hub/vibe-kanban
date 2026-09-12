@@ -274,10 +274,61 @@ en vez de `VK_SHARED_API_BASE not set`.
    `#`, `+` o `=` Electric muere con *"invalid or missing username"*. Debe ser
    alfanumérica.
 
-### Cómo entrar
+### ⚠️ El relay va en un perfil aparte, y sin él no hay conexión al host
 
-El login está en **http://localhost:3000** — formulario de email y contraseña, sin OAuth.
-Las credenciales están en `.env.remote` (`SELF_HOST_LOCAL_AUTH_EMAIL` / `_PASSWORD`).
+`relay-server` está bajo `profiles: ["relay"]`, así que **un `up -d` normal no lo
+levanta**. Sin él, el backend muestra los proyectos pero no puede emparejarse con tu
+máquina: en ajustes pide conectarse a un host y no lo consigue.
+
+```bash
+docker compose --env-file .env.remote --profile relay up -d --build
+```
+
+Escucha en `127.0.0.1:8082`, que es donde el frontend lo busca
+(`VITE_RELAY_API_BASE_URL`). Comprobar con `curl localhost:8082/health` → 200.
+
+### Cómo arrancar el conjunto
+
+```bash
+# 1. backend remoto, CON el perfil relay
+cd crates/remote
+docker compose --env-file .env.remote --profile relay up -d
+
+# 2. servidor local, apuntando a las dos piezas
+cd ../..
+PORT=8420 HOST=127.0.0.1 \
+  VK_SHARED_API_BASE=http://localhost:3000 \
+  VK_SHARED_RELAY_API_BASE=http://localhost:8082 \
+  ./target/debug/server.exe
+```
+
+### Hay DOS interfaces, y hay que entrar en las dos
+
+| URL | Qué es | Para qué |
+|---|---|---|
+| `localhost:3000` | Web del backend remoto | Proyectos, organizaciones, tableros kanban |
+| `localhost:8420` | App local | Agentes, workspaces, worktrees |
+
+**Iniciar sesión en el 3000 no autentica el 8420.** Son sesiones separadas. Si solo entras
+en el 3000, verás los proyectos pero sin ningún host conectado, porque tu máquina —que es
+el host— no se ha emparejado. Hay que entrar también desde el 8420: icono de cuenta abajo
+a la izquierda → *Iniciar sesión* → *Sign in with email*.
+
+Credenciales en `.env.remote` (`SELF_HOST_LOCAL_AUTH_EMAIL` / `_PASSWORD`). Ojo: ese
+fichero está en `.gitignore`, y editores como VS Code o Cursor lo **ocultan** del árbol de
+ficheros. Ábrelo por ruta o con `cat crates/remote/.env.remote`.
+
+### Selector de carpetas
+
+El servidor local ya expone `/api/filesystem/directory` y `/api/filesystem/git-repos`, y el
+frontend los usa en el botón **"Explorar"**: es un navegador de carpetas propio, dentro de
+la web.
+
+El explorador **nativo** de Windows no se puede abrir desde una página web — los
+navegadores no permiten que una web obtenga rutas reales del disco. Dos vías si se quiere
+nativo: la app de escritorio en `crates/tauri-app`, o añadir al servidor local un endpoint
+que lance un diálogo nativo (crate `rfd`), aprovechando que el servidor corre en la propia
+máquina. La segunda es pequeña y encaja con el resto de la arquitectura.
 
 ### Nota sobre Docker Desktop
 
