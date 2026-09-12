@@ -21,6 +21,19 @@ variables las deja muertas por construcción.**
 `remote_info.get_api_base()` devuelve `None` sin `VK_SHARED_API_BASE`, y entonces el
 cliente remoto queda en `RemoteClientNotConfigured`.
 
+### 🟡 Telemetría en tiempo de COMPILACIÓN (descubierta al construir el frontend)
+
+`pnpm run build` en `packages/local-web` ejecuta **`sentry-vite-plugin`**, que intenta subir
+source maps a Sentry. Sin token falla y el build continúa:
+
+```
+error: Auth token is required for this request. Please run `sentry-cli login`
+```
+
+No se sube nada sin `SENTRY_AUTH_TOKEN`, igual que el resto: apagado por defecto en un
+build propio. Pero conviene saber que **existe una llamada saliente en el build del
+frontend**, no solo en runtime. Si molesta, se quita del `vite.config.ts`.
+
 ### Lo que NO es telemetría
 
 - **`PrMonitorService`** (`crates/services/src/services/pr_monitor.rs`) sondea cada 60 s,
@@ -57,6 +70,16 @@ controlador en vez de a stdout: el adaptador no usa el modo print.
 | `crates/executors/src/mcp_config.rs` | adaptador MCP `Passthrough` |
 | `crates/server/src/bin/generate_types.rs` | declaración TS + JSON schema |
 | `crates/executors/default_profiles.json` | perfil `ANTIGRAVITY` por defecto |
+| `packages/web-core/src/shared/components/AgentIcon.tsx` | nombre e icono en la UI |
+| `packages/public/agents/antigravity-{light,dark}.svg` | **nuevos** — icono propio |
+
+> El fichero de la UI se me pasó en la primera pasada: busqué puntos de registro en
+> `frontend/src`, que en este repo no existe — el código vive en `packages/`. Lo cazó el
+> compilador de TypeScript, porque `getAgentName` tiene un `switch` exhaustivo sin
+> `default` y añadir un agente al enum lo rompe.
+>
+> Los iconos son un **marcador de posición neutro** (flecha ascendente en un círculo), no
+> una reproducción de la marca de Google.
 
 ### Decisiones
 
