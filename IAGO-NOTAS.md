@@ -195,11 +195,60 @@ crate `cc` lo localiza solo vía vswhere, aunque no esté en el PATH.
 4. **Frontend.** No se ha verificado que el selector de agentes muestre Antigravity en la
    UI, solo que el tipo existe en `shared/types.ts`.
 
-### Siguiente paso
+---
+
+## Backend remoto autoalojado (tableros kanban)
+
+### Por qué hace falta
+
+La app tiene **dos backends**. El local (`server.exe`) ejecuta los agentes y los
+workspaces. El remoto (`crates/remote`) lleva cuentas, proyectos y **los tableros
+kanban** — normalmente en los servidores de BloopAI. Por eso el tablero pide iniciar
+sesión: no es una función apagada, es una función que vive en otra máquina.
+
+Bloop cerró el 10 de abril de 2026. Su API alojada aún responde
+(`/v1/health` → `{"status":"ok","version":"0.1.27"}`) pero está **17 versiones por
+detrás** de este código, nadie la mantiene y no hay comprobación de compatibilidad en el
+cliente. Autoalojar es la única opción sensata.
+
+### Configuración
+
+Del compose solo **una variable es obligatoria**: `VIBEKANBAN_REMOTE_JWT_SECRET`. Todo lo
+demás tiene defecto, y **la telemetría viene vacía de fábrica** (`POSTHOG_*`,
+`SENTRY_DSN_REMOTE`, `LOOPS_EMAIL_API_KEY`, `STRIPE_*`).
+
+`crates/remote/.env.remote` está escrito con secretos generados al azar y **lo ignora git**
+(`.gitignore` línea 19). Usa la vía de autenticación local (`SELF_HOST_LOCAL_AUTH_EMAIL` /
+`_PASSWORD`, implementada en `src/auth/local.rs`), así que **no hace falta registrar una
+GitHub App ni OAuth de Google**. La contraseña generada está en ese fichero.
+
+El servidor escucha en `127.0.0.1:3000` — solo localhost, nada expuesto.
+
+```bash
+pnpm run remote:dev                        # levanta postgres + electric + remote-server
+VK_SHARED_API_BASE=http://localhost:3000   # y se arranca el server local con esto
+```
+
+### Almacenamiento en disco
+
+**No requiere configuración.** `C:\Users\iagui\AppData\Local\Docker\wsl` es un *junction* a
+`E:\Dev\Docker\wsl`, así que el data root de Docker ya resuelve a E. Los volúmenes con
+nombre a secas —misma convención que GestionaB2B— aterrizan ahí solos. No hacen falta
+`driver_opts` ni bind mounts.
+
+### Bloqueo actual
+
+Docker Desktop 4.90.0 está abierto pero el daemon no arranca: hay una ventana
+`app://dd/error-dialog` esperando desde las 18:52 y `com.docker.service` está parado.
+Arrancar ese servicio exige elevación. **Lo tiene que desbloquear el usuario.**
+
+---
+
+## Siguiente paso
 
 ```bash
 cargo run --bin server
 ```
 
 Abrir el tablero, comprobar que Antigravity aparece en el selector de agentes y lanzarle
-una tarea de solo lectura.
+una tarea de solo lectura. Para los tableros kanban, además, `pnpm run remote:dev`.
