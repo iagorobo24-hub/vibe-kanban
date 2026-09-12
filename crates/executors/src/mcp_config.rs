@@ -397,7 +397,13 @@ impl CodingAgent {
         use Adapter::*;
 
         let adapter = match self {
-            CodingAgent::ClaudeCode(_) | CodingAgent::Amp(_) | CodingAgent::Droid(_) => Passthrough,
+            // agy acepta `mcpServers` con command/args tal cual. No usamos el adaptador
+            // Gemini porque ese reescribe `url` -> `httpUrl`, mientras que agy espera
+            // `serverUrl` para transporte HTTP.
+            CodingAgent::ClaudeCode(_)
+            | CodingAgent::Amp(_)
+            | CodingAgent::Droid(_)
+            | CodingAgent::Antigravity(_) => Passthrough,
             CodingAgent::QwenCode(_) | CodingAgent::Gemini(_) => Gemini,
             CodingAgent::CursorAgent(_) => Cursor,
             CodingAgent::Codex(_) => Codex,
