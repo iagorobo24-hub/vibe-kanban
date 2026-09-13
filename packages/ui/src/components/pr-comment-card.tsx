@@ -78,9 +78,11 @@ function CompactCard({
   const displayText = isReview && path ? `${path}: ${body}` : body;
 
   return (
-    <span
+    <button
+      type="button"
       className={cn(
         'inline-flex items-center gap-1.5 py-0.5 bg-muted rounded border align-middle cursor-pointer border-border hover:border-muted-foreground max-w-[300px]',
+        'border-0 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
         className
       )}
       onClick={onClick}
@@ -89,12 +91,15 @@ function CompactCard({
       tabIndex={0}
       title={`@${author}: ${body}\n\n${t('prComments.card.tooltip')}`}
     >
-      <Icon className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+      <Icon
+        className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0"
+        aria-hidden="true"
+      />
       <span className="text-xs font-medium flex-shrink-0">@{author}</span>
       <span className="text-xs text-muted-foreground truncate">
         {truncateBody(displayText, 50)}
       </span>
-    </span>
+    </button>
   );
 }
 

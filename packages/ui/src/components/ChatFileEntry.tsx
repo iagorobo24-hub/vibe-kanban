@@ -152,7 +152,6 @@ export function ChatFileEntry({
             </div>
           )}
           {openInChangesButton}
-          {/* Diff body - shown when expanded */}
         </div>
 
         {/* Diff body - shown when expanded */}
