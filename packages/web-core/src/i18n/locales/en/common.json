@@ -543,6 +543,14 @@
     "remoteAuthUnavailable": "Remote authentication is temporarily unavailable. Some remote features may not work until it recovers."
   },
   "appBar": {
+    "local": "Local",
+    "localWorkspaces": "Local workspaces",
+    "remote": "Remote",
+    "pairRemoteDevice": "Pair a remote device",
+    "createProject": "Create project",
+    "projects": "Projects",
+    "export": "Export",
+    "exportData": "Export data",
     "kanban": {
       "tooltip": "Sign in to view projects",
       "title": "Kanban Boards",
