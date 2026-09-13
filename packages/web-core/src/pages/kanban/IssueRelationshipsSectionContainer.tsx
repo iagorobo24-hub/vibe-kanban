@@ -85,14 +85,18 @@ export function IssueRelationshipsSectionContainer({
   const headerExtra = (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <span
-          role="button"
-          tabIndex={0}
-          className="text-low hover:text-normal"
+        <button
+          type="button"
+          aria-label="Añadir relación"
+          className="rounded-sm p-0.5 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           onClick={(e) => e.stopPropagation()}
         >
-          <PlusIcon className="size-icon-xs" weight="bold" />
-        </span>
+          <PlusIcon
+            aria-hidden="true"
+            className="size-icon-xs"
+            weight="bold"
+          />
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem

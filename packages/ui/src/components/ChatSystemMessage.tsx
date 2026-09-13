@@ -15,15 +15,19 @@ export function ChatSystemMessage({
   onToggle,
 }: ChatSystemMessageProps) {
   return (
-    <div
+    <button
+      type="button"
       className={cn(
-        'flex items-start gap-base text-sm text-low cursor-pointer',
+        'flex w-full items-start gap-base border-0 bg-transparent p-0 text-left text-sm text-low cursor-pointer',
         className
       )}
       onClick={onToggle}
-      role="button"
+      aria-expanded={expanded}
     >
-      <InfoIcon className="shrink-0 size-icon-base pt-0.5" />
+      <InfoIcon
+        aria-hidden="true"
+        className="shrink-0 size-icon-base pt-0.5"
+      />
       <span
         className={cn(
           !expanded && 'truncate',
@@ -32,6 +36,6 @@ export function ChatSystemMessage({
       >
         {content}
       </span>
-    </div>
+    </button>
   );
 }

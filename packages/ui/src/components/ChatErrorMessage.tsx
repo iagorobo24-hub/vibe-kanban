@@ -15,15 +15,19 @@ export function ChatErrorMessage({
   onToggle,
 }: ChatErrorMessageProps) {
   return (
-    <div
+    <button
+      type="button"
       className={cn(
-        'flex items-start gap-base text-sm text-error cursor-pointer',
+        'flex w-full items-start gap-base border-0 bg-transparent p-0 text-left text-sm text-error cursor-pointer',
         className
       )}
       onClick={onToggle}
-      role="button"
+      aria-expanded={expanded}
     >
-      <WarningCircleIcon className="shrink-0 size-icon-base pt-0.5" />
+      <WarningCircleIcon
+        aria-hidden="true"
+        className="shrink-0 size-icon-base pt-0.5"
+      />
       <span
         className={cn(
           !expanded && 'truncate',
@@ -32,6 +36,6 @@ export function ChatErrorMessage({
       >
         {content}
       </span>
-    </div>
+    </button>
   );
 }
