@@ -7,10 +7,13 @@ import { useUserSystem } from '@/shared/hooks/useUserSystem';
  * empty or indefinitely loading result.
  */
 export function useRemoteAuthAvailability() {
-  const { remoteAuthDegraded } = useUserSystem();
+  const { loading, remoteAuthDegraded } = useUserSystem();
 
   return {
     remoteAuthDegraded,
-    isRemoteAuthAvailable: !remoteAuthDegraded,
+    // Do not let remote subscriptions race the initial /api/info load. The
+    // local plane must finish establishing its capabilities before callers
+    // can decide whether the optional remote plane is usable.
+    isRemoteAuthAvailable: !loading && !remoteAuthDegraded,
   };
 }
