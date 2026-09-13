@@ -315,7 +315,7 @@ export function LandingPage() {
 
   if (loading || !config || !initialized) {
     return (
-      <div className="h-screen bg-primary flex items-center justify-center">
+      <div className="agentos-theme agentos-page-shell h-screen bg-primary flex items-center justify-center">
         <p className="text-low">Loading...</p>
       </div>
     );
@@ -326,16 +326,16 @@ export function LandingPage() {
   }
 
   return (
-    <div className="h-screen bg-primary flex items-center justify-center p-double">
+    <div className="agentos-theme agentos-onboarding-landing h-screen bg-primary flex items-center justify-center p-double">
       {isTauriApp() && (
         <div
           data-tauri-drag-region
           className="fixed inset-x-0 top-0 h-10 z-10"
         />
       )}
-      <div className="flex max-h-full w-full max-w-5xl flex-col rounded-sm border border-border bg-secondary">
+      <div className="agentos-onboarding-landing__card flex max-h-full w-full max-w-5xl flex-col rounded-sm border border-border bg-secondary">
         {/* Header */}
-        <header className="shrink-0 space-y-base p-double pb-base">
+        <header className="agentos-onboarding-landing__header shrink-0 space-y-base p-double pb-base">
           <div className="flex items-center justify-between">
             <img src={logoSrc} alt="Vibe Kanban" className="h-8 w-auto logo" />
             <div className="flex flex-wrap items-center gap-2">
@@ -350,7 +350,7 @@ export function LandingPage() {
               ))}
             </div>
           </div>
-          <div className="rounded-sm border border-brand bg-brand/20 p-base">
+          <div className="agentos-onboarding-landing__warning rounded-sm border border-brand bg-brand/20 p-base">
             <div className="flex items-start gap-base">
               <WarningIcon
                 className="size-icon-sm text-brand shrink-0 mt-[2px]"
@@ -376,8 +376,8 @@ export function LandingPage() {
         </header>
 
         {/* 3-column grid */}
-        <div className="min-h-0 flex-1 overflow-y-auto px-double pb-double">
-          <div className="grid grid-cols-3 gap-double">
+        <div className="agentos-onboarding-landing__content min-h-0 flex-1 overflow-y-auto px-double pb-double">
+          <div className="agentos-onboarding-landing__grid grid grid-cols-3 gap-double">
             {/* Column 1: Coding Agent */}
             <section className="space-y-half">
               <h2 className="text-sm font-medium text-high">Coding Agent</h2>
@@ -391,7 +391,7 @@ export function LandingPage() {
                       type="button"
                       onClick={() => setSelectedAgent(agent)}
                       className={cn(
-                        'flex items-center gap-base rounded-sm border px-base py-half text-left',
+                        'agentos-onboarding-option flex items-center gap-base rounded-sm border px-base py-half text-left',
                         selected
                           ? 'border-brand bg-brand/10'
                           : 'border-border bg-panel hover:bg-primary'
@@ -429,7 +429,7 @@ export function LandingPage() {
                       type="button"
                       onClick={() => setEditorType(editor)}
                       className={cn(
-                        'flex items-center gap-base rounded-sm border px-base py-half text-left',
+                        'agentos-onboarding-option flex items-center gap-base rounded-sm border px-base py-half text-left',
                         selected
                           ? 'border-brand bg-brand/10'
                           : 'border-border bg-panel hover:bg-primary'
@@ -492,7 +492,7 @@ export function LandingPage() {
                       type="button"
                       onClick={() => handleSoundSelect(option.value)}
                       className={cn(
-                        'flex items-center gap-base rounded-sm border px-base py-half text-left',
+                        'agentos-onboarding-option flex items-center gap-base rounded-sm border px-base py-half text-left',
                         selected
                           ? 'border-brand bg-brand/10'
                           : 'border-border bg-panel hover:bg-primary'
@@ -521,7 +521,7 @@ export function LandingPage() {
                   type="button"
                   onClick={() => setSoundEnabled(false)}
                   className={cn(
-                    'flex items-center gap-base rounded-sm border px-base py-half text-left',
+                    'agentos-onboarding-option flex items-center gap-base rounded-sm border px-base py-half text-left',
                     !soundEnabled
                       ? 'border-brand bg-brand/10'
                       : 'border-border bg-panel hover:bg-primary'
@@ -548,7 +548,7 @@ export function LandingPage() {
         </div>
 
         {/* Footer */}
-        <div className="shrink-0 border-t border-border p-double pt-base flex items-center justify-between gap-base">
+        <div className="agentos-onboarding-landing__footer shrink-0 border-t border-border p-double pt-base flex items-center justify-between gap-base">
           <p className="text-xs text-low">
             By continuing you agree to the{' '}
             <a

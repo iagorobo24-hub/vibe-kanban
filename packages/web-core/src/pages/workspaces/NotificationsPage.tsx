@@ -97,7 +97,7 @@ export function NotificationsPage() {
 
   if (!enabled) {
     return (
-      <div className="agentos-page-shell flex items-center justify-center h-full text-low">
+      <div className="agentos-theme agentos-page-shell flex items-center justify-center h-full text-low">
         Sign in to view notifications
       </div>
     );
@@ -105,13 +105,13 @@ export function NotificationsPage() {
 
   return (
     <div className="agentos-notifications-page flex flex-col h-full overflow-hidden">
-      <div className="flex items-center justify-between px-double py-base border-b border-border">
+      <div className="agentos-notifications-page__header flex items-center justify-between px-double py-base border-b border-border">
         <h1 className="text-xl font-medium text-high">Notifications</h1>
         {unseenCount > 0 && (
           <button
             type="button"
             onClick={handleMarkAllSeen}
-            className="flex items-center gap-1 px-base py-half text-sm text-low hover:text-normal transition-colors cursor-pointer"
+            className="agentos-notifications-page__mark-all flex items-center gap-1 px-base py-half text-sm text-low hover:text-normal transition-colors cursor-pointer"
           >
             <ChecksIcon size={16} />
             Mark all as read
@@ -121,7 +121,7 @@ export function NotificationsPage() {
 
       <div className="agentos-notifications-page__list flex-1 overflow-y-auto">
         {groupedNotifications.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full gap-2 text-low">
+          <div className="agentos-notifications-page__empty flex flex-col items-center justify-center h-full gap-2 text-low">
             <BellIcon size={32} weight="light" />
             <p className="text-base">No notifications yet</p>
           </div>
@@ -140,7 +140,7 @@ export function NotificationsPage() {
                   }
                 }}
                 className={cn(
-                  'w-full flex items-center gap-base px-double py-base text-left transition-colors cursor-pointer outline-none',
+                  'agentos-notifications-page__row w-full flex items-center gap-base px-double py-base text-left transition-colors cursor-pointer outline-none',
                   'hover:bg-secondary',
                   'focus-visible:bg-secondary',
                   'focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand',
@@ -149,14 +149,14 @@ export function NotificationsPage() {
               >
                 <span
                   className={cn(
-                    'shrink-0 w-2 h-2 rounded-full',
+                    'agentos-notifications-page__unread-dot shrink-0 w-2 h-2 rounded-full',
                     !group.seen && 'bg-brand'
                   )}
                 />
                 <div className="flex-1 min-w-0">
                   <p
                     className={cn(
-                      'text-base truncate',
+                      'agentos-notifications-page__message text-base truncate',
                       group.seen ? 'text-normal' : 'text-high'
                     )}
                   >
@@ -165,7 +165,7 @@ export function NotificationsPage() {
                       membersByUserId={membersByUserId}
                     />
                   </p>
-                  <p className="text-sm text-low mt-0.5">
+                  <p className="agentos-notifications-page__time text-sm text-low mt-0.5">
                     {formatRelativeTime(group.latest.created_at)}
                   </p>
                 </div>
@@ -178,7 +178,7 @@ export function NotificationsPage() {
                     }}
                     onKeyDown={(e) => e.stopPropagation()}
                     className={cn(
-                      'shrink-0 inline-flex items-center gap-half rounded-sm px-half py-half text-sm text-low transition-colors cursor-pointer',
+                      'agentos-notifications-page__mark shrink-0 inline-flex items-center gap-half rounded-sm px-half py-half text-sm text-low transition-colors cursor-pointer',
                       'hover:bg-secondary hover:text-normal',
                       'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
                     )}

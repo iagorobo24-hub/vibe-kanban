@@ -49,10 +49,10 @@ export function ExportPage({
       : '/vibe-kanban-logo.svg';
 
   return (
-    <div className="agentos-page-shell h-full overflow-auto bg-primary">
-      <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
-        <div className="agentos-page-card rounded-sm border border-border bg-secondary p-double space-y-double">
-          <header className="space-y-double text-center">
+    <div className="agentos-theme agentos-export-page agentos-page-shell h-full overflow-auto bg-primary">
+      <div className="agentos-export-page__content mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
+        <div className="agentos-export-page__card agentos-page-card rounded-sm border border-border bg-secondary p-double space-y-double">
+          <header className="agentos-export-page__header space-y-double text-center">
             <div className="flex justify-center">
               <img
                 src={logoSrc}

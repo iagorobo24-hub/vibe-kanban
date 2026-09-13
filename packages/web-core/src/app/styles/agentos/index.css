@@ -1034,6 +1034,96 @@
   background-color: var(--agentos-panel);
 }
 
+.agentos-theme .agentos-notifications-page__header {
+  background: rgb(43 41 38 / 58%);
+}
+
+.agentos-theme .agentos-notifications-page__mark-all {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.25rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-notifications-page__mark-all:hover {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-notifications-page__row {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-notifications-page__row:hover,
+.agentos-theme .agentos-notifications-page__row:focus-visible {
+  background: var(--agentos-panel-raised);
+}
+
+.agentos-theme .agentos-notifications-page__message {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-notifications-page__time {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-notifications-page__mark {
+  border: 1px solid transparent;
+  min-height: 2.1rem;
+}
+
+.agentos-theme .agentos-export-page__card {
+  border-radius: var(--agentos-radius-md);
+}
+
+.agentos-theme .agentos-export-page__header {
+  border-bottom: 1px solid var(--agentos-border);
+  padding-bottom: 1.25rem;
+}
+
+.agentos-theme .agentos-onboarding-landing {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-onboarding-landing__card {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-theme .agentos-onboarding-landing__warning {
+  background: rgb(224 139 97 / 10%);
+  border-color: rgb(224 139 97 / 32%);
+}
+
+.agentos-theme .agentos-onboarding-option {
+  min-height: 3rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-onboarding-option:hover,
+.agentos-theme .agentos-onboarding-option:focus-visible {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border-strong);
+}
+
+.agentos-theme .agentos-onboarding-option:active {
+  transform: translateY(1px);
+}
+
+.agentos-theme .agentos-onboarding-landing__footer {
+  border-color: var(--agentos-border);
+}
+
 .agentos-theme [role='dialog'] {
   background-color: var(--agentos-panel);
   border-color: var(--agentos-border);
@@ -1198,6 +1288,46 @@
 
   .agentos-theme .agentos-kanban-card {
     margin-inline: 0.35rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing {
+    align-items: stretch;
+    padding: 0.75rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__card {
+    max-height: none;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__header,
+  .agentos-theme .agentos-onboarding-landing__content,
+  .agentos-theme .agentos-onboarding-landing__footer {
+    padding-inline: 1rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__footer button {
+    justify-content: center;
+  }
+
+  .agentos-theme .agentos-notifications-page__header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-inline: 1rem;
+  }
+
+  .agentos-theme .agentos-notifications-page__row {
+    padding-inline: 1rem;
   }
 }
 
