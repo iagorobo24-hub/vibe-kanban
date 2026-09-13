@@ -57,13 +57,33 @@ const ConfirmDialogImpl = NiceModal.create<ConfirmDialogProps>((props) => {
 
     switch (variant) {
       case 'destructive':
-        return <WarningIcon className={`${iconClass} text-destructive`} />;
+        return (
+          <WarningIcon
+            className={`${iconClass} text-destructive`}
+            aria-hidden="true"
+          />
+        );
       case 'info':
-        return <InfoIcon className={`${iconClass} text-blue-500`} />;
+        return (
+          <InfoIcon
+            className={`${iconClass} text-blue-500`}
+            aria-hidden="true"
+          />
+        );
       case 'success':
-        return <CheckCircleIcon className={`${iconClass} text-green-500`} />;
+        return (
+          <CheckCircleIcon
+            className={`${iconClass} text-green-500`}
+            aria-hidden="true"
+          />
+        );
       default:
-        return <XCircleIcon className={`${iconClass} text-muted-foreground`} />;
+        return (
+          <XCircleIcon
+            className={`${iconClass} text-muted-foreground`}
+            aria-hidden="true"
+          />
+        );
     }
   };
 

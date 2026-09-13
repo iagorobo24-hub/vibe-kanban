@@ -389,6 +389,7 @@ export function OnboardingSignInPage() {
                               <CheckIcon
                                 className="size-icon-xs text-success inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.yes')}
@@ -399,6 +400,7 @@ export function OnboardingSignInPage() {
                               <XIcon
                                 className="size-icon-xs text-warning inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.no')}
@@ -412,6 +414,7 @@ export function OnboardingSignInPage() {
                               <CheckIcon
                                 className="size-icon-xs text-success inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.yes')}
@@ -422,6 +425,7 @@ export function OnboardingSignInPage() {
                               <XIcon
                                 className="size-icon-xs text-warning inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.no')}

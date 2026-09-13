@@ -290,7 +290,7 @@ export function CreateModeRepoPickerBar({
                       title={`Remove ${repoDisplayName}`}
                       className={cn(repoRowButtonClassName, 'hover:text-error')}
                     >
-                      <XIcon className="size-icon-xs" weight="bold" />
+                      <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
                     </button>
                   </div>
                 );
@@ -390,7 +390,7 @@ export function CreateModeRepoPickerBar({
             className="shrink-0 text-low hover:text-normal"
             aria-label={t('createMode.repoPicker.setupHintDismiss')}
           >
-            <XIcon className="size-icon-2xs" weight="bold" />
+            <XIcon className="size-icon-2xs" weight="bold" aria-hidden="true" />
           </button>
         </div>
       )}

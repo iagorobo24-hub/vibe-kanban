@@ -39,7 +39,7 @@ export function ErrorAlert({
           aria-label={dismissLabel ?? 'Dismiss error'}
           className="absolute right-half top-half rounded-sm p-[2px] text-error/90 hover:bg-error/15 hover:text-error transition-colors"
         >
-          <XIcon className="size-icon-xs" weight="bold" />
+          <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
         </button>
       )}
     </div>

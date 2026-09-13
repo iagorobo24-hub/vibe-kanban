@@ -66,14 +66,29 @@ export function ChatSubagentEntry({
 
     if (isSuccess) {
       return (
-        <CheckCircleIcon className="size-icon-xs text-success" weight="fill" />
+        <CheckCircleIcon
+          className="size-icon-xs text-success"
+          weight="fill"
+          aria-hidden="true"
+        />
       );
     }
     if (isError) {
-      return <XCircleIcon className="size-icon-xs text-error" weight="fill" />;
+      return (
+        <XCircleIcon
+          className="size-icon-xs text-error"
+          weight="fill"
+          aria-hidden="true"
+        />
+      );
     }
     if (isPending) {
-      return <CircleNotchIcon className="size-icon-xs text-low animate-spin" />;
+      return (
+        <CircleNotchIcon
+          className="size-icon-xs text-low animate-spin"
+          aria-hidden="true"
+        />
+      );
     }
     return null;
   }, [status]);

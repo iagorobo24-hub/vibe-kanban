@@ -186,7 +186,7 @@ export function RetryEditorInline({
             <Paperclip className="h-3 w-3" />
           </Button>
           <Button variant="outline" onClick={onCancel} disabled={isSending}>
-            <X className="h-3 w-3 mr-1" />{' '}
+            <X className="h-3 w-3 mr-1" aria-hidden="true" />{' '}
             {t('buttons.cancel', { ns: 'common' })}
           </Button>
           <Button onClick={onSend} disabled={!canSend || isSending}>

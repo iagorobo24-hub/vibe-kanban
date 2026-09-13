@@ -97,7 +97,7 @@ export function KeyValueField({
             )}
             aria-label={`Remove ${key}`}
           >
-            <XIcon className="size-icon-xs" weight="bold" />
+          <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
           </button>
         </div>
       ))}

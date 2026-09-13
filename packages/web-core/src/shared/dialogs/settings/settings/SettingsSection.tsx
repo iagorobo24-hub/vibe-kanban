@@ -32,7 +32,7 @@ export function SettingsSection({
             onClick={onClose}
             className="rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
           >
-            <XIcon className="h-4 w-4 text-normal" weight="bold" />
+            <XIcon className="h-4 w-4 text-normal" weight="bold" aria-hidden="true" />
             <span className="sr-only">
               {t('buttons.close', { ns: 'common' })}
             </span>

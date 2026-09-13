@@ -256,7 +256,7 @@ export function CommandBar<
         {canGoBack && !search && (
           <CommandGroup>
             <CommandItem value="__back__" onSelect={onGoBack}>
-              <CaretLeftIcon className="h-4 w-4" weight="bold" />
+              <CaretLeftIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               <span>{t('commandBar.back')}</span>
             </CommandItem>
           </CommandGroup>

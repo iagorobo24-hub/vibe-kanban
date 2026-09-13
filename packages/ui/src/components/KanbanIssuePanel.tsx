@@ -290,7 +290,7 @@ export function KanbanIssuePanel({
             className="agentos-issue-panel__action p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
             aria-label={t("kanban.closePanel")}
           >
-            <XIcon className="size-icon-sm" weight="bold" />
+            <XIcon className="size-icon-sm" weight="bold" aria-hidden="true" />
           </button>
         </div>
       </div>

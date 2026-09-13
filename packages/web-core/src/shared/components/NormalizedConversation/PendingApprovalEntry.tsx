@@ -117,7 +117,7 @@ function ActionButtons({
             aria-label={isResponding ? 'Submitting denial' : 'Deny'}
             aria-busy={isResponding}
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>

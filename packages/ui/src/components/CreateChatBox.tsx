@@ -228,7 +228,7 @@ export function CreateChatBox<TExecutor extends string = string>({
                   className="inline-flex items-center text-low hover:text-error transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label={`Remove link to ${linkedIssue.simpleId}`}
                 >
-                  <XIcon className="size-icon-xs" weight="bold" />
+                  <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
                 </button>
               </div>
             </>

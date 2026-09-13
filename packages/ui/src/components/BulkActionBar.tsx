@@ -115,7 +115,7 @@ export function BulkActionBar({
               defaultValue: 'Clear selection',
             })}
           >
-            <XIcon className="size-icon-xs" weight="bold" />
+            <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
           </button>
         </Tooltip>
       </div>

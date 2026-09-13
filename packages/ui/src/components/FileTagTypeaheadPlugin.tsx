@@ -548,7 +548,7 @@ export function FileTagTypeaheadPlugin({
                         disabled={isChoosingRepo}
                       >
                         <span className="flex items-center gap-half">
-                          <GearIcon className="size-icon-xs" weight="bold" />
+                          <GearIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
                           <span>{repoCtaLabel}</span>
                         </span>
                       </TypeaheadMenu.Action>

@@ -71,7 +71,7 @@ export function IssueRelationshipsSection({
                   className="agentos-issue-relationship-row__remove p-half rounded-sm text-low hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100"
                   aria-label="Remove relationship"
                 >
-                  <XIcon className="size-icon-2xs" weight="bold" />
+                  <XIcon className="size-icon-2xs" weight="bold" aria-hidden="true" />
                 </button>
               )}
             </div>

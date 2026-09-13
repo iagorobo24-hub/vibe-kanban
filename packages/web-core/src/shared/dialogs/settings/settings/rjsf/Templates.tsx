@@ -130,7 +130,7 @@ export const ArrayFieldItemTemplate = (props: ArrayFieldItemTemplateProps) => {
           )}
           title="Remove item"
         >
-          <XIcon className="size-icon-xs" weight="bold" />
+          <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
         </button>
       )}
     </div>

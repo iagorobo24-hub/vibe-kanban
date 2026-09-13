@@ -311,7 +311,7 @@ function StatusRow({
               }
               disabled={!canDelete}
             >
-              <XIcon className="size-icon-xs" weight="bold" />
+              <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
             </button>
             <Switch
               checked={!status.hidden}
@@ -1324,7 +1324,7 @@ export function RemoteProjectsSettingsSection({
                         onClick={() => handleRemoveDefaultRepo(dr.repo_id)}
                         className="flex items-center justify-center size-icon-sm text-low hover:text-normal"
                       >
-                        <XIcon className="size-icon-xs" weight="bold" />
+                        <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
                       </button>
                     </div>
                   );

@@ -143,7 +143,7 @@ export function AppBarUserPopover({
                   className="sm:opacity-0 sm:group-hover:opacity-100 p-1 rounded hover:bg-secondary transition-opacity shrink-0"
                   aria-label={t('orgSwitcher.orgSettings')}
                 >
-                  <GearIcon className="size-icon-xs" weight="bold" />
+                  <GearIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
                 </button>
               )}
             </span>

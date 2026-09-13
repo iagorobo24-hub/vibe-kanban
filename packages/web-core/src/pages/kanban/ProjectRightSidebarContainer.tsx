@@ -126,7 +126,7 @@ function WorkspaceCreatePanel({
             className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
             aria-label="Close create workspace view"
           >
-            <XIcon className="size-icon-sm" weight="bold" />
+            <XIcon className="size-icon-sm" weight="bold" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -275,7 +275,7 @@ function WorkspaceSessionPanel({
                     className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
                     aria-label="Close conversation view"
                   >
-                    <XIcon className="size-icon-sm" weight="bold" />
+                    <XIcon className="size-icon-sm" weight="bold" aria-hidden="true" />
                   </button>
                 </div>
               </div>
