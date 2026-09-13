@@ -97,8 +97,21 @@ export function NotificationsPage() {
 
   if (!enabled) {
     return (
-      <div className="agentos-theme agentos-page-shell flex items-center justify-center h-full text-low">
-        Sign in to view notifications
+      <div
+        className="agentos-theme agentos-page-shell agentos-empty-state h-full"
+        role="status"
+        aria-labelledby="agentos-notifications-auth-title"
+      >
+        <BellIcon size={32} weight="light" aria-hidden="true" />
+        <h1
+          id="agentos-notifications-auth-title"
+          className="agentos-empty-state__title"
+        >
+          Notifications
+        </h1>
+        <p className="agentos-empty-state__description">
+          Sign in to view notifications from your agents and workspaces.
+        </p>
       </div>
     );
   }
@@ -121,9 +134,12 @@ export function NotificationsPage() {
 
       <div className="agentos-notifications-page__list flex-1 overflow-y-auto">
         {groupedNotifications.length === 0 ? (
-          <div className="agentos-notifications-page__empty flex flex-col items-center justify-center h-full gap-2 text-low">
+          <div className="agentos-notifications-page__empty agentos-empty-state h-full">
             <BellIcon size={32} weight="light" />
-            <p className="text-base">No notifications yet</p>
+            <p className="agentos-empty-state__title">No notifications yet</p>
+            <p className="agentos-empty-state__description">
+              Updates that need your attention will appear here.
+            </p>
           </div>
         ) : (
           <div className="divide-y divide-border">
