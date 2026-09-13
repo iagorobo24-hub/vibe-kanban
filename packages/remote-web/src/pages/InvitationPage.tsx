@@ -115,7 +115,7 @@ export default function InvitationPage() {
             <span className="font-medium text-high">
               {invitation.organization_name ?? invitation.organization_slug}
             </span>{" "}
-            on Vibe Kanban.
+            on AgentOS.
           </p>
         </header>
 

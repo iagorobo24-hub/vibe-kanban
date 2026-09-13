@@ -70,7 +70,7 @@ export default function LoginCompletePage() {
         <p className="text-sm text-normal mt-base">{error}</p>
         <button
           type="button"
-          className="mt-double w-full rounded-sm bg-brand px-base py-half text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover"
+          className="agentos-button agentos-button--primary mt-double w-full"
           onClick={() =>
             navigate({
               to: "/account",

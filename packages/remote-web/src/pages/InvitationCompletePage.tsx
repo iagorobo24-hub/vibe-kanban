@@ -79,7 +79,7 @@ export default function InvitationCompletePage() {
         <p className="mt-base text-sm text-normal">{error}</p>
         <button
           type="button"
-          className="mt-double w-full rounded-sm bg-brand px-base py-half text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover"
+          className="agentos-button agentos-button--primary mt-double w-full"
           onClick={() => {
             window.location.assign(retryPath);
           }}
@@ -100,7 +100,7 @@ export default function InvitationCompletePage() {
           href="https://www.vibekanban.com/docs/getting-started"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-double block w-full rounded-sm bg-brand px-base py-half text-center text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover"
+          className="agentos-button agentos-button--primary mt-double w-full"
         >
           Get started
         </a>

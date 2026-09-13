@@ -162,7 +162,7 @@ export default function HomePage() {
         <p className="mt-base text-sm text-normal">{displayError}</p>
         <button
           type="button"
-          className="mt-double rounded-sm bg-brand px-base py-half text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover"
+          className="agentos-button agentos-button--primary mt-double"
           onClick={() => {
             void handleSignInAgain();
           }}
@@ -190,7 +190,7 @@ export default function HomePage() {
                 <p className="text-sm text-low">No hosts linked yet</p>
                 <button
                   type="button"
-                  className="mt-base rounded-sm border border-border bg-primary px-base py-half text-sm font-medium text-normal hover:border-brand/60 hover:text-high"
+                  className="agentos-button agentos-button--secondary agentos-button--sm mt-base"
                   onClick={() => {
                     openRelaySettings();
                   }}
@@ -246,7 +246,7 @@ export default function HomePage() {
                 })}
                 <button
                   type="button"
-                  className="flex w-full items-center justify-center rounded-sm border border-dashed border-border px-base py-half text-sm text-low hover:border-brand/60 hover:text-normal"
+                  className="agentos-button agentos-button--ghost agentos-button--sm flex w-full"
                   onClick={() => {
                     openRelaySettings();
                   }}
