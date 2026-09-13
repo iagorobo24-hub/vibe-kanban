@@ -270,6 +270,9 @@ function SettingsDialogContent({
             // Desktop: fixed size with rounded corners
             'md:w-[900px] md:h-[700px] md:rounded-sm md:border md:border-border/50'
           )}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="agentos-settings-title"
         >
           {/* Sidebar - hidden on mobile when showing content */}
           <div
@@ -284,13 +287,18 @@ function SettingsDialogContent({
           >
             {/* Header */}
             <div className="p-4 border-b border-border flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-high">
+              <h2
+                id="agentos-settings-title"
+                className="text-lg font-semibold text-high"
+              >
                 {t('settings.layout.nav.title')}
               </h2>
-              {/* Close button - mobile only */}
+              {/* Close button */}
               <button
+                type="button"
                 onClick={handleCloseWithConfirmation}
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal md:hidden"
+                aria-label="Close settings"
+                className="agentos-icon-button p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
                 <XIcon className="size-icon-sm" weight="bold" />
               </button>
@@ -313,7 +321,9 @@ function SettingsDialogContent({
             {/* Mobile header with back button */}
             <div className="flex items-center gap-2 p-3 border-b border-border md:hidden">
               <button
+                type="button"
                 onClick={handleMobileBack}
+                aria-label="Back to settings navigation"
                 className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
                 <CaretLeftIcon className="size-icon-sm" weight="bold" />
@@ -322,7 +332,9 @@ function SettingsDialogContent({
                 {t(`settings.layout.nav.${activeSection}`)}
               </span>
               <button
+                type="button"
                 onClick={handleCloseWithConfirmation}
+                aria-label="Close settings"
                 className="ml-auto p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
                 <XIcon className="size-icon-sm" weight="bold" />
