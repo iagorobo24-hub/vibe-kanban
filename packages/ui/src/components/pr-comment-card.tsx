@@ -121,6 +121,12 @@ function FullCard({
   const isReview = commentType === 'review';
   const Icon = isReview ? Code : MessageSquare;
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!onClick || (e.key !== 'Enter' && e.key !== ' ')) return;
+    e.preventDefault();
+    onClick(e as unknown as React.MouseEvent);
+  };
+
   return (
     <div
       className={cn(
@@ -129,13 +135,18 @@ function FullCard({
         className
       )}
       onClick={onClick}
-      role="button"
-      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      aria-label={onClick ? `PR comment by @${author}` : undefined}
     >
       {/* Header */}
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
-          <Icon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          <Icon
+            className="w-4 h-4 text-muted-foreground flex-shrink-0"
+            aria-hidden="true"
+          />
           <span className="font-medium text-sm">@{author}</span>
           {isReview && (
             <span className="text-xs text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">

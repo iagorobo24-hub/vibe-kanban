@@ -384,21 +384,17 @@ export function RemoteCloudHostsSettingsCardContent({
                         'rounded-sm border border-border bg-secondary/30 p-3 flex items-center justify-between gap-3',
                         isOffline
                           ? 'opacity-80'
-                          : 'cursor-pointer hover:bg-secondary/50',
+                          : 'hover:bg-secondary/50',
                       ].join(' ')}
-                      onClick={(event) => {
-                        const target = event.target as HTMLElement | null;
-                        if (
-                          target?.closest('[data-relay-host-action="remove"]')
-                        ) {
-                          return;
-                        }
-                        void handleGoToHostWorkspaces(host.id, host.status);
-                      }}
-                      role="button"
-                      tabIndex={0}
                     >
-                      <div className="min-w-0">
+                      <button
+                        type="button"
+                        className="min-w-0 flex-1 border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                        onClick={() =>
+                          void handleGoToHostWorkspaces(host.id, host.status)
+                        }
+                        aria-label={`Open ${host.name} workspaces`}
+                      >
                         <p className="text-sm font-medium text-high truncate">
                           {host.name}
                         </p>
@@ -407,21 +403,19 @@ export function RemoteCloudHostsSettingsCardContent({
                             ? `${host.status === 'online' ? 'Online' : 'Offline'}${host.pairedAt ? ` · Paired ${new Date(host.pairedAt).toLocaleDateString()}` : ''}`
                             : host.id}
                         </p>
-                      </div>
-                      <span data-relay-host-action="remove">
-                        <PrimaryButton
-                          variant="tertiary"
-                          value={t(
-                            'settings.relay.remoteCloudHost.remove',
-                            'Remove'
-                          )}
-                          onClick={() => void handleRemove(host.id)}
-                          disabled={isRemoving}
-                          actionIcon={
-                            removingHostId === host.id ? 'spinner' : undefined
-                          }
-                        />
-                      </span>
+                      </button>
+                      <PrimaryButton
+                        variant="tertiary"
+                        value={t(
+                          'settings.relay.remoteCloudHost.remove',
+                          'Remove'
+                        )}
+                        onClick={() => void handleRemove(host.id)}
+                        disabled={isRemoving}
+                        actionIcon={
+                          removingHostId === host.id ? 'spinner' : undefined
+                        }
+                      />
                     </div>
                   );
                 })}
