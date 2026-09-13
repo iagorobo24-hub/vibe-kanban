@@ -103,7 +103,7 @@ function WorkspaceCreatePanel({
   }, [linkedIssueId, onOpenIssue, onClose]);
 
   return (
-    <div className="relative flex h-full flex-1 flex-col bg-primary">
+    <div className="agentos-project-inspector relative flex h-full flex-1 flex-col bg-primary">
       <div className="flex items-center justify-between px-base py-half border-b shrink-0">
         <div className="flex items-center gap-half min-w-0 font-ibm-plex-mono">
           <button
@@ -238,7 +238,7 @@ function WorkspaceSessionPanel({
       <ApprovalFeedbackProvider>
         <EntriesProvider key={`${workspaceId}-${selectedSessionId ?? 'new'}`}>
           <MessageEditProvider>
-            <div className="relative flex h-full flex-1 flex-col bg-primary">
+            <div className="agentos-project-inspector relative flex h-full flex-1 flex-col bg-primary">
               <div className="flex items-center justify-between px-base py-half border-b shrink-0">
                 <div className="flex items-center gap-half min-w-0 font-ibm-plex-mono">
                   <button

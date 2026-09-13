@@ -94,7 +94,7 @@ function ProjectMutationsRegistration({ children }: { children: ReactNode }) {
 
 function ProjectKanbanBoard() {
   return (
-    <div className="flex h-full min-h-0 w-full flex-col">
+    <div className="agentos-project-board flex h-full min-h-0 w-full flex-col">
       <div className="min-h-0 flex-1">
         <KanbanContainer />
       </div>
@@ -117,11 +117,11 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
 
   if (isMobile) {
     return isRightPanelOpen ? (
-      <div className="h-full w-full overflow-hidden bg-secondary">
+      <div className="agentos-project-surface h-full w-full overflow-hidden bg-secondary">
         <ProjectRightSidebarContainer />
       </div>
     ) : (
-      <div className="h-full w-full overflow-hidden bg-primary">
+      <div className="agentos-project-surface h-full w-full overflow-hidden bg-primary">
         <ProjectKanbanBoard />
       </div>
     );
@@ -151,7 +151,7 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
       <Panel
         id="kanban-left"
         minSize="20%"
-        className="min-w-0 h-full overflow-hidden bg-primary"
+        className="agentos-project-surface min-w-0 h-full overflow-hidden bg-primary"
       >
         <ProjectKanbanBoard />
       </Panel>
@@ -168,7 +168,7 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
           id="kanban-right"
           minSize="400px"
           maxSize="800px"
-          className="min-w-0 h-full overflow-hidden bg-secondary"
+          className="agentos-project-surface min-w-0 h-full overflow-hidden bg-secondary"
         >
           <ProjectRightSidebarContainer />
         </Panel>

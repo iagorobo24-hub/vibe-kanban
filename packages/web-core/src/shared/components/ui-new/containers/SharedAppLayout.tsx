@@ -300,7 +300,7 @@ export function SharedAppLayout() {
     <SyncErrorProvider>
       <div
         className={cn(
-          'bg-primary',
+          'agentos-theme agentos-shell bg-primary',
           isMobile
             ? 'flex fixed inset-0 pb-[env(safe-area-inset-bottom)]'
             : cn(

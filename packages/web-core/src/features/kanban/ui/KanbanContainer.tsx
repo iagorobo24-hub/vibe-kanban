@@ -894,15 +894,20 @@ export function KanbanContainer() {
   }
 
   return (
-    <div className="flex flex-col h-full space-y-base">
+    <div className="agentos-project-board__content flex flex-col h-full space-y-base">
       <div
         className={cn(
-          'px-double pt-double space-y-base',
+          'agentos-project-board__header px-double pt-double space-y-base',
           isMobile && 'px-base pt-base'
         )}
       >
         <div className="flex items-center gap-half">
-          <h2 className={cn('text-2xl font-medium', isMobile && 'text-lg')}>
+          <h2
+            className={cn(
+              'agentos-project-board__title text-2xl font-medium',
+              isMobile && 'text-lg'
+            )}
+          >
             {projectName}
           </h2>
 
@@ -931,7 +936,7 @@ export function KanbanContainer() {
 
         <div
           className={cn(
-            'flex items-start gap-base',
+            'agentos-project-board__controls flex items-start gap-base',
             isMobile ? 'flex-col' : 'flex-wrap'
           )}
         >
@@ -980,7 +985,7 @@ export function KanbanContainer() {
             <p className="text-low">{t('kanban.noVisibleStatuses')}</p>
           </div>
         ) : (
-          <div className="flex-1 overflow-x-auto px-double">
+          <div className="agentos-kanban-scroll flex-1 overflow-x-auto px-double">
             <KanbanProvider onDragEnd={handleDragEnd}>
               {visibleStatuses.map((status) => {
                 const issueIds = items[status.id] ?? [];
@@ -988,7 +993,7 @@ export function KanbanContainer() {
                 return (
                   <KanbanBoard key={status.id}>
                     <KanbanHeader>
-                      <div className="border-t sticky border-b top-0 z-20 flex shrink-0 items-center justify-between gap-2 p-base bg-secondary">
+                      <div className="agentos-kanban-column__header border-t sticky border-b top-0 z-20 flex shrink-0 items-center justify-between gap-2 p-base bg-secondary">
                         <div className="flex items-center gap-2">
                           <div
                             className="h-2 w-2 rounded-full shrink-0"
@@ -1126,7 +1131,7 @@ export function KanbanContainer() {
           </div>
         )
       ) : (
-        <div className="flex-1 overflow-y-auto px-double">
+        <div className="agentos-issue-list-scroll flex-1 overflow-y-auto px-double">
           <KanbanProvider onDragEnd={handleDragEnd} className="!block !w-full">
             <IssueListView
               statuses={listViewStatuses}

@@ -1,7 +1,7 @@
-import { type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-import { cn } from '../lib/cn';
+import { cn } from "../lib/cn";
 
 interface MobileDrawerProps {
   open: boolean;
@@ -16,9 +16,10 @@ export function MobileDrawer({ open, onClose, children }: MobileDrawerProps) {
       <div
         data-tauri-drag-region
         className={cn(
-          'fixed inset-0 bg-black/50 z-[100]',
-          'transition-opacity duration-200 ease-out',
-          open ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          "agentos-mobile-drawer__backdrop",
+          "fixed inset-0 bg-black/50 z-[100]",
+          "transition-opacity duration-200 ease-out",
+          open ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={onClose}
         aria-hidden="true"
@@ -26,15 +27,16 @@ export function MobileDrawer({ open, onClose, children }: MobileDrawerProps) {
       {/* Drawer panel */}
       <div
         className={cn(
-          'fixed left-0 top-0 h-full w-[280px] bg-primary z-[101]',
-          'pb-[env(safe-area-inset-bottom)]',
-          'transition-transform duration-200 ease-out',
-          open ? 'translate-x-0' : '-translate-x-full pointer-events-none'
+          "agentos-theme agentos-mobile-drawer",
+          "fixed left-0 top-0 h-full w-[280px] bg-primary z-[101]",
+          "pb-[env(safe-area-inset-bottom)]",
+          "transition-transform duration-200 ease-out",
+          open ? "translate-x-0" : "-translate-x-full pointer-events-none",
         )}
       >
         {children}
       </div>
     </>,
-    document.body
+    document.body,
   );
 }

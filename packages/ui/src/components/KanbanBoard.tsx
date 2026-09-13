@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Card } from './Card';
+import { Card } from "./Card";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from './RadixTooltip';
-import { cn } from '../lib/cn';
+} from "./RadixTooltip";
+import { cn } from "../lib/cn";
 import {
   DragDropContext,
   Droppable,
@@ -16,19 +16,19 @@ import {
   type DraggableProvided,
   type DraggableStateSnapshot,
   type DroppableProvided,
-} from '@hello-pangea/dnd';
+} from "@hello-pangea/dnd";
 import {
   type KeyboardEvent,
   type MouseEvent,
   type MutableRefObject,
   type ReactNode,
   type Ref,
-} from 'react';
-import { useTranslation } from 'react-i18next';
-import { DotsSixVerticalIcon, PlusIcon } from '@phosphor-icons/react';
-import { Button } from './Button';
+} from "react";
+import { useTranslation } from "react-i18next";
+import { DotsSixVerticalIcon, PlusIcon } from "@phosphor-icons/react";
+import { Button } from "./Button";
 
-export type { DropResult } from '@hello-pangea/dnd';
+export type { DropResult } from "@hello-pangea/dnd";
 
 export type Status = {
   id: string;
@@ -55,7 +55,11 @@ export type KanbanBoardProps = {
 
 export const KanbanBoard = ({ children, className }: KanbanBoardProps) => {
   return (
-    <div className={cn('flex flex-col min-h-40', className)}>{children}</div>
+    <div
+      className={cn("agentos-kanban-column flex flex-col min-h-40", className)}
+    >
+      {children}
+    </div>
   );
 };
 
@@ -63,7 +67,7 @@ export const KanbanBoard = ({ children, className }: KanbanBoardProps) => {
 // Kanban Card (Draggable)
 // =============================================================================
 
-export type KanbanCardProps = Pick<Feature, 'id' | 'name'> & {
+export type KanbanCardProps = Pick<Feature, "id" | "name"> & {
   index: number;
   children?: ReactNode;
   className?: string;
@@ -98,9 +102,9 @@ export const KanbanCard = ({
         // Combine DnD ref and forwarded ref
         const setRefs = (node: HTMLDivElement | null) => {
           provided.innerRef(node);
-          if (typeof forwardedRef === 'function') {
+          if (typeof forwardedRef === "function") {
             forwardedRef(node);
-          } else if (forwardedRef && typeof forwardedRef === 'object') {
+          } else if (forwardedRef && typeof forwardedRef === "object") {
             (forwardedRef as MutableRefObject<HTMLDivElement | null>).current =
               node;
           }
@@ -109,12 +113,12 @@ export const KanbanCard = ({
         return (
           <Card
             className={cn(
-              'p-base outline-none flex-col border -mt-[1px] -mx-[1px] bg-primary',
-              snapshot.isDragging && 'cursor-grabbing shadow-lg',
+              "agentos-kanban-card p-base outline-none flex-col border -mt-[1px] -mx-[1px] bg-primary",
+              snapshot.isDragging && "cursor-grabbing shadow-lg",
               isSelected
-                ? 'ring-2 ring-accent ring-inset bg-accent/5'
-                : isOpen && 'ring-2 ring-secondary-foreground ring-inset',
-              className
+                ? "ring-2 ring-accent ring-inset bg-accent/5"
+                : isOpen && "ring-2 ring-secondary-foreground ring-inset",
+              className,
             )}
             ref={setRefs}
             {...provided.draggableProps}
@@ -180,7 +184,7 @@ export const KanbanCards = ({ id, children, className }: KanbanCardsProps) => (
   <Droppable droppableId={id}>
     {(provided: DroppableProvided) => (
       <div
-        className={cn('flex flex-1 flex-col', className)}
+        className={cn("flex flex-1 flex-col", className)}
         ref={provided.innerRef}
         {...provided.droppableProps}
       >
@@ -200,25 +204,25 @@ export type KanbanHeaderProps =
       children: ReactNode;
     }
   | {
-      name: Status['name'];
-      color: Status['color'];
+      name: Status["name"];
+      color: Status["color"];
       className?: string;
       onAddTask?: () => void;
     };
 
 export const KanbanHeader = (props: KanbanHeaderProps) => {
-  const { t } = useTranslation('tasks');
+  const { t } = useTranslation("tasks");
 
-  if ('children' in props) {
+  if ("children" in props) {
     return props.children;
   }
 
   return (
     <Card
       className={cn(
-        'sticky top-0 z-20 flex shrink-0 items-center gap-base p-base flex gap-base',
-        'bg-background',
-        props.className
+        "sticky top-0 z-20 flex shrink-0 items-center gap-base p-base flex gap-base",
+        "bg-background",
+        props.className,
       )}
       style={{
         backgroundImage: `linear-gradient(hsl(var(${props.color}) / 0.03), hsl(var(${props.color}) / 0.03))`,
@@ -239,12 +243,12 @@ export const KanbanHeader = (props: KanbanHeaderProps) => {
               variant="ghost"
               className="m-0 p-0 h-0 text-foreground/50 hover:text-foreground"
               onClick={props.onAddTask}
-              aria-label={t('actions.addTask')}
+              aria-label={t("actions.addTask")}
             >
               <PlusIcon className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="top">{t('actions.addTask')}</TooltipContent>
+          <TooltipContent side="top">{t("actions.addTask")}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </Card>
@@ -270,8 +274,8 @@ export const KanbanProvider = ({
     <DragDropContext onDragEnd={onDragEnd}>
       <div
         className={cn(
-          'inline-grid grid-flow-col auto-cols-[minmax(200px,400px)] divide-x border-x items-stretch min-h-full',
-          className
+          "agentos-kanban-provider inline-grid grid-flow-col auto-cols-[minmax(200px,400px)] divide-x border-x items-stretch min-h-full",
+          className,
         )}
       >
         {children}
