@@ -357,7 +357,11 @@ export function AppBar({
               })}
               aria-label={item.label}
             >
-              <item.icon className="size-icon-base" weight="bold" />
+              <item.icon
+                className="size-icon-base"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           </Tooltip>
         );
@@ -404,7 +408,11 @@ export function AppBar({
                   className={getStandardAppBarButtonClassName({})}
                   aria-label={item.label}
                 >
-                  <KanbanIcon className="size-icon-base" weight="bold" />
+                  <KanbanIcon
+                    className="size-icon-base"
+                    weight="bold"
+                    aria-hidden="true"
+                  />
                 </button>
               </PopoverTrigger>
             </Tooltip>
@@ -435,7 +443,10 @@ export function AppBar({
       case "loading":
         return (
           <div className="flex items-center justify-center w-10 h-10">
-            <SpinnerIcon className="size-5 animate-spin text-muted" />
+            <SpinnerIcon
+              className="size-5 animate-spin text-muted"
+              aria-hidden="true"
+            />
           </div>
         );
       case "project-list":
