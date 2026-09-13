@@ -291,6 +291,24 @@
   background-color: var(--agentos-bg);
 }
 
+.agentos-theme .agentos-vscode-page {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-workspace-notes {
+  background-color: var(--agentos-panel);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme
+  .agentos-workspace-notes
+  :where(textarea, [contenteditable='true']) {
+  background-color: var(--agentos-bg);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
 .agentos-theme .agentos-create-workspace {
   background:
     radial-gradient(circle at 50% 18%, rgb(224 139 97 / 6%), transparent 34%),

@@ -171,12 +171,12 @@ export function VSCodeWorkspacePage() {
 
   return (
     <AppWithStyleOverride setTheme={setTheme}>
-      <div className="h-screen flex flex-col bg-primary">
+      <div className="agentos-theme agentos-vscode-page h-screen flex flex-col bg-primary">
         <WebviewContextMenu />
 
         <main
           ref={mainContainerRef}
-          className="relative flex flex-1 flex-col h-full min-h-0"
+          className="agentos-workspaces-main relative flex flex-1 flex-col h-full min-h-0"
         >
           <ApprovalFeedbackProvider>
             <EntriesProvider
