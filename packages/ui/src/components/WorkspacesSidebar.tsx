@@ -252,7 +252,7 @@ export function WorkspacesSidebar({
           title={t("common:workspaces.title")}
           collapsible={false}
           actions={headerActions}
-          className="border-b"
+          className="agentos-workspaces-sidebar__title-bar border-b"
         />
         {!isLoading && (
           <div className="px-base flex items-stretch gap-half">

@@ -253,6 +253,26 @@
   border-color: var(--agentos-border);
 }
 
+.agentos-theme .agentos-workspaces-sidebar__header {
+  gap: 0.75rem;
+  padding-block: 0.35rem 0.75rem;
+}
+
+.agentos-theme .agentos-workspaces-sidebar__title-bar {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-workspaces-sidebar__title-bar
+  :where(button, [role='button']) {
+  color: var(--agentos-text-muted);
+  min-height: 2.25rem;
+}
+
+.agentos-theme .agentos-workspaces-sidebar__title-bar
+  :where(button, [role='button']):hover {
+  color: var(--agentos-text);
+}
+
 .agentos-theme .agentos-workspaces-sidebar__header input {
   background-color: var(--agentos-bg);
   border-color: var(--agentos-border);
@@ -289,6 +309,19 @@
 
 .agentos-theme .agentos-workspaces-main {
   background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-workspaces-main__conversation {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-workspaces-main__chatbox {
+  background: linear-gradient(
+    180deg,
+    rgb(29 28 26 / 0%),
+    rgb(29 28 26 / 96%) 32%
+  );
+  padding: 0.75rem 1rem 1rem;
 }
 
 .agentos-theme .agentos-vscode-page {
@@ -469,6 +502,57 @@
   box-shadow: 0 14px 34px rgb(0 0 0 / 18%);
 }
 
+.agentos-theme .agentos-chatbox__header {
+  background: rgb(43 41 38 / 58%);
+  min-height: 3.1rem;
+  padding: 0.6rem 0.85rem;
+}
+
+.agentos-theme .agentos-chatbox__editor {
+  gap: 1.1rem;
+  padding: 0.95rem 1rem 0.8rem;
+}
+
+.agentos-theme .agentos-chatbox__footer {
+  border-top: 1px solid rgb(58 55 50 / 72%);
+  padding-top: 0.75rem;
+}
+
+.agentos-theme .agentos-chatbox__footer :where(button) {
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.05rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-chatbox__footer :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-chatbox__footer .agentos-primary-button.bg-brand {
+  background: var(--agentos-accent);
+  color: #241b17;
+}
+
+.agentos-theme
+  .agentos-chatbox__footer
+  .agentos-primary-button.bg-brand:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+  color: #241b17;
+}
+
+.agentos-theme
+  .agentos-chatbox__footer
+  .agentos-primary-button:disabled {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-subtle);
+}
+
 .agentos-theme .agentos-create-workspace .agentos-chatbox {
   width: min(56rem, 100%);
 }
@@ -624,6 +708,18 @@
   border-color: var(--agentos-border);
 }
 
+.agentos-theme .agentos-right-sidebar__section-header > div:first-child {
+  background: rgb(43 41 38 / 58%);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme
+  .agentos-right-sidebar__section-header
+  > div:first-child
+  :where(button, [role='button']):hover {
+  color: var(--agentos-text);
+}
+
 .agentos-theme .agentos-right-sidebar__section > * {
   border-color: var(--agentos-border);
 }
@@ -643,6 +739,126 @@
 .agentos-theme .agentos-logs-panel pre,
 .agentos-theme .agentos-process-list pre,
 .agentos-theme .agentos-git-panel code {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-repo-card {
+  background: var(--agentos-panel-raised);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
+  margin-block: 0.75rem;
+  padding: 0.9rem;
+}
+
+.agentos-theme .agentos-repo-card :where(button):hover:not(:disabled) {
+  background-color: var(--agentos-panel);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-git-panel__working-branch {
+  background: var(--agentos-bg);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  margin-block: 0.75rem;
+  padding: 0.9rem;
+}
+
+.agentos-theme .agentos-git-panel__working-branch input {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-context-bar__surface {
+  background: rgb(36 35 33 / 94%);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 28%);
+}
+
+.agentos-theme .agentos-context-bar__surface > :first-child {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-context-bar__surface :where(button) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2rem;
+  min-width: 2rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-context-bar__surface :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-dropdown-trigger {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-muted);
+  min-height: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-dropdown-trigger:hover:not(:disabled) {
+  background: #35312d;
+  border-color: #514a43;
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-toolbar-icon-button {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.1rem;
+  min-width: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-toolbar-icon-button:hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-primary-button {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-primary-button.bg-brand:not(:disabled) {
+  background: var(--agentos-accent);
+  color: #241b17;
+}
+
+.agentos-theme .agentos-primary-button.bg-brand:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+  color: #241b17;
+  transform: translateY(-1px);
+}
+
+.agentos-theme .agentos-primary-button.bg-panel {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
   color: var(--agentos-text-muted);
 }
 

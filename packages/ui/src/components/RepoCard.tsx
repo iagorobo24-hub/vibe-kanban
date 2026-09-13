@@ -120,7 +120,7 @@ export function RepoCard({
   }, [availableActionOptions, selectedAction]);
 
   return (
-    <div className="bg-primary rounded-sm my-base p-base space-y-base">
+    <div className="agentos-repo-card bg-primary rounded-sm my-base p-base space-y-base">
       <div className="font-medium">{name}</div>
       {/* Branch row */}
       <div className="flex items-center gap-base">

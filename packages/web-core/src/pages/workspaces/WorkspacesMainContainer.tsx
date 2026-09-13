@@ -202,7 +202,7 @@ export const WorkspacesMainContainer = forwardRef<
 
   const conversationContent = workspaceWithSession ? (
     <div
-      className="flex-1 min-h-0 overflow-hidden flex justify-center"
+      className="agentos-workspaces-main__conversation flex-1 min-h-0 overflow-hidden flex justify-center"
       onWheel={(e) => forwardWheelToScroller(e, conversationListRef)}
     >
       <div className="w-chat max-w-full h-full">

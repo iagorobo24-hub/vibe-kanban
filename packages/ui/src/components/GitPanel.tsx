@@ -86,7 +86,7 @@ export function GitPanel({
             onMoreClick={() => onMoreClick?.(repo.id)}
           />
         ))}
-        <div className="bg-primary flex flex-col gap-base w-full p-base rounded-sm my-base">
+        <div className="agentos-git-panel__working-branch bg-primary flex flex-col gap-base w-full p-base rounded-sm my-base">
           <div className="flex gap-base items-center">
             <GitBranchIcon className="size-icon-md text-base" weight="fill" />
             <p className="font-medium truncate">

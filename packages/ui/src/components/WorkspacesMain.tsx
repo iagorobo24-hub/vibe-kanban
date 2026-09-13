@@ -81,7 +81,7 @@ export function WorkspacesMain({
       )}
       {/* Chat box - always rendered to prevent flash during workspace switch */}
       <div
-        className="flex justify-center @container pl-px"
+        className="agentos-workspaces-main__chatbox flex justify-center @container pl-px"
         data-chatbox-container="true"
       >
         {chatBoxContent}

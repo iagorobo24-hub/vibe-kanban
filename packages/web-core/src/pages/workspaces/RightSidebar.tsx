@@ -207,6 +207,7 @@ export const RightSidebar = memo(function RightSidebar({
                 persistKey={section.persistKey}
                 defaultExpanded={section.expanded}
                 actions={section.actions}
+                className="agentos-right-sidebar__section-header"
               >
                 <div className="flex flex-1 border-t min-h-[200px] w-full overflow-auto">
                   {section.content}
