@@ -73,7 +73,11 @@ export function AppBarUserPopover({
             )}
             aria-label="Sign in"
           >
-            <UserIcon className="size-icon-sm" weight="bold" />
+            <UserIcon
+              className="size-icon-sm"
+              weight="bold"
+              aria-hidden="true"
+            />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="end" className="min-w-[200px]">
@@ -116,7 +120,11 @@ export function AppBarUserPopover({
               onError={onAvatarError}
             />
           ) : (
-            <UserIcon className="size-icon-sm" weight="bold" />
+            <UserIcon
+              className="size-icon-sm"
+              weight="bold"
+              aria-hidden="true"
+            />
           )}
         </button>
       </DropdownMenuTrigger>
@@ -140,10 +148,14 @@ export function AppBarUserPopover({
                     onOpenChange(false);
                     onOrgSettings(org.id);
                   }}
-                  className="sm:opacity-0 sm:group-hover:opacity-100 p-1 rounded hover:bg-secondary transition-opacity shrink-0"
+                  className="shrink-0 rounded p-1 transition-opacity hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
                   aria-label={t('orgSwitcher.orgSettings')}
                 >
-                  <GearIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
+                  <GearIcon
+                    className="size-icon-xs"
+                    weight="bold"
+                    aria-hidden="true"
+                  />
                 </button>
               )}
             </span>

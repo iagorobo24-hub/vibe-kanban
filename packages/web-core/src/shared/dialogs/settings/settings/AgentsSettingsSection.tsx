@@ -430,12 +430,17 @@ export function AgentsSettingsSection() {
               headerAction={
                 selectedExecutorType && (
                   <button
-                    className="p-half rounded-sm hover:bg-secondary text-low hover:text-normal"
+                    className="rounded-sm p-half text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                     onClick={() => handleCreateConfig(selectedExecutorType)}
                     disabled={profilesSaving}
                     title={t('settings.agents.editor.createNew')}
+                    aria-label={t('settings.agents.editor.createNew')}
                   >
-                    <PlusIcon className="size-icon-2xs" weight="bold" />
+                    <PlusIcon
+                      className="size-icon-2xs"
+                      weight="bold"
+                      aria-hidden="true"
+                    />
                   </button>
                 )
               }
@@ -547,12 +552,17 @@ function ConfigActionsDropdown({
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            'p-half rounded-sm hover:bg-panel text-low hover:text-normal',
-            'opacity-0 group-hover:opacity-100 transition-opacity'
+            'rounded-sm p-half text-low hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
+            'opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100'
           )}
           onClick={(e) => e.stopPropagation()}
+          aria-label={t('settings.agents.editor.configActions')}
         >
-          <DotsThreeIcon className="size-icon-xs" weight="bold" />
+          <DotsThreeIcon
+            className="size-icon-xs"
+            weight="bold"
+            aria-hidden="true"
+          />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

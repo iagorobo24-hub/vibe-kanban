@@ -1526,12 +1526,17 @@ function ProjectActionsDropdown({
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            'p-half rounded-sm hover:bg-panel text-low hover:text-normal',
-            'opacity-0 group-hover:opacity-100 transition-opacity'
+            'rounded-sm p-half text-low hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
+            'opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100'
           )}
           onClick={(e) => e.stopPropagation()}
+          aria-label={t('common:projects.actions', 'Project actions')}
         >
-          <DotsThreeIcon className="size-icon-xs" weight="bold" />
+          <DotsThreeIcon
+            className="size-icon-xs"
+            weight="bold"
+            aria-hidden="true"
+          />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
