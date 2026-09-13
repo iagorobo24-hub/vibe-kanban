@@ -135,7 +135,7 @@ export function NotificationsPage() {
       <div className="agentos-notifications-page__list flex-1 overflow-y-auto">
         {groupedNotifications.length === 0 ? (
           <div className="agentos-notifications-page__empty agentos-empty-state h-full">
-            <BellIcon size={32} weight="light" />
+            <BellIcon size={32} weight="light" aria-hidden="true" />
             <p className="agentos-empty-state__title">No notifications yet</p>
             <p className="agentos-empty-state__description">
               Updates that need your attention will appear here.
@@ -144,47 +144,43 @@ export function NotificationsPage() {
         ) : (
           <div className="divide-y divide-border">
             {groupedNotifications.map((group) => (
-              <div
+              <article
                 key={group.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => handleClick(group)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleClick(group);
-                  }
-                }}
                 className={cn(
-                  'agentos-notifications-page__row w-full flex items-center gap-base px-double py-base text-left transition-colors cursor-pointer outline-none',
+                  'agentos-notifications-page__row w-full flex items-center gap-base px-double py-base transition-colors',
                   'hover:bg-secondary',
-                  'focus-visible:bg-secondary',
-                  'focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand',
                   !group.seen && 'bg-brand/5'
                 )}
               >
-                <span
-                  className={cn(
-                    'agentos-notifications-page__unread-dot shrink-0 w-2 h-2 rounded-full',
-                    !group.seen && 'bg-brand'
-                  )}
-                />
-                <div className="flex-1 min-w-0">
-                  <p
+                <button
+                  type="button"
+                  onClick={() => handleClick(group)}
+                  className="agentos-notifications-page__open flex min-w-0 flex-1 items-center gap-base text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand"
+                >
+                  <span
                     className={cn(
-                      'agentos-notifications-page__message text-base truncate',
-                      group.seen ? 'text-normal' : 'text-high'
+                      'agentos-notifications-page__unread-dot shrink-0 w-2 h-2 rounded-full',
+                      !group.seen && 'bg-brand'
                     )}
-                  >
-                    <NotificationMessage
-                      segments={getGroupedNotificationSegments(group)}
-                      membersByUserId={membersByUserId}
-                    />
-                  </p>
-                  <p className="agentos-notifications-page__time text-sm text-low mt-0.5">
-                    {formatRelativeTime(group.latest.created_at)}
-                  </p>
-                </div>
+                    aria-hidden="true"
+                  />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span
+                      className={cn(
+                        'agentos-notifications-page__message text-base truncate',
+                        group.seen ? 'text-normal' : 'text-high'
+                      )}
+                    >
+                      <NotificationMessage
+                        segments={getGroupedNotificationSegments(group)}
+                        membersByUserId={membersByUserId}
+                      />
+                    </span>
+                    <span className="agentos-notifications-page__time text-sm text-low mt-0.5">
+                      {formatRelativeTime(group.latest.created_at)}
+                    </span>
+                  </span>
+                </button>
                 {!group.seen && (
                   <button
                     type="button"
@@ -205,7 +201,7 @@ export function NotificationsPage() {
                     <span className="hidden sm:inline">Mark as read</span>
                   </button>
                 )}
-              </div>
+              </article>
             ))}
           </div>
         )}

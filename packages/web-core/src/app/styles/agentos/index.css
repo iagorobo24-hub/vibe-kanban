@@ -140,11 +140,13 @@
   background-color: var(--agentos-panel);
   border-right: 1px solid var(--agentos-border);
   color: var(--agentos-text);
+  overscroll-behavior: contain;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
 .agentos-theme .agentos-mobile-drawer__backdrop {
   background-color: rgb(10 9 8 / 68%);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .agentos-theme .agentos-mobile-drawer__header,
@@ -1377,14 +1379,14 @@
   border-color: var(--agentos-border);
 }
 
-.agentos-theme .agentos-notifications-page__list [role='button'] {
+.agentos-theme .agentos-notifications-page__open {
   transition:
     background-color 160ms ease,
     color 160ms ease;
 }
 
-.agentos-theme .agentos-notifications-page__list [role='button']:hover,
-.agentos-theme .agentos-notifications-page__list [role='button']:focus-visible {
+.agentos-theme .agentos-notifications-page__open:hover,
+.agentos-theme .agentos-notifications-page__open:focus-visible {
   background-color: var(--agentos-panel);
 }
 
@@ -1643,6 +1645,7 @@
   border-radius: var(--agentos-radius-md);
   box-shadow: 0 24px 80px rgb(0 0 0 / 40%);
   color: var(--agentos-text);
+  overscroll-behavior: contain;
 }
 
 .agentos-guide-dialog__nav,
