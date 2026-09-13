@@ -94,7 +94,7 @@ export function GuideDialogShell({
               </button>
             </div>
             <nav
-              className="flex-1 p-3 flex flex-col gap-1 overflow-y-auto md:pt-3"
+              className="flex-1 p-3 flex flex-col gap-1 overflow-y-auto overscroll-contain md:pt-3"
               aria-label="Guide topics"
             >
               {topics.map((topic, idx) => (
@@ -121,7 +121,7 @@ export function GuideDialogShell({
           {/* Content - hidden on mobile when showing nav */}
           <div
             className={cn(
-              "agentos-guide-dialog__body flex-1 flex flex-col relative overflow-y-auto",
+              "agentos-guide-dialog__body flex-1 flex flex-col relative overflow-y-auto overscroll-contain",
               // Mobile: full width, hidden when showing nav
               !mobileShowContent && "hidden",
               // Desktop: always visible

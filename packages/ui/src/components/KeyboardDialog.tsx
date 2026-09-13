@@ -139,7 +139,7 @@ const Dialog = React.forwardRef<
   if (!open) return null;
 
   return createPortal(
-    <div className="agentos-dialog agentos-dialog-viewport fixed inset-0 z-[10000] flex items-start justify-center p-4 overflow-y-auto">
+    <div className="agentos-dialog agentos-dialog-viewport fixed inset-0 z-[10000] flex items-start justify-center p-4 overflow-y-auto overscroll-contain">
       <div
         data-tauri-drag-region
         className="agentos-dialog-overlay fixed inset-0 bg-black/50"

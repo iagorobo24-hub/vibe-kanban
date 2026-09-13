@@ -270,7 +270,7 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
             </button>
           </div>
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
               {groups.map((group, i) => (
                 <ShortcutSection key={i} group={group} />
