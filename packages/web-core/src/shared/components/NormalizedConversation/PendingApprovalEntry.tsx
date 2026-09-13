@@ -142,7 +142,7 @@ function DenyReasonForm({
   onSubmit: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 p-4">
+    <div className="agentos-approval-entry__deny-form flex flex-col gap-2 p-4">
       <WYSIWYGEditor
         value={value}
         onChange={onChange}
@@ -322,10 +322,10 @@ const PendingApprovalEntry = ({
 
         <div className="agentos-approval-entry__actions bg-background px-2 py-1.5 text-xs sm:text-sm">
           <TooltipProvider>
-            <div className="flex items-center justify-between gap-1.5 pl-4">
+            <div className="agentos-approval-entry__prompt flex items-center justify-between gap-1.5 pl-4">
               <div className="flex items-center gap-1.5">
                 {!isEnteringReason && (
-                  <span className="text-muted-foreground">
+                  <span className="agentos-approval-entry__question text-muted-foreground">
                     Would you like to approve this?
                   </span>
                 )}
@@ -342,7 +342,7 @@ const PendingApprovalEntry = ({
 
             {error && (
               <div
-                className="mt-1 text-xs text-red-600"
+                className="agentos-approval-entry__error mt-1 text-xs text-red-600"
                 role="alert"
                 aria-live="polite"
               >

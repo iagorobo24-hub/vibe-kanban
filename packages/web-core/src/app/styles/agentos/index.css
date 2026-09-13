@@ -1068,6 +1068,10 @@
   overflow-y: auto;
 }
 
+.agentos-dialog-viewport {
+  overscroll-behavior: contain;
+}
+
 .agentos-dialog-content :where(input, textarea, select) {
   background-color: var(--agentos-bg);
   border-color: var(--agentos-border);
@@ -1086,6 +1090,87 @@
 .agentos-dialog-close:hover {
   color: var(--agentos-text);
   opacity: 1;
+}
+
+.agentos-guide-dialog,
+.agentos-settings-dialog {
+  background: rgb(36 35 33 / 96%);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 40%);
+  color: var(--agentos-text);
+}
+
+.agentos-guide-dialog__nav,
+.agentos-settings-dialog__nav {
+  background: rgb(43 41 38 / 72%);
+  border-color: var(--agentos-border);
+}
+
+.agentos-guide-dialog__nav :where(button),
+.agentos-settings-dialog__nav :where(button) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-guide-dialog__nav :where(button):hover,
+.agentos-guide-dialog__nav :where(button):focus-visible,
+.agentos-settings-dialog__nav :where(button):hover,
+.agentos-settings-dialog__nav :where(button):focus-visible {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-guide-dialog__body,
+.agentos-settings-dialog__body {
+  background: var(--agentos-panel);
+}
+
+.agentos-approval-entry__actions {
+  background: rgb(29 28 26 / 76%);
+  color: var(--agentos-text-muted);
+  padding: 0.7rem 0.85rem;
+}
+
+.agentos-approval-entry__prompt {
+  min-height: 2.35rem;
+}
+
+.agentos-approval-entry__question {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-approval-entry__actions :where(button) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2rem;
+  min-width: 2rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-approval-entry__actions :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-approval-entry__error {
+  border-top: 1px solid rgb(221 141 130 / 30%);
+  color: var(--agentos-danger);
+  padding: 0.5rem 1rem 0;
+}
+
+.agentos-approval-entry__deny-form {
+  border-top: 1px solid rgb(228 179 108 / 24%);
 }
 
 .agentos-approval-entry {

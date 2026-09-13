@@ -246,7 +246,7 @@ function SettingsDialogContent({
       {/* Overlay */}
       <div
         data-tauri-drag-region
-        className="fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
+        className="agentos-dialog-overlay fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
         onClick={handleCloseWithConfirmation}
       />
       {/* Dialog wrapper - handles positioning */}
@@ -262,7 +262,7 @@ function SettingsDialogContent({
         {/* Dialog content - handles animation */}
         <div
           className={cn(
-            'h-full w-full flex overflow-hidden',
+            'agentos-settings-dialog h-full w-full flex overflow-hidden',
             'bg-panel/95 backdrop-blur-sm shadow-lg',
             'animate-in fade-in-0 slide-in-from-bottom-4 duration-200',
             // Mobile: full screen, no rounded corners
@@ -274,7 +274,7 @@ function SettingsDialogContent({
           {/* Sidebar - hidden on mobile when showing content */}
           <div
             className={cn(
-              'bg-secondary/80 border-r border-border flex flex-col',
+              'agentos-settings-dialog__nav bg-secondary/80 border-r border-border flex flex-col',
               // Mobile: full width, hidden when showing content
               'w-full',
               mobileShowContent && 'hidden',
@@ -303,7 +303,7 @@ function SettingsDialogContent({
           {/* Content - hidden on mobile when showing nav */}
           <div
             className={cn(
-              'flex-1 flex flex-col relative overflow-hidden',
+              'agentos-settings-dialog__body flex-1 flex flex-col relative overflow-hidden',
               // Mobile: full width, hidden when showing nav
               !mobileShowContent && 'hidden',
               // Desktop: always visible
