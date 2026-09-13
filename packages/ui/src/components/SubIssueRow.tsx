@@ -174,7 +174,7 @@ export function SubIssueRow({
                   <button
                     type="button"
                     onClick={(e) => e.stopPropagation()}
-                    className="p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
+                    className="rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                     aria-label="Sub-issue actions"
                     title="Sub-issue actions"
                   >

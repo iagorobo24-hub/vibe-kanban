@@ -68,7 +68,7 @@ export function IssueRelationshipsSection({
                     e.stopPropagation();
                     onRemoveRelationship(rel.relationshipId);
                   }}
-                  className="agentos-issue-relationship-row__remove p-half rounded-sm text-low hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100"
+                  className="agentos-issue-relationship-row__remove rounded-sm p-half text-low opacity-0 transition-colors hover:bg-error/10 hover:text-error focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100"
                   aria-label="Remove relationship"
                 >
                   <XIcon className="size-icon-2xs" weight="bold" aria-hidden="true" />

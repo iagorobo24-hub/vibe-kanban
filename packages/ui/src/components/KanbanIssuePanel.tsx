@@ -266,10 +266,14 @@ export function KanbanIssuePanel({
             <button
               type="button"
               onClick={onCopyLink}
-              className="agentos-issue-panel__action p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+              className="agentos-issue-panel__action rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               aria-label={t("kanban.copyLink")}
             >
-              <LinkIcon className="size-icon-sm" weight="bold" />
+              <LinkIcon
+                className="size-icon-sm"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           )}
         </div>
@@ -278,16 +282,20 @@ export function KanbanIssuePanel({
             <button
               type="button"
               onClick={onMoreActions}
-              className="agentos-issue-panel__action p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+              className="agentos-issue-panel__action rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               aria-label={t("kanban.moreActions")}
             >
-              <DotsThreeIcon className="size-icon-sm" weight="bold" />
+              <DotsThreeIcon
+                className="size-icon-sm"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           )}
           <button
             type="button"
             onClick={onClose}
-            className="agentos-issue-panel__action p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+            className="agentos-issue-panel__action rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             aria-label={t("kanban.closePanel")}
           >
             <XIcon className="size-icon-sm" weight="bold" aria-hidden="true" />
@@ -438,14 +446,17 @@ export function KanbanIssuePanel({
                             }}
                             disabled={isSubmitting || isUploading}
                             className={cn(
-                              "p-half rounded-sm transition-colors",
+                              "rounded-sm p-half transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
                               "text-low hover:text-normal hover:bg-panel/50",
                               "disabled:opacity-50 disabled:cursor-not-allowed",
                             )}
                             title={t("kanban.attachFile")}
                             aria-label={t("kanban.attachFile")}
                           >
-                            <PaperclipIcon className="size-icon-sm" />
+                            <PaperclipIcon
+                              className="size-icon-sm"
+                              aria-hidden="true"
+                            />
                           </button>
                         </TooltipTrigger>
                         <TooltipContent>

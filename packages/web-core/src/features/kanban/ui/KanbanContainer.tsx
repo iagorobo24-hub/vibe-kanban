@@ -915,11 +915,15 @@ export function KanbanContainer() {
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="agentos-project-board__menu-button p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
+                className="agentos-project-board__menu-button rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                 aria-label="Project menu"
                 data-agentos-control="project-menu"
               >
-                <DotsThreeIcon className="size-icon-sm" weight="bold" />
+                <DotsThreeIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -999,16 +1003,21 @@ export function KanbanContainer() {
                           <div
                             className="h-2 w-2 rounded-full shrink-0"
                             style={{ backgroundColor: `hsl(${status.color})` }}
+                            aria-hidden="true"
                           />
                           <p className="m-0 text-sm">{status.name}</p>
                         </div>
                         <button
                           type="button"
                           onClick={() => handleAddTask(status.id)}
-                          className="agentos-kanban-column__add p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
+                          className="agentos-kanban-column__add rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                           aria-label="Add task"
                         >
-                          <PlusIcon className="size-icon-xs" weight="bold" />
+                          <PlusIcon
+                            className="size-icon-xs"
+                            weight="bold"
+                            aria-hidden="true"
+                          />
                         </button>
                       </div>
                     </KanbanHeader>

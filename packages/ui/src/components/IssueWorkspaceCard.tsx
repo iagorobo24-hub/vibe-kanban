@@ -170,12 +170,13 @@ export function IssueWorkspaceCard({
               <DropdownMenuTrigger asChild>
                 <button
                   onClick={(e) => e.stopPropagation()}
-                  className="agentos-issue-workspace-card__menu p-0.5 rounded hover:bg-secondary transition-colors"
+                  className="agentos-issue-workspace-card__menu rounded p-0.5 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                   aria-label={t('workspaces.more')}
                 >
                   <DotsThreeIcon
                     className="size-icon-xs text-low"
                     weight="bold"
+                    aria-hidden="true"
                   />
                 </button>
               </DropdownMenuTrigger>

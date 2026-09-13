@@ -114,7 +114,9 @@ function WorkspaceCreatePanel({
           >
             {linkedIssueSimpleId ?? 'Issue'}
           </button>
-          <span className="text-low text-sm shrink-0">/</span>
+          <span className="text-low text-sm shrink-0" aria-hidden="true">
+            /
+          </span>
           <span className={breadcrumbButtonClass}>
             {t('createWorkspaceFromPr.createWorkspace')}
           </span>
@@ -123,7 +125,7 @@ function WorkspaceCreatePanel({
           <button
             type="button"
             onClick={onClose}
-            className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+            className="rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             aria-label="Close create workspace view"
           >
             <XIcon className="size-icon-sm" weight="bold" aria-hidden="true" />
@@ -249,7 +251,9 @@ function WorkspaceSessionPanel({
                   >
                     {issueSimpleId ?? 'Issue'}
                   </button>
-                  <span className="text-low text-sm shrink-0">/</span>
+                  <span className="text-low text-sm shrink-0" aria-hidden="true">
+                    /
+                  </span>
                   <button
                     type="button"
                     onClick={handleOpenWorkspaceView}
@@ -264,18 +268,26 @@ function WorkspaceSessionPanel({
                   <button
                     type="button"
                     onClick={handleOpenWorkspaceView}
-                    className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+                    className="rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                     aria-label="Open in workspace view"
                   >
-                    <ArrowsOutIcon className="size-icon-sm" weight="bold" />
+                    <ArrowsOutIcon
+                      className="size-icon-sm"
+                      weight="bold"
+                      aria-hidden="true"
+                    />
                   </button>
                   <button
                     type="button"
                     onClick={onClose}
-                    className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+                    className="rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                     aria-label="Close conversation view"
                   >
-                    <XIcon className="size-icon-sm" weight="bold" aria-hidden="true" />
+                    <XIcon
+                      className="size-icon-sm"
+                      weight="bold"
+                      aria-hidden="true"
+                    />
                   </button>
                 </div>
               </div>
@@ -304,7 +316,7 @@ function WorkspaceSessionPanel({
                     <button
                       type="button"
                       onClick={() => handleScrollToBottom('auto')}
-                      className="absolute bottom-2 right-4 z-10 pointer-events-auto flex items-center justify-center size-8 rounded-full bg-secondary/80 backdrop-blur-sm border border-secondary text-low hover:text-normal hover:bg-secondary shadow-md transition-colors"
+                      className="absolute bottom-2 right-4 z-10 pointer-events-auto flex size-8 items-center justify-center rounded-full border border-secondary bg-secondary/80 text-low shadow-md backdrop-blur-sm transition-colors hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                       aria-label="Scroll to bottom"
                       title="Scroll to bottom"
                     >
