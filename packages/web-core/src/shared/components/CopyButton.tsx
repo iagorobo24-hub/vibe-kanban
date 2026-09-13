@@ -44,10 +44,12 @@ export function CopyButton({
 
   const button = (
     <button
+      type="button"
       className={cn(
         'flex items-center justify-center transition-colors',
         'drop-shadow-[2px_2px_4px_rgba(121,121,121,0.25)]',
-        'text-low group-hover:text-normal'
+        'min-h-7 min-w-7 rounded-sm text-low group-hover:text-normal',
+        'hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
       )}
       aria-label={tooltip}
       onClick={handleClick}

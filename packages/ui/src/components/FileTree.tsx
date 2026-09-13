@@ -1,14 +1,14 @@
-import { memo, type ReactNode } from "react";
-import { useTranslation } from "react-i18next";
+import { memo, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   GithubLogoIcon,
   CaretUpIcon,
   CaretDownIcon,
-} from "@phosphor-icons/react";
-import { cn } from "../lib/cn";
-import { Tooltip } from "./Tooltip";
-import { FileTreeSearchBar } from "./FileTreeSearchBar";
-import { FileTreeNode, type FileTreeNodeItem } from "./FileTreeNode";
+} from '@phosphor-icons/react';
+import { cn } from '../lib/cn';
+import { Tooltip } from './Tooltip';
+import { FileTreeSearchBar } from './FileTreeSearchBar';
+import { FileTreeNode, type FileTreeNodeItem } from './FileTreeNode';
 
 export interface FileTreeViewNode extends FileTreeNodeItem {
   children?: FileTreeViewNode[];
@@ -35,15 +35,15 @@ interface FileTreeProps {
   /** Whether GitHub comments are currently loading */
   isGitHubCommentsLoading?: boolean;
   /** Callback to navigate between files with GitHub comments */
-  onNavigateComments?: (direction: "prev" | "next") => void;
+  onNavigateComments?: (direction: 'prev' | 'next') => void;
   /** Whether there are files with GitHub comments to navigate */
   hasFilesWithComments?: boolean;
   scrollContainerRef?: (el: HTMLDivElement | null) => void;
 }
 
 const FILE_NODE_STYLE = {
-  contentVisibility: "auto" as const,
-  containIntrinsicSize: "auto 26px",
+  contentVisibility: 'auto' as const,
+  containIntrinsicSize: 'auto 26px',
 };
 
 export const FileTree = memo(function FileTree({
@@ -66,20 +66,20 @@ export const FileTree = memo(function FileTree({
   renderFileIcon,
   scrollContainerRef,
 }: FileTreeProps) {
-  const { t } = useTranslation(["tasks", "common"]);
+  const { t } = useTranslation(['tasks', 'common']);
   const renderNodes = (nodeList: FileTreeViewNode[], depth = 0) => {
     return nodeList.map((node) => (
       <div
         key={node.id}
-        style={node.type === "file" ? FILE_NODE_STYLE : undefined}
+        style={node.type === 'file' ? FILE_NODE_STYLE : undefined}
       >
         <FileTreeNode
           node={node}
           depth={depth}
           isExpanded={!collapsedPaths.has(node.path)}
           isSelected={selectedPath === node.path}
-          onToggle={node.type === "folder" ? onToggleExpand : undefined}
-          onSelect={node.type === "file" ? onSelectFile : undefined}
+          onToggle={node.type === 'folder' ? onToggleExpand : undefined}
+          onSelect={node.type === 'file' ? onSelectFile : undefined}
           renderFileIcon={renderFileIcon}
           commentCount={
             showGitHubComments
@@ -88,7 +88,7 @@ export const FileTree = memo(function FileTree({
           }
           showCommentBadge={showGitHubComments}
         />
-        {node.type === "folder" &&
+        {node.type === 'folder' &&
           node.children &&
           !collapsedPaths.has(node.path) &&
           renderNodes(node.children, depth + 1)}
@@ -99,8 +99,8 @@ export const FileTree = memo(function FileTree({
   return (
     <div
       className={cn(
-        "agentos-file-tree flex-1 w-full bg-secondary flex flex-col",
-        className,
+        'agentos-file-tree flex-1 w-full bg-secondary flex flex-col',
+        className
       )}
     >
       <div className="px-base pt-base overflow-hidden">
@@ -115,22 +115,22 @@ export const FileTree = memo(function FileTree({
           </div>
           {showGitHubComments && onNavigateComments && hasFilesWithComments && (
             <>
-              <Tooltip content={t("common:fileTree.prevGitHubComment")}>
+              <Tooltip content={t('common:fileTree.prevGitHubComment')}>
                 <button
                   type="button"
-                  onClick={() => onNavigateComments("prev")}
-                  className="p-1 rounded hover:bg-panel transition-colors shrink-0 text-low hover:text-normal"
-                  aria-label={t("common:fileTree.prevGitHubComment")}
+                  onClick={() => onNavigateComments('prev')}
+                  className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                  aria-label={t('common:fileTree.prevGitHubComment')}
                 >
                   <CaretUpIcon className="size-icon-sm" />
                 </button>
               </Tooltip>
-              <Tooltip content={t("common:fileTree.nextGitHubComment")}>
+              <Tooltip content={t('common:fileTree.nextGitHubComment')}>
                 <button
                   type="button"
-                  onClick={() => onNavigateComments("next")}
-                  className="p-1 rounded hover:bg-panel transition-colors shrink-0 text-low hover:text-normal"
-                  aria-label={t("common:fileTree.nextGitHubComment")}
+                  onClick={() => onNavigateComments('next')}
+                  className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                  aria-label={t('common:fileTree.nextGitHubComment')}
                 >
                   <CaretDownIcon className="size-icon-sm" />
                 </button>
@@ -141,22 +141,23 @@ export const FileTree = memo(function FileTree({
             <Tooltip
               content={
                 showGitHubComments
-                  ? t("common:fileTree.hideGitHubComments")
-                  : t("common:fileTree.showGitHubComments")
+                  ? t('common:fileTree.hideGitHubComments')
+                  : t('common:fileTree.showGitHubComments')
               }
             >
               <button
                 type="button"
                 onClick={() => onToggleGitHubComments(!showGitHubComments)}
                 className={cn(
-                  "p-1 rounded hover:bg-panel transition-colors shrink-0",
-                  showGitHubComments ? "text-normal" : "text-low",
-                  isGitHubCommentsLoading && "opacity-50 animate-pulse",
+                  'flex size-7 items-center justify-center rounded-sm transition-colors shrink-0 hover:bg-panel focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
+                  showGitHubComments ? 'text-normal' : 'text-low',
+                  isGitHubCommentsLoading && 'opacity-50 animate-pulse'
                 )}
+                aria-pressed={showGitHubComments}
                 aria-label={
                   showGitHubComments
-                    ? t("common:fileTree.hideGitHubComments")
-                    : t("common:fileTree.showGitHubComments")
+                    ? t('common:fileTree.hideGitHubComments')
+                    : t('common:fileTree.showGitHubComments')
                 }
               >
                 <GithubLogoIcon className="size-icon-sm" weight="fill" />
@@ -168,13 +169,13 @@ export const FileTree = memo(function FileTree({
       <div
         ref={scrollContainerRef}
         className="p-base flex-1 min-h-0 overflow-auto scrollbar-thin scrollbar-thumb-panel scrollbar-track-transparent"
-        style={{ contain: "layout style paint" }}
+        style={{ contain: 'layout style paint' }}
       >
         {nodes.length > 0 ? (
           renderNodes(nodes)
         ) : (
           <div className="p-base text-low text-sm">
-            {searchQuery ? t("common:fileTree.noResults") : "No changed files"}
+            {searchQuery ? t('common:fileTree.noResults') : 'No changed files'}
           </div>
         )}
       </div>

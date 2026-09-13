@@ -468,10 +468,19 @@ const DiffFileItem = memo(function DiffFileItem({
             className="size-icon-xs p-0"
           />
         )}
-        <CaretDownIcon
-          className={`size-icon-xs text-low transition-transform cursor-pointer${!expanded ? ' -rotate-90' : ''}`}
+        <button
+          type="button"
           onClick={handleToggle}
-        />
+          className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          aria-expanded={expanded}
+          aria-label={expanded ? 'Collapse file diff' : 'Expand file diff'}
+          title={expanded ? 'Collapse file diff' : 'Expand file diff'}
+        >
+          <CaretDownIcon
+            className={`size-icon-xs transition-transform${!expanded ? ' -rotate-90' : ''}`}
+            aria-hidden="true"
+          />
+        </button>
       </div>
     ),
     [
@@ -546,6 +555,7 @@ const DiffFileItem = memo(function DiffFileItem({
         | undefined
     ) => (
       <button
+        type="button"
         className="flex items-center justify-center size-icon-base rounded text-brand bg-brand/20 transition-transform hover:scale-110"
         onClick={() => {
           const line = getHoveredLine();
@@ -565,6 +575,7 @@ const DiffFileItem = memo(function DiffFileItem({
           });
         }}
         title={t('comments.addReviewComment')}
+        aria-label={t('comments.addReviewComment')}
       >
         <PlusIcon className="size-3.5" weight="bold" />
       </button>

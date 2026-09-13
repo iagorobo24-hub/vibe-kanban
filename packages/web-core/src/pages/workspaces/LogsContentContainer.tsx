@@ -122,10 +122,15 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
           <button
             type="button"
             onClick={collapseTerminal}
-            className="text-low hover:text-normal transition-colors"
+            className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-tertiary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             title={t('actions.collapse')}
+            aria-label={t('actions.collapse')}
           >
-            <ArrowsInSimpleIcon className="size-icon-sm" weight="bold" />
+            <ArrowsInSimpleIcon
+              className="size-icon-sm"
+              weight="bold"
+              aria-hidden="true"
+            />
           </button>
         </div>
         <div className="flex-1 flex min-h-0 border-t border-border">
