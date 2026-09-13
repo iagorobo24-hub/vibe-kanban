@@ -133,6 +133,14 @@ export default defineConfig({
       '/api': {
         target: `http://localhost:${process.env.BACKEND_PORT || '3001'}`,
         changeOrigin: true,
+        // The local API validates Origin for browser HTTP requests too. The
+        // dev proxy is local-only, so normalize it to the backend target
+        // while keeping production origin validation unchanged.
+        configure(proxy, options) {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.setHeader('origin', options.target as string);
+          });
+        },
         // The local server validates the browser Origin during WebSocket
         // upgrades. Rewrite it to the backend target so proxied streams are
         // accepted just like direct local connections.
