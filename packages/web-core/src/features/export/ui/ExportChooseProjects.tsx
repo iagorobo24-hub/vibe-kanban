@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CheckCircleIcon, CircleIcon, ImageIcon } from '@phosphor-icons/react';
+import { useTranslation } from 'react-i18next';
 
 export interface ExportOrganization {
   id: string;
@@ -34,6 +35,7 @@ export function ExportChooseProjects({
   onOrgChange,
   onContinue,
 }: ExportChooseProjectsProps) {
+  const { t } = useTranslation('common');
   const [selectedProjectIds, setSelectedProjectIds] = useState<Set<string>>(
     new Set()
   );
@@ -81,7 +83,7 @@ export function ExportChooseProjects({
   return (
     <div className="p-double space-y-double">
       <div className="space-y-base">
-        <h2 className="text-lg font-semibold text-high">Export projects</h2>
+        <h2 className="text-lg font-semibold text-high">{t('export.title')}</h2>
       </div>
 
       {organizations.length > 1 && (
@@ -90,13 +92,14 @@ export function ExportChooseProjects({
             htmlFor="export-organization"
             className="text-sm font-medium text-high"
           >
-            Organization
+            {t('export.organization')}
           </label>
           <select
             id="export-organization"
+            name="organizationId"
             value={selectedOrgId ?? ''}
             onChange={(e) => onOrgChange(e.target.value)}
-            className="w-full rounded-sm border border-border bg-primary px-base py-half text-sm text-high focus:outline-none focus:ring-1 focus:ring-brand"
+            className="w-full rounded-sm border border-border bg-primary px-base py-half text-sm text-high focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
             {organizations.map((org) => (
               <option key={org.id} value={org.id}>
@@ -108,14 +111,19 @@ export function ExportChooseProjects({
       )}
 
       {isLoading ? (
-        <p className="text-sm text-low">Loading projects...</p>
+        <p className="text-sm text-low" role="status" aria-live="polite">
+          {t('export.loadingProjects')}
+        </p>
       ) : projects.length === 0 ? (
-        <p className="text-sm text-low">No projects found.</p>
+        <p className="text-sm text-low">{t('export.noProjects')}</p>
       ) : (
         <div className="space-y-half">
           <div className="flex items-center justify-between">
             <span className="text-sm text-normal">
-              {selectedProjectIds.size} of {projects.length} selected
+              {t('export.selected', {
+                selected: selectedProjectIds.size,
+                total: projects.length,
+              })}
             </span>
             <button
               type="button"
@@ -124,8 +132,8 @@ export function ExportChooseProjects({
               aria-pressed={selectedProjectIds.size === projects.length}
             >
               {selectedProjectIds.size === projects.length
-                ? 'Deselect all'
-                : 'Select all'}
+                ? t('export.deselectAll')
+                : t('export.selectAll')}
             </button>
           </div>
           <div className="max-h-64 overflow-y-auto rounded-sm border border-border divide-y divide-border">
@@ -179,10 +187,12 @@ export function ExportChooseProjects({
               aria-hidden="true"
             />
             <span className="text-sm font-medium text-high">
-              Include attachments
+              {t('export.includeAttachments')}
             </span>
           </div>
-          <p className="text-xs text-low">Include files attached to issues.</p>
+          <p className="text-xs text-low">
+            {t('export.includeAttachmentsDescription')}
+          </p>
         </div>
       </label>
 
@@ -192,7 +202,7 @@ export function ExportChooseProjects({
         disabled={selectedProjectIds.size === 0}
         className="w-full rounded-sm bg-brand px-base py-half text-sm font-medium text-white transition-colors hover:bg-brand/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Export
+        {t('export.start')}
       </button>
     </div>
   );

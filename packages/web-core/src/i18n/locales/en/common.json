@@ -557,6 +557,31 @@
     "answeredCount": "Answered {{count}} question",
     "answeredCount_other": "Answered {{count}} questions"
   },
+  "export": {
+    "title": "Export projects",
+    "organization": "Organization",
+    "loadingProjects": "Loading projects…",
+    "noProjects": "No projects found.",
+    "selected": "{{selected}} of {{total}} selected",
+    "deselectAll": "Deselect all",
+    "selectAll": "Select all",
+    "includeAttachments": "Include attachments",
+    "includeAttachmentsDescription": "Include files attached to issues.",
+    "start": "Export",
+    "generating": "Generating your export…",
+    "wait": "This may take a moment{{attachments}}.",
+    "withAttachments": ", especially with attachments",
+    "errors": {
+      "failed": "Export failed",
+      "requestFailed": "Export failed (status {{status}}).",
+      "generic": "The export could not be completed."
+    },
+    "retry": "Retry",
+    "complete": "Export complete!",
+    "automaticDownload": "Your download should start automatically. If not, use the button below.",
+    "download": "Download {{filename}}",
+    "more": "Export more projects"
+  },
   "cloudShutdown": {
     "message": "Legacy cloud notice: export your Vibe Kanban Cloud data within 30 days.",
     "moreInfo": "Read more about the shutdown."

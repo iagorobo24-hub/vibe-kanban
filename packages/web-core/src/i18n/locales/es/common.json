@@ -557,6 +557,31 @@
     "answeredCount": "Respondió {{count}} pregunta",
     "answeredCount_other": "Respondió {{count}} preguntas"
   },
+  "export": {
+    "title": "Exportar proyectos",
+    "organization": "Organización",
+    "loadingProjects": "Cargando proyectos…",
+    "noProjects": "No se han encontrado proyectos.",
+    "selected": "{{selected}} de {{total}} seleccionados",
+    "deselectAll": "Deseleccionar todos",
+    "selectAll": "Seleccionar todos",
+    "includeAttachments": "Incluir adjuntos",
+    "includeAttachmentsDescription": "Incluye los archivos adjuntos a las incidencias.",
+    "start": "Exportar",
+    "generating": "Generando la exportación…",
+    "wait": "Este proceso puede tardar unos instantes{{attachments}}.",
+    "withAttachments": ", especialmente si incluye adjuntos",
+    "errors": {
+      "failed": "La exportación ha fallado",
+      "requestFailed": "La exportación ha fallado (estado {{status}}).",
+      "generic": "No se ha podido completar la exportación."
+    },
+    "retry": "Reintentar",
+    "complete": "¡Exportación completada!",
+    "automaticDownload": "La descarga debería comenzar automáticamente. Si no es así, utiliza el botón siguiente.",
+    "download": "Descargar {{filename}}",
+    "more": "Exportar más proyectos"
+  },
   "cloudShutdown": {
     "message": "Aviso del servicio cloud heredado: exporta tus datos de Vibe Kanban Cloud en los próximos 30 días.",
     "moreInfo": "Más información sobre el cierre."
