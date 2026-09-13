@@ -1878,6 +1878,18 @@
   padding: 0.75rem 1rem;
 }
 
+.agentos-oauth-button {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-oauth-button:hover:not(:disabled) {
+  background: #35312d;
+  border-color: var(--agentos-border-strong);
+  color: var(--agentos-text);
+}
+
 .agentos-icon-button {
   align-items: center;
   background: transparent;

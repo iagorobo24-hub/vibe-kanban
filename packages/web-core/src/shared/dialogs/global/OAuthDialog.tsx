@@ -248,7 +248,10 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
           <>
             <DialogHeader>
               <div className="flex items-center gap-3">
-                <LogIn className="h-6 w-6 text-primary-foreground" />
+                <LogIn
+                  className="h-6 w-6 text-primary-foreground"
+                  aria-hidden="true"
+                />
                 <DialogTitle>{t('oauth.title')}</DialogTitle>
               </div>
               <DialogDescription className="text-left pt-2">
@@ -268,6 +271,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
               )}
               {isAuthMethodsError && (
                 <Button
+                  type="button"
                   variant="outline"
                   className="w-full"
                   onClick={() => void refetchAuthMethods()}
@@ -277,30 +281,46 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
               )}
               {!isAuthMethodsError && hasLocalAuth && (
                 <>
-                  <Input
-                    id="local-auth-email"
-                    type="email"
-                    value={localEmail}
-                    onChange={(event) => setLocalEmail(event.target.value)}
-                    placeholder="Email"
-                    autoComplete="username"
-                  />
-                  <Input
-                    id="local-auth-password"
-                    type="password"
-                    value={localPassword}
-                    onChange={(event) => setLocalPassword(event.target.value)}
-                    placeholder="Password"
-                    autoComplete="current-password"
-                  />
+                  <div className="agentos-field">
+                    <label
+                      className="agentos-field__label"
+                      htmlFor="local-auth-email"
+                    >
+                      {t('oauth.email', 'Email')}
+                    </label>
+                    <Input
+                      id="local-auth-email"
+                      type="email"
+                      value={localEmail}
+                      onChange={(event) => setLocalEmail(event.target.value)}
+                      placeholder={t('oauth.email', 'Email')}
+                      autoComplete="username"
+                    />
+                  </div>
+                  <div className="agentos-field">
+                    <label
+                      className="agentos-field__label"
+                      htmlFor="local-auth-password"
+                    >
+                      {t('oauth.password', 'Password')}
+                    </label>
+                    <Input
+                      id="local-auth-password"
+                      type="password"
+                      value={localPassword}
+                      onChange={(event) => setLocalPassword(event.target.value)}
+                      placeholder={t('oauth.password', 'Password')}
+                      autoComplete="current-password"
+                    />
+                  </div>
                   <button
                     type="button"
-                    className="relative flex h-10 w-full items-center overflow-hidden rounded-[4px] border border-[#dadce0] bg-[#f2f2f2] px-3 text-[14px] font-medium leading-5 tracking-[0.25px] text-[#1f1f1f] transition-colors duration-150 hover:bg-[#e8eaed] active:bg-[#e2e3e5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a73e8]/40 disabled:cursor-not-allowed disabled:bg-[#ffffff61] disabled:text-[#1f1f1f]/40"
+                    className="agentos-button agentos-button--primary w-full"
                     onClick={() => void handleLocalLogin()}
                     disabled={
                       isSubmittingLocal || !localEmail.trim() || !localPassword
                     }
-                    style={{ fontFamily: "'Roboto', Arial, sans-serif" }}
+                    aria-busy={isSubmittingLocal}
                   >
                     <span className="w-full text-center">
                       {isSubmittingLocal
@@ -333,7 +353,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
             </div>
 
             <DialogFooter>
-              <Button variant="ghost" onClick={handleClose}>
+              <Button type="button" variant="ghost" onClick={handleClose}>
                 {t('buttons.cancel')}
               </Button>
             </DialogFooter>
@@ -345,7 +365,10 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
           <>
             <DialogHeader>
               <div className="flex items-center gap-3">
-                <LogIn className="h-6 w-6 text-primary-foreground" />
+                <LogIn
+                  className="h-6 w-6 text-primary-foreground"
+                  aria-hidden="true"
+                />
                 <DialogTitle>{t('oauth.waitingTitle')}</DialogTitle>
               </div>
               <DialogDescription className="text-left pt-2">
@@ -355,7 +378,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
 
             <div className="space-y-4 py-6">
               <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground">
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
                 <span>{t('oauth.waitingForAuth')}</span>
               </div>
               <p className="text-sm text-center text-muted-foreground">
@@ -364,10 +387,10 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
             </div>
 
             <DialogFooter className="gap-2 sm:gap-0">
-              <Button variant="ghost" onClick={handleBack}>
+              <Button type="button" variant="ghost" onClick={handleBack}>
                 {t('oauth.back')}
               </Button>
-              <Button variant="ghost" onClick={handleClose}>
+              <Button type="button" variant="ghost" onClick={handleClose}>
                 {t('buttons.cancel')}
               </Button>
             </DialogFooter>
@@ -395,6 +418,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -425,10 +449,10 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
             </div>
 
             <DialogFooter className="gap-2 sm:gap-0">
-              <Button variant="ghost" onClick={handleBack}>
+              <Button type="button" variant="ghost" onClick={handleBack}>
                 {t('oauth.tryAgain')}
               </Button>
-              <Button variant="ghost" onClick={handleClose}>
+              <Button type="button" variant="ghost" onClick={handleClose}>
                 {t('buttons.close')}
               </Button>
             </DialogFooter>
