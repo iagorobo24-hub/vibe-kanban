@@ -23,8 +23,41 @@ fn is_jsonc_file(path: &Path) -> bool {
 }
 
 static DEFAULT_MCP_JSON: &str = include_str!("../default_mcp.json");
+
+/// Ruta al binario `vibe-kanban-mcp` que acompaña al ejecutable en marcha.
+///
+/// El catálogo por defecto apunta el servidor MCP propio a `npx -y vibe-kanban@latest
+/// --mcp`, que descarga el paquete publicado por upstream. En un fork eso ejecuta el
+/// código de otro: el nuestro tiene ejecutores y rutas que el publicado no conoce.
+/// Si el binario hermano existe, lo preferimos.
+fn sibling_mcp_binary() -> Option<String> {
+    let exe = std::env::current_exe().ok()?;
+    let name = if cfg!(windows) {
+        "vibe-kanban-mcp.exe"
+    } else {
+        "vibe-kanban-mcp"
+    };
+    let candidate = exe.parent()?.join(name);
+    candidate
+        .is_file()
+        .then(|| candidate.to_string_lossy().into_owned())
+}
+
 pub static PRECONFIGURED_MCP_SERVERS: LazyLock<Value> = LazyLock::new(|| {
-    serde_json::from_str::<Value>(DEFAULT_MCP_JSON).expect("Failed to parse default MCP JSON")
+    let mut catalog =
+        serde_json::from_str::<Value>(DEFAULT_MCP_JSON).expect("Failed to parse default MCP JSON");
+
+    // Sin binario hermano —por ejemplo en un `cargo run` que sólo compiló el server—
+    // se queda la entrada `npx` del catálogo, que sigue funcionando.
+    if let Some(path) = sibling_mcp_binary() {
+        catalog["vibe_kanban"] = serde_json::json!({
+            "command": path,
+            "args": ["--mode", "global"],
+        });
+        tracing::debug!("MCP propio resuelto al binario local: {path}");
+    }
+
+    catalog
 });
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
