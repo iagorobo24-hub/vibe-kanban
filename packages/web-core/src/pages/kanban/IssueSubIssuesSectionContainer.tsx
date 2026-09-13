@@ -214,10 +214,12 @@ export function IssueSubIssuesSectionContainer({
       {
         icon: PlusIcon,
         onClick: handleCreateNewSubIssue,
+        label: 'Create sub-issue',
       },
       {
         icon: LinkIcon,
         onClick: handleLinkSubIssue,
+        label: 'Link sub-issue',
       },
     ],
     [handleCreateNewSubIssue, handleLinkSubIssue]

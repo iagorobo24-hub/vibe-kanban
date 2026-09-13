@@ -109,7 +109,13 @@ export const RightSidebar = memo(function RightSidebar({
         visible: isTerminalVisible && !isTerminalExpanded,
         expanded: terminalExpanded,
         content: <TerminalPanelContainer />,
-        actions: [{ icon: ArrowsOutSimpleIcon, onClick: expandTerminal }],
+        actions: [
+          {
+            icon: ArrowsOutSimpleIcon,
+            onClick: expandTerminal,
+            label: 'Expand terminal',
+          },
+        ],
       },
       {
         title: t('common:sections.notes'),

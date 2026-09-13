@@ -87,8 +87,6 @@ function CompactCard({
       )}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
-      role="button"
-      tabIndex={0}
       title={`@${author}: ${body}\n\n${t('prComments.card.tooltip')}`}
     >
       <Icon

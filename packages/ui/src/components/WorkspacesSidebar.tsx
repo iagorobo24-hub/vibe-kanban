@@ -237,10 +237,12 @@ export function WorkspacesSidebar({
       icon: StackIcon,
       onClick: () => onToggleLayoutMode?.(),
       isActive: layoutMode === "accordion",
+      label: "Toggle workspace layout",
     },
     {
       icon: PlusIcon,
       onClick: () => onAddWorkspace?.(),
+      label: "Add workspace",
     },
   ];
 
