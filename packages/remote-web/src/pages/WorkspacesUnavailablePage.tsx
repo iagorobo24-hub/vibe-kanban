@@ -38,8 +38,8 @@ export default function WorkspacesUnavailablePage({
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-3xl items-center justify-center px-double py-double">
-      <div className="w-full space-y-base rounded-sm border border-border bg-secondary p-double">
+    <div className="agentos-remote-status-page mx-auto flex h-full w-full max-w-3xl items-center justify-center px-double py-double">
+      <div className="agentos-remote-status-page__card agentos-remote-card w-full space-y-base rounded-sm border border-border bg-secondary p-double">
         <h1 className="text-xl font-semibold text-high">Workspaces</h1>
 
         {isCheckingBlockedHost ? (
@@ -63,8 +63,7 @@ export default function WorkspacesUnavailablePage({
 
             <ol className="list-inside list-decimal space-y-half text-sm text-low">
               <li>
-                On that machine, open Vibe Kanban and confirm the host is
-                online.
+                On that machine, open AgentOS and confirm the host is online.
               </li>
               <li>
                 If it still fails, open Relay Settings and pair this host again.
@@ -87,7 +86,7 @@ export default function WorkspacesUnavailablePage({
         <button
           type="button"
           onClick={openRelaySettings}
-          className="rounded-sm border border-border bg-primary px-base py-half text-xs text-normal hover:border-brand/60"
+          className="agentos-button agentos-button--secondary agentos-button--sm"
         >
           Open Relay Settings
         </button>

@@ -82,7 +82,7 @@ export default function LoginPage() {
   return (
     <div className="agentos-theme agentos-page-shell h-screen overflow-auto bg-primary">
       <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-base py-double">
-        <div className="space-y-double rounded-sm border border-border bg-secondary p-double">
+        <div className="agentos-remote-card space-y-double rounded-sm border border-border bg-secondary p-double">
           <header className="space-y-double text-center">
             <div className="flex justify-center">
               <BrandLogo className="h-8 w-auto" />
@@ -133,7 +133,7 @@ export default function LoginPage() {
                 </div>
                 <button
                   type="button"
-                  className="w-full rounded-sm bg-brand px-base py-half text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+                  className="agentos-button agentos-button--primary w-full disabled:cursor-not-allowed"
                   onClick={() => void handleLocalLogin()}
                   disabled={pending !== null || !email.trim() || !password}
                 >
@@ -209,8 +209,7 @@ function OAuthButton({
   return (
     <button
       type="button"
-      className="flex h-10 min-w-[280px] items-center justify-center rounded-[4px] border border-[#dadce0] bg-[#f2f2f2] px-3 text-[14px] font-medium text-[#1f1f1f] transition-colors hover:bg-[#e8eaed] active:bg-[#e2e3e5] disabled:cursor-not-allowed disabled:opacity-50"
-      style={{ fontFamily: "'Roboto', Arial, sans-serif" }}
+      className="agentos-button agentos-button--secondary min-h-10 w-full min-w-[280px] disabled:cursor-not-allowed"
       onClick={onClick}
       disabled={disabled || loading}
     >

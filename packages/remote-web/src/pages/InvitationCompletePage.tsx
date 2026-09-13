@@ -8,6 +8,7 @@ import {
   retrieveInvitationToken,
   retrieveVerifier,
 } from "@remote/shared/lib/pkce";
+import { RemoteStatusCard } from "@remote/shared/components/RemotePagePrimitives";
 
 export default function InvitationCompletePage() {
   const { token: urlToken } = useParams({
@@ -74,7 +75,7 @@ export default function InvitationCompletePage() {
     const retryPath = urlToken ? `/invitations/${urlToken}/accept` : "/account";
 
     return (
-      <StatusCard title="Could not accept invitation" variant="error">
+      <RemoteStatusCard title="Could not accept invitation" variant="error">
         <p className="mt-base text-sm text-normal">{error}</p>
         <button
           type="button"
@@ -85,13 +86,13 @@ export default function InvitationCompletePage() {
         >
           Try again
         </button>
-      </StatusCard>
+      </RemoteStatusCard>
     );
   }
 
   if (isAccepted) {
     return (
-      <StatusCard title="Invitation accepted!">
+      <RemoteStatusCard title="Invitation accepted!">
         <p className="mt-base text-sm text-normal">
           Your invitation is confirmed. You can now close this page.
         </p>
@@ -103,38 +104,13 @@ export default function InvitationCompletePage() {
         >
           Get started
         </a>
-      </StatusCard>
+      </RemoteStatusCard>
     );
   }
 
   return (
-    <StatusCard title="Completing invitation...">
+    <RemoteStatusCard title="Completing invitation...">
       <p className="mt-base text-sm text-low">Processing OAuth callback...</p>
-    </StatusCard>
-  );
-}
-
-function StatusCard({
-  title,
-  variant,
-  children,
-}: {
-  title: string;
-  variant?: "error";
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="h-screen overflow-auto bg-primary">
-      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-base py-double">
-        <div className="rounded-sm border border-border bg-secondary p-double">
-          <h2
-            className={`text-lg font-semibold ${variant === "error" ? "text-error" : "text-high"}`}
-          >
-            {title}
-          </h2>
-          {children}
-        </div>
-      </div>
-    </div>
+    </RemoteStatusCard>
   );
 }

@@ -1242,6 +1242,57 @@
   box-shadow: var(--agentos-shadow);
 }
 
+.agentos-theme .agentos-remote-page {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(224 139 97 / 7%), transparent 34rem),
+    var(--agentos-bg);
+}
+
+.agentos-theme .agentos-remote-page__content {
+  min-height: 100%;
+}
+
+.agentos-theme .agentos-remote-card {
+  background-color: rgb(36 35 33 / 94%);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-theme .agentos-remote-list-item {
+  border-color: var(--agentos-border);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-remote-list-item:hover:not(:disabled),
+.agentos-theme .agentos-remote-list-item:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border-strong);
+}
+
+.agentos-theme .agentos-remote-list-item:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.agentos-theme .agentos-remote-status-card--error {
+  border-color: rgb(221 141 130 / 36%);
+}
+
+.agentos-theme .agentos-remote-status-page {
+  background:
+    radial-gradient(circle at 50% 12%, rgb(224 139 97 / 6%), transparent 28rem),
+    var(--agentos-bg);
+}
+
+.agentos-theme .agentos-remote-home {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text);
+}
+
 .agentos-theme .agentos-notifications-page {
   background-color: var(--agentos-bg);
   color: var(--agentos-text-muted);

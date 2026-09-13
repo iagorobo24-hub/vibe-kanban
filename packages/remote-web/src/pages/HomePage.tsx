@@ -180,13 +180,13 @@ export default function HomePage() {
   );
 
   return (
-    <div className="h-full overflow-auto">
+    <div className="agentos-remote-home h-full overflow-auto">
       <div className="mx-auto w-full max-w-6xl px-base py-base sm:px-double sm:py-double">
         {isMobile && isSignedIn && (
           <section className="mb-double">
             <h2 className="text-lg font-semibold text-high">Your Hosts</h2>
             {hosts.length === 0 ? (
-              <div className="mt-base rounded-sm border border-border bg-secondary p-base text-center">
+              <div className="agentos-remote-card mt-base rounded-sm border border-border bg-secondary p-base text-center">
                 <p className="text-sm text-low">No hosts linked yet</p>
                 <button
                   type="button"
@@ -210,7 +210,7 @@ export default function HomePage() {
                       key={host.id}
                       type="button"
                       disabled={!isClickable}
-                      className={`flex w-full items-center gap-base rounded-sm border border-border bg-primary px-base py-base text-left transition-colors ${
+                      className={`agentos-remote-list-item flex w-full items-center gap-base rounded-sm border border-border bg-primary px-base py-base text-left transition-colors ${
                         isClickable
                           ? "hover:border-high/20 hover:bg-panel"
                           : "opacity-50"
@@ -269,7 +269,7 @@ export default function HomePage() {
         </header>
 
         {organizationCount === 0 ? (
-          <section className="mt-double rounded-sm border border-border bg-secondary p-base sm:p-double">
+          <section className="agentos-remote-card mt-double rounded-sm border border-border bg-secondary p-base sm:p-double">
             <h2 className="text-base font-medium text-high">
               No organizations found
             </h2>
@@ -297,8 +297,8 @@ export default function HomePage() {
 
 function CenteredCard({ children }: { children: ReactNode }) {
   return (
-    <div className="flex h-full items-center justify-center px-base">
-      <section className="w-full max-w-md rounded-sm border border-border bg-secondary p-double text-center">
+    <div className="agentos-remote-status-page flex h-full items-center justify-center px-base">
+      <section className="agentos-remote-card w-full max-w-md rounded-sm border border-border bg-secondary p-double text-center">
         {children}
       </section>
     </div>
@@ -315,7 +315,7 @@ function OrganizationSection({
   onRequireHost: () => void;
 }) {
   return (
-    <section className="space-y-base">
+    <section className="agentos-remote-organization space-y-base">
       <header className="flex items-center justify-between gap-base">
         <h2 className="truncate text-lg font-medium text-high">
           {organization.name}
@@ -326,7 +326,7 @@ function OrganizationSection({
       </header>
 
       {projects.length === 0 ? (
-        <div className="rounded-sm border border-border bg-primary px-base py-base text-sm text-low">
+        <div className="agentos-remote-card rounded-sm border border-border bg-primary px-base py-base text-sm text-low">
           No projects yet
         </div>
       ) : (
@@ -366,7 +366,7 @@ function ProjectCard({
     return (
       <button
         type="button"
-        className="group flex h-[61px] w-full flex-col justify-center rounded-sm border border-border bg-primary px-base py-base text-left hover:border-brand/60 hover:bg-panel"
+        className="agentos-remote-list-item group flex h-[61px] w-full flex-col justify-center rounded-sm border border-border bg-primary px-base py-base text-left hover:border-brand/60 hover:bg-panel"
         onClick={onRequireHost}
       >
         <p className="text-sm font-medium text-high">{project.name}</p>
@@ -382,7 +382,7 @@ function ProjectCard({
       onClick={() => {
         setSelectedOrgId(project.organization_id);
       }}
-      className="group flex h-[61px] flex-col justify-center rounded-sm border border-border bg-primary px-base py-base hover:border-high/20 hover:bg-panel focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+      className="agentos-remote-list-item group flex h-[61px] flex-col justify-center rounded-sm border border-border bg-primary px-base py-base hover:border-high/20 hover:bg-panel focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
     >
       <p className="text-sm font-medium text-high">{project.name}</p>
       <p className="mt-half text-xs text-low group-hover:text-normal">
@@ -394,6 +394,6 @@ function ProjectCard({
 
 function ProjectCardSkeleton() {
   return (
-    <div className="h-[61px] rounded-sm border border-border bg-primary animate-pulse" />
+    <div className="agentos-remote-card h-[61px] rounded-sm border border-border bg-primary animate-pulse" />
   );
 }

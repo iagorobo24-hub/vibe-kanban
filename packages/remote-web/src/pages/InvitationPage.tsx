@@ -12,6 +12,12 @@ import {
   storeInvitationToken,
   storeVerifier,
 } from "@remote/shared/lib/pkce";
+import {
+  RemoteCard,
+  RemotePage,
+  RemoteStatusCard,
+} from "@remote/shared/components/RemotePagePrimitives";
+import { AgentOSWordmark } from "@vibe/web-core/agentos-wordmark";
 
 export default function InvitationPage() {
   const { token } = useParams({ from: "/invitations/$token/accept" });
@@ -80,78 +86,79 @@ export default function InvitationPage() {
 
   if (error && !invitation) {
     return (
-      <StatusCard title="Invalid or expired invitation" variant="error">
+      <RemoteStatusCard title="Invalid or expired invitation" variant="error">
         <p className="mt-base text-sm text-normal">{error}</p>
-      </StatusCard>
+      </RemoteStatusCard>
     );
   }
 
   if (!invitation) {
     return (
-      <StatusCard title="Loading invitation...">
+      <RemoteStatusCard title="Loading invitation...">
         <p className="mt-base text-sm text-low">Please wait.</p>
-      </StatusCard>
+      </RemoteStatusCard>
     );
   }
 
   return (
-    <div className="h-screen overflow-auto bg-primary">
-      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-base py-double">
-        <div className="space-y-double rounded-sm border border-border bg-secondary p-double">
-          <header className="space-y-half text-center">
-            <h1 className="text-2xl font-semibold text-high">
-              You&apos;re invited
-            </h1>
-            <p className="text-sm text-low">
-              You&apos;ve been invited to join{" "}
-              <span className="font-medium text-high">
-                {invitation.organization_name ?? invitation.organization_slug}
-              </span>{" "}
-              on Vibe Kanban.
-            </p>
-          </header>
+    <RemotePage>
+      <RemoteCard className="space-y-double p-double">
+        <header className="space-y-half text-center">
+          <div className="mb-double flex justify-center">
+            <AgentOSWordmark />
+          </div>
+          <h1 className="text-2xl font-semibold text-high">
+            You&apos;re invited
+          </h1>
+          <p className="text-sm text-low">
+            You&apos;ve been invited to join{" "}
+            <span className="font-medium text-high">
+              {invitation.organization_name ?? invitation.organization_slug}
+            </span>{" "}
+            on Vibe Kanban.
+          </p>
+        </header>
 
-          <section className="mx-auto w-full max-w-xs space-y-half border-t border-border pt-base text-sm">
-            <div className="flex items-center justify-between gap-base">
-              <span className="text-low">Role</span>
-              <span className="font-medium text-high">{invitation.role}</span>
-            </div>
-            <div className="flex items-center justify-between gap-base">
-              <span className="text-low">Expires</span>
-              <span className="font-medium text-high">
-                {new Date(invitation.expires_at).toLocaleDateString()}
-              </span>
-            </div>
-          </section>
+        <section className="mx-auto w-full max-w-xs space-y-half border-t border-border pt-base text-sm">
+          <div className="flex items-center justify-between gap-base">
+            <span className="text-low">Role</span>
+            <span className="font-medium text-high">{invitation.role}</span>
+          </div>
+          <div className="flex items-center justify-between gap-base">
+            <span className="text-low">Expires</span>
+            <span className="font-medium text-high">
+              {new Date(invitation.expires_at).toLocaleDateString()}
+            </span>
+          </div>
+        </section>
 
-          {error && (
-            <div className="rounded-sm border border-error/30 bg-error/10 p-base">
-              <p className="text-sm text-high">{error}</p>
-            </div>
-          )}
+        {error && (
+          <div className="rounded-sm border border-error/30 bg-error/10 p-base">
+            <p className="text-sm text-high">{error}</p>
+          </div>
+        )}
 
-          <section className="space-y-base border-t border-border pt-base text-center">
-            <p className="text-sm text-low">Choose a provider to continue:</p>
-            <div className="flex flex-col items-center gap-2">
-              <OAuthButton
-                provider="github"
-                label="Continue with GitHub"
-                onClick={() => void handleOAuthLogin("github")}
-                disabled={pendingProvider !== null}
-                loading={pendingProvider === "github"}
-              />
-              <OAuthButton
-                provider="google"
-                label="Continue with Google"
-                onClick={() => void handleOAuthLogin("google")}
-                disabled={pendingProvider !== null}
-                loading={pendingProvider === "google"}
-              />
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
+        <section className="space-y-base border-t border-border pt-base text-center">
+          <p className="text-sm text-low">Choose a provider to continue:</p>
+          <div className="flex flex-col items-center gap-2">
+            <OAuthButton
+              provider="github"
+              label="Continue with GitHub"
+              onClick={() => void handleOAuthLogin("github")}
+              disabled={pendingProvider !== null}
+              loading={pendingProvider === "github"}
+            />
+            <OAuthButton
+              provider="google"
+              label="Continue with Google"
+              onClick={() => void handleOAuthLogin("google")}
+              disabled={pendingProvider !== null}
+              loading={pendingProvider === "google"}
+            />
+          </div>
+        </section>
+      </RemoteCard>
+    </RemotePage>
   );
 }
 
@@ -171,8 +178,7 @@ function OAuthButton({
   return (
     <button
       type="button"
-      className="flex h-10 min-w-[280px] items-center justify-center rounded-[4px] border border-[#dadce0] bg-[#f2f2f2] px-3 text-[14px] font-medium text-[#1f1f1f] transition-colors hover:bg-[#e8eaed] active:bg-[#e2e3e5] disabled:cursor-not-allowed disabled:opacity-50"
-      style={{ fontFamily: "'Roboto', Arial, sans-serif" }}
+      className="agentos-button agentos-button--secondary min-h-10 w-full min-w-[280px] disabled:cursor-not-allowed"
       onClick={onClick}
       disabled={disabled || loading}
     >
@@ -180,30 +186,5 @@ function OAuthButton({
         ? `Opening ${provider === "github" ? "GitHub" : "Google"}...`
         : label}
     </button>
-  );
-}
-
-function StatusCard({
-  title,
-  variant,
-  children,
-}: {
-  title: string;
-  variant?: "error";
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="h-screen overflow-auto bg-primary">
-      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-base py-double">
-        <div className="rounded-sm border border-border bg-secondary p-double">
-          <h2
-            className={`text-lg font-semibold ${variant === "error" ? "text-error" : "text-high"}`}
-          >
-            {title}
-          </h2>
-          {children}
-        </div>
-      </div>
-    </div>
   );
 }
