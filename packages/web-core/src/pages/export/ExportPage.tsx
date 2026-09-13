@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ThemeMode } from 'shared/types';
-import { useTheme } from '@/shared/hooks/useTheme';
 import { ExportLayout } from '@/features/export/ui/ExportLayout';
+import { AgentOSWordmark } from '@/shared/components/AgentOSWordmark';
 import type { ExportRequest } from '@/features/export/ui/ExportDownload';
 import type {
   ExportOrganization,
@@ -12,15 +11,6 @@ import { useUserOrganizations } from '@/shared/hooks/useUserOrganizations';
 import { useOrganizationProjects } from '@/shared/hooks/useOrganizationProjects';
 import { makeRequest as makeRemoteRequest } from '@/shared/lib/remoteApi';
 import { LoginRequiredPrompt } from '@/shared/dialogs/shared/LoginRequiredPrompt';
-
-function resolveTheme(theme: ThemeMode): 'light' | 'dark' {
-  if (theme === ThemeMode.SYSTEM) {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
-  }
-  return theme === ThemeMode.DARK ? 'dark' : 'light';
-}
 
 interface ExportPageProps {
   exportFn: (request: ExportRequest) => Promise<Response>;
@@ -41,20 +31,13 @@ export function ExportPage({
   selectedOrgId,
   onOrgChange,
 }: ExportPageProps) {
-  const { theme } = useTheme();
-
-  const logoSrc =
-    resolveTheme(theme) === 'dark'
-      ? '/vibe-kanban-logo-dark.svg'
-      : '/vibe-kanban-logo.svg';
-
   return (
     <div className="agentos-theme agentos-export-page agentos-page-shell h-full overflow-auto bg-primary">
       <div className="agentos-export-page__content mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
         <div className="agentos-export-page__card agentos-page-card rounded-sm border border-border bg-secondary p-double space-y-double">
           <header className="agentos-export-page__header space-y-double text-center">
             <div className="flex justify-center">
-              <img src={logoSrc} alt="AgentOS" className="h-8 w-auto logo" />
+              <AgentOSWordmark />
             </div>
             <p className="text-sm text-low">
               Download your project and issue data to CSV files. Optionally
