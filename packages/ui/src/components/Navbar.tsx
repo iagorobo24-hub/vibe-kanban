@@ -101,7 +101,7 @@ export type MobileTabId =
   | "git";
 
 export const MOBILE_TABS: { id: MobileTabId; icon: Icon; label: string }[] = [
-  { id: "workspaces", icon: LayoutIcon, label: "Wksps" },
+  { id: "workspaces", icon: LayoutIcon, label: "Workspaces" },
   { id: "chat", icon: ChatsTeardropIcon, label: "Chat" },
   { id: "changes", icon: GitDiffIcon, label: "Diff" },
   { id: "logs", icon: TerminalIcon, label: "Logs" },
@@ -304,6 +304,8 @@ export function Navbar({
                     <button
                       key={tab.id}
                       type="button"
+                      aria-label={tab.label}
+                      aria-pressed={isActive}
                       className={cn(
                         "flex items-center gap-1 px-1.5 py-1 text-xs whitespace-nowrap transition-colors",
                         isActive
@@ -325,6 +327,7 @@ export function Navbar({
               {onNavigateToBoard && (
                 <button
                   type="button"
+                  aria-label="Board"
                   className="flex items-center gap-1 px-1.5 py-1 text-xs text-low hover:text-normal whitespace-nowrap"
                   onClick={onNavigateToBoard}
                 >
