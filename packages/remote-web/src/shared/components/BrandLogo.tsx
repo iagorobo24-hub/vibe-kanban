@@ -5,15 +5,23 @@ interface BrandLogoProps {
 
 export function BrandLogo({
   className = "h-8 w-auto",
-  alt = "Vibe Kanban",
+  alt = "AgentOS",
 }: BrandLogoProps) {
   return (
-    <picture>
-      <source
-        srcSet="/vibe-kanban-logo-dark.svg"
-        media="(prefers-color-scheme: dark)"
-      />
-      <img src="/vibe-kanban-logo.svg" alt={alt} className={className} />
-    </picture>
+    <div
+      className={`agentos-brand-wordmark inline-flex items-center gap-2 ${className}`}
+      role="img"
+      aria-label={alt}
+    >
+      <span
+        className="agentos-brand-wordmark__mark flex h-8 w-8 items-center justify-center rounded-md text-sm font-semibold"
+        aria-hidden="true"
+      >
+        A
+      </span>
+      <span className="agentos-brand-wordmark__name text-sm font-semibold tracking-tight">
+        AgentOS
+      </span>
+    </div>
   );
 }

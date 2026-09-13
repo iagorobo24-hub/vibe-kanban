@@ -244,7 +244,7 @@ export function RemoteAppShell({ children }: RemoteAppShellProps) {
   return (
     <div
       className={cn(
-        "flex flex-col bg-primary",
+        "agentos-theme agentos-shell flex flex-col bg-primary",
         isMobile
           ? "fixed inset-0 pb-[env(safe-area-inset-bottom)]"
           : "h-screen",
