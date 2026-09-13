@@ -296,6 +296,15 @@ export function createImageNode(options: CreateImageNodeOptions) {
       ]
     );
 
+    const handleKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        handleClick(event as unknown as React.MouseEvent);
+      },
+      [handleClick]
+    );
+
     const handleDownload = useCallback(
       (event: React.MouseEvent) => {
         event.preventDefault();
@@ -460,9 +469,11 @@ export function createImageNode(options: CreateImageNodeOptions) {
       <span
         className="group relative inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 ml-0.5 mr-0.5 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors align-bottom"
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
         onDoubleClick={onDoubleClickEdit}
         role="button"
         tabIndex={0}
+        aria-label={`Open ${displayName}`}
       >
         {thumbnailContent}
         <span className="flex flex-col min-w-0">
@@ -482,7 +493,7 @@ export function createImageNode(options: CreateImageNodeOptions) {
             aria-label={t('kanban.removeImage')}
             type="button"
           >
-            <X className="w-2.5 h-2.5 text-background" />
+            <X className="w-2.5 h-2.5 text-background" aria-hidden="true" />
           </button>
         )}
         {showDownloadButton ? (
@@ -496,7 +507,10 @@ export function createImageNode(options: CreateImageNodeOptions) {
             aria-label={t('kanban.downloadAttachment')}
             type="button"
           >
-            <Download className="w-2.5 h-2.5 text-background" />
+            <Download
+              className="w-2.5 h-2.5 text-background"
+              aria-hidden="true"
+            />
           </button>
         ) : null}
       </span>

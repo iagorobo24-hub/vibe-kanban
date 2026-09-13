@@ -97,15 +97,6 @@ export function IssueListRow({
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          role="button"
-          tabIndex={0}
-          onClick={onClick}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onClick(e as unknown as MouseEvent);
-            }
-          }}
           className={cn(
             'group/row flex items-center justify-between gap-double px-double py-half',
             'transition-colors',
@@ -130,6 +121,7 @@ export function IssueListRow({
                 <DotsSixVerticalIcon
                   className="size-icon-xs text-low"
                   weight="bold"
+                  aria-hidden="true"
                 />
               </div>
               {/* Checkbox — shown on hover or when multi-select active */}
@@ -148,12 +140,19 @@ export function IssueListRow({
                 />
               </div>
             </div>
-            <PriorityIcon priority={issue.priority} />
-            <span className="font-ibm-plex-mono text-sm text-normal shrink-0">
-              {issue.simple_id}
-            </span>
-            <StatusDot color={statusColor} />
-            <span className="text-base text-high truncate">{issue.title}</span>
+            <button
+              type="button"
+              className="flex min-w-0 flex-1 items-center gap-double border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+              onClick={onClick}
+              aria-label={`${issue.simple_id}: ${issue.title}`}
+            >
+              <PriorityIcon priority={issue.priority} />
+              <span className="font-ibm-plex-mono text-sm text-normal shrink-0">
+                {issue.simple_id}
+              </span>
+              <StatusDot color={statusColor} />
+              <span className="text-base text-high truncate">{issue.title}</span>
+            </button>
           </div>
 
           {/* Right side: Tags, Assignee, Age */}

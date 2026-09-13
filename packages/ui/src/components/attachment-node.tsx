@@ -226,6 +226,15 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
       [attachmentId, resolvedUrl]
     );
 
+    const handleKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        void openUrl(event as unknown as React.MouseEvent);
+      },
+      [openUrl]
+    );
+
     const handleDelete = useCallback(
       (event: React.MouseEvent) => {
         event.preventDefault();
@@ -267,9 +276,11 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
             console.error('Failed to open attachment:', error);
           });
         }}
+        onKeyDown={handleKeyDown}
         onDoubleClick={onDoubleClickEdit}
         role="button"
         tabIndex={0}
+        aria-label={`Open attachment ${displayName}`}
       >
         <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
           {icon}
@@ -291,7 +302,7 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
             aria-label={t('kanban.removeImage')}
             type="button"
           >
-            <X className="w-2.5 h-2.5 text-background" />
+            <X className="w-2.5 h-2.5 text-background" aria-hidden="true" />
           </button>
         )}
         {resolvedUrl && (
@@ -305,7 +316,10 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
             aria-label={t('kanban.downloadAttachment')}
             type="button"
           >
-            <Download className="w-2.5 h-2.5 text-background" />
+            <Download
+              className="w-2.5 h-2.5 text-background"
+              aria-hidden="true"
+            />
           </button>
         )}
       </span>
