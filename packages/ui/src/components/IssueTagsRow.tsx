@@ -84,11 +84,11 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
   const addTagTrigger = (
     <button
       type="button"
-      className="flex items-center justify-center h-5 w-5 rounded-sm text-low hover:text-normal hover:bg-panel transition-colors disabled:opacity-50"
+      className="flex size-6 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:opacity-50"
       disabled={disabled}
       aria-label="Add tag"
     >
-      <PlusIcon className="size-icon-xs" weight="bold" />
+      <PlusIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
     </button>
   );
 
@@ -101,21 +101,24 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
           type="button"
           onClick={() => handleTagToggle(tag.id)}
           disabled={disabled}
+          aria-label={`Remove tag ${tag.name}`}
           className={cn(
             'inline-flex items-center justify-center',
-            'h-5 px-base gap-half',
+            'h-6 gap-half px-base',
             'bg-panel rounded-sm',
             'text-sm text-low font-medium',
             'whitespace-nowrap',
             'transition-colors',
             !disabled &&
               'hover:bg-error/20 hover:text-error hover:line-through cursor-pointer',
-            disabled && 'cursor-default'
+            disabled && 'cursor-default',
+            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
           )}
         >
           <span
             className="w-2 h-2 rounded-full shrink-0"
             style={{ backgroundColor: `hsl(${tag.color})` }}
+            aria-hidden="true"
           />
           {tag.name}
         </button>
@@ -137,10 +140,14 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
           type="button"
           onClick={onLinkPr}
           disabled={disabled}
-          className="flex items-center justify-center h-5 w-5 rounded-sm text-low hover:text-normal hover:bg-panel transition-colors disabled:opacity-50"
+          className="flex size-6 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:opacity-50"
           aria-label="Link pull request"
         >
-          <GitPullRequest className="size-icon-xs" weight="bold" />
+          <GitPullRequest
+            className="size-icon-xs"
+            weight="bold"
+            aria-hidden="true"
+          />
         </button>
       )}
 
@@ -149,10 +156,11 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
         <button
           key={issue.id}
           type="button"
-          className="inline-flex items-center gap-half h-5 px-base bg-panel rounded-sm text-sm text-low hover:text-normal transition-colors"
+          className="inline-flex items-center gap-half rounded-sm bg-panel px-base py-half text-sm text-low transition-colors hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           title={issue.title}
+          aria-label={`${issue.displayId}: ${issue.title}`}
         >
-          <HashIcon className="size-icon-xs" weight="bold" />
+          <HashIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
           <span>{issue.displayId}</span>
         </button>
       ))}

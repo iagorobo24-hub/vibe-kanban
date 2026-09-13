@@ -49,16 +49,26 @@ export function PropertyDropdown<T extends string = string>({
             'flex items-center gap-half bg-panel rounded-sm',
             'text-sm text-normal hover:bg-secondary transition-colors',
             'disabled:opacity-50 disabled:cursor-not-allowed',
+            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
             'py-half',
             'px-base',
             iconOnly && isNonDefault && 'text-brand'
           )}
+          aria-label={iconOnly ? (label ?? selectedOption?.label) : undefined}
         >
           {iconOnly && IconComponent ? (
-            <IconComponent className="size-icon-xs" weight="bold" />
+            <IconComponent
+              className="size-icon-xs"
+              weight="bold"
+              aria-hidden="true"
+            />
           ) : IconComponent ? (
             <>
-              <IconComponent className="size-icon-xs" weight="bold" />
+              <IconComponent
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
               {label && <span>{label}:</span>}
               <span>{selectedOption?.label}</span>
             </>
@@ -66,7 +76,11 @@ export function PropertyDropdown<T extends string = string>({
             (selectedOption?.renderOption?.() ?? selectedOption?.label)
           )}
           {!iconOnly && (
-            <CaretDownIcon className="size-icon-2xs text-low" weight="bold" />
+            <CaretDownIcon
+              className="size-icon-2xs text-low"
+              weight="bold"
+              aria-hidden="true"
+            />
           )}
         </button>
       </DropdownMenuTrigger>
