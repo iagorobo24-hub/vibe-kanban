@@ -300,7 +300,11 @@ function SettingsDialogContent({
                 aria-label="Close settings"
                 className="agentos-icon-button p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
-                <XIcon className="size-icon-sm" weight="bold" />
+                <XIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
             </div>
             <SettingsDialogNavigation
@@ -326,7 +330,11 @@ function SettingsDialogContent({
                 aria-label="Back to settings navigation"
                 className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
-                <CaretLeftIcon className="size-icon-sm" weight="bold" />
+                <CaretLeftIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
               <span className="text-sm font-medium text-high">
                 {t(`settings.layout.nav.${activeSection}`)}
@@ -337,7 +345,11 @@ function SettingsDialogContent({
                 aria-label="Close settings"
                 className="ml-auto p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
-                <XIcon className="size-icon-sm" weight="bold" />
+                <XIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
             </div>
             {/* Section content */}

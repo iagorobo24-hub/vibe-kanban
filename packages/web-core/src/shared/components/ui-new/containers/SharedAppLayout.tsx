@@ -437,7 +437,7 @@ export function SharedAppLayout() {
                 aria-label="Close navigation menu"
                 className="agentos-mobile-drawer__close agentos-icon-button"
               >
-                <XIcon className="h-4 w-4" weight="bold" />
+                <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               </button>
             </div>
 
@@ -450,7 +450,7 @@ export function SharedAppLayout() {
               }}
               className="agentos-mobile-drawer__item flex items-center gap-2 px-4 py-3 text-sm cursor-pointer"
             >
-              <LayoutIcon className="h-4 w-4" />
+              <LayoutIcon className="h-4 w-4" aria-hidden="true" />
               Workspaces
             </button>
 
@@ -471,7 +471,7 @@ export function SharedAppLayout() {
                   }}
                   className="agentos-mobile-drawer__item flex w-full items-center gap-2 px-3 py-2.5 text-sm cursor-pointer"
                 >
-                  <DownloadSimpleIcon className="h-4 w-4" />
+                  <DownloadSimpleIcon className="h-4 w-4" aria-hidden="true" />
                   Export data
                 </button>
               </div>
@@ -512,6 +512,7 @@ export function SharedAppLayout() {
                   <KanbanIcon
                     className="h-8 w-8 mx-auto text-low"
                     weight="bold"
+                    aria-hidden="true"
                   />
                   <p className="mt-3 text-sm font-medium text-high">
                     Kanban Boards
@@ -546,7 +547,7 @@ export function SharedAppLayout() {
                   }}
                   className="agentos-mobile-drawer__item flex items-center gap-2 w-full px-3 py-2.5 text-sm cursor-pointer"
                 >
-                  <PlusIcon className="h-4 w-4" />
+                  <PlusIcon className="h-4 w-4" aria-hidden="true" />
                   Create Project
                 </button>
               </div>

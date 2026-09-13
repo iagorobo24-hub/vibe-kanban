@@ -79,6 +79,7 @@ function NavbarIconButton({
       <IconComponent
         className="size-icon-base"
         weight={isActive ? "fill" : "regular"}
+        aria-hidden="true"
       />
     </button>
   );
@@ -250,7 +251,10 @@ export function Navbar({
                       onClick={onNavigateBack}
                       aria-label="Back"
                     >
-                      <CaretLeftIcon className="size-icon-base" />
+                      <CaretLeftIcon
+                        className="size-icon-base"
+                        aria-hidden="true"
+                      />
                     </button>
                   )
                 : onOpenDrawer && (
@@ -260,7 +264,10 @@ export function Navbar({
                       onClick={onOpenDrawer}
                       aria-label="Open menu"
                     >
-                      <SidebarSimpleIcon className="size-icon-base" />
+                      <SidebarSimpleIcon
+                        className="size-icon-base"
+                        aria-hidden="true"
+                      />
                     </button>
                   )}
               <p className="text-base text-normal font-medium truncate cursor-default select-none">
@@ -277,7 +284,10 @@ export function Navbar({
                     onClick={onNavigateBack}
                     aria-label="Back"
                   >
-                    <CaretLeftIcon className="size-icon-sm" />
+                    <CaretLeftIcon
+                      className="size-icon-sm"
+                      aria-hidden="true"
+                    />
                   </button>
                   <div className="h-4 w-px bg-border mx-0.5 shrink-0" />
                 </>
@@ -290,7 +300,7 @@ export function Navbar({
                       onClick={onOpenDrawer}
                       aria-label="Projects"
                     >
-                      <KanbanIcon className="size-icon-sm" />
+                      <KanbanIcon className="size-icon-sm" aria-hidden="true" />
                     </button>
                     <div className="h-4 w-px bg-border mx-0.5 shrink-0" />
                   </>
@@ -317,6 +327,7 @@ export function Navbar({
                       <TabIcon
                         className="size-icon-sm"
                         weight={isActive ? "fill" : "regular"}
+                        aria-hidden="true"
                       />
                       <span className="hidden min-[480px]:inline">
                         {tab.label}
@@ -331,7 +342,7 @@ export function Navbar({
                   className="flex items-center gap-1 px-1.5 py-1 text-xs text-low hover:text-normal whitespace-nowrap"
                   onClick={onNavigateToBoard}
                 >
-                  <KanbanIcon className="size-icon-sm" />
+                  <KanbanIcon className="size-icon-sm" aria-hidden="true" />
                   <span className="hidden min-[480px]:inline">Board</span>
                 </button>
               )}
@@ -365,7 +376,10 @@ export function Navbar({
                 onClick={onReload}
                 aria-label="Reload"
               >
-                <ArrowClockwiseIcon className="size-icon-sm" />
+                <ArrowClockwiseIcon
+                  className="size-icon-sm"
+                  aria-hidden="true"
+                />
               </button>
             )}
             {!isOnProjectPage && onOpenSettings && (
@@ -375,7 +389,7 @@ export function Navbar({
                 onClick={onOpenSettings}
                 aria-label="Settings"
               >
-                <GearIcon className="size-icon-sm" />
+                <GearIcon className="size-icon-sm" aria-hidden="true" />
               </button>
             )}
             {!isOnProjectPage && onOpenCommandBar && (
@@ -385,7 +399,7 @@ export function Navbar({
                 onClick={onOpenCommandBar}
                 aria-label="Command bar"
               >
-                <ListIcon className="size-icon-sm" />
+                <ListIcon className="size-icon-sm" aria-hidden="true" />
               </button>
             )}
             {mobileUserSlot && (
