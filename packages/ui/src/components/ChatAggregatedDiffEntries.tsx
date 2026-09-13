@@ -260,26 +260,29 @@ export function ChatAggregatedDiffEntries({
         className={cn(
           'flex items-center p-base w-full',
           isDenied ? 'bg-error/20' : 'bg-panel',
-          'cursor-pointer'
+          'group'
         )}
-        onClick={handleClick}
         onMouseEnter={() => onHoverChange(true)}
         onMouseLeave={() => onHoverChange(false)}
-        role="button"
-        aria-expanded={expanded}
         data-scroll-anchor-target=""
       >
-        <div className="flex-1 flex items-center gap-base min-w-0">
+        <button
+          type="button"
+          className="flex min-w-0 flex-1 items-center gap-base border-0 bg-transparent p-0 text-left"
+          onClick={handleClick}
+          aria-expanded={!isVSCode ? expanded : undefined}
+        >
           <span className="relative shrink-0">
             {!isVSCode && isHovered ? (
               <CaretDownIcon
+                aria-hidden="true"
                 className={cn(
                   'size-icon-base transition-transform duration-150',
                   !expanded && '-rotate-90'
                 )}
               />
             ) : (
-              <FileIcon className="size-icon-base" />
+              <FileIcon aria-hidden="true" className="size-icon-base" />
             )}
             {aggregateStatus && (
               <ToolStatusDot
@@ -292,19 +295,6 @@ export function ChatAggregatedDiffEntries({
           <span className="text-xs text-low shrink-0">
             · {entries.length} {entries.length === 1 ? 'edit' : 'edits'}
           </span>
-          {!isVSCode && onOpenInChanges && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onOpenInChanges();
-              }}
-              className="shrink-0 p-0.5 rounded hover:bg-muted text-low hover:text-normal transition-colors"
-              title={t('conversation.viewInChangesPanel')}
-            >
-              <ArrowSquareUpRightIcon className="size-icon-xs" />
-            </button>
-          )}
           {hasStats && (
             <span className="text-sm shrink-0">
               {totalStats.additions > 0 && (
@@ -316,14 +306,29 @@ export function ChatAggregatedDiffEntries({
               )}
             </span>
           )}
-        </div>
-        {!isVSCode && (
-          <CaretDownIcon
-            className={cn(
-              'size-icon-xs shrink-0 text-low transition-transform',
-              !expanded && '-rotate-90'
-            )}
-          />
+          {!isVSCode && (
+            <CaretDownIcon
+              aria-hidden="true"
+              className={cn(
+                'size-icon-xs shrink-0 text-low transition-transform',
+                !expanded && '-rotate-90'
+              )}
+            />
+          )}
+        </button>
+        {!isVSCode && onOpenInChanges && (
+          <button
+            type="button"
+            onClick={onOpenInChanges}
+            className="shrink-0 rounded p-0.5 text-low hover:bg-muted hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+            aria-label={t('conversation.viewInChangesPanel')}
+            title={t('conversation.viewInChangesPanel')}
+          >
+            <ArrowSquareUpRightIcon
+              aria-hidden="true"
+              className="size-icon-xs"
+            />
+          </button>
         )}
       </div>
 
