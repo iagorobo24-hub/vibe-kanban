@@ -193,14 +193,14 @@ export const RightSidebar = memo(function RightSidebar({
   ]);
 
   return (
-    <div className="h-full border-l bg-secondary overflow-y-auto">
+    <div className="agentos-right-sidebar h-full border-l bg-secondary overflow-y-auto">
       <div className="divide-y border-b">
         {sections
           .filter((section) => section.visible)
           .map((section) => (
             <div
               key={section.persistKey}
-              className="max-h-[max(50vh,400px)] flex flex-col overflow-hidden"
+              className="agentos-right-sidebar__section max-h-[max(50vh,400px)] flex flex-col overflow-hidden"
             >
               <CollapsibleSectionHeader
                 title={section.title}

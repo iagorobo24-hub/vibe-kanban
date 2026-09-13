@@ -313,7 +313,7 @@ export function WorkspacesLayout() {
     );
 
     return (
-      <div className="flex flex-1 min-h-0 h-full">
+      <div className="agentos-workspaces-layout flex flex-1 min-h-0 h-full">
         <div className="flex-1 min-w-0 h-full">
           {isCreateMode ? (
             <CreateModeProvider
@@ -417,7 +417,7 @@ export function WorkspacesLayout() {
   );
 
   return (
-    <div className="flex flex-1 min-h-0 h-full">
+    <div className="agentos-workspaces-layout flex flex-1 min-h-0 h-full">
       {isLeftSidebarVisible && (
         <div className="w-[300px] shrink-0 h-full overflow-hidden">
           <WorkspacesSidebarContainer onScrollToBottom={handleScrollToBottom} />

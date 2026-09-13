@@ -97,14 +97,14 @@ export function NotificationsPage() {
 
   if (!enabled) {
     return (
-      <div className="flex items-center justify-center h-full text-low">
+      <div className="agentos-page-shell flex items-center justify-center h-full text-low">
         Sign in to view notifications
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="agentos-notifications-page flex flex-col h-full overflow-hidden">
       <div className="flex items-center justify-between px-double py-base border-b border-border">
         <h1 className="text-xl font-medium text-high">Notifications</h1>
         {unseenCount > 0 && (
@@ -119,7 +119,7 @@ export function NotificationsPage() {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="agentos-notifications-page__list flex-1 overflow-y-auto">
         {groupedNotifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-2 text-low">
             <BellIcon size={32} weight="light" />

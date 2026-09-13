@@ -1,19 +1,19 @@
-import type { ForwardedRef, ReactNode, RefAttributes } from 'react';
+import type { ForwardedRef, ReactNode, RefAttributes } from "react";
 import {
   forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
-} from 'react';
-import { useTranslation } from 'react-i18next';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import { cn } from '../lib/cn';
+} from "react";
+import { useTranslation } from "react-i18next";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { cn } from "../lib/cn";
 
 export interface ChangesPanelHandle {
   scrollToIndex: (
     index: number,
-    options?: { align?: 'start' | 'center' | 'end' }
+    options?: { align?: "start" | "center" | "end" },
   ) => void;
 }
 
@@ -63,12 +63,12 @@ const LARGE_DIFF_THRESHOLD = 1000;
 const LARGE_DIFF_PLACEHOLDER_HEIGHT = 56;
 
 function getDiffPath(diff: ChangesPanelDiff): string {
-  return diff.newPath || diff.oldPath || '';
+  return diff.newPath || diff.oldPath || "";
 }
 
 function estimateDiffHeight(
   diff: ChangesPanelDiff,
-  isExpanded: boolean
+  isExpanded: boolean,
 ): number {
   if (!isExpanded) {
     return HEADER_HEIGHT + SPACING;
@@ -99,13 +99,13 @@ const ChangesPanelInner = <TDiff extends ChangesPanelDiff>(
     shouldSuppressSizeAdjustment,
     workspaceId,
   }: ChangesPanelProps<TDiff>,
-  ref: ForwardedRef<ChangesPanelHandle>
+  ref: ForwardedRef<ChangesPanelHandle>,
 ) => {
-  const { t } = useTranslation(['tasks', 'common']);
+  const { t } = useTranslation(["tasks", "common"]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const prevRangeRef = useRef({ startIndex: -1, endIndex: -1 });
   const diffRefCallbacksRef = useRef(
-    new Map<string, (el: HTMLDivElement | null) => void>()
+    new Map<string, (el: HTMLDivElement | null) => void>(),
   );
   const virtualizer = useVirtualizer({
     count: diffItems.length,
@@ -160,7 +160,7 @@ const ChangesPanelInner = <TDiff extends ChangesPanelDiff>(
     virtualizer.shouldAdjustScrollPositionOnItemSizeChange = (
       item,
       _delta,
-      instance
+      instance,
     ) => {
       if (shouldSuppressSizeAdjustment?.()) {
         return false;
@@ -188,17 +188,17 @@ const ChangesPanelInner = <TDiff extends ChangesPanelDiff>(
       }
       virtualizerRef.current.measureElement(element);
     },
-    [onMeasuredHeight]
+    [onMeasuredHeight],
   );
 
   useImperativeHandle(ref, () => ({
     scrollToIndex: (
       index: number,
-      options?: { align?: 'start' | 'center' | 'end' }
+      options?: { align?: "start" | "center" | "end" },
     ) => {
       virtualizer.scrollToIndex(index, {
-        align: options?.align ?? 'start',
-        behavior: 'auto',
+        align: options?.align ?? "start",
+        behavior: "auto",
       });
     },
   }));
@@ -210,19 +210,19 @@ const ChangesPanelInner = <TDiff extends ChangesPanelDiff>(
       ).current = node;
       onScrollerRef?.(node);
     },
-    [onScrollerRef]
+    [onScrollerRef],
   );
 
   if (diffItems.length === 0) {
     return (
       <div
         className={cn(
-          'w-full h-full bg-secondary flex flex-col px-base',
-          className
+          "agentos-changes-panel w-full h-full bg-secondary flex flex-col px-base",
+          className,
         )}
       >
         <div className="flex-1 flex items-center justify-center text-low">
-          <p className="text-sm">{t('common:empty.noChanges')}</p>
+          <p className="text-sm">{t("common:empty.noChanges")}</p>
         </div>
       </div>
     );
@@ -239,10 +239,10 @@ const ChangesPanelInner = <TDiff extends ChangesPanelDiff>(
     <div
       ref={scrollerRefCallback}
       className={cn(
-        'w-full h-full bg-secondary overflow-auto px-base',
-        className
+        "agentos-changes-panel w-full h-full bg-secondary overflow-auto px-base",
+        className,
       )}
-      style={{ contain: 'layout style paint' }}
+      style={{ contain: "layout style paint" }}
     >
       <div
         style={{
@@ -285,9 +285,9 @@ const ChangesPanelInner = <TDiff extends ChangesPanelDiff>(
 type ChangesPanelComponent = <
   TDiff extends ChangesPanelDiff = ChangesPanelDiff,
 >(
-  props: ChangesPanelProps<TDiff> & RefAttributes<ChangesPanelHandle>
+  props: ChangesPanelProps<TDiff> & RefAttributes<ChangesPanelHandle>,
 ) => JSX.Element;
 
 export const ChangesPanel = forwardRef(
-  ChangesPanelInner
+  ChangesPanelInner,
 ) as ChangesPanelComponent;

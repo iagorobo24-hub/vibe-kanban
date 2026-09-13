@@ -49,9 +49,9 @@ export function ExportPage({
       : '/vibe-kanban-logo.svg';
 
   return (
-    <div className="h-full overflow-auto bg-primary">
+    <div className="agentos-page-shell h-full overflow-auto bg-primary">
       <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
-        <div className="rounded-sm border border-border bg-secondary p-double space-y-double">
+        <div className="agentos-page-card rounded-sm border border-border bg-secondary p-double space-y-double">
           <header className="space-y-double text-center">
             <div className="flex justify-center">
               <img
@@ -128,7 +128,7 @@ export function ExportPageContainer() {
 
   if (!isLoaded) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-primary">
+      <div className="agentos-page-shell flex h-full w-full items-center justify-center bg-primary">
         <p className="text-sm text-low">Loading...</p>
       </div>
     );
@@ -136,7 +136,7 @@ export function ExportPageContainer() {
 
   if (!isSignedIn) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-primary p-base">
+      <div className="agentos-page-shell flex h-full w-full items-center justify-center bg-primary p-base">
         <LoginRequiredPrompt
           className="max-w-md"
           title="Sign in to export your cloud data"

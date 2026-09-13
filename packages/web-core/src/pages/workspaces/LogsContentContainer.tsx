@@ -66,7 +66,7 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
   // Empty state
   if (!content) {
     return (
-      <div className="w-full h-full bg-secondary flex items-center justify-center text-low">
+      <div className="agentos-logs-panel w-full h-full bg-secondary flex items-center justify-center text-low">
         <p className="text-sm">{t('logs.selectProcessToView')}</p>
       </div>
     );
@@ -79,7 +79,12 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
       .map((line) => ({ type: 'STDOUT' as const, content: line }));
 
     return (
-      <div className={cn('h-full bg-secondary flex flex-col', className)}>
+      <div
+        className={cn(
+          'agentos-logs-panel h-full bg-secondary flex flex-col',
+          className
+        )}
+      >
         <div className="px-4 py-2 border-b border-border text-sm font-medium text-normal shrink-0">
           {content.toolName}
         </div>
@@ -104,7 +109,12 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
   // Terminal content - render terminal with collapse button
   if (content.type === 'terminal') {
     return (
-      <div className={cn('h-full bg-secondary flex flex-col', className)}>
+      <div
+        className={cn(
+          'agentos-logs-panel h-full bg-secondary flex flex-col',
+          className
+        )}
+      >
         <div className="px-4 py-1 flex items-center justify-between shrink-0 h-8">
           <span className="text-sm font-medium text-normal">
             {t('processes.terminal')}
@@ -129,7 +139,7 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
 
   // Process logs - render with VirtualizedProcessLogs
   return (
-    <div className={cn('h-full bg-secondary', className)}>
+    <div className={cn('agentos-logs-panel h-full bg-secondary', className)}>
       <VirtualizedProcessLogs
         key={processId}
         logs={logs}

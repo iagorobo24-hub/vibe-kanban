@@ -251,7 +251,7 @@ export function OnboardingSignInPage() {
 
   if (loading || !config) {
     return (
-      <div className="h-screen bg-primary flex items-center justify-center">
+      <div className="agentos-theme agentos-page-shell h-screen bg-primary flex items-center justify-center">
         <p className="text-low">Loading...</p>
       </div>
     );
@@ -265,7 +265,7 @@ export function OnboardingSignInPage() {
   }
 
   return (
-    <div className="h-screen overflow-auto bg-primary">
+    <div className="agentos-theme agentos-page-shell h-screen overflow-auto bg-primary">
       {isTauriApp() && (
         <div
           data-tauri-drag-region
@@ -273,7 +273,7 @@ export function OnboardingSignInPage() {
         />
       )}
       <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
-        <div className="rounded-sm border border-border bg-secondary p-double space-y-double">
+        <div className="agentos-page-card rounded-sm border border-border bg-secondary p-double space-y-double">
           <header className="space-y-double text-center">
             <div className="flex justify-center">
               <img

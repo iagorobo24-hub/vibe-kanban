@@ -146,7 +146,7 @@ export function ProcessListContainer() {
   );
 
   return (
-    <div className="flex flex-col flex-1 w-full bg-secondary">
+    <div className="agentos-process-list flex flex-col flex-1 w-full bg-secondary">
       <div className="flex-1 overflow-y-auto pt-half px-base">
         {terminalItem}
         {sortedProcesses.map((process) => (
