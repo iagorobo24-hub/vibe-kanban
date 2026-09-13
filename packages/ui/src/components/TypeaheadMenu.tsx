@@ -364,13 +364,19 @@ function TypeaheadMenuItemComponent({
   return (
     <div
       ref={ref}
-      className={`px-base py-half rounded-sm cursor-pointer text-sm transition-colors ${
+      className={`relative px-base py-half rounded-sm text-sm transition-colors ${
         isSelected ? 'bg-secondary text-high' : 'hover:bg-secondary text-normal'
       }`}
       onMouseMove={handleMouseMove}
-      onClick={onClick}
     >
-      {children}
+      <button
+        type="button"
+        className="absolute inset-0 z-0 w-full rounded-sm border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand"
+        onClick={onClick}
+        aria-label={`Select option ${index + 1}`}
+        aria-pressed={isSelected}
+      />
+      <div className="relative z-10 pointer-events-none">{children}</div>
     </div>
   );
 }
