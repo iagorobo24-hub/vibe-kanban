@@ -1,4 +1,5 @@
 import { cn } from '@/shared/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface CloudShutdownExportBannerProps {
   onClick: () => void;
@@ -7,6 +8,8 @@ interface CloudShutdownExportBannerProps {
 export function CloudShutdownExportBanner({
   onClick,
 }: CloudShutdownExportBannerProps) {
+  const { t } = useTranslation('common');
+
   return (
     <div
       className={cn(
@@ -19,15 +22,15 @@ export function CloudShutdownExportBanner({
         onClick={onClick}
         className="border-0 bg-transparent p-0 text-inherit underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-on-brand"
       >
-        Vibe Kanban Cloud is shutting down. Export your data within 30 days.
+        {t('cloudShutdown.message')}
       </button>
       <a
         href="https://vibekanban.com/shutdown"
         target="_blank"
         rel="noreferrer"
-        className="underline underline-offset-2"
+        className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-on-brand"
       >
-        Read more here.
+        {t('cloudShutdown.moreInfo')}
       </a>
     </div>
   );

@@ -556,5 +556,9 @@
     "submitting": "Submitting answers...",
     "answeredCount": "Answered {{count}} question",
     "answeredCount_other": "Answered {{count}} questions"
+  },
+  "cloudShutdown": {
+    "message": "Legacy cloud notice: export your Vibe Kanban Cloud data within 30 days.",
+    "moreInfo": "Read more about the shutdown."
   }
 }

@@ -556,5 +556,9 @@
     "submitting": "Enviando respuestas...",
     "answeredCount": "Respondió {{count}} pregunta",
     "answeredCount_other": "Respondió {{count}} preguntas"
+  },
+  "cloudShutdown": {
+    "message": "Aviso del servicio cloud heredado: exporta tus datos de Vibe Kanban Cloud en los próximos 30 días.",
+    "moreInfo": "Más información sobre el cierre."
   }
 }
