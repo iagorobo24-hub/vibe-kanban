@@ -114,7 +114,7 @@ function StatusRowClone({ status, provided }: StatusRowCloneProps) {
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       className={cn(
-        'flex items-center gap-base px-base py-half rounded-sm shadow-lg',
+        'flex items-center gap-base px-base py-half rounded-sm shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset',
         status.isNew ? 'bg-panel' : 'bg-secondary',
         status.hidden && 'opacity-50'
       )}
@@ -122,9 +122,14 @@ function StatusRowClone({ status, provided }: StatusRowCloneProps) {
         ...provided.draggableProps.style,
         zIndex: 10001,
       }}
+      aria-label={`Reorder status: ${status.name}`}
     >
       <div className="flex items-center justify-center size-icon-sm cursor-grabbing">
-        <DotsSixVerticalIcon className="size-icon-xs text-low" weight="bold" />
+        <DotsSixVerticalIcon
+          className="size-icon-xs text-low"
+          weight="bold"
+          aria-hidden="true"
+        />
       </div>
       <div
         className="size-dot rounded-full shrink-0"
@@ -222,11 +227,16 @@ function StatusRow({
           <div className="flex items-center gap-base">
             <div
               {...provided.dragHandleProps}
-              className="flex items-center justify-center size-icon-sm cursor-grab"
+              className="flex items-center justify-center size-icon-sm cursor-grab rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+              aria-label={t('kanban.reorderStatus', {
+                defaultValue: 'Reorder status: {{name}}',
+                name: status.name,
+              })}
             >
               <DotsSixVerticalIcon
                 className="size-icon-xs text-low"
                 weight="bold"
+                aria-hidden="true"
               />
             </div>
 
@@ -241,6 +251,7 @@ function StatusRow({
                   type="button"
                   className="flex items-center justify-center size-icon-sm"
                   title={t('kanban.changeColor', 'Change color')}
+                  aria-label={t('kanban.changeColor', 'Change color')}
                 >
                   <div
                     className="size-dot rounded-full shrink-0"
@@ -272,7 +283,7 @@ function StatusRow({
                 onKeyDown={handleNameKeyDown}
                 onBlur={handleNameBlur}
                 autoFocus
-                className="bg-transparent text-sm text-high outline-none border-b border-brand w-24"
+                className="bg-transparent text-sm text-high outline-none border-b border-brand w-24 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               />
             ) : (
               <button
@@ -292,8 +303,13 @@ function StatusRow({
               onClick={() => onStartEditing(status.id)}
               className="flex items-center justify-center size-icon-sm text-low hover:text-normal"
               title={t('kanban.editName', 'Edit name')}
+              aria-label={t('kanban.editName', 'Edit name')}
             >
-              <PencilSimpleLineIcon className="size-icon-xs" weight="bold" />
+              <PencilSimpleLineIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
             <button
               type="button"
@@ -309,15 +325,34 @@ function StatusRow({
                   ? t('kanban.deleteStatus', 'Delete status')
                   : t('kanban.cannotDeleteWithIssues', 'Move issues first')
               }
+              aria-label={
+                canDelete
+                  ? t('kanban.deleteStatus', 'Delete status')
+                  : t('kanban.cannotDeleteWithIssues', 'Move issues first')
+              }
               disabled={!canDelete}
             >
-              <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
+              <XIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
             <Switch
               checked={!status.hidden}
               onCheckedChange={(checked) => onToggleHidden(status.id, !checked)}
               disabled={isLastVisible && !status.hidden}
               title={
+                isLastVisible
+                  ? t(
+                      'kanban.lastVisibleStatus',
+                      'At least one status must be visible'
+                    )
+                  : status.hidden
+                    ? t('kanban.showStatus', 'Show status')
+                    : t('kanban.hideStatus', 'Hide status')
+              }
+              aria-label={
                 isLastVisible
                   ? t(
                       'kanban.lastVisibleStatus',
@@ -1324,7 +1359,11 @@ export function RemoteProjectsSettingsSection({
                         onClick={() => handleRemoveDefaultRepo(dr.repo_id)}
                         className="flex items-center justify-center size-icon-sm text-low hover:text-normal"
                       >
-                        <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
+                        <XIcon
+                          className="size-icon-xs"
+                          weight="bold"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   );
