@@ -42,6 +42,16 @@ const RenameSessionDialogImpl = NiceModal.create<RenameSessionDialogProps>(
     const handleConfirm = async () => {
       const trimmedName = name.trim();
 
+      if (!trimmedName) {
+        setError(
+          t(
+            'conversation.sessions.renameValidationRequired',
+            'Enter a session name.'
+          )
+        );
+        return;
+      }
+
       if (trimmedName === currentName) {
         modal.resolve({ action: 'canceled' } as RenameSessionDialogResult);
         modal.hide();
@@ -89,6 +99,9 @@ const RenameSessionDialogImpl = NiceModal.create<RenameSessionDialogProps>(
 
           <div className="space-y-4">
             <div className="space-y-2">
+              <label htmlFor="session-name" className="sr-only">
+                {t('conversation.sessions.renameLabel', 'Session name')}
+              </label>
               <Input
                 id="session-name"
                 type="text"
@@ -105,13 +118,24 @@ const RenameSessionDialogImpl = NiceModal.create<RenameSessionDialogProps>(
                 placeholder={t('conversation.sessions.renamePlaceholder')}
                 disabled={isSubmitting}
                 autoFocus
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? 'session-name-error' : undefined}
               />
-              {error && <p className="text-sm text-destructive">{error}</p>}
+              {error && (
+                <p
+                  id="session-name-error"
+                  className="text-sm text-destructive"
+                  role="alert"
+                >
+                  {error}
+                </p>
+              )}
             </div>
           </div>
 
           <DialogFooter>
             <Button
+              type="button"
               variant="outline"
               onClick={handleCancel}
               disabled={isSubmitting}
@@ -119,6 +143,7 @@ const RenameSessionDialogImpl = NiceModal.create<RenameSessionDialogProps>(
               {t('common:buttons.cancel')}
             </Button>
             <Button
+              type="submit"
               onClick={() => void handleConfirm()}
               disabled={isSubmitting}
             >

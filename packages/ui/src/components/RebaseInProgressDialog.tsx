@@ -108,7 +108,11 @@ const RebaseInProgressDialogImpl =
             </DialogHeader>
 
             <div className="space-y-4">
-              {error && <div className="text-sm text-destructive">{error}</div>}
+              {error && (
+                <div className="text-sm text-destructive" role="alert">
+                  {error}
+                </div>
+              )}
 
               <div className="text-sm text-muted-foreground">
                 {t(
@@ -120,6 +124,7 @@ const RebaseInProgressDialogImpl =
 
             <DialogFooter className="gap-2 sm:gap-0">
               <Button
+                type="button"
                 variant="outline"
                 onClick={handleCancel}
                 disabled={isSubmitting}
@@ -127,6 +132,7 @@ const RebaseInProgressDialogImpl =
                 {t('common:buttons.cancel')}
               </Button>
               <Button
+                type="button"
                 variant="destructive"
                 onClick={handleAbort}
                 disabled={isSubmitting}
@@ -135,7 +141,11 @@ const RebaseInProgressDialogImpl =
                   ? t('rebaseInProgress.dialog.aborting', 'Aborting...')
                   : t('rebaseInProgress.dialog.abort', 'Abort Rebase')}
               </Button>
-              <Button onClick={handleContinue} disabled={isSubmitting}>
+              <Button
+                type="submit"
+                onClick={handleContinue}
+                disabled={isSubmitting}
+              >
                 {isSubmitting
                   ? t('rebaseInProgress.dialog.continuing', 'Continuing...')
                   : t('rebaseInProgress.dialog.continue', 'Continue Rebase')}

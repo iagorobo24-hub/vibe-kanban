@@ -1,18 +1,18 @@
-import * as React from "react";
-import { X } from "lucide-react";
-import { useHotkeys, useHotkeysContext } from "react-hotkeys-hook";
-import { createPortal } from "react-dom";
+import * as React from 'react';
+import { X } from 'lucide-react';
+import { useHotkeys, useHotkeysContext } from 'react-hotkeys-hook';
+import { createPortal } from 'react-dom';
 
-import { cn } from "../lib/cn";
-import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
+import { cn } from '../lib/cn';
+import { useDialogFocusTrap } from '../lib/useDialogFocusTrap';
 
-const DIALOG_SCOPE = "dialog";
-const KANBAN_SCOPE = "kanban";
-const PROJECTS_SCOPE = "projects";
+const DIALOG_SCOPE = 'dialog';
+const KANBAN_SCOPE = 'kanban';
+const PROJECTS_SCOPE = 'projects';
 const DialogTitleIdContext = React.createContext<string | null>(null);
 
 function assignRef<T>(ref: React.ForwardedRef<T>, value: T | null) {
-  if (typeof ref === "function") {
+  if (typeof ref === 'function') {
     ref(value);
     return;
   }
@@ -38,7 +38,7 @@ const Dialog = React.forwardRef<
       dialogRef.current = node;
       assignRef(ref, node);
     },
-    [ref],
+    [ref]
   );
 
   useDialogFocusTrap(dialogRef, !!open);
@@ -62,7 +62,7 @@ const Dialog = React.forwardRef<
   }, [open, enableScope, disableScope]);
 
   useHotkeys(
-    "esc",
+    'esc',
     (e) => {
       if (!open) return;
       if (uncloseable) return;
@@ -70,8 +70,8 @@ const Dialog = React.forwardRef<
       const activeElement = document.activeElement as HTMLElement;
       if (
         activeElement &&
-        (activeElement.tagName === "INPUT" ||
-          activeElement.tagName === "TEXTAREA" ||
+        (activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA' ||
           activeElement.isContentEditable)
       ) {
         activeElement.blur();
@@ -86,16 +86,16 @@ const Dialog = React.forwardRef<
       scopes: [DIALOG_SCOPE],
       preventDefault: true,
     },
-    [open, uncloseable, onOpenChange],
+    [open, uncloseable, onOpenChange]
   );
 
   useHotkeys(
-    "enter",
+    'enter',
     (e) => {
       if (!open) return;
 
       const activeElement = document.activeElement as HTMLElement;
-      if (activeElement?.tagName === "TEXTAREA") {
+      if (activeElement?.tagName === 'TEXTAREA') {
         return;
       }
 
@@ -105,7 +105,7 @@ const Dialog = React.forwardRef<
       }
 
       const submitButton = container.querySelector(
-        'button[type="submit"]',
+        'button[type="submit"]'
       ) as HTMLButtonElement | null;
       if (submitButton && !submitButton.disabled) {
         e?.preventDefault();
@@ -114,14 +114,14 @@ const Dialog = React.forwardRef<
       }
 
       const buttons = Array.from(
-        container.querySelectorAll("button"),
+        container.querySelectorAll('button')
       ) as HTMLButtonElement[];
       const primaryButton = buttons.find(
         (btn) =>
           !btn.disabled &&
-          !btn.textContent?.toLowerCase().includes("cancel") &&
-          !btn.textContent?.toLowerCase().includes("close") &&
-          btn.type !== "button",
+          !btn.textContent?.toLowerCase().includes('cancel') &&
+          !btn.textContent?.toLowerCase().includes('close') &&
+          btn.type !== 'button'
       );
 
       if (primaryButton) {
@@ -133,7 +133,7 @@ const Dialog = React.forwardRef<
       enabled: !!open,
       scopes: [DIALOG_SCOPE],
     },
-    [open],
+    [open]
   );
 
   if (!open) return null;
@@ -148,8 +148,8 @@ const Dialog = React.forwardRef<
       <div
         ref={setDialogRef}
         className={cn(
-          "agentos-dialog-content relative z-[10000] flex flex-col w-full max-w-xl gap-4 bg-primary p-6 shadow-lg duration-200 sm:rounded-lg my-8",
-          className,
+          'agentos-dialog-content relative z-[10000] flex flex-col w-full max-w-xl gap-4 bg-primary p-6 shadow-lg duration-200 sm:rounded-lg my-8',
+          className
         )}
         {...props}
         role="dialog"
@@ -160,8 +160,9 @@ const Dialog = React.forwardRef<
         {!uncloseable && (
           <button
             type="button"
-            className="agentos-dialog-close absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-10"
+            className="agentos-dialog-close absolute right-4 top-4 z-10 flex size-8 items-center justify-center rounded-sm opacity-70 ring-offset-background transition-colors hover:bg-secondary hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             onClick={() => onOpenChange?.(false)}
+            aria-label="Close dialog"
           >
             <X className="h-4 w-4" aria-hidden="true" />
             <span className="sr-only">Close</span>
@@ -172,10 +173,10 @@ const Dialog = React.forwardRef<
         </DialogTitleIdContext.Provider>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 });
-Dialog.displayName = "Dialog";
+Dialog.displayName = 'Dialog';
 
 const DialogHeader = ({
   className,
@@ -183,13 +184,13 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "agentos-dialog-header flex flex-col space-y-1.5 text-center sm:text-left",
-      className,
+      'agentos-dialog-header flex flex-col space-y-1.5 text-center sm:text-left',
+      className
     )}
     {...props}
   />
 );
-DialogHeader.displayName = "DialogHeader";
+DialogHeader.displayName = 'DialogHeader';
 
 const DialogTitle = React.forwardRef<
   HTMLParagraphElement,
@@ -202,14 +203,14 @@ const DialogTitle = React.forwardRef<
       ref={ref}
       id={id ?? contextId ?? undefined}
       className={cn(
-        "agentos-dialog-title text-lg font-semibold leading-none tracking-tight",
-        className,
+        'agentos-dialog-title text-lg font-semibold leading-none tracking-tight',
+        className
       )}
       {...props}
     />
   );
 });
-DialogTitle.displayName = "DialogTitle";
+DialogTitle.displayName = 'DialogTitle';
 
 const DialogDescription = React.forwardRef<
   HTMLParagraphElement,
@@ -218,13 +219,13 @@ const DialogDescription = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "agentos-dialog-description text-sm text-muted-foreground",
-      className,
+      'agentos-dialog-description text-sm text-muted-foreground',
+      className
     )}
     {...props}
   />
 ));
-DialogDescription.displayName = "DialogDescription";
+DialogDescription.displayName = 'DialogDescription';
 
 const DialogContent = React.forwardRef<
   HTMLDivElement,
@@ -233,13 +234,13 @@ const DialogContent = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "agentos-dialog-content__body flex flex-col gap-4",
-      className,
+      'agentos-dialog-content__body flex flex-col gap-4',
+      className
     )}
     {...props}
   />
 ));
-DialogContent.displayName = "DialogContent";
+DialogContent.displayName = 'DialogContent';
 
 const DialogFooter = ({
   className,
@@ -247,13 +248,13 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "agentos-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2",
-      className,
+      'agentos-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2',
+      className
     )}
     {...props}
   />
 );
-DialogFooter.displayName = "DialogFooter";
+DialogFooter.displayName = 'DialogFooter';
 
 export {
   Dialog,

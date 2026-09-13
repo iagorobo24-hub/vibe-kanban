@@ -64,7 +64,10 @@ const DeleteWorkspaceDialogImpl = NiceModal.create<DeleteWorkspaceDialogProps>(
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <div className="flex items-center gap-3">
-              <WarningIcon className="h-6 w-6 text-destructive" />
+              <WarningIcon
+                className="h-6 w-6 text-destructive"
+                aria-hidden="true"
+              />
               <DialogTitle>
                 {t('workspaces.deleteDialog.title', 'Delete Workspace')}
               </DialogTitle>
@@ -153,10 +156,10 @@ const DeleteWorkspaceDialogImpl = NiceModal.create<DeleteWorkspaceDialogProps>(
           </div>
 
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={handleCancel}>
+            <Button type="button" variant="outline" onClick={handleCancel}>
               {t('buttons.cancel')}
             </Button>
-            <Button variant="destructive" onClick={handleConfirm}>
+            <Button type="submit" variant="destructive" onClick={handleConfirm}>
               {t('buttons.delete')}
             </Button>
           </DialogFooter>

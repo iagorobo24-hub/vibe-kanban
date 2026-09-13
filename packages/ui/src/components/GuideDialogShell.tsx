@@ -1,7 +1,7 @@
-import { useRef, useState, type ReactNode } from "react";
-import { CaretLeftIcon, XIcon } from "@phosphor-icons/react";
-import { cn } from "../lib/cn";
-import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
+import { useRef, useState, type ReactNode } from 'react';
+import { CaretLeftIcon, XIcon } from '@phosphor-icons/react';
+import { cn } from '../lib/cn';
+import { useDialogFocusTrap } from '../lib/useDialogFocusTrap';
 
 export interface GuideDialogTopic {
   id: string;
@@ -47,24 +47,24 @@ export function GuideDialogShell({
       {/* Dialog wrapper - handles positioning */}
       <div
         className={cn(
-          "fixed z-[9999]",
+          'fixed z-[9999]',
           // Mobile: full screen
-          "inset-0",
+          'inset-0',
           // Desktop: centered with fixed size
-          "md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
+          'md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2'
         )}
       >
         <div
           ref={dialogRef}
           className={cn(
-            "agentos-guide-dialog h-full w-full flex overflow-hidden",
-            "bg-panel/95 backdrop-blur-sm shadow-lg",
-            "animate-in fade-in-0 slide-in-from-bottom-4 duration-200",
+            'agentos-guide-dialog h-full w-full flex overflow-hidden',
+            'bg-panel/95 backdrop-blur-sm shadow-lg',
+            'animate-in fade-in-0 slide-in-from-bottom-4 duration-200',
             // Mobile: full screen, no rounded corners
-            "rounded-none border-0",
+            'rounded-none border-0',
             // Desktop: fixed size with rounded corners
-            "md:w-[800px] md:h-[600px] md:rounded-sm md:border md:border-border/50",
-            className,
+            'md:w-[800px] md:h-[600px] md:rounded-sm md:border md:border-border/50',
+            className
           )}
           role="dialog"
           aria-modal="true"
@@ -73,12 +73,12 @@ export function GuideDialogShell({
           {/* Sidebar - hidden on mobile when showing content */}
           <div
             className={cn(
-              "agentos-guide-dialog__nav bg-secondary/80 border-r border-border/50 flex flex-col",
+              'agentos-guide-dialog__nav bg-secondary/80 border-r border-border/50 flex flex-col',
               // Mobile: full width, hidden when showing content
-              "w-full",
-              mobileShowContent && "hidden",
+              'w-full',
+              mobileShowContent && 'hidden',
               // Desktop: fixed width sidebar, always visible
-              "md:w-52 md:block",
+              'md:w-52 md:block'
             )}
           >
             {/* Header with mobile close button */}
@@ -88,7 +88,7 @@ export function GuideDialogShell({
                 type="button"
                 onClick={onClose}
                 aria-label={closeLabel}
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                className="flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               </button>
@@ -107,10 +107,10 @@ export function GuideDialogShell({
                   }}
                   aria-pressed={idx === selectedIndex}
                   className={cn(
-                    "text-left px-3 py-2 rounded-sm text-sm transition-colors",
+                    'min-h-9 rounded-sm px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
                     idx === selectedIndex
-                      ? "bg-brand/10 text-brand font-medium"
-                      : "text-normal hover:bg-primary/10",
+                      ? 'bg-brand/10 text-brand font-medium'
+                      : 'text-normal hover:bg-primary/10'
                   )}
                 >
                   {topic.title}
@@ -121,11 +121,11 @@ export function GuideDialogShell({
           {/* Content - hidden on mobile when showing nav */}
           <div
             className={cn(
-              "agentos-guide-dialog__body flex-1 flex flex-col relative overflow-y-auto overscroll-contain",
+              'agentos-guide-dialog__body flex-1 flex flex-col relative overflow-y-auto overscroll-contain',
               // Mobile: full width, hidden when showing nav
-              !mobileShowContent && "hidden",
+              !mobileShowContent && 'hidden',
               // Desktop: always visible
-              "md:flex",
+              'md:flex'
             )}
           >
             {/* Mobile header with back button */}
@@ -134,7 +134,7 @@ export function GuideDialogShell({
                 type="button"
                 onClick={() => setMobileShowContent(false)}
                 aria-label="Back"
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                className="flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <CaretLeftIcon
                   className="h-4 w-4"
@@ -147,7 +147,7 @@ export function GuideDialogShell({
                 type="button"
                 onClick={onClose}
                 aria-label={closeLabel}
-                className="ml-auto p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                className="ml-auto flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               </button>
@@ -157,7 +157,7 @@ export function GuideDialogShell({
               type="button"
               onClick={onClose}
               aria-label={closeLabel}
-              className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 hidden md:block"
+              className="absolute right-4 top-4 hidden size-8 items-center justify-center rounded-sm opacity-70 ring-offset-panel transition-colors hover:bg-secondary hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 md:flex"
             >
               <XIcon className="h-4 w-4 text-normal" aria-hidden="true" />
             </button>
@@ -176,7 +176,7 @@ export function GuideDialogShell({
                 />
               )}
               <div className="text-normal text-sm leading-relaxed space-y-3">
-                {typeof selectedTopic.content === "string" ? (
+                {typeof selectedTopic.content === 'string' ? (
                   <p>{selectedTopic.content}</p>
                 ) : (
                   selectedTopic.content
