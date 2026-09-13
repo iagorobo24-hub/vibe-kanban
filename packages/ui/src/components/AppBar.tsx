@@ -515,6 +515,19 @@ export function AppBar({
         "bg-secondary border-r border-border",
       )}
     >
+      <div
+        className="agentos-app-bar__brand flex w-10 flex-col items-center gap-1"
+        aria-label="AgentOS"
+        title="AgentOS"
+      >
+        <div className="agentos-app-bar__brand-mark flex h-7 w-7 items-center justify-center rounded-md text-sm font-semibold">
+          A
+        </div>
+        <span className="agentos-app-bar__brand-name text-[8px] font-medium leading-none tracking-wide">
+          AgentOS
+        </span>
+      </div>
+
       {sections.map((section) => (
         <div key={section.key} className="flex flex-col items-center gap-1">
           <AppBarSectionLabel>{section.label}</AppBarSectionLabel>
