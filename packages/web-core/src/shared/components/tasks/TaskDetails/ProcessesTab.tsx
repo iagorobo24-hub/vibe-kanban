@@ -178,7 +178,10 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
           ) : executionProcesses.length === 0 ? (
             <div className="flex items-center justify-center text-muted-foreground py-10">
               <div className="text-center">
-                <Cog className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <Cog
+                  className="mx-auto mb-4 h-12 w-12 opacity-50"
+                  aria-hidden="true"
+                />
                 <p>{t('processes.noProcesses')}</p>
               </div>
             </div>
@@ -293,7 +296,7 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
               <button
                 onClick={handleCopyLogs}
                 disabled={logs.length === 0}
-                className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md border border-border transition-colors ${
+                className={`flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand ${
                   copied
                     ? 'text-success'
                     : logs.length === 0
@@ -305,9 +308,10 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
               </button>
               <button
                 onClick={() => setSelectedProcessId(null)}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md border border-border transition-colors"
+                className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                aria-label={t('processes.backToList')}
               >
-                <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
                 {t('processes.backToList')}
               </button>
             </div>

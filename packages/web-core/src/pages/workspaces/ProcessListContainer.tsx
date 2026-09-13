@@ -103,18 +103,28 @@ export function ProcessListContainer() {
             <button
               onClick={onPrevMatch}
               disabled={matchCount === 0}
-              className="p-1 text-low hover:text-normal disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-sm p-1 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Previous match"
               title="Previous match (Shift+Enter)"
             >
-              <CaretUpIcon className="size-icon-sm" weight="bold" />
+              <CaretUpIcon
+                className="size-icon-sm"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
             <button
               onClick={onNextMatch}
               disabled={matchCount === 0}
-              className="p-1 text-low hover:text-normal disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-sm p-1 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Next match"
               title="Next match (Enter)"
             >
-              <CaretDownIcon className="size-icon-sm" weight="bold" />
+              <CaretDownIcon
+                className="size-icon-sm"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           </div>
         </>
@@ -127,12 +137,14 @@ export function ProcessListContainer() {
       type="button"
       onClick={expandTerminal}
       className={cn(
-        'w-full h-[26px] flex items-center gap-half px-half rounded-sm text-left transition-colors'
+        'flex h-[26px] w-full items-center gap-half rounded-sm px-half text-left transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
       )}
+      aria-label={t('processes.terminal')}
     >
       <TerminalIcon
         className="size-icon-sm flex-shrink-0 text-low"
         weight="regular"
+        aria-hidden="true"
       />
       <span
         className={cn(
