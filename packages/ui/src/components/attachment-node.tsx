@@ -226,15 +226,6 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
       [attachmentId, resolvedUrl]
     );
 
-    const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent) => {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
-        event.preventDefault();
-        void openUrl(event as unknown as React.MouseEvent);
-      },
-      [openUrl]
-    );
-
     const handleDelete = useCallback(
       (event: React.MouseEvent) => {
         event.preventDefault();
@@ -263,38 +254,41 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
 
     const icon =
       isWorkspaceAttachment || isAttachment ? (
-        <File className="w-5 h-5 text-muted-foreground" />
+        <File className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
       ) : (
-        <HelpCircle className="w-5 h-5 text-muted-foreground" />
+        <HelpCircle
+          className="w-5 h-5 text-muted-foreground"
+          aria-hidden="true"
+        />
       );
 
     return (
-      <span
-        className="group relative inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 ml-0.5 mr-0.5 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors align-bottom"
-        onClick={(event) => {
-          openUrl(event).catch((error) => {
-            console.error('Failed to open attachment:', error);
-          });
-        }}
-        onKeyDown={handleKeyDown}
-        onDoubleClick={onDoubleClickEdit}
-        role="button"
-        tabIndex={0}
-        aria-label={`Open attachment ${displayName}`}
-      >
-        <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-          {icon}
-        </span>
-        <span className="flex flex-col min-w-0">
-          <span className="text-xs text-muted-foreground truncate max-w-[120px]">
-            {displayName}
+      <span className="group relative inline-flex align-bottom">
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          onClick={(event) => {
+            openUrl(event).catch((error) => {
+              console.error('Failed to open attachment:', error);
+            });
+          }}
+          onDoubleClick={onDoubleClickEdit}
+          aria-label={`Open attachment ${displayName}`}
+        >
+          <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+            {icon}
           </span>
-          {metadataLine && (
-            <span className="text-[10px] text-muted-foreground/70 truncate max-w-[120px]">
-              {metadataLine}
+          <span className="flex flex-col min-w-0 text-left">
+            <span className="text-xs text-muted-foreground truncate max-w-[120px]">
+              {displayName}
             </span>
-          )}
-        </span>
+            {metadataLine && (
+              <span className="text-[10px] text-muted-foreground/70 truncate max-w-[120px]">
+                {metadataLine}
+              </span>
+            )}
+          </span>
+        </button>
         {editor.isEditable() && (
           <button
             onClick={handleDelete}

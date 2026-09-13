@@ -296,15 +296,6 @@ export function createImageNode(options: CreateImageNodeOptions) {
       ]
     );
 
-    const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent) => {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
-        event.preventDefault();
-        handleClick(event as unknown as React.MouseEvent);
-      },
-      [handleClick]
-    );
-
     const handleDownload = useCallback(
       (event: React.MouseEvent) => {
         event.preventDefault();
@@ -360,9 +351,12 @@ export function createImageNode(options: CreateImageNodeOptions) {
 
       if (isImageAttachment && !localAttachment && attachmentLoading) {
         thumbnailContent = (
-          <div className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-          </div>
+          <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+            <Loader2
+              className="w-5 h-5 text-muted-foreground animate-spin"
+              aria-hidden="true"
+            />
+          </span>
         );
       } else if (isImageAttachment && previewUrl) {
         thumbnailContent = (
@@ -375,9 +369,12 @@ export function createImageNode(options: CreateImageNodeOptions) {
         );
       } else {
         thumbnailContent = (
-          <div className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-            <File className="w-5 h-5 text-muted-foreground" />
-          </div>
+          <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+            <File
+              className="w-5 h-5 text-muted-foreground"
+              aria-hidden="true"
+            />
+          </span>
         );
       }
       displayName = truncatePath(
@@ -398,9 +395,12 @@ export function createImageNode(options: CreateImageNodeOptions) {
     } else if (isVibeImage && (hasLocalImage || hasContext)) {
       if (!isWorkspaceImage) {
         thumbnailContent = (
-          <div className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-            <File className="w-5 h-5 text-muted-foreground" />
-          </div>
+          <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+            <File
+              className="w-5 h-5 text-muted-foreground"
+              aria-hidden="true"
+            />
+          </span>
         );
         displayName = truncatePath(workspaceDisplayName);
         const parts: string[] = [];
@@ -414,9 +414,12 @@ export function createImageNode(options: CreateImageNodeOptions) {
         metadataLine = parts.length > 0 ? parts.join(' · ') : null;
       } else if (loading) {
         thumbnailContent = (
-          <div className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-            <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
-          </div>
+          <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+            <Loader2
+              className="w-5 h-5 text-muted-foreground animate-spin"
+              aria-hidden="true"
+            />
+          </span>
         );
         displayName = truncatePath(src);
       } else if (metadata?.exists && metadata.proxy_url) {
@@ -443,49 +446,58 @@ export function createImageNode(options: CreateImageNodeOptions) {
         }
       } else {
         thumbnailContent = (
-          <div className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-            <HelpCircle className="w-5 h-5 text-muted-foreground" />
-          </div>
+          <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+            <HelpCircle
+              className="w-5 h-5 text-muted-foreground"
+              aria-hidden="true"
+            />
+          </span>
         );
         displayName = truncatePath(src);
       }
     } else if (!isVibeImage) {
       thumbnailContent = (
-        <div className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-          <HelpCircle className="w-5 h-5 text-muted-foreground" />
-        </div>
+        <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+          <HelpCircle
+            className="w-5 h-5 text-muted-foreground"
+            aria-hidden="true"
+          />
+        </span>
       );
       displayName = truncatePath(altText || src);
     } else {
       thumbnailContent = (
-        <div className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-          <HelpCircle className="w-5 h-5 text-muted-foreground" />
-        </div>
+        <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+          <HelpCircle
+            className="w-5 h-5 text-muted-foreground"
+            aria-hidden="true"
+          />
+        </span>
       );
       displayName = truncatePath(src);
     }
 
     return (
-      <span
-        className="group relative inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 ml-0.5 mr-0.5 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors align-bottom"
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        onDoubleClick={onDoubleClickEdit}
-        role="button"
-        tabIndex={0}
-        aria-label={`Open ${displayName}`}
-      >
-        {thumbnailContent}
-        <span className="flex flex-col min-w-0">
-          <span className="text-xs text-muted-foreground truncate max-w-[120px]">
-            {displayName}
-          </span>
-          {metadataLine && (
-            <span className="text-[10px] text-muted-foreground/70 truncate max-w-[120px]">
-              {metadataLine}
+      <span className="group relative inline-flex align-bottom">
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          onClick={handleClick}
+          onDoubleClick={onDoubleClickEdit}
+          aria-label={`Open ${displayName}`}
+        >
+          {thumbnailContent}
+          <span className="flex flex-col min-w-0 text-left">
+            <span className="text-xs text-muted-foreground truncate max-w-[120px]">
+              {displayName}
             </span>
-          )}
-        </span>
+            {metadataLine && (
+              <span className="text-[10px] text-muted-foreground/70 truncate max-w-[120px]">
+                {metadataLine}
+              </span>
+            )}
+          </span>
+        </button>
         {editor.isEditable() && (
           <button
             onClick={handleDelete}

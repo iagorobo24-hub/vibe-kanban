@@ -64,45 +64,39 @@ export interface IssueWorkspaceCreateCardProps {
 
 interface IssueWorkspaceCardContainerProps {
   onClick?: () => void;
+  accessibleName?: string;
   className?: string;
   children: React.ReactNode;
 }
 
 function IssueWorkspaceCardContainer({
   onClick,
+  accessibleName,
   className,
   children,
 }: IssueWorkspaceCardContainerProps) {
   return (
     <div
       className={cn(
-        'agentos-issue-workspace-card flex flex-col gap-half p-base bg-panel rounded-sm transition-colors duration-150',
+        'agentos-issue-workspace-card relative flex flex-col gap-half p-base bg-panel rounded-sm transition-colors duration-150',
         onClick && 'cursor-pointer hover:bg-secondary/70',
         className
       )}
-      onClick={
-        onClick
-          ? (e) => {
-              e.stopPropagation();
-              onClick();
-            }
-          : undefined
-      }
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={
-        onClick
-          ? (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                e.stopPropagation();
-                onClick();
-              }
-            }
-          : undefined
-      }
     >
-      {children}
+      {onClick && (
+        <button
+          type="button"
+          className="absolute inset-0 z-0 rounded-sm border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          onClick={(event) => {
+            event.stopPropagation();
+            onClick();
+          }}
+          aria-label={accessibleName}
+        />
+      )}
+      <div className={cn('relative z-10', onClick && 'pointer-events-none')}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -135,7 +129,13 @@ export function IssueWorkspaceCard({
     (hasUnseenActivity && !isRunning);
 
   return (
-    <IssueWorkspaceCardContainer onClick={onClick} className={className}>
+    <IssueWorkspaceCardContainer
+      onClick={onClick}
+      accessibleName={
+        workspace.name ? `Open workspace ${workspace.name}` : 'Open workspace'
+      }
+      className={className}
+    >
       {/* Row 1: Status badge + Name (left), Owner avatar + menu (right) */}
       <div className="agentos-issue-workspace-card__header flex items-center justify-between">
         <div className="agentos-issue-workspace-card__title flex items-center gap-half min-w-0">
@@ -158,7 +158,7 @@ export function IssueWorkspaceCard({
           )}
         </div>
 
-        <div className="agentos-issue-workspace-card__actions flex items-center gap-half">
+        <div className="agentos-issue-workspace-card__actions pointer-events-auto flex items-center gap-half">
           {showOwner && workspace.owner && (
             <UserAvatar
               user={workspace.owner}
@@ -278,7 +278,7 @@ export function IssueWorkspaceCard({
           )}
         </div>
 
-        <div className="agentos-issue-workspace-card__prs hidden sm:flex items-center gap-half shrink-0">
+        <div className="agentos-issue-workspace-card__prs pointer-events-auto hidden sm:flex items-center gap-half shrink-0">
           {workspace.prs.length > 0 ? (
             workspace.prs.map((pr) => (
               <a
