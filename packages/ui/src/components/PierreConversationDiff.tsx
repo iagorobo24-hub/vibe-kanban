@@ -283,16 +283,24 @@ export function DiffViewCard({
   return (
     <div className={cn('rounded-sm border overflow-hidden', className)}>
       {/* Header */}
-      <div
-        className={cn(
-          'flex items-center bg-panel p-base w-full',
-          onToggle && 'cursor-pointer'
+      <div className="relative flex items-center bg-panel p-base w-full">
+        {onToggle && (
+          <button
+            type="button"
+            className="absolute inset-0 z-0 border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand"
+            onClick={onToggle}
+            aria-expanded={expanded}
+            aria-label={`${expanded ? 'Collapse' : 'Expand'} diff for ${filePath}`}
+          />
         )}
-        onClick={onToggle}
-      >
-        <div className="flex-1 flex items-center gap-base min-w-0">
+        <div
+          className={cn(
+            'relative z-10 flex-1 flex items-center gap-base min-w-0',
+            onToggle && 'pointer-events-none'
+          )}
+        >
           <span className="relative shrink-0">
-            <FileIcon className="size-icon-base" />
+            <FileIcon className="size-icon-base" aria-hidden="true" />
             {status && (
               <ToolStatusDot
                 status={status}
@@ -321,6 +329,7 @@ export function DiffViewCard({
               'size-icon-xs shrink-0 text-low transition-transform',
               !expanded && '-rotate-90'
             )}
+            aria-hidden="true"
           />
         )}
       </div>

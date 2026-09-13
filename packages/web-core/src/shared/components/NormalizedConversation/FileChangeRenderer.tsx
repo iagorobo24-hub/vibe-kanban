@@ -134,12 +134,21 @@ const FileChangeRenderer = ({
     <div>
       <div className={headerClass}>
         {icon}
-        <p
-          onClick={() => expandable && setExpanded()}
-          className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer"
-        >
-          {titleNode}
-        </p>
+        {expandable ? (
+          <button
+            type="button"
+            onClick={() => setExpanded()}
+            className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer text-left border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+            aria-expanded={effectiveExpanded}
+            aria-label={`Toggle file content for ${path}`}
+          >
+            {titleNode}
+          </button>
+        ) : (
+          <p className="text-sm font-mono overflow-x-auto flex-1">
+            {titleNode}
+          </p>
+        )}
       </div>
 
       {/* Body */}

@@ -275,12 +275,14 @@ function StatusRow({
                 className="bg-transparent text-sm text-high outline-none border-b border-brand w-24"
               />
             ) : (
-              <span
-                className="text-sm text-high cursor-pointer"
+              <button
+                type="button"
+                className="text-sm text-high cursor-pointer text-left border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                 onClick={() => onStartEditing(status.id)}
+                aria-label={t('kanban.editName', 'Edit name')}
               >
                 {status.name}
-              </span>
+              </button>
             )}
           </div>
 

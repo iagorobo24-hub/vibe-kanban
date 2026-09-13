@@ -100,10 +100,13 @@ function EditDiffRenderer({
   return (
     <div>
       <div className={headerClass}>
-        <SquarePen className="h-3 w-3" />
-        <p
+        <SquarePen className="h-3 w-3" aria-hidden="true" />
+        <button
+          type="button"
           onClick={() => setExpanded()}
-          className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer"
+          className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer text-left border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          aria-expanded={effectiveExpanded}
+          aria-label={`Toggle diff for ${path}`}
         >
           {path}{' '}
           <span style={{ color: 'hsl(var(--console-success))' }}>
@@ -112,7 +115,7 @@ function EditDiffRenderer({
           <span style={{ color: 'hsl(var(--console-error))' }}>
             -{deletions}
           </span>
-        </p>
+        </button>
       </div>
 
       {effectiveExpanded && (
