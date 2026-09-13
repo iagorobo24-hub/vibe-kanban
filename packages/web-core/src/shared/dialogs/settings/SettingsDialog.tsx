@@ -248,6 +248,7 @@ function SettingsDialogContent({
         data-tauri-drag-region
         className="agentos-dialog-overlay fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
         onClick={handleCloseWithConfirmation}
+        aria-hidden="true"
       />
       {/* Dialog wrapper - handles positioning */}
       <div
