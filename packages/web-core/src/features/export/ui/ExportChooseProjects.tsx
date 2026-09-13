@@ -86,11 +86,17 @@ export function ExportChooseProjects({
 
       {organizations.length > 1 && (
         <div className="space-y-half">
-          <label className="text-sm font-medium text-high">Organization</label>
+          <label
+            htmlFor="export-organization"
+            className="text-sm font-medium text-high"
+          >
+            Organization
+          </label>
           <select
+            id="export-organization"
             value={selectedOrgId ?? ''}
             onChange={(e) => onOrgChange(e.target.value)}
-            className="w-full rounded-sm border border-border bg-primary px-base py-half text-sm text-high"
+            className="w-full rounded-sm border border-border bg-primary px-base py-half text-sm text-high focus:outline-none focus:ring-1 focus:ring-brand"
           >
             {organizations.map((org) => (
               <option key={org.id} value={org.id}>
@@ -112,8 +118,10 @@ export function ExportChooseProjects({
               {selectedProjectIds.size} of {projects.length} selected
             </span>
             <button
+              type="button"
               onClick={handleSelectAll}
-              className="text-sm text-brand hover:text-brand/80"
+              className="rounded-sm px-half py-0.5 text-sm text-brand hover:bg-primary hover:text-brand/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+              aria-pressed={selectedProjectIds.size === projects.length}
             >
               {selectedProjectIds.size === projects.length
                 ? 'Deselect all'
@@ -126,16 +134,22 @@ export function ExportChooseProjects({
               return (
                 <button
                   key={project.id}
+                  type="button"
                   onClick={() => handleToggleProject(project.id)}
-                  className="w-full flex items-center gap-base px-base py-half text-sm text-left hover:bg-primary transition-colors"
+                  className="flex min-h-10 w-full items-center gap-base px-base py-half text-left text-sm transition-colors hover:bg-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand"
+                  aria-pressed={isSelected}
                 >
                   {isSelected ? (
                     <CheckCircleIcon
                       className="size-icon-sm text-brand shrink-0"
                       weight="fill"
+                      aria-hidden="true"
                     />
                   ) : (
-                    <CircleIcon className="size-icon-sm text-low shrink-0" />
+                    <CircleIcon
+                      className="size-icon-sm text-low shrink-0"
+                      aria-hidden="true"
+                    />
                   )}
                   <span className={isSelected ? 'text-high' : 'text-normal'}>
                     {project.name}
@@ -147,8 +161,12 @@ export function ExportChooseProjects({
         </div>
       )}
 
-      <label className="flex items-start gap-base cursor-pointer">
+      <label
+        htmlFor="export-include-attachments"
+        className="flex items-start gap-base cursor-pointer"
+      >
         <input
+          id="export-include-attachments"
           type="checkbox"
           checked={includeAttachments}
           onChange={(e) => setIncludeAttachments(e.target.checked)}
@@ -156,7 +174,10 @@ export function ExportChooseProjects({
         />
         <div className="space-y-half">
           <div className="flex items-center gap-half">
-            <ImageIcon className="size-icon-sm text-normal" />
+            <ImageIcon
+              className="size-icon-sm text-normal"
+              aria-hidden="true"
+            />
             <span className="text-sm font-medium text-high">
               Include attachments
             </span>
@@ -166,9 +187,10 @@ export function ExportChooseProjects({
       </label>
 
       <button
+        type="button"
         onClick={handleContinue}
         disabled={selectedProjectIds.size === 0}
-        className="w-full rounded-sm bg-brand px-base py-half text-sm font-medium text-white hover:bg-brand/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full rounded-sm bg-brand px-base py-half text-sm font-medium text-white transition-colors hover:bg-brand/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Export
       </button>

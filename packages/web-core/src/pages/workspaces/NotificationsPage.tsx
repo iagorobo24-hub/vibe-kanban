@@ -124,9 +124,9 @@ export function NotificationsPage() {
           <button
             type="button"
             onClick={handleMarkAllSeen}
-            className="agentos-notifications-page__mark-all flex items-center gap-1 px-base py-half text-sm text-low hover:text-normal transition-colors cursor-pointer"
+            className="agentos-notifications-page__mark-all flex min-h-8 items-center gap-1 rounded-sm px-base py-half text-sm text-low transition-colors cursor-pointer hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
-            <ChecksIcon size={16} />
+            <ChecksIcon size={16} aria-hidden="true" />
             Mark all as read
           </button>
         )}
@@ -197,7 +197,7 @@ export function NotificationsPage() {
                     aria-label="Mark notification as read"
                     title="Mark as read"
                   >
-                    <CheckIcon size={14} weight="bold" />
+                    <CheckIcon size={14} weight="bold" aria-hidden="true" />
                     <span className="hidden sm:inline">Mark as read</span>
                   </button>
                 )}

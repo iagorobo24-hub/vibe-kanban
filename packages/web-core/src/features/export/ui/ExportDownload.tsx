@@ -124,18 +124,23 @@ export function ExportDownload({
       )}
 
       {error && (
-        <div className="space-y-base">
+        <div className="space-y-base" role="alert">
           <div className="flex items-center gap-base text-danger">
-            <WarningIcon className="size-icon-sm" weight="fill" />
+            <WarningIcon
+              className="size-icon-sm"
+              weight="fill"
+              aria-hidden="true"
+            />
             <p className="text-sm font-medium">Export failed</p>
           </div>
           <p className="text-sm text-normal">{error}</p>
           <button
+            type="button"
             onClick={() => {
               hasStartedRef.current = false;
               void startExport();
             }}
-            className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal hover:bg-primary transition-colors"
+            className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal transition-colors hover:bg-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
             Retry
           </button>
@@ -160,16 +165,18 @@ export function ExportDownload({
 
           <div className="space-y-base">
             <button
+              type="button"
               onClick={handleManualDownload}
-              className="w-full flex items-center justify-center gap-half rounded-sm bg-brand px-base py-half text-sm font-medium text-white hover:bg-brand/90 transition-colors"
+              className="flex w-full items-center justify-center gap-half rounded-sm bg-brand px-base py-half text-sm font-medium text-white transition-colors hover:bg-brand/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
-              <DownloadSimpleIcon className="size-icon-sm" />
+              <DownloadSimpleIcon className="size-icon-sm" aria-hidden="true" />
               Download {filename}
             </button>
 
             <button
+              type="button"
               onClick={onExportMore}
-              className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal hover:bg-primary transition-colors"
+              className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal transition-colors hover:bg-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             >
               Export more projects
             </button>

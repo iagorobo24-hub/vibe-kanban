@@ -339,6 +339,7 @@ export function LandingPage() {
               <WarningIcon
                 className="size-icon-sm text-brand shrink-0 mt-[2px]"
                 weight="fill"
+                aria-hidden="true"
               />
               <p className="text-sm text-normal">
                 AgentOS runs AI coding agents with{' '}
@@ -380,10 +381,12 @@ export function LandingPage() {
                           ? 'border-brand bg-brand/10'
                           : 'border-border bg-panel hover:bg-primary'
                       )}
+                      aria-pressed={selected}
                     >
                       <AgentIcon
                         agent={agent}
                         className="size-icon-xl shrink-0"
+                        aria-hidden="true"
                       />
                       <span className="text-sm text-normal flex-1 truncate">
                         {getAgentName(agent)}
@@ -392,6 +395,7 @@ export function LandingPage() {
                         <CheckIcon
                           className="size-icon-xs text-brand shrink-0"
                           weight="bold"
+                          aria-hidden="true"
                         />
                       )}
                     </button>
@@ -418,10 +422,12 @@ export function LandingPage() {
                           ? 'border-brand bg-brand/10'
                           : 'border-border bg-panel hover:bg-primary'
                       )}
+                      aria-pressed={selected}
                     >
                       <IdeIcon
                         editorType={editor}
                         className="size-icon-sm shrink-0"
+                        aria-hidden="true"
                       />
                       <span className="text-sm text-normal flex-1 truncate">
                         {getIdeName(editor)}
@@ -430,6 +436,7 @@ export function LandingPage() {
                         <CheckIcon
                           className="size-icon-xs text-brand shrink-0"
                           weight="bold"
+                          aria-hidden="true"
                         />
                       )}
                     </button>
@@ -439,10 +446,14 @@ export function LandingPage() {
 
               {editorType === EditorType.CUSTOM && (
                 <div className="space-y-half">
-                  <label className="text-sm font-medium text-normal">
+                  <label
+                    htmlFor="onboarding-custom-editor-command"
+                    className="text-sm font-medium text-normal"
+                  >
                     Custom Command
                   </label>
                   <input
+                    id="onboarding-custom-editor-command"
                     type="text"
                     value={customCommand}
                     onChange={(e) => setCustomCommand(e.target.value)}
@@ -481,6 +492,7 @@ export function LandingPage() {
                           ? 'border-brand bg-brand/10'
                           : 'border-border bg-panel hover:bg-primary'
                       )}
+                      aria-pressed={selected}
                     >
                       <Icon
                         className={cn(
@@ -488,6 +500,7 @@ export function LandingPage() {
                           selected ? 'text-brand' : 'text-normal'
                         )}
                         weight={selected ? 'fill' : 'bold'}
+                        aria-hidden="true"
                       />
                       <span className="text-sm text-normal flex-1 truncate">
                         {option.label}
@@ -496,6 +509,7 @@ export function LandingPage() {
                         <CheckIcon
                           className="size-icon-xs text-brand shrink-0"
                           weight="bold"
+                          aria-hidden="true"
                         />
                       )}
                     </button>
@@ -510,6 +524,7 @@ export function LandingPage() {
                       ? 'border-brand bg-brand/10'
                       : 'border-border bg-panel hover:bg-primary'
                   )}
+                  aria-pressed={!soundEnabled}
                 >
                   <SpeakerXIcon
                     className={cn(
@@ -517,12 +532,14 @@ export function LandingPage() {
                       !soundEnabled ? 'text-brand' : 'text-normal'
                     )}
                     weight={!soundEnabled ? 'fill' : 'bold'}
+                    aria-hidden="true"
                   />
                   <span className="text-sm text-normal flex-1">No sound</span>
                   {!soundEnabled && (
                     <CheckIcon
                       className="size-icon-xs text-brand shrink-0"
                       weight="bold"
+                      aria-hidden="true"
                     />
                   )}
                 </button>
