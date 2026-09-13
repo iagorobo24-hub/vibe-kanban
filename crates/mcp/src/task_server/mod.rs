@@ -105,7 +105,12 @@ impl McpServer {
     async fn fetch_context_at_startup(&self) -> anyhow::Result<Option<McpContext>> {
         let current_dir = std::env::current_dir().context("Failed to resolve current directory")?;
         let canonical_path = current_dir.canonicalize().unwrap_or(current_dir);
-        let normalized_path = utils::path::normalize_macos_private_alias(&canonical_path);
+        // On Windows canonicalize() returns the extended-length form, which never matches
+        // the container_ref stored in the database. Without this the context never resolves,
+        // and every tool that can infer its workspace silently stops being able to.
+        let normalized_path = utils::path::strip_windows_verbatim_prefix(
+            utils::path::normalize_macos_private_alias(&canonical_path),
+        );
 
         match self.try_fetch_attempt_context(&normalized_path).await {
             Ok(Some(ctx)) => Ok(Some(

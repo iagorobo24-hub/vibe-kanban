@@ -7,6 +7,13 @@ pub const VIBE_ATTACHMENTS_DIR: &str = ".vibe-attachments";
 /// .git is not in .gitignore but should never be watched.
 pub const ALWAYS_SKIP_DIRS: &[&str] = &[".git", "node_modules"];
 
+/// The Windows extended-length path prefix: backslash, backslash, question mark, backslash.
+/// Kept as a named constant because miscounting the backslashes is silent and self-consistent
+/// — a wrong literal makes both the code and its test agree on the wrong answer.
+const VERBATIM_PREFIX: &str = r"\\?\";
+/// What follows [`VERBATIM_PREFIX`] when the path is a UNC share.
+const VERBATIM_UNC_INFIX: &str = r"UNC\";
+
 /// Convert absolute paths to relative paths based on worktree path
 /// This is a robust implementation that handles symlinks and edge cases
 pub fn make_path_relative(path: &str, worktree_path: &str) -> String {
@@ -105,6 +112,28 @@ pub fn normalize_macos_private_alias<P: AsRef<Path>>(p: P) -> PathBuf {
     p.to_path_buf()
 }
 
+/// Strip the Windows extended-length ("verbatim") `\\?\` prefix that `canonicalize` adds.
+///
+/// `std::fs::canonicalize` returns `\\?\C:\Users\...` on Windows, while paths stored in
+/// the database — container refs, worktree paths — are plain `C:\Users\...`. Comparing
+/// the two as strings never matches, so any lookup keyed on a canonicalized path silently
+/// fails. This is the Windows counterpart of [`normalize_macos_private_alias`], which
+/// exists for the same class of bug on macOS.
+pub fn strip_windows_verbatim_prefix<P: AsRef<Path>>(p: P) -> PathBuf {
+    let p = p.as_ref();
+    if cfg!(windows)
+        && let Some(s) = p.to_str()
+        && let Some(rest) = s.strip_prefix(VERBATIM_PREFIX)
+    {
+        // Verbatim UNC paths (`\\?\UNC\server\share`) map back to `\\server\share`.
+        if let Some(unc) = rest.strip_prefix(VERBATIM_UNC_INFIX) {
+            return PathBuf::from(format!(r"\\{unc}"));
+        }
+        return PathBuf::from(rest);
+    }
+    p.to_path_buf()
+}
+
 pub fn get_vibe_kanban_temp_dir() -> std::path::PathBuf {
     let dir_name = if cfg!(debug_assertions) {
         "vibe-kanban-dev"
@@ -151,6 +180,39 @@ mod tests {
         assert_eq!(
             make_path_relative("/other/path/file.js", "/tmp/test-worktree"),
             "/other/path/file.js"
+        );
+    }
+
+    /// Pin the prefix byte by byte.
+    ///
+    /// Escaped byte literals are unambiguous in a way a raw string is not: if the constant
+    /// ever loses a backslash, this fails, whereas a behavioural test written with the same
+    /// wrong literal would agree with the bug and pass.
+    #[test]
+    fn test_verbatim_prefix_is_exactly_four_bytes() {
+        assert_eq!(VERBATIM_PREFIX.as_bytes(), &[b'\\', b'\\', b'?', b'\\']);
+        assert_eq!(VERBATIM_UNC_INFIX.as_bytes(), &[b'U', b'N', b'C', b'\\']);
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn test_strip_windows_verbatim_prefix() {
+        // What canonicalize() returns, against what the database stores.
+        let canonicalized = format!("{VERBATIM_PREFIX}C:\\Users\\x\\worktrees\\vk-test");
+        assert_eq!(
+            strip_windows_verbatim_prefix(&canonicalized),
+            PathBuf::from("C:\\Users\\x\\worktrees\\vk-test")
+        );
+        // Verbatim UNC paths go back to their ordinary form.
+        let unc = format!("{VERBATIM_PREFIX}{VERBATIM_UNC_INFIX}server\\share\\dir");
+        assert_eq!(
+            strip_windows_verbatim_prefix(&unc),
+            PathBuf::from("\\\\server\\share\\dir")
+        );
+        // Without the prefix, untouched.
+        assert_eq!(
+            strip_windows_verbatim_prefix("C:\\Users\\x"),
+            PathBuf::from("C:\\Users\\x")
         );
     }
 
