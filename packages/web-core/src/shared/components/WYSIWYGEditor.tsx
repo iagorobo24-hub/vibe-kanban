@@ -617,7 +617,7 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
       return (
         <div className="relative group">
           <div className="sticky top-0 right-2 z-10 pointer-events-none h-0">
-            <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+            <div className="flex justify-end gap-1 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
               {/* Copy button */}
               <Button
                 type="button"
@@ -629,9 +629,12 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
                 className="pointer-events-auto p-2 bg-muted h-8 w-8"
               >
                 {copied ? (
-                  <Check className="w-4 h-4 text-success" />
+                  <Check className="w-4 h-4 text-success" aria-hidden="true" />
                 ) : (
-                  <Clipboard className="w-4 h-4 text-muted-foreground" />
+                  <Clipboard
+                    className="w-4 h-4 text-muted-foreground"
+                    aria-hidden="true"
+                  />
                 )}
               </Button>
               {/* Edit button - only if onEdit provided */}
@@ -645,7 +648,10 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
                   onClick={onEdit}
                   className="pointer-events-auto p-2 bg-muted h-8 w-8"
                 >
-                  <Pencil className="w-4 h-4 text-muted-foreground" />
+                  <Pencil
+                    className="w-4 h-4 text-muted-foreground"
+                    aria-hidden="true"
+                  />
                 </Button>
               )}
               {/* Delete button - only if onDelete provided */}
@@ -659,7 +665,10 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
                   onClick={onDelete}
                   className="pointer-events-auto p-2 bg-muted h-8 w-8"
                 >
-                  <Trash2 className="w-4 h-4 text-muted-foreground" />
+                  <Trash2
+                    className="w-4 h-4 text-muted-foreground"
+                    aria-hidden="true"
+                  />
                 </Button>
               )}
             </div>

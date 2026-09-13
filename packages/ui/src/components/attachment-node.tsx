@@ -292,7 +292,7 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
         {editor.isEditable() && (
           <button
             onClick={handleDelete}
-            className="absolute top-1 right-1 w-4 h-4 rounded-full bg-foreground/70 hover:bg-destructive flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/70 opacity-0 transition-opacity hover:bg-destructive focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100 group-focus-within:opacity-100"
             aria-label={t('kanban.removeImage')}
             type="button"
           >
@@ -304,8 +304,8 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
             onClick={handleDownload}
             className={
               editor.isEditable()
-                ? 'absolute top-1 right-6 w-4 h-4 rounded-full bg-foreground/70 hover:bg-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'
-                : 'absolute top-1 right-1 w-4 h-4 rounded-full bg-foreground/70 hover:bg-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'
+                ? 'absolute right-6 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/70 opacity-0 transition-opacity hover:bg-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100 group-focus-within:opacity-100'
+                : 'absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/70 opacity-0 transition-opacity hover:bg-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100 group-focus-within:opacity-100'
             }
             aria-label={t('kanban.downloadAttachment')}
             type="button"

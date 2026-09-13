@@ -216,7 +216,7 @@ export function WorkspaceSummary({
 
       {/* Right-side hover action - more options only */}
       {workspaceId && onOpenWorkspaceActions && (
-        <div className="absolute right-0 top-0 bottom-0 flex items-center sm:opacity-0 sm:group-hover:opacity-100">
+        <div className="absolute bottom-0 right-0 top-0 flex items-center sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
           {/* Gradient fade from transparent to background */}
           <div className="h-full w-6 pointer-events-none bg-gradient-to-r from-transparent to-secondary" />
           {/* Single action button */}
@@ -224,10 +224,15 @@ export function WorkspaceSummary({
             <button
               onClick={handleOpenCommandBar}
               onPointerDown={(e) => e.stopPropagation()}
-              className="p-1.5 rounded-sm text-low hover:text-normal hover:bg-tertiary"
+              className="rounded-sm p-1.5 text-low hover:bg-tertiary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               title={t('workspaces.more')}
+              aria-label={t('workspaces.more')}
             >
-              <DotsThreeIcon className="size-5" weight="bold" />
+              <DotsThreeIcon
+                className="size-5"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           </div>
         </div>

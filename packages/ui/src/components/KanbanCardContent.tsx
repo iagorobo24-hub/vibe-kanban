@@ -234,7 +234,7 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
               'agentos-kanban-card__more p-half -m-half rounded-sm text-low hover:text-normal hover:bg-secondary shrink-0',
               isMobile
                 ? ''
-                : 'invisible opacity-0 group-hover:visible group-hover:opacity-100',
+                : 'invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100',
               'transition-[opacity,color,background-color]'
             )}
             aria-label={t('kanban.moreActions')}
