@@ -26,6 +26,11 @@ export function MobileDrawer({ open, onClose, children }: MobileDrawerProps) {
       />
       {/* Drawer panel */}
       <div
+        role="dialog"
+        aria-modal={open || undefined}
+        aria-hidden={!open}
+        aria-label="AgentOS navigation"
+        tabIndex={-1}
         className={cn(
           "agentos-theme agentos-mobile-drawer",
           "fixed left-0 top-0 h-full w-[280px] bg-primary z-[101]",

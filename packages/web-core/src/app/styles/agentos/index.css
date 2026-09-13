@@ -147,6 +147,76 @@
   background-color: rgb(10 9 8 / 68%);
 }
 
+.agentos-theme .agentos-mobile-drawer__header,
+.agentos-theme .agentos-mobile-drawer__footer {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-mobile-drawer__close {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+  width: 32px;
+}
+
+.agentos-theme .agentos-mobile-drawer__close:hover {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border-strong);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-mobile-drawer__item {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  min-height: 40px;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-mobile-drawer__item:hover {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-mobile-drawer__item--active {
+  background-color: rgb(224 139 97 / 12%);
+  border-color: rgb(224 139 97 / 26%);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-mobile-drawer__item--active:hover {
+  background-color: rgb(224 139 97 / 18%);
+  border-color: rgb(224 139 97 / 38%);
+}
+
+.agentos-theme .agentos-mobile-drawer__divider {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-mobile-drawer__label {
+  color: var(--agentos-text-subtle);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.agentos-theme .agentos-mobile-drawer__empty {
+  color: var(--agentos-text-muted);
+}
+
 .agentos-theme .agentos-project-surface,
 .agentos-theme .agentos-project-board {
   background-color: var(--agentos-bg);

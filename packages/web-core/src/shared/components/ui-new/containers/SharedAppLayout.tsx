@@ -426,7 +426,7 @@ export function SharedAppLayout() {
         >
           <div className="flex flex-col h-full">
             {/* Header: org name + close button */}
-            <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="agentos-mobile-drawer__header flex items-center justify-between p-4 border-b border-border">
               <span className="text-sm font-medium text-high truncate">
                 {organizations.find((o) => o.id === selectedOrgId)?.name ??
                   'Organization'}
@@ -434,7 +434,8 @@ export function SharedAppLayout() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                className="p-1 rounded-sm text-low hover:text-normal cursor-pointer"
+                aria-label="Close navigation menu"
+                className="agentos-mobile-drawer__close agentos-icon-button"
               >
                 <XIcon className="h-4 w-4" weight="bold" />
               </button>
@@ -447,26 +448,28 @@ export function SharedAppLayout() {
                 void navigate({ to: '/workspaces' });
                 setIsDrawerOpen(false);
               }}
-              className="flex items-center gap-2 px-4 py-3 text-sm text-normal hover:bg-secondary cursor-pointer"
+              className="agentos-mobile-drawer__item flex items-center gap-2 px-4 py-3 text-sm cursor-pointer"
             >
               <LayoutIcon className="h-4 w-4" />
               Workspaces
             </button>
 
             {/* Divider */}
-            <div className="border-t border-border mx-4" />
+            <div className="agentos-mobile-drawer__divider border-t border-border mx-4" />
 
             {/* Export link */}
             {isSignedIn && (
-              <div className="px-4 py-3">
-                <p className="mb-2 text-xs font-medium text-low">Export</p>
+              <div className="agentos-mobile-drawer__section px-4 py-3">
+                <p className="agentos-mobile-drawer__label mb-2 text-xs font-medium">
+                  Export
+                </p>
                 <button
                   type="button"
                   onClick={() => {
                     handleExportClick();
                     setIsDrawerOpen(false);
                   }}
-                  className="flex w-full items-center gap-2 rounded-md px-3 py-2.5 text-sm text-normal hover:bg-secondary cursor-pointer"
+                  className="agentos-mobile-drawer__item flex w-full items-center gap-2 px-3 py-2.5 text-sm cursor-pointer"
                 >
                   <DownloadSimpleIcon className="h-4 w-4" />
                   Export data
@@ -475,7 +478,9 @@ export function SharedAppLayout() {
             )}
 
             {/* Divider */}
-            {isSignedIn && <div className="border-t border-border mx-4" />}
+            {isSignedIn && (
+              <div className="agentos-mobile-drawer__divider border-t border-border mx-4" />
+            )}
 
             {/* Project list */}
             <div className="flex-1 overflow-y-auto p-2">
@@ -489,11 +494,10 @@ export function SharedAppLayout() {
                       setIsDrawerOpen(false);
                     }}
                     className={cn(
-                      'flex items-center gap-3 w-full px-3 py-2.5 rounded-md text-sm text-left cursor-pointer',
-                      'transition-colors',
+                      'agentos-mobile-drawer__item flex items-center gap-3 w-full px-3 py-2.5 text-sm text-left cursor-pointer',
                       project.id === activeProjectId
-                        ? 'bg-brand/10 text-high'
-                        : 'text-normal hover:bg-secondary'
+                        ? 'agentos-mobile-drawer__item--active'
+                        : ''
                     )}
                   >
                     <span
@@ -504,7 +508,7 @@ export function SharedAppLayout() {
                   </button>
                 ))
               ) : (
-                <div className="px-4 py-6 text-center">
+                <div className="agentos-mobile-drawer__empty px-4 py-6 text-center">
                   <KanbanIcon
                     className="h-8 w-8 mx-auto text-low"
                     weight="bold"
@@ -522,7 +526,7 @@ export function SharedAppLayout() {
                         handleSignIn();
                         setIsDrawerOpen(false);
                       }}
-                      className="w-full px-3 py-2 rounded-md text-sm font-medium bg-brand text-on-brand hover:bg-brand-hover cursor-pointer"
+                      className="agentos-button agentos-button--primary w-full justify-center"
                     >
                       Sign in
                     </button>
@@ -533,14 +537,14 @@ export function SharedAppLayout() {
 
             {/* Create Project button */}
             {isSignedIn && (
-              <div className="p-3 border-t border-border">
+              <div className="agentos-mobile-drawer__footer p-3 border-t border-border">
                 <button
                   type="button"
                   onClick={() => {
                     handleCreateProject();
                     setIsDrawerOpen(false);
                   }}
-                  className="flex items-center gap-2 w-full px-3 py-2.5 rounded-md text-sm text-low hover:text-normal hover:bg-secondary cursor-pointer"
+                  className="agentos-mobile-drawer__item flex items-center gap-2 w-full px-3 py-2.5 text-sm cursor-pointer"
                 >
                   <PlusIcon className="h-4 w-4" />
                   Create Project
