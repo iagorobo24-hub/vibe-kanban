@@ -28,11 +28,40 @@ use crate::{
     executors::{ExecutorError, ExecutorExitResult, SpawnedChild, acp::AcpEvent},
 };
 
+fn exit_result_for_acp_session(had_prompt_error: bool) -> ExecutorExitResult {
+    if had_prompt_error {
+        ExecutorExitResult::Failure
+    } else {
+        ExecutorExitResult::Success
+    }
+}
+
 /// Reusable harness for ACP-based conns (Gemini, Qwen, etc.)
 pub struct AcpAgentHarness {
     session_namespace: String,
     model: Option<String>,
     mode: Option<String>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn acp_prompt_error_is_reported_as_failure() {
+        assert!(matches!(
+            exit_result_for_acp_session(true),
+            ExecutorExitResult::Failure
+        ));
+    }
+
+    #[test]
+    fn acp_prompt_without_error_is_reported_as_success() {
+        assert!(matches!(
+            exit_result_for_acp_session(false),
+            ExecutorExitResult::Success
+        ));
+    }
 }
 
 impl Default for AcpAgentHarness {
@@ -458,6 +487,7 @@ impl AcpAgentHarness {
                         );
 
                         let mut current_req = Some(initial_req);
+                        let mut had_prompt_error = false;
 
                         while let Some(req) = current_req.take() {
                             if cancel.is_cancelled() {
@@ -484,14 +514,15 @@ impl AcpAgentHarness {
                                 }
                                 Err(e) => {
                                     tracing::debug!("error {} {e} {:?}", e.code, e.data);
-                                    if e.code
+                                    let is_expected_server_shutdown = e.code
                                         == agent_client_protocol::ErrorCode::INTERNAL_ERROR.code
                                         && e.data
                                             .as_ref()
-                                            .is_some_and(|d| d == "server shut down unexpectedly")
-                                    {
+                                            .is_some_and(|d| d == "server shut down unexpectedly");
+                                    if is_expected_server_shutdown {
                                         tracing::debug!("ACP server killed");
                                     } else {
+                                        had_prompt_error = true;
                                         let _ = log_tx
                                             .send(AcpEvent::Error(format!("{e}")).to_string());
                                     }
@@ -520,7 +551,7 @@ impl AcpAgentHarness {
 
                         // Notify container of completion
                         if let Some(tx) = exit_signal_tx.take() {
-                            let _ = tx.send(ExecutorExitResult::Success);
+                            let _ = tx.send(exit_result_for_acp_session(had_prompt_error));
                         }
 
                         // Cancel session work

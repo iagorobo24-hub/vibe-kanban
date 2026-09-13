@@ -517,7 +517,10 @@ impl LocalContainerService {
                     status_result = match exit_result {
                         Ok(ExecutorExitResult::Success) => Ok(success_exit_status()),
                         Ok(ExecutorExitResult::Failure) => Ok(failure_exit_status()),
-                        Err(_) => Ok(success_exit_status()), // Channel closed, assume success
+                        // A dropped sender means the executor terminated without reporting a
+                        // result. Treat that as a failure so setup/runtime errors cannot become a
+                        // false successful completion.
+                        Err(_) => Ok(failure_exit_status()),
                     };
                 }
                 // Process exit
