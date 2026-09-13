@@ -276,11 +276,7 @@ export function OnboardingSignInPage() {
         <div className="agentos-page-card agentos-onboarding-signin__card rounded-sm border border-border bg-secondary p-double space-y-double">
           <header className="agentos-onboarding-signin__header space-y-double text-center">
             <div className="flex justify-center">
-              <img
-                src={logoSrc}
-                alt="Vibe Kanban"
-                className="h-8 w-auto logo"
-              />
+              <img src={logoSrc} alt="AgentOS" className="h-8 w-auto logo" />
             </div>
             {!isLoggedIn && (
               <p className="text-sm text-low">

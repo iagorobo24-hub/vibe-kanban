@@ -79,7 +79,7 @@
   "signIn": "Iniciar sesión",
   "signOut": "Cerrar sesión",
   "oauth": {
-    "title": "Iniciar sesión en Vibe Kanban",
+    "title": "Iniciar sesión en AgentOS",
     "description": "Inicia sesión para unirte a organizaciones y compartir tareas con tu equipo",
     "continueWithGitHub": "Continuar con GitHub",
     "continueWithGoogle": "Continuar con Google",
@@ -465,7 +465,7 @@
     "projectsGuide": {
       "intro": {
         "title": "Welcome",
-        "content": "Welcome to Vibe Kanban. Use the help sections in this panel to learn how things work, then create your first issue. You can re-open this help dialog or give feedback anytime from the navbar."
+        "content": "Bienvenido a AgentOS. Usa las secciones de ayuda de este panel para conocer el funcionamiento y crear tu primer issue. Puedes volver a abrir esta guía o enviar comentarios desde la barra de navegación."
       },
       "welcome": {
         "title": "Projects",
@@ -481,7 +481,7 @@
       },
       "organizations": {
         "title": "Invite your team",
-        "content": "We've automatically created a personal organization and initial project so you can get started with Vibe Kanban. Export your cloud data before shutdown."
+        "content": "Hemos creado automáticamente una organización personal y un proyecto inicial para que puedas empezar con AgentOS. Exporta tus datos cloud antes del cierre."
       }
     }
   },

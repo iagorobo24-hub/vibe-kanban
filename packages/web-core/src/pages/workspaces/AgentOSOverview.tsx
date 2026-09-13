@@ -115,7 +115,7 @@ export function AgentOSOverview() {
   const [objective, setObjective] = useState('');
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  usePageTitle('AgentOS');
+  usePageTitle();
 
   const runningWorkspaces = useMemo(
     () => workspaces.filter((workspace) => workspace.isRunning),

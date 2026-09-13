@@ -54,11 +54,7 @@ export function ExportPage({
         <div className="agentos-export-page__card agentos-page-card rounded-sm border border-border bg-secondary p-double space-y-double">
           <header className="agentos-export-page__header space-y-double text-center">
             <div className="flex justify-center">
-              <img
-                src={logoSrc}
-                alt="Vibe Kanban"
-                className="h-8 w-auto logo"
-              />
+              <img src={logoSrc} alt="AgentOS" className="h-8 w-auto logo" />
             </div>
             <p className="text-sm text-low">
               Download your project and issue data to CSV files. Optionally
