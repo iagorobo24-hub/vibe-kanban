@@ -121,72 +121,72 @@ function FullCard({
   const isReview = commentType === 'review';
   const Icon = isReview ? Code : MessageSquare;
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!onClick || (e.key !== 'Enter' && e.key !== ' ')) return;
-    e.preventDefault();
-    onClick(e as unknown as React.MouseEvent);
-  };
-
   return (
     <div
       className={cn(
-        'p-3 bg-muted/50 rounded-md border border-border cursor-pointer hover:border-muted-foreground transition-colors overflow-hidden',
+        'relative p-3 bg-muted/50 rounded-md border border-border overflow-hidden',
+        onClick && 'cursor-pointer hover:border-muted-foreground',
         variant === 'full' && 'inline-block align-bottom max-w-md',
         className
       )}
-      onClick={onClick}
-      onKeyDown={handleKeyDown}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      aria-label={onClick ? `PR comment by @${author}` : undefined}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2 mb-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <Icon
-            className="w-4 h-4 text-muted-foreground flex-shrink-0"
-            aria-hidden="true"
-          />
-          <span className="font-medium text-sm">@{author}</span>
-          {isReview && (
-            <span className="text-xs text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">
-              {t('prComments.card.review')}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
-          <span>{formatDate(createdAt)}</span>
-          {url && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(url, '_blank', 'noopener,noreferrer');
-              }}
-              className="hover:text-foreground transition-colors"
-              aria-label="Open in browser"
-            >
-              <ExternalLink className="w-3 h-3" />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* File path for review comments */}
-      {isReview && path && (
-        <div className="text-xs font-mono text-primary/70 mb-1">
-          {path}
-          {line ? `:${line}` : ''}
-        </div>
+      {onClick && (
+        <button
+          type="button"
+          className="absolute inset-0 z-0 rounded-md border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          onClick={onClick}
+          aria-label={`Open PR comment by @${author}`}
+        />
       )}
+      <div className={cn('relative z-10', onClick && 'pointer-events-none')}>
+        {/* Header */}
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <Icon
+              className="w-4 h-4 text-muted-foreground flex-shrink-0"
+              aria-hidden="true"
+            />
+            <span className="font-medium text-sm">@{author}</span>
+            {isReview && (
+              <span className="text-xs text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">
+                {t('prComments.card.review')}
+              </span>
+            )}
+          </div>
+          <div className="pointer-events-auto flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
+            <span>{formatDate(createdAt)}</span>
+            {url && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(url, '_blank', 'noopener,noreferrer');
+                }}
+                className="hover:text-foreground transition-colors"
+                aria-label="Open in browser"
+              >
+                <ExternalLink className="w-3 h-3" aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        </div>
 
-      {/* Diff hunk for review comments */}
-      {isReview && diffHunk && <DiffHunk diffHunk={diffHunk} />}
+        {/* File path for review comments */}
+        {isReview && path && (
+          <div className="text-xs font-mono text-primary/70 mb-1">
+            {path}
+            {line ? `:${line}` : ''}
+          </div>
+        )}
 
-      {/* Comment body */}
-      <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words mt-2">
-        {body}
-      </p>
+        {/* Diff hunk for review comments */}
+        {isReview && diffHunk && <DiffHunk diffHunk={diffHunk} />}
+
+        {/* Comment body */}
+        <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words mt-2">
+          {body}
+        </p>
+      </div>
     </div>
   );
 }

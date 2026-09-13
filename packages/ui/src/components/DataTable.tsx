@@ -79,10 +79,10 @@ export function DataTable<T>({
               <TableRow
                 key={key}
                 clickable={!!onRowClick}
-                role={onRowClick ? 'button' : undefined}
                 tabIndex={onRowClick ? 0 : undefined}
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
+                aria-label={onRowClick ? 'Activate table row' : undefined}
               >
                 {columns.map((column) => (
                   <TableCell key={column.id} className={column.className}>
