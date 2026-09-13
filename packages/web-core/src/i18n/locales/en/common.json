@@ -363,6 +363,11 @@
   "kanban": {
     "noVisibleStatuses": "All statuses are hidden. Use display settings or switch to another tab to view issues.",
     "noProjectFound": "No project found",
+    "remoteAuthUnavailable": {
+      "title": "Remote connection needs attention",
+      "description": "The local plane is still available, but remote projects cannot be reached right now. Refresh the connection to retry.",
+      "action": "Retry connection"
+    },
     "unassigned": "Unassigned",
     "noTagsAvailable": "No tags available",
     "createNewIssue": "Create new issue",

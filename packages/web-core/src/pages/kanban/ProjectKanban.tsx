@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Group, Layout, Panel, Separator } from 'react-resizable-panels';
 import { OrgProvider } from '@/shared/providers/remote/OrgProvider';
@@ -19,12 +19,17 @@ import { useUserOrganizations } from '@/shared/hooks/useUserOrganizations';
 import { useOrganizationProjects } from '@/shared/hooks/useOrganizationProjects';
 import { useOrganizationStore } from '@/shared/stores/useOrganizationStore';
 import { useAuth } from '@/shared/hooks/auth/useAuth';
+import { useUserSystem } from '@/shared/hooks/useUserSystem';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { useCurrentKanbanRouteState } from '@/shared/hooks/useCurrentKanbanRouteState';
 import {
   buildKanbanIssueComposerKey,
   closeKanbanIssueComposer,
 } from '@/shared/stores/useKanbanIssueComposerStore';
+import { getRemoteAuthDegradedMessage } from '@/shared/lib/auth/remoteAuthDegraded';
+import { WifiOff } from 'lucide-react';
+import { Alert } from '@vibe/ui/components/Alert';
+import { Button } from '@vibe/ui/components/Button';
 /**
  * Component that registers project mutations with ActionsContext.
  * Must be rendered inside both ActionsProvider and ProjectProvider.
@@ -211,6 +216,44 @@ function ProjectKanbanInner({ projectId }: { projectId: string }) {
   );
 }
 
+function RemoteAuthUnavailablePrompt({ reason }: { reason: string }) {
+  const { t } = useTranslation('common');
+  const handleRetry = useCallback(() => {
+    window.location.reload();
+  }, []);
+
+  return (
+    <div className="agentos-remote-auth-state flex h-full w-full items-center justify-center p-base">
+      <Alert
+        variant="default"
+        className="agentos-remote-auth-state__alert flex max-w-xl items-start gap-3"
+      >
+        <WifiOff className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+        <div className="space-y-2">
+          <h2 className="font-medium">
+            {t('kanban.remoteAuthUnavailable.title')}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {t('kanban.remoteAuthUnavailable.description')}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {getRemoteAuthDegradedMessage(reason, t)}
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRetry}
+            className="gap-2"
+          >
+            <WifiOff className="h-4 w-4" />
+            {t('kanban.remoteAuthUnavailable.action')}
+          </Button>
+        </div>
+      </Alert>
+    </div>
+  );
+}
+
 /**
  * Hook to find a project by ID, using orgId from Zustand store
  */
@@ -259,6 +302,7 @@ export function ProjectKanban() {
   const appNavigation = useAppNavigation();
   const { t } = useTranslation('common');
   const { isSignedIn, isLoaded: authLoaded } = useAuth();
+  const { remoteAuthDegraded } = useUserSystem();
   const issueComposerKey = useMemo(() => {
     if (!projectId) {
       return null;
@@ -292,8 +336,8 @@ export function ProjectKanban() {
     projectId ?? undefined
   );
 
-  // Show loading while auth state is being determined
-  if (!authLoaded || isLoading) {
+  // Show loading only while the local auth state is being determined.
+  if (!authLoaded) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <p className="text-low">{t('states.loading')}</p>
@@ -311,6 +355,20 @@ export function ProjectKanban() {
           description={t('kanban.loginRequired.description')}
           actionLabel={t('kanban.loginRequired.action')}
         />
+      </div>
+    );
+  }
+
+  // Remote auth is a known degraded capability, not an inaccessible project.
+  // Render a recoverable state instead of leaving the page in an endless load.
+  if (remoteAuthDegraded) {
+    return <RemoteAuthUnavailablePrompt reason={remoteAuthDegraded} />;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <p className="text-low">{t('states.loading')}</p>
       </div>
     );
   }

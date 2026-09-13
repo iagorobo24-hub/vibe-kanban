@@ -10,6 +10,7 @@ import type { OrganizationMemberWithProfile } from 'shared/types';
 import { organizationsApi } from '@/shared/lib/api';
 import { organizationKeys } from '@/shared/hooks/organizationKeys';
 import { OrgContext, type OrgContextValue } from '@/shared/hooks/useOrgContext';
+import { useRemoteAuthAvailability } from '@/shared/hooks/useRemoteAuthAvailability';
 
 interface OrgProviderProps {
   organizationId: string;
@@ -22,10 +23,12 @@ export function OrgProvider({ organizationId, children }: OrgProviderProps) {
     [organizationId]
   );
   const enabled = Boolean(organizationId);
+  const { isRemoteAuthAvailable } = useRemoteAuthAvailability();
+  const remoteEnabled = enabled && isRemoteAuthAvailable;
 
   // Shape subscriptions (Electric sync)
   const projectsResult = useShape(PROJECTS_SHAPE, params, {
-    enabled,
+    enabled: remoteEnabled,
     mutation: PROJECT_MUTATION,
   });
 
@@ -33,7 +36,7 @@ export function OrgProvider({ organizationId, children }: OrgProviderProps) {
   const membersQuery = useQuery({
     queryKey: organizationKeys.members(organizationId),
     queryFn: () => organizationsApi.getMembers(organizationId),
-    enabled: Boolean(organizationId),
+    enabled: remoteEnabled,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
