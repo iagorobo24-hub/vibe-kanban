@@ -52,13 +52,14 @@ export function IssueSubIssuesSection({
       persistKey="kanban-issue-sub-issues"
       defaultExpanded={true}
       actions={actions}
+      className="agentos-issue-sub-issues-section"
     >
       <Droppable droppableId={parentIssueId}>
         {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="agentos-issue-section p-base flex flex-col relative border-t"
+            className="agentos-issue-section agentos-issue-sub-issues-section__body p-base flex flex-col relative border-t"
           >
             {isReordering && (
               <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10">

@@ -140,8 +140,9 @@ export function IssueCommentsSection({
       persistKey="kanban-issue-comments"
       defaultExpanded={true}
       actions={[]}
+      className="agentos-issue-comments-section"
     >
-      <div className="p-base flex flex-col gap-base border-t">
+      <div className="agentos-issue-comments-section__body p-base flex flex-col gap-base border-t">
         {/* Comments list */}
         {isLoading ? (
           <div className="flex flex-col gap-double animate-pulse">
@@ -173,7 +174,7 @@ export function IssueCommentsSection({
         {/* Comment Input with WYSIWYG + dropzone */}
         <div
           {...dropzoneProps?.getRootProps()}
-          className="relative flex flex-col gap-double bg-secondary border border-border rounded-sm p-double"
+          className="agentos-issue-comments-section__composer relative flex flex-col gap-double bg-secondary border border-border rounded-sm p-double"
         >
           <input {...dropzoneProps?.getInputProps()} />
           {renderEditor({
@@ -223,7 +224,9 @@ export function IssueCommentsSection({
               type="button"
               onClick={onSubmitComment}
               disabled={!commentInput.trim() || isUploading}
+              aria-label={t("buttons.send", "Send comment")}
               className={cn(
+                "agentos-issue-comments-section__submit",
                 "size-[22px] rounded-full bg-panel border border-border",
                 "flex items-center justify-center",
                 "text-high hover:bg-secondary transition-colors",
@@ -234,7 +237,7 @@ export function IssueCommentsSection({
             </button>
           </div>
           {dropzoneProps?.isDragActive && (
-            <div className="absolute inset-0 z-50 bg-primary/80 backdrop-blur-sm border-2 border-dashed border-brand rounded flex items-center justify-center">
+            <div className="agentos-issue-comments-section__dropzone absolute inset-0 z-50 bg-primary/80 backdrop-blur-sm border-2 border-dashed border-brand rounded flex items-center justify-center">
               <p className="text-sm font-medium text-high">
                 {t("kanban.dropFilesHere")}
               </p>
@@ -279,9 +282,9 @@ function CommentItem({
   const timeAgo = formatRelativeTime(comment.createdAt);
 
   return (
-    <div className="agentos-issue-comments flex flex-col gap-base">
+    <div className="agentos-issue-comment flex flex-col gap-base">
       {/* Header row */}
-      <div className="flex items-center justify-between">
+      <div className="agentos-issue-comment__header flex items-center justify-between">
         <div className="flex items-center gap-base">
           {comment.author ? (
             <UserAvatar user={comment.author} className="size-4" />
@@ -298,7 +301,10 @@ function CommentItem({
         {comment.canModify && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="size-5 flex items-center justify-center text-low hover:text-normal">
+              <button
+                className="agentos-issue-comment__menu size-5 flex items-center justify-center text-low hover:text-normal"
+                aria-label={t("kanban.commentActions", "Comment actions")}
+              >
                 <DotsThreeIcon size={16} weight="bold" />
               </button>
             </DropdownMenuTrigger>
@@ -320,7 +326,7 @@ function CommentItem({
 
       {/* Message - editable or read-only */}
       {isEditing ? (
-        <div className="flex flex-col gap-half bg-primary border border-border rounded-sm p-double">
+        <div className="agentos-issue-comment__editing flex flex-col gap-half bg-primary border border-border rounded-sm p-double">
           {renderEditor({
             value: editValue,
             onChange: onEditValueChange,
@@ -328,7 +334,7 @@ function CommentItem({
             onCmdEnter: onSaveEdit,
             className: "min-h-[40px]",
           })}
-          <div className="flex gap-half justify-end">
+          <div className="agentos-issue-comment__editing-actions flex gap-half justify-end">
             <button
               type="button"
               onClick={onCancelEdit}
@@ -350,15 +356,17 @@ function CommentItem({
           </div>
         </div>
       ) : (
-        renderEditor({
-          value: comment.message,
-          disabled: true,
-          className: "text-normal",
-        })
+        <div className="agentos-issue-comment__message">
+          {renderEditor({
+            value: comment.message,
+            disabled: true,
+            className: "text-normal",
+          })}
+        </div>
       )}
 
       {/* Reactions row */}
-      <div className="flex items-center gap-base flex-wrap">
+      <div className="agentos-issue-comment__reactions flex items-center gap-base flex-wrap">
         {/* Existing reactions */}
         <TooltipProvider>
           {reactions.map((reaction) => (
@@ -368,6 +376,7 @@ function CommentItem({
                   type="button"
                   onClick={() => onToggleReaction(reaction.emoji)}
                   className={cn(
+                    "agentos-issue-comment__reaction",
                     "flex items-center gap-half px-base py-half rounded-sm",
                     "border transition-colors",
                     reaction.hasReacted
@@ -390,6 +399,7 @@ function CommentItem({
         <EmojiPicker onSelect={onToggleReaction}>
           <button
             type="button"
+            aria-label={t("kanban.addReaction", "Add reaction")}
             className="size-6 flex items-center justify-center text-low hover:text-normal rounded-sm hover:bg-secondary transition-colors"
           >
             <SmileyIcon size={16} />
@@ -400,7 +410,7 @@ function CommentItem({
         <button
           type="button"
           onClick={onReply}
-          className="flex items-center gap-half text-low hover:text-normal transition-colors"
+          className="agentos-issue-comment__reply flex items-center gap-half text-low hover:text-normal transition-colors"
         >
           <ArrowBendUpLeftIcon size={16} />
           <span className="font-light">{t("buttons.reply")}</span>

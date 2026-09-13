@@ -42,8 +42,9 @@ export function IssueWorkspacesSection({
       persistKey="kanban-issue-workspaces"
       defaultExpanded={true}
       actions={actions}
+      className="agentos-issue-workspaces-section"
     >
-      <div className="agentos-issue-section px-base p-base flex flex-col gap-base border-t">
+      <div className="agentos-issue-section agentos-issue-workspaces-section__body px-base p-base flex flex-col gap-base border-t">
         {isLoading ? (
           <p className="text-low py-half">{t("workspaces.loading")}</p>
         ) : workspaces.length === 0 ? (

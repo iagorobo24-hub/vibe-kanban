@@ -344,6 +344,200 @@
   border-color: #514a43;
 }
 
+.agentos-theme .agentos-collapsible-section__header {
+  min-height: 2.65rem;
+  border-bottom: 1px solid transparent;
+  color: var(--agentos-text-muted);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-collapsible-section__header:hover,
+.agentos-theme .agentos-collapsible-section__header:focus-visible {
+  background-color: rgb(43 41 38 / 62%);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-collapsible-section__title {
+  letter-spacing: -0.01em;
+}
+
+.agentos-theme .agentos-collapsible-section__actions {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-collapsible-section__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  min-width: 2rem;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-collapsible-section__action:hover,
+.agentos-theme .agentos-collapsible-section__action:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-collapsible-section__toggle {
+  flex: 0 0 auto;
+}
+
+.agentos-theme .agentos-issue-comments-section__body,
+.agentos-theme .agentos-issue-sub-issues-section__body,
+.agentos-theme .agentos-issue-workspaces-section__body,
+.agentos-theme .agentos-issue-relationships-section .agentos-issue-section {
+  background: rgb(29 28 26 / 26%);
+}
+
+.agentos-theme .agentos-issue-comment {
+  padding-block: 0.2rem 0.85rem;
+  border-bottom: 1px solid rgb(58 55 50 / 72%);
+}
+
+.agentos-theme .agentos-issue-comment:last-child {
+  border-bottom: 0;
+}
+
+.agentos-theme .agentos-issue-comment__header {
+  min-height: 1.8rem;
+}
+
+.agentos-theme .agentos-issue-comment__menu,
+.agentos-theme .agentos-issue-comment__reply,
+.agentos-theme .agentos-issue-comments-section__submit {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-issue-comment__menu:hover,
+.agentos-theme .agentos-issue-comment__menu:focus-visible,
+.agentos-theme .agentos-issue-comment__reply:hover,
+.agentos-theme .agentos-issue-comment__reply:focus-visible,
+.agentos-theme .agentos-issue-comments-section__submit:hover:not(:disabled),
+.agentos-theme .agentos-issue-comments-section__submit:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-comment__message {
+  color: var(--agentos-text-muted);
+  line-height: 1.55;
+}
+
+.agentos-theme .agentos-issue-comment__reactions {
+  min-height: 1.75rem;
+}
+
+.agentos-theme .agentos-issue-comment__reaction {
+  min-height: 1.8rem;
+  border-color: var(--agentos-border);
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-issue-comment__editing {
+  border-color: var(--agentos-border);
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-issue-relationship-row {
+  min-height: 2.15rem;
+  padding-inline: 0.35rem;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.agentos-theme .agentos-issue-relationship-row:hover,
+.agentos-theme .agentos-issue-relationship-row:focus-within {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-relationship-row__remove {
+  opacity: 0.35;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme
+  .agentos-issue-relationship-row:hover
+  .agentos-issue-relationship-row__remove,
+.agentos-theme
+  .agentos-issue-relationship-row:focus-within
+  .agentos-issue-relationship-row__remove,
+.agentos-theme .agentos-issue-relationship-row__remove:focus-visible {
+  opacity: 1;
+}
+
+.agentos-theme .agentos-sub-issue-row {
+  min-height: 2.35rem;
+  border: 1px solid transparent;
+}
+
+.agentos-theme .agentos-sub-issue-row:hover,
+.agentos-theme .agentos-sub-issue-row:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-sub-issue-row__handle,
+.agentos-theme .agentos-sub-issue-row__meta {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-sub-issue-row__main {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-workspace-card__header,
+.agentos-theme .agentos-issue-workspace-card__meta {
+  min-width: 0;
+}
+
+.agentos-theme .agentos-issue-workspace-card__title {
+  min-width: 0;
+}
+
+.agentos-theme .agentos-issue-workspace-card__menu,
+.agentos-theme .agentos-issue-workspace-card__create-action {
+  border: 1px solid transparent;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-issue-workspace-card__menu:hover,
+.agentos-theme .agentos-issue-workspace-card__menu:focus-visible,
+.agentos-theme
+  .agentos-issue-workspace-card__create-action:hover:not(:disabled),
+.agentos-theme .agentos-issue-workspace-card__create-action:focus-visible {
+  border-color: var(--agentos-border);
+}
+
 .agentos-theme .agentos-workspaces-layout {
   background-color: var(--agentos-bg);
 }
@@ -1122,6 +1316,106 @@
 
 .agentos-theme .agentos-onboarding-landing__footer {
   border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-onboarding-signin {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(224 139 97 / 8%), transparent 34rem),
+    var(--agentos-bg);
+}
+
+.agentos-theme .agentos-onboarding-signin__card {
+  background: rgb(36 35 33 / 92%);
+  border-color: var(--agentos-border);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-theme .agentos-onboarding-signin__header {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-onboarding-signin__error {
+  border-color: rgb(221 141 130 / 34%);
+  background: rgb(221 141 130 / 8%);
+}
+
+.agentos-theme .agentos-onboarding-signin__actions {
+  padding-block: 0.25rem;
+}
+
+.agentos-theme .agentos-onboarding-signin__more-options {
+  min-height: 2rem;
+  padding-inline: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-onboarding-signin__more-options:hover,
+.agentos-theme .agentos-onboarding-signin__more-options:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-onboarding-signin__comparison {
+  border-color: var(--agentos-border);
+  background: rgb(29 28 26 / 58%);
+}
+
+.agentos-theme .agentos-onboarding-signin__comparison table {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-onboarding-signin__comparison thead {
+  background: var(--agentos-panel-raised);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-command-dialog {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-command-bar {
+  border-color: var(--agentos-border);
+  background: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-command-input,
+.agentos-theme .agentos-command-bar__input-row {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-command-list {
+  scrollbar-color: #514a43 transparent;
+}
+
+.agentos-theme .agentos-command-group {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-command-item {
+  min-height: 2.4rem;
+  border: 1px solid transparent;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-command-item:hover,
+.agentos-theme .agentos-command-item[data-selected='true'] {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-command-empty {
+  color: var(--agentos-text-muted);
 }
 
 .agentos-theme [role='dialog'] {

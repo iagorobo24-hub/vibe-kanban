@@ -134,7 +134,7 @@ const Dialog = React.forwardRef<
   if (!open) return null;
 
   return createPortal(
-    <div className="agentos-dialog-viewport fixed inset-0 z-[10000] flex items-start justify-center p-4 overflow-y-auto">
+    <div className="agentos-dialog agentos-dialog-viewport fixed inset-0 z-[10000] flex items-start justify-center p-4 overflow-y-auto">
       <div
         data-tauri-drag-region
         className="agentos-dialog-overlay fixed inset-0 bg-black/50"
@@ -171,7 +171,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
+      "agentos-dialog-header flex flex-col space-y-1.5 text-center sm:text-left",
       className,
     )}
     {...props}
@@ -186,7 +186,7 @@ const DialogTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
+      "agentos-dialog-title text-lg font-semibold leading-none tracking-tight",
       className,
     )}
     {...props}
@@ -200,7 +200,10 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn(
+      "agentos-dialog-description text-sm text-muted-foreground",
+      className,
+    )}
     {...props}
   />
 ));
@@ -210,7 +213,14 @@ const DialogContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex flex-col gap-4", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn(
+      "agentos-dialog-content__body flex flex-col gap-4",
+      className,
+    )}
+    {...props}
+  />
 ));
 DialogContent.displayName = "DialogContent";
 
@@ -220,7 +230,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2",
+      "agentos-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2",
       className,
     )}
     {...props}

@@ -91,8 +91,10 @@ export function CollapsibleSectionHeader({
 
   const headerContent = (
     <>
-      <span className="font-medium truncate text-normal">{title}</span>
-      <div className="flex items-center gap-half">
+      <span className="agentos-collapsible-section__title font-medium truncate text-normal">
+        {title}
+      </span>
+      <div className="agentos-collapsible-section__actions flex items-center gap-half">
         {headerExtra}
         {actions.map((action, index) => {
           const ActionIcon = action.icon;
@@ -104,7 +106,7 @@ export function CollapsibleSectionHeader({
               onClick={(e) => handleActionClick(e, action.onClick)}
               onKeyDown={(e) => handleActionKeyDown(e, action.onClick)}
               className={cn(
-                'hover:text-normal',
+                'agentos-collapsible-section__action hover:text-normal',
                 action.isActive ? 'text-brand' : 'text-low'
               )}
             >
@@ -116,7 +118,7 @@ export function CollapsibleSectionHeader({
           <CaretDownIcon
             weight="fill"
             className={cn(
-              'size-icon-xs text-low transition-transform',
+              'agentos-collapsible-section__toggle size-icon-xs text-low transition-transform',
               !expanded && '-rotate-90'
             )}
           />
@@ -126,14 +128,19 @@ export function CollapsibleSectionHeader({
   );
 
   return (
-    <div className={cn('flex flex-col h-full min-h-0', className)}>
+    <div
+      className={cn(
+        'agentos-collapsible-section flex flex-col h-full min-h-0',
+        className
+      )}
+    >
       <div className="">
         {collapsible ? (
           <button
             type="button"
             onClick={() => setExpanded((prev) => !prev)}
             className={cn(
-              'flex items-center justify-between w-full px-base py-half cursor-pointer'
+              'agentos-collapsible-section__header flex items-center justify-between w-full px-base py-half cursor-pointer'
             )}
           >
             {headerContent}
@@ -141,7 +148,7 @@ export function CollapsibleSectionHeader({
         ) : (
           <div
             className={cn(
-              'flex items-center justify-between w-full px-base py-half'
+              'agentos-collapsible-section__header flex items-center justify-between w-full px-base py-half'
             )}
           >
             {headerContent}

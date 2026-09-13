@@ -94,7 +94,7 @@ export function SubIssueRow({
             }
           }}
           className={cn(
-            'flex items-center gap-half px-base py-half rounded-sm transition-colors',
+            'agentos-sub-issue-row flex items-center gap-half px-base py-half rounded-sm transition-colors',
             onClick && 'cursor-pointer hover:bg-secondary',
             snapshot.isDragging && 'bg-secondary shadow-lg cursor-grabbing',
             className
@@ -103,7 +103,7 @@ export function SubIssueRow({
           {/* Drag handle */}
           <div
             {...provided.dragHandleProps}
-            className="cursor-grab shrink-0"
+            className="agentos-sub-issue-row__handle cursor-grab shrink-0"
             onClick={(e) => e.stopPropagation()}
           >
             <DotsSixVerticalIcon
@@ -113,12 +113,12 @@ export function SubIssueRow({
           </div>
 
           {/* Left side: Priority, ID, Status, Title */}
-          <div className="flex items-center gap-half flex-1 min-w-0">
+          <div className="agentos-sub-issue-row__main flex items-center gap-half flex-1 min-w-0">
             {onPriorityClick ? (
               <button
                 type="button"
                 onClick={onPriorityClick}
-                className="flex items-center cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+                className="agentos-sub-issue-row__priority flex items-center cursor-pointer hover:bg-secondary rounded-sm transition-colors"
               >
                 <PriorityIcon priority={priority} />
                 {!priority && (
@@ -139,7 +139,7 @@ export function SubIssueRow({
           </div>
 
           {/* Right side: Assignee, Age */}
-          <div className="flex items-center gap-half shrink-0">
+          <div className="agentos-sub-issue-row__meta flex items-center gap-half shrink-0">
             {onAssigneeClick ? (
               <button
                 type="button"

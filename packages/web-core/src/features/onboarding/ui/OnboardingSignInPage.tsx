@@ -265,16 +265,16 @@ export function OnboardingSignInPage() {
   }
 
   return (
-    <div className="agentos-theme agentos-page-shell h-screen overflow-auto bg-primary">
+    <div className="agentos-theme agentos-page-shell agentos-onboarding-signin h-screen overflow-auto bg-primary">
       {isTauriApp() && (
         <div
           data-tauri-drag-region
           className="fixed inset-x-0 top-0 h-10 z-10"
         />
       )}
-      <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
-        <div className="agentos-page-card rounded-sm border border-border bg-secondary p-double space-y-double">
-          <header className="space-y-double text-center">
+      <div className="agentos-onboarding-signin__container mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
+        <div className="agentos-page-card agentos-onboarding-signin__card rounded-sm border border-border bg-secondary p-double space-y-double">
+          <header className="agentos-onboarding-signin__header space-y-double text-center">
             <div className="flex justify-center">
               <img
                 src={logoSrc}
@@ -290,7 +290,7 @@ export function OnboardingSignInPage() {
           </header>
 
           {isAuthMethodsError && !isLoggedIn && (
-            <div className="rounded-sm border border-error/30 bg-error/10 p-base">
+            <div className="agentos-onboarding-signin__error rounded-sm border border-error/30 bg-error/10 p-base">
               <p className="text-sm text-high">
                 {authMethodsError instanceof Error
                   ? authMethodsError.message
@@ -300,7 +300,7 @@ export function OnboardingSignInPage() {
           )}
 
           {isLoggedIn ? (
-            <section className="space-y-base">
+            <section className="agentos-onboarding-signin__signed-in space-y-base">
               <p className="text-sm text-normal text-center">
                 {t('onboardingSignIn.signedInAs', {
                   name:
@@ -321,7 +321,7 @@ export function OnboardingSignInPage() {
             </section>
           ) : (
             <>
-              <section className="flex flex-col items-center gap-2">
+              <section className="agentos-onboarding-signin__actions flex flex-col items-center gap-2">
                 {!isAuthMethodsError && hasLocalAuth ? (
                   <PrimaryButton
                     value={isAuthDialogOpen ? 'Opening sign in...' : 'Sign in'}
@@ -357,7 +357,7 @@ export function OnboardingSignInPage() {
               <div className="flex justify-center">
                 <button
                   type="button"
-                  className="text-sm text-low hover:text-normal underline underline-offset-2"
+                  className="agentos-onboarding-signin__more-options text-sm text-low hover:text-normal underline underline-offset-2"
                   onClick={() => {
                     if (!showComparison) {
                       trackRemoteOnboardingEvent(
@@ -378,7 +378,7 @@ export function OnboardingSignInPage() {
           )}
 
           {showComparison && !isLoggedIn && (
-            <section className="space-y-base rounded-sm border border-border bg-panel p-base">
+            <section className="agentos-onboarding-signin__comparison space-y-base rounded-sm border border-border bg-panel p-base">
               <div className="overflow-x-auto rounded-sm border border-border">
                 <table className="w-full border-collapse">
                   <thead className="bg-secondary text-xs font-medium text-low">

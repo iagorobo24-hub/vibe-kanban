@@ -38,6 +38,7 @@ export function IssueRelationshipsSection({
       persistKey="kanban-issue-relationships"
       defaultExpanded={true}
       headerExtra={headerExtra}
+      className="agentos-issue-relationships-section"
     >
       <div className="agentos-issue-section p-base flex flex-col gap-half border-t">
         {isLoading ? (
@@ -50,7 +51,7 @@ export function IssueRelationshipsSection({
           relationships.map((rel) => (
             <div
               key={rel.relationshipId}
-              className="flex items-center justify-between group"
+              className="agentos-issue-relationship-row flex items-center justify-between group"
             >
               <RelationshipBadge
                 displayType={rel.displayType}
@@ -67,7 +68,7 @@ export function IssueRelationshipsSection({
                     e.stopPropagation();
                     onRemoveRelationship(rel.relationshipId);
                   }}
-                  className="p-half rounded-sm text-low hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100"
+                  className="agentos-issue-relationship-row__remove p-half rounded-sm text-low hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100"
                   aria-label="Remove relationship"
                 >
                   <XIcon className="size-icon-2xs" weight="bold" />

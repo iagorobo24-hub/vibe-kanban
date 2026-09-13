@@ -77,7 +77,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
+      "agentos-dialog-header flex flex-col space-y-1.5 text-center sm:text-left",
       className,
     )}
     {...props}
@@ -91,7 +91,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2",
+      "agentos-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2",
       className,
     )}
     {...props}
@@ -106,7 +106,7 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight text-high",
+      "agentos-dialog-title text-lg font-semibold leading-none tracking-tight text-high",
       className,
     )}
     {...props}
@@ -120,7 +120,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-normal", className)}
+    className={cn("agentos-dialog-description text-sm text-normal", className)}
     {...props}
   />
 ));
