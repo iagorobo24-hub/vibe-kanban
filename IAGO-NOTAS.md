@@ -341,6 +341,92 @@ resuelve.
 
 ---
 
+## A1 — ¿servidor ACP oficial de Google o adaptador de la comunidad?
+
+**Resultado: nos quedamos con el adaptador. El plan decía lo contrario y el plan estaba
+equivocado.** Todo lo de abajo está medido hablándole ACP por stdio a los dos binarios,
+no leído en documentación.
+
+### Lo que motivaba migrar
+
+El registro ACP (`agentclientprotocol/registry`, ficha `antigravity-acp/agent.json`, v1.1.1)
+publica un servidor ACP oficial de Google. El argumento de peso no era "primera parte es
+mejor", sino que nuestro ejecutor lanzaba `npx -y agy-acp` **sin versión**: `-y` resuelve
+`latest` en cada arranque de agente, así que cualquier publicación futura del paquete
+—un solo maintainer en npm— se ejecutaría sin revisión, con acceso de escritura al worktree.
+
+### Lo que se midió
+
+| | `agy-acp` 0.5.2 (comunidad) | `agy_acp_server` 1.1.1 (Google) |
+|---|---|---|
+| Modelos | **14**, incl. Claude Opus 4.6, Sonnet 4.6, GPT-OSS 120B | 11, **solo Gemini** |
+| `mcpCapabilities` | `http:false, sse:false` | **`http:true, sse:true`** |
+| `sessionCapabilities` | list, resume, **fork, close, additionalDirectories** | list, resume |
+| `promptCapabilities.audio` | false | true |
+| Autenticación | reutiliza el login de `agy` | **login OAuth propio y aparte** |
+| Modos | default / accept-edits / plan | default / auto_edit / yolo |
+| Disco | 0 (reutiliza el `agy` de 185 MB) | **562 MB** |
+| Procedencia | npm, un maintainer | **Google LLC, firma EV DigiCert** |
+
+### Por qué decidió el catálogo de modelos
+
+El servidor oficial **no expone Claude ni GPT-OSS**. El adaptador, por ir contra el `agy`
+real, sí: `claude-opus-4-6-thinking`, `claude-sonnet-4-6` y `gpt-oss-120b-medium` salen de
+la misma suscripción de Antigravity. Renunciar a eso choca de frente con la Fase E, que
+trata precisamente de repartir tareas entre proveedores por calidad/precio.
+
+### El escollo de autenticación, para quien lo reconsidere
+
+El binario oficial **ignora `~/.gemini/oauth_creds.json`**. Con `session/new` responde:
+
+```
+-32000 Authentication required — No authentication method selected. Either call the
+`authenticate` method, or set `auth.type` in ~/.gemini/antigravity-acp/settings.json
+```
+
+Y el harness ACP compartido **nunca llama a `authenticate`**: hace
+`let _ = conn.initialize(...)` (`acp/harness.rs:335`) y descarta los `authMethods`. Migrar
+exigiría tocar el harness común, que usan Gemini, Qwen y Copilot. Eso solo ya sacaba A1
+de la categoría "S".
+
+Se comprobó que la vía de `settings.json` funciona: con `{"auth":{"type":"oauth-personal"}}`
+el servidor completa OAuth y `session/new` responde bien. El token queda en
+`~/.gemini/antigravity-acp/acp_token.json`, **separado** del de `agy`, que no se toca.
+
+### Lo que sí se cambió
+
+`npx -y agy-acp` → **`npx -y agy-acp@0.5.2`**, que es la convención que ya seguían todos
+los demás ejecutores npm del repo (`@google/gemini-cli@0.29.3`, `opencode-ai@1.4.7`,
+`@github/copilot@0.0.403`, `@qwen-code/qwen-code@0.9.1`). El nuestro era el único sin fijar.
+Esto cierra la exposición de supply-chain sin coste ninguno.
+
+Y la lista de modelos pasó de **7 a 14**: estaba incompleta, le faltaban los nueve
+`flash` de 3.8/3.7/3.6. Verificada contra `agy models`.
+
+### Si algún día se reconsidera el oficial
+
+El registro **no publica checksum**, así que queda aquí el de la descarga verificada:
+
+```
+https://dl.google.com/agy-extensions/releases/windows/agy-acp-server-agy_acp_server_1.1.1-windows-x86_64.zip
+zip   sha256 47cb50eef14f0a4655d78cfcfda869bcea7aaee5f9787e936bc2935ea612c3b8  (468.238.392 bytes)
+exe   sha256 74ee0984927af43bc9e7917004cd1ac6674c7d8c13420be2afa0452856a56818  agy_acp_server.exe
+harn  sha256 e7bbeec60ea39bea11ba3a31cb559accd86665591ad2ca8db1ff7952cc9679ac  localharness_external.exe
+```
+
+Ambos `.exe` con firma Authenticode válida de `CN=Google LLC` (DigiCert G4 EV).
+
+El motivo para volver a mirarlo sería la Fase D: su `mcpCapabilities {http, sse}` levantaría
+la restricción de servir la memoria solo por stdio.
+
+### Consecuencia para A2
+
+El ejecutor genérico del registro tendrá que **verificar firmas o checksums por su cuenta**:
+las fichas `agent.json` no traen ninguno. En Windows, `Get-AuthenticodeSignature` da mejor
+garantía que un hash, pero no todos los agentes del registro estarán firmados.
+
+---
+
 ## Siguiente paso
 
 ```bash

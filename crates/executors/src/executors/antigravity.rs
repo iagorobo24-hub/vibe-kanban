@@ -1,13 +1,41 @@
 //! Ejecutor para Google Antigravity CLI (`agy`).
 //!
 //! `agy` no habla ACP de forma nativa — el feature request oficial
-//! (google-antigravity/antigravity-cli#31) sigue abierto. Usamos el adaptador
-//! `agy-acp` (Apache-2.0, https://github.com/shindgew/agy-acp), que envuelve el
-//! binario `agy` instalado y expone ACP por stdio, de modo que reutilizamos el
-//! harness ACP compartido igual que Gemini, Qwen y Copilot.
+//! (google-antigravity/antigravity-cli#31) sigue abierto, y `agy 1.2.2` no tiene
+//! subcomando `acp`. Usamos el adaptador `agy-acp` (Apache-2.0,
+//! https://github.com/shindgew/agy-acp), que envuelve el binario `agy` instalado y
+//! expone ACP por stdio, de modo que reutilizamos el harness ACP compartido igual
+//! que Gemini, Qwen y Copilot.
 //!
 //! Esto además esquiva el problema conocido de `agy -p`, que escribe la respuesta
 //! al terminal controlador en vez de a stdout: el adaptador no usa el modo print.
+//!
+//! ## Por qué NO el servidor ACP oficial de Google
+//!
+//! El registro ACP (`agentclientprotocol/registry`) publica `agy_acp_server.exe`,
+//! firmado por Google LLC. Lo probamos hablándole ACP por stdio y descartamos
+//! migrar, por dos motivos medidos:
+//!
+//! 1. **Sólo expone modelos Gemini** (11). Pierde `claude-opus-4-6-thinking`,
+//!    `claude-sonnet-4-6`, `gpt-oss-120b-medium` y `gemini-3.1-pro-high`, que sí
+//!    da el adaptador vía `agy` (14 modelos). Perder Claude y GPT-OSS elimina el
+//!    arbitraje entre proveedores dentro de una sola suscripción.
+//! 2. **Autenticación propia e independiente.** Ignora `~/.gemini/oauth_creds.json`
+//!    de `agy` y exige `authenticate` por ACP o `auth.type` en
+//!    `~/.gemini/antigravity-acp/settings.json`. El harness compartido nunca llama a
+//!    `authenticate` (descarta el resultado de `initialize`), así que serían dos
+//!    logins que mantener y un cambio en el harness común.
+//!
+//! A favor del oficial, para cuando se reconsidere: anuncia `mcpCapabilities`
+//! `{http: true, sse: true}` frente a `{http: false, sse: false}` del adaptador, y
+//! pesa 562 MB en disco frente a 0 del adaptador, que reutiliza el `agy` ya instalado.
+//!
+//! ## Versión fijada
+//!
+//! `agy-acp` va clavado a una versión igual que el resto de ejecutores npm del repo
+//! (`@google/gemini-cli@0.29.3`, `opencode-ai@1.4.7`, `@github/copilot@0.0.403`).
+//! Sin versión, `npx -y` resuelve `latest` en **cada arranque de agente**, lo que
+//! ejecutaría cualquier publicación futura del paquete sin revisarla.
 
 use std::{path::Path, sync::Arc};
 
@@ -56,7 +84,7 @@ impl Antigravity {
     fn build_command_builder(&self) -> Result<CommandBuilder, CommandBuildError> {
         // El adaptador detecta el binario `agy` instalado; si no existe, lo instala
         // desde los releases oficiales durante `initialize`.
-        let mut builder = CommandBuilder::new("npx -y agy-acp");
+        let mut builder = CommandBuilder::new("npx -y agy-acp@0.5.2");
 
         // agy-acp mapea su opción `model` al flag `--model` de agy.
         if let Some(model) = &self.model {
@@ -186,22 +214,10 @@ impl StandardCodingAgentExecutor for Antigravity {
         _workdir: Option<&std::path::Path>,
         _repo_path: Option<&std::path::Path>,
     ) -> Result<futures::stream::BoxStream<'static, json_patch::Patch>, ExecutorError> {
-        // Extraídos de `agy models` (CLI 1.2.2).
+        // Los 14 modelos que expone `agy models` (CLI 1.2.2), verificados ejecutándolo.
         let options = ExecutorDiscoveredOptions {
             model_selector: ModelSelectorConfig {
                 models: vec![
-                    ModelInfo {
-                        id: "gemini-3.1-pro-high".to_string(),
-                        name: "Gemini 3.1 Pro (High)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.1-pro-low".to_string(),
-                        name: "Gemini 3.1 Pro (Low)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
                     ModelInfo {
                         id: "gemini-3.8-flash-high".to_string(),
                         name: "Gemini 3.8 Flash (High)".to_string(),
@@ -211,6 +227,60 @@ impl StandardCodingAgentExecutor for Antigravity {
                     ModelInfo {
                         id: "gemini-3.8-flash-medium".to_string(),
                         name: "Gemini 3.8 Flash (Medium)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.8-flash-low".to_string(),
+                        name: "Gemini 3.8 Flash (Low)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.7-flash-high".to_string(),
+                        name: "Gemini 3.7 Flash (High)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.7-flash-medium".to_string(),
+                        name: "Gemini 3.7 Flash (Medium)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.7-flash-low".to_string(),
+                        name: "Gemini 3.7 Flash (Low)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.6-flash-high".to_string(),
+                        name: "Gemini 3.6 Flash (High)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.6-flash-medium".to_string(),
+                        name: "Gemini 3.6 Flash (Medium)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.6-flash-low".to_string(),
+                        name: "Gemini 3.6 Flash (Low)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.1-pro-high".to_string(),
+                        name: "Gemini 3.1 Pro (High)".to_string(),
+                        provider_id: None,
+                        reasoning_options: vec![],
+                    },
+                    ModelInfo {
+                        id: "gemini-3.1-pro-low".to_string(),
+                        name: "Gemini 3.1 Pro (Low)".to_string(),
                         provider_id: None,
                         reasoning_options: vec![],
                     },
