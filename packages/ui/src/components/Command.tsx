@@ -57,6 +57,7 @@ const CommandInput = React.forwardRef<
     <MagnifyingGlassIcon
       className="mr-base h-4 w-4 shrink-0 text-low"
       weight="bold"
+      aria-hidden="true"
     />
     <CommandPrimitive.Input
       ref={ref}

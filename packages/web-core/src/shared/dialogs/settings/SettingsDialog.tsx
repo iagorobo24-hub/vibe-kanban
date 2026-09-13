@@ -92,7 +92,7 @@ function SettingsDialogNavigation({
         disabled={isDisabled}
         aria-disabled={isDisabled}
         className={cn(
-          'flex items-center gap-3 text-left px-3 py-2 rounded-sm text-sm transition-colors',
+          'flex min-h-10 items-center gap-3 rounded-sm px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
           isDisabled
             ? 'text-low opacity-50 cursor-not-allowed'
             : isActive
@@ -100,7 +100,11 @@ function SettingsDialogNavigation({
               : 'text-normal hover:bg-primary/10'
         )}
       >
-        <Icon className="size-icon-sm shrink-0" weight="bold" />
+        <Icon
+          className="size-icon-sm shrink-0"
+          weight="bold"
+          aria-hidden="true"
+        />
         <span className="truncate">
           {t(`settings.layout.nav.${section.id}`)}
         </span>
@@ -299,7 +303,7 @@ function SettingsDialogContent({
                 type="button"
                 onClick={handleCloseWithConfirmation}
                 aria-label="Close settings"
-                className="agentos-icon-button p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                className="agentos-icon-button flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <XIcon
                   className="size-icon-sm"
@@ -329,7 +333,7 @@ function SettingsDialogContent({
                 type="button"
                 onClick={handleMobileBack}
                 aria-label="Back to settings navigation"
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                className="flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <CaretLeftIcon
                   className="size-icon-sm"
@@ -344,7 +348,7 @@ function SettingsDialogContent({
                 type="button"
                 onClick={handleCloseWithConfirmation}
                 aria-label="Close settings"
-                className="ml-auto p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                className="ml-auto flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <XIcon
                   className="size-icon-sm"

@@ -54,16 +54,27 @@ const ReleaseNotesDialogImpl = create<NoProps>(() => {
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-thin">
           {isLoading && (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-5 w-5 animate-spin text-low" />
+              <Loader2
+                className="h-5 w-5 animate-spin text-low"
+                aria-hidden="true"
+              />
             </div>
           )}
 
           {isError && (
             <div className="flex flex-col items-center justify-center py-12 text-center space-y-3">
-              <AlertCircle className="h-8 w-8 text-low" />
+              <AlertCircle className="h-8 w-8 text-low" aria-hidden="true" />
               <p className="text-sm text-low">Unable to load release notes.</p>
-              <Button variant="outline" size="sm" onClick={handleOpenInBrowser}>
-                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleOpenInBrowser}
+              >
+                <ExternalLink
+                  className="h-3.5 w-3.5 mr-1.5"
+                  aria-hidden="true"
+                />
                 View on GitHub
               </Button>
             </div>
@@ -90,8 +101,13 @@ const ReleaseNotesDialogImpl = create<NoProps>(() => {
         </div>
 
         <DialogFooter className="px-6 py-3 border-t flex-shrink-0">
-          <Button variant="outline" size="sm" onClick={handleOpenInBrowser}>
-            <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleOpenInBrowser}
+          >
+            <ExternalLink className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
             Open on GitHub
           </Button>
         </DialogFooter>
