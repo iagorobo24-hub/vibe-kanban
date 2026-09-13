@@ -1,0 +1,336 @@
+:root {
+  --agentos-bg: #1d1c1a;
+  --agentos-panel: #242321;
+  --agentos-panel-raised: #2b2926;
+  --agentos-border: #3a3732;
+  --agentos-text: #f3eee6;
+  --agentos-text-muted: #b7afa4;
+  --agentos-text-subtle: #81796f;
+  --agentos-accent: #e08b61;
+  --agentos-accent-strong: #ef9a6d;
+  --agentos-success: #91c49b;
+  --agentos-warning: #e4b36c;
+  --agentos-danger: #dd8d82;
+  --agentos-info: #9bb9d9;
+  --agentos-radius-sm: 6px;
+  --agentos-radius-md: 10px;
+  --agentos-shadow: 0 18px 60px rgb(0 0 0 / 22%);
+}
+
+.agentos-theme {
+  color-scheme: dark;
+  color: var(--agentos-text);
+  background: var(--agentos-bg);
+  -webkit-tap-highlight-color: rgb(224 139 97 / 18%);
+}
+
+.agentos-theme :where(button, a, input, textarea, select) {
+  touch-action: manipulation;
+}
+
+.agentos-theme :where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--agentos-accent);
+  outline-offset: 2px;
+}
+
+.agentos-button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 38px;
+  padding: 0.625rem 0.875rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.agentos-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.agentos-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.agentos-button--primary {
+  background: var(--agentos-accent);
+  color: #241b17;
+}
+
+.agentos-button--primary:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+}
+
+.agentos-button--secondary {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-button--secondary:hover:not(:disabled),
+.agentos-button--ghost:hover:not(:disabled) {
+  background: #35312d;
+  border-color: #514a43;
+}
+
+.agentos-button--ghost {
+  background: transparent;
+  color: var(--agentos-text-muted);
+}
+
+.agentos-button--danger {
+  background: rgb(221 141 130 / 12%);
+  border-color: rgb(221 141 130 / 35%);
+  color: var(--agentos-danger);
+}
+
+.agentos-button--danger:hover:not(:disabled) {
+  background: rgb(221 141 130 / 20%);
+}
+
+.agentos-button--sm {
+  min-height: 32px;
+  padding: 0.45rem 0.7rem;
+}
+
+.agentos-button--lg {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+}
+
+.agentos-icon-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  min-width: 36px;
+  padding: 0.5rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-icon-button:hover:not(:disabled),
+.agentos-icon-button[aria-pressed='true'] {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.agentos-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.agentos-field__label {
+  color: var(--agentos-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.agentos-field__required {
+  color: var(--agentos-accent);
+  margin-left: 0.25rem;
+}
+
+.agentos-field__hint,
+.agentos-field__error {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+.agentos-field__hint {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-field__error {
+  color: var(--agentos-danger);
+}
+
+.agentos-panel {
+  background: var(--agentos-panel);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+}
+
+.agentos-panel--raised {
+  background: var(--agentos-panel-raised);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-panel--quiet {
+  background: transparent;
+  border-color: rgb(58 55 50 / 70%);
+}
+
+.agentos-status {
+  align-items: flex-start;
+  display: inline-flex;
+  gap: 0.55rem;
+}
+
+.agentos-status__dot {
+  background: currentColor;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  height: 8px;
+  margin-top: 0.3rem;
+  width: 8px;
+}
+
+.agentos-status__label {
+  color: var(--agentos-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.agentos-status__detail {
+  color: var(--agentos-text-subtle);
+  display: block;
+  font-size: 0.6875rem;
+  margin-top: 0.15rem;
+}
+
+.agentos-status--neutral {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-status--running,
+.agentos-status--success {
+  color: var(--agentos-success);
+}
+
+.agentos-status--attention {
+  color: var(--agentos-warning);
+}
+
+.agentos-status--failed,
+.agentos-status--danger {
+  color: var(--agentos-danger);
+}
+
+.agentos-status--info {
+  color: var(--agentos-info);
+}
+
+.agentos-section-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.agentos-section-header__eyebrow {
+  color: var(--agentos-text-subtle);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.agentos-section-header__title {
+  color: var(--agentos-text);
+  font-size: 1rem;
+  font-weight: 650;
+  margin: 0.25rem 0 0;
+  text-wrap: balance;
+}
+
+.agentos-section-header__description {
+  color: var(--agentos-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin: 0.35rem 0 0;
+  max-width: 58ch;
+}
+
+.agentos-empty-state,
+.agentos-feedback-state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  min-height: 180px;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.agentos-empty-state__title,
+.agentos-feedback-state__title {
+  color: var(--agentos-text);
+  font-size: 0.875rem;
+  font-weight: 650;
+  margin: 0;
+}
+
+.agentos-empty-state__description,
+.agentos-feedback-state__description {
+  color: var(--agentos-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 48ch;
+}
+
+.agentos-metric {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.agentos-metric__label {
+  color: var(--agentos-text-muted);
+  font-size: 0.6875rem;
+}
+
+.agentos-metric__value {
+  color: var(--agentos-text);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.agentos-metric__detail {
+  color: var(--agentos-text-subtle);
+  font-size: 0.625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agentos-button,
+  .agentos-icon-button {
+    transition: none;
+  }
+
+  .agentos-button:hover:not(:disabled),
+  .agentos-button:active:not(:disabled) {
+    transform: none;
+  }
+}
