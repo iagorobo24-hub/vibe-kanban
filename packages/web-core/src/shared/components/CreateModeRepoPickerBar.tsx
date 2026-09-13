@@ -244,11 +244,11 @@ export function CreateModeRepoPickerBar({
   );
 
   return (
-    <div className="w-chat max-w-full">
+    <div className="agentos-create-workspace__repo-picker w-chat max-w-full">
       <div className="px-plusfifty py-base">
         {repos.length > 0 && (
           <div>
-            <div className="rounded-sm border border-border/60">
+            <div className="agentos-create-workspace__repo-list rounded-sm border border-border/60">
               {repos.map((repo, index) => {
                 const branch = targetBranches[repo.id] ?? 'Select branch';
                 const repoDisplayName = getRepoDisplayName(repo);
@@ -259,7 +259,7 @@ export function CreateModeRepoPickerBar({
                   <div
                     key={repo.id}
                     className={cn(
-                      'flex min-w-0 items-center gap-half px-base py-half',
+                      'agentos-create-workspace__repo-row flex min-w-0 items-center gap-half px-base py-half',
                       index > 0 && 'border-t border-border/60'
                     )}
                   >
@@ -299,7 +299,7 @@ export function CreateModeRepoPickerBar({
           </div>
         )}
 
-        <div className="mt-base flex flex-wrap items-center gap-half">
+        <div className="agentos-create-workspace__repo-actions mt-base flex flex-wrap items-center gap-half">
           <button
             type="button"
             onClick={handleChooseRepo}
@@ -354,12 +354,13 @@ export function CreateModeRepoPickerBar({
               value="Continue"
               onClick={onContinueToPrompt}
               disabled={isBusy || repos.length === 0}
+              className="agentos-create-workspace__continue"
             />
           </div>
         </div>
       </div>
       {showSetupHint && (
-        <div className="mx-plusfifty mt-half flex items-start gap-half rounded-sm border border-brand/20 bg-brand/5 px-base py-base">
+        <div className="agentos-create-workspace__setup-hint mx-plusfifty mt-half flex items-start gap-half rounded-sm border border-brand/20 bg-brand/5 px-base py-base">
           <div className="flex-1">
             <p className="text-sm font-medium text-normal">
               {t('createMode.repoPicker.setupHintTitle')}
@@ -394,7 +395,7 @@ export function CreateModeRepoPickerBar({
         </div>
       )}
       {pickerError && (
-        <div className="mt-half rounded-sm border border-error/30 bg-error/10 px-base py-half">
+        <div className="agentos-create-workspace__picker-error mt-half rounded-sm border border-error/30 bg-error/10 px-base py-half">
           <p className="text-xs text-error">{pickerError}</p>
         </div>
       )}
