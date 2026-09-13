@@ -56,15 +56,15 @@ type PendingAction = 'choose' | 'browse' | 'create' | 'branch' | null;
 
 const inlineControlButtonClassName =
   'inline-flex items-center gap-half rounded-sm px-half py-half text-sm text-normal ' +
-  'hover:text-high disabled:cursor-not-allowed disabled:opacity-50';
+  'hover:text-high focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50';
 
 const recentInlineControlButtonClassName =
   'inline-flex items-center gap-half rounded-sm px-half py-half text-sm ' +
-  'disabled:cursor-not-allowed disabled:opacity-50';
+  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50';
 
 const repoRowButtonClassName =
   'inline-flex items-center gap-half text-sm text-low hover:text-high ' +
-  'disabled:cursor-not-allowed disabled:opacity-50';
+  'rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50';
 
 interface CreateModeRepoPickerBarProps {
   onContinueToPrompt: () => void;
@@ -275,9 +275,16 @@ export function CreateModeRepoPickerBar({
                       title="Change branch"
                     >
                       {isChangingBranch ? (
-                        <SpinnerIcon className="size-icon-xs animate-spin" />
+                        <SpinnerIcon
+                          className="size-icon-xs animate-spin"
+                          aria-hidden="true"
+                        />
                       ) : (
-                        <GitBranchIcon className="size-icon-xs" weight="bold" />
+                        <GitBranchIcon
+                          className="size-icon-xs"
+                          weight="bold"
+                          aria-hidden="true"
+                        />
                       )}
                       <span className="max-w-[200px] truncate">{branch}</span>
                     </button>
@@ -290,7 +297,11 @@ export function CreateModeRepoPickerBar({
                       title={`Remove ${repoDisplayName}`}
                       className={cn(repoRowButtonClassName, 'hover:text-error')}
                     >
-                      <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
+                      <XIcon
+                        className="size-icon-xs"
+                        weight="bold"
+                        aria-hidden="true"
+                      />
                     </button>
                   </div>
                 );
@@ -312,11 +323,15 @@ export function CreateModeRepoPickerBar({
             )}
           >
             {pendingAction === 'choose' ? (
-              <SpinnerIcon className="size-icon-xs animate-spin" />
+              <SpinnerIcon
+                className="size-icon-xs animate-spin"
+                aria-hidden="true"
+              />
             ) : (
               <ClockCounterClockwiseIcon
                 className="size-icon-xs"
                 weight="bold"
+                aria-hidden="true"
               />
             )}
             <span>{t('createMode.repoPicker.actions.recent')}</span>
@@ -328,9 +343,16 @@ export function CreateModeRepoPickerBar({
             className={inlineControlButtonClassName}
           >
             {pendingAction === 'browse' ? (
-              <SpinnerIcon className="size-icon-xs animate-spin" />
+              <SpinnerIcon
+                className="size-icon-xs animate-spin"
+                aria-hidden="true"
+              />
             ) : (
-              <MagnifyingGlassIcon className="size-icon-xs" weight="bold" />
+              <MagnifyingGlassIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             )}
             <span>{t('createMode.repoPicker.actions.browse')}</span>
           </button>
@@ -341,9 +363,16 @@ export function CreateModeRepoPickerBar({
             className={inlineControlButtonClassName}
           >
             {pendingAction === 'create' ? (
-              <SpinnerIcon className="size-icon-xs animate-spin" />
+              <SpinnerIcon
+                className="size-icon-xs animate-spin"
+                aria-hidden="true"
+              />
             ) : (
-              <PlusIcon className="size-icon-xs" weight="bold" />
+              <PlusIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             )}
             <span>{t('createMode.repoPicker.actions.create')}</span>
           </button>
@@ -370,7 +399,7 @@ export function CreateModeRepoPickerBar({
             </p>
             <button
               type="button"
-              className="mt-quarter cursor-pointer text-sm font-medium text-brand underline hover:text-brand/80"
+              className="mt-quarter cursor-pointer rounded-sm text-sm font-medium text-brand underline hover:text-brand/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               onClick={() => {
                 const unconfiguredRepo = repos.find(
                   (repo) => !repo.setup_script
@@ -387,7 +416,7 @@ export function CreateModeRepoPickerBar({
           <button
             type="button"
             onClick={() => setSetupHintDismissed(true)}
-            className="shrink-0 text-low hover:text-normal"
+            className="shrink-0 rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             aria-label={t('createMode.repoPicker.setupHintDismiss')}
           >
             <XIcon className="size-icon-2xs" weight="bold" aria-hidden="true" />

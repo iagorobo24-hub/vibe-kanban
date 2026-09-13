@@ -44,10 +44,10 @@ export function PreviewControls({
           <button
             type="button"
             onClick={onViewFullLogs}
-            className="flex items-center gap-half text-xs text-brand hover:text-brand-hover"
+            className="flex items-center gap-half rounded-sm text-xs text-brand hover:text-brand-hover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
             <span>{t('preview.logs.viewFull')}</span>
-            <ArrowSquareOutIcon className="size-icon-xs" />
+            <ArrowSquareOutIcon className="size-icon-xs" aria-hidden="true" />
           </button>
         </div>
 
@@ -56,8 +56,10 @@ export function PreviewControls({
             {processTabs.map((process) => (
               <button
                 key={process.id}
+                type="button"
+                aria-pressed={activeProcessId === process.id}
                 className={cn(
-                  'px-base py-half text-xs border-b-2 transition-colors',
+                  'rounded-t-sm border-b-2 px-base py-half text-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
                   activeProcessId === process.id
                     ? 'border-brand text-normal'
                     : 'border-transparent text-low hover:text-normal'
@@ -73,7 +75,10 @@ export function PreviewControls({
         <div className="flex-1 min-h-0 overflow-hidden">
           {isLoading && processTabs.length === 0 ? (
             <div className="h-full flex items-center justify-center text-low">
-              <SpinnerIcon className="size-icon-sm animate-spin" />
+              <SpinnerIcon
+                className="size-icon-sm animate-spin"
+                aria-hidden="true"
+              />
             </div>
           ) : processTabs.length > 0 ? (
             logsContent
