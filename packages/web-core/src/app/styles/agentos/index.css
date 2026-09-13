@@ -91,6 +91,7 @@
   background-color: var(--agentos-panel);
   border-right: 1px solid var(--agentos-border);
   color: var(--agentos-text);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .agentos-theme .agentos-mobile-drawer__backdrop {
@@ -187,6 +188,44 @@
 .agentos-theme .agentos-project-inspector {
   background-color: var(--agentos-panel);
   color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-panel {
+  background-color: var(--agentos-panel);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-panel__header {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-panel__body {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-issue-panel__body > :where(div, section) {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-section {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-property-row > :where(div, button) {
+  border-color: var(--agentos-border);
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-issue-workspace-card {
+  background-color: var(--agentos-panel);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-theme .agentos-issue-workspace-card:hover {
+  background-color: var(--agentos-panel-raised);
+  border-color: #514a43;
 }
 
 .agentos-theme .agentos-workspaces-layout {
@@ -417,6 +456,55 @@
 
 .agentos-theme [role='dialog'] :where(button) {
   border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-dialog-overlay {
+  background-color: rgb(10 9 8 / 74%);
+  backdrop-filter: blur(4px);
+}
+
+.agentos-dialog-content {
+  max-height: calc(100dvh - 2rem);
+  overscroll-behavior: contain;
+  overflow-y: auto;
+}
+
+.agentos-dialog-content :where(input, textarea, select) {
+  background-color: var(--agentos-bg);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-dialog-content :where(input, textarea, select):focus {
+  border-color: var(--agentos-accent);
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 12%);
+}
+
+.agentos-dialog-close {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-dialog-close:hover {
+  color: var(--agentos-text);
+  opacity: 1;
+}
+
+.agentos-approval-entry {
+  border: 1px solid rgb(228 179 108 / 36%);
+  border-radius: var(--agentos-radius-md);
+  background-color: rgb(228 179 108 / 6%);
+  overflow: hidden;
+}
+
+.agentos-approval-entry__actions {
+  border-top: 1px solid rgb(228 179 108 / 24%);
+}
+
+@media (max-width: 640px) {
+  .agentos-dialog-content {
+    width: calc(100% - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
 }
 
 @media (max-width: 767px) {

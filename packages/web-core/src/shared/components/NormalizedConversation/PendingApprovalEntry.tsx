@@ -316,11 +316,11 @@ const PendingApprovalEntry = ({
   });
 
   return (
-    <div className="relative mt-3">
-      <div className="overflow-hidden">
+    <div className="agentos-approval-entry relative mt-3">
+      <div className="agentos-approval-entry__body overflow-hidden">
         {children}
 
-        <div className="bg-background px-2 py-1.5 text-xs sm:text-sm">
+        <div className="agentos-approval-entry__actions bg-background px-2 py-1.5 text-xs sm:text-sm">
           <TooltipProvider>
             <div className="flex items-center justify-between gap-1.5 pl-4">
               <div className="flex items-center gap-1.5">
