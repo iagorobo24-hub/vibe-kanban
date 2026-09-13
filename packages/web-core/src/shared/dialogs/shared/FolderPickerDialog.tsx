@@ -248,26 +248,42 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                 ) : (
                   <div className="p-2">
                     {filteredEntries.map((entry, index) => (
-                      <div
+                      <button
+                        type="button"
                         key={index}
-                        className={`flex items-center space-x-2 p-2 rounded cursor-pointer hover:bg-accent ${
+                        className={`flex items-center space-x-2 p-2 rounded text-left border-0 bg-transparent w-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand hover:bg-accent ${
                           !entry.is_directory
                             ? 'opacity-50 cursor-not-allowed'
-                            : ''
+                            : 'cursor-pointer'
                         }`}
-                        onClick={() =>
-                          entry.is_directory && handleFolderClick(entry)
+                        onClick={() => {
+                          if (entry.is_directory) handleFolderClick(entry);
+                        }}
+                        disabled={!entry.is_directory}
+                        aria-label={
+                          entry.is_directory
+                            ? `Open folder ${entry.name}`
+                            : entry.name
                         }
                         title={entry.name} // Show full name on hover
                       >
                         {entry.is_directory ? (
                           entry.is_git_repo ? (
-                            <FolderOpen className="h-4 w-4 text-success flex-shrink-0" />
+                            <FolderOpen
+                              className="h-4 w-4 text-success flex-shrink-0"
+                              aria-hidden="true"
+                            />
                           ) : (
-                            <Folder className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                            <Folder
+                              className="h-4 w-4 text-blue-600 flex-shrink-0"
+                              aria-hidden="true"
+                            />
                           )
                         ) : (
-                          <File className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                          <File
+                            className="h-4 w-4 text-gray-400 flex-shrink-0"
+                            aria-hidden="true"
+                          />
                         )}
                         <span className="text-sm flex-1 truncate min-w-0">
                           {entry.name}
@@ -277,7 +293,7 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                             {t('folderPicker.gitRepo')}
                           </span>
                         )}
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}

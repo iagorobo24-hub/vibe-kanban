@@ -187,86 +187,95 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
               {executionProcesses.map((process) => (
                 <div
                   key={process.id}
-                  className={`border rounded-lg p-4 hover:bg-muted/30 cursor-pointer transition-colors ${
+                  className={`relative border rounded-lg p-4 ${'hover:bg-muted/30 transition-colors'} ${
                     loadingProcessId === process.id
                       ? 'opacity-50 cursor-wait'
                       : isProcessGreyed(process.id)
                         ? 'opacity-50'
                         : ''
                   }`}
-                  onClick={() => handleProcessClick(process)}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-3 min-w-0">
-                      {getStatusIcon(process.status)}
-                      <div className="min-w-0">
-                        <h3 className="font-medium text-sm">
-                          {process.run_reason}
-                        </h3>
-                        <p
-                          className="text-sm text-muted-foreground mt-1 truncate"
-                          title={process.id}
-                        >
-                          {t('processes.processId', { id: process.id })}
-                        </p>
-                        {process.dropped && (
-                          <span
-                            className="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200"
-                            title={t('processes.deletedTooltip')}
+                  <button
+                    type="button"
+                    className="absolute inset-0 z-0 rounded-lg border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand"
+                    onClick={() => {
+                      void handleProcessClick(process);
+                    }}
+                    aria-label={`${t('processes.detailsTitle')}: ${process.run_reason}`}
+                  />
+                  <div className="relative z-10 pointer-events-none">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-3 min-w-0">
+                        {getStatusIcon(process.status)}
+                        <div className="min-w-0">
+                          <h3 className="font-medium text-sm">
+                            {process.run_reason}
+                          </h3>
+                          <p
+                            className="text-sm text-muted-foreground mt-1 truncate"
+                            title={process.id}
                           >
-                            {t('processes.deleted')}
-                          </span>
-                        )}
-                        {
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {t('processes.agent')}{' '}
-                            {process.executor_action.typ.type ===
-                              'CodingAgentInitialRequest' ||
-                            process.executor_action.typ.type ===
-                              'CodingAgentFollowUpRequest' ||
-                            process.executor_action.typ.type ===
-                              'ReviewRequest' ? (
-                              <ProfileVariantBadge
-                                executorConfig={
-                                  process.executor_action.typ.executor_config
-                                }
-                              />
-                            ) : null}
+                            {t('processes.processId', { id: process.id })}
                           </p>
-                        }
+                          {process.dropped && (
+                            <span
+                              className="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200"
+                              title={t('processes.deletedTooltip')}
+                            >
+                              {t('processes.deleted')}
+                            </span>
+                          )}
+                          {
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {t('processes.agent')}{' '}
+                              {process.executor_action.typ.type ===
+                                'CodingAgentInitialRequest' ||
+                              process.executor_action.typ.type ===
+                                'CodingAgentFollowUpRequest' ||
+                              process.executor_action.typ.type ===
+                                'ReviewRequest' ? (
+                                <ProfileVariantBadge
+                                  executorConfig={
+                                    process.executor_action.typ.executor_config
+                                  }
+                                />
+                              ) : null}
+                            </p>
+                          }
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span
+                          className={`inline-block px-2 py-1 text-xs font-medium border rounded-full ${getStatusColor(
+                            process.status
+                          )}`}
+                        >
+                          {process.status}
+                        </span>
+                        {process.exit_code !== null && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {t('processes.exit', {
+                              code: process.exit_code.toString(),
+                            })}
+                          </p>
+                        )}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <span
-                        className={`inline-block px-2 py-1 text-xs font-medium border rounded-full ${getStatusColor(
-                          process.status
-                        )}`}
-                      >
-                        {process.status}
-                      </span>
-                      {process.exit_code !== null && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {t('processes.exit', {
-                            code: process.exit_code.toString(),
-                          })}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="mt-3 text-xs text-muted-foreground">
-                    <div className="flex justify-between">
-                      <span>
-                        {t('processes.started', {
-                          date: formatDate(process.started_at),
-                        })}
-                      </span>
-                      {process.completed_at && (
+                    <div className="mt-3 text-xs text-muted-foreground">
+                      <div className="flex justify-between">
                         <span>
-                          {t('processes.completed', {
-                            date: formatDate(process.completed_at),
+                          {t('processes.started', {
+                            date: formatDate(process.started_at),
                           })}
                         </span>
-                      )}
+                        {process.completed_at && (
+                          <span>
+                            {t('processes.completed', {
+                              date: formatDate(process.completed_at),
+                            })}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

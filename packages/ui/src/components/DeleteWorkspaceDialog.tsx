@@ -82,19 +82,25 @@ const DeleteWorkspaceDialogImpl = NiceModal.create<DeleteWorkspaceDialogProps>(
               <div
                 className={`flex items-center gap-3 text-sm font-medium select-none ${
                   canDeleteBranches
-                    ? 'cursor-pointer'
+                    ? ''
                     : 'text-muted-foreground cursor-not-allowed'
                 }`}
-                onClick={() => {
-                  if (canDeleteBranches) setDeleteBranches((v) => !v);
-                }}
               >
                 <Checkbox
+                  id="delete-workspace-branch"
                   checked={deleteBranches}
+                  onCheckedChange={setDeleteBranches}
                   disabled={!canDeleteBranches}
+                  aria-label={t(
+                    'workspaces.deleteDialog.deleteBranchLabel',
+                    'Delete branch'
+                  )}
                 />
-                <span className="flex items-center gap-2">
-                  <GitBranchIcon className="h-4 w-4" />
+                <label
+                  htmlFor="delete-workspace-branch"
+                  className="flex items-center gap-2"
+                >
+                  <GitBranchIcon className="h-4 w-4" aria-hidden="true" />
                   {t(
                     'workspaces.deleteDialog.deleteBranchLabel',
                     'Delete branch'
@@ -102,7 +108,7 @@ const DeleteWorkspaceDialogImpl = NiceModal.create<DeleteWorkspaceDialogProps>(
                   <code className="rounded bg-muted px-1 py-0.5 text-xs font-mono">
                     {branchName}
                   </code>
-                </span>
+                </label>
               </div>
               {hasOpenPR && (
                 <p className="text-xs text-muted-foreground pl-7">
@@ -114,13 +120,21 @@ const DeleteWorkspaceDialogImpl = NiceModal.create<DeleteWorkspaceDialogProps>(
               )}
             </div>
             {isLinkedToIssue && (
-              <div
-                className="flex items-center gap-3 text-sm font-medium cursor-pointer select-none"
-                onClick={() => setUnlinkFromIssue((v) => !v)}
-              >
-                <Checkbox checked={unlinkFromIssue} />
-                <span className="flex items-center gap-2">
-                  <LinkBreakIcon className="h-4 w-4" />
+              <div className="flex items-center gap-3 text-sm font-medium select-none">
+                <Checkbox
+                  id="delete-workspace-unlink"
+                  checked={unlinkFromIssue}
+                  onCheckedChange={setUnlinkFromIssue}
+                  aria-label={t(
+                    'workspaces.deleteDialog.unlinkFromIssueLabel',
+                    'Also unlink from issue'
+                  )}
+                />
+                <label
+                  htmlFor="delete-workspace-unlink"
+                  className="flex items-center gap-2"
+                >
+                  <LinkBreakIcon className="h-4 w-4" aria-hidden="true" />
                   {t(
                     'workspaces.deleteDialog.unlinkFromIssueLabel',
                     'Also unlink from issue'
@@ -133,7 +147,7 @@ const DeleteWorkspaceDialogImpl = NiceModal.create<DeleteWorkspaceDialogProps>(
                       </code>
                     </>
                   )}
-                </span>
+                </label>
               </div>
             )}
           </div>
