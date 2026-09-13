@@ -149,7 +149,7 @@ export function KanbanFilterBar<
   return (
     <>
       {isMobile && mobileSearchExpanded ? (
-        <div className="flex items-center gap-half">
+        <div className="agentos-kanban-filters__mobile-search flex items-center gap-half">
           <button
             type="button"
             onClick={() => {
@@ -176,7 +176,7 @@ export function KanbanFilterBar<
             isMobile ? "gap-half" : "gap-base",
           )}
         >
-          <ButtonGroup className="flex-wrap">
+          <ButtonGroup className="agentos-kanban-filters__view-toggle flex-wrap">
             <ButtonGroupItem
               active={activeViewId === viewIds.TEAM}
               onClick={() => onViewChange(viewIds.TEAM)}
@@ -213,7 +213,7 @@ export function KanbanFilterBar<
               variant="search"
               actionIcon={filters.searchQuery ? XIcon : undefined}
               onAction={handleClearSearch}
-              className="min-w-[160px] w-[220px] max-w-full"
+              className="agentos-kanban-filters__search min-w-[160px] w-[220px] max-w-full"
             />
           )}
 
@@ -221,7 +221,7 @@ export function KanbanFilterBar<
             type="button"
             onClick={() => onFiltersDialogOpenChange(true)}
             className={cn(
-              "flex items-center justify-center p-half rounded-sm transition-colors",
+              "agentos-kanban-filters__filter flex items-center justify-center p-half rounded-sm transition-colors",
               hasActiveFilters
                 ? "text-brand hover:text-brand"
                 : "text-low hover:text-normal hover:bg-secondary",
@@ -238,6 +238,7 @@ export function KanbanFilterBar<
               value={t("kanban.clearFilters", "Clear filters")}
               actionIcon={XIcon}
               onClick={onClearFilters}
+              className="agentos-kanban-filters__clear"
             />
           )}
 
@@ -246,7 +247,7 @@ export function KanbanFilterBar<
               type="button"
               onClick={() => onCreateIssue()}
               className={cn(
-                "rounded-sm p-half bg-brand hover:bg-brand-hover text-on-brand transition-colors",
+                "agentos-kanban-filters__create rounded-sm p-half bg-brand hover:bg-brand-hover text-on-brand transition-colors",
                 shouldAnimateCreateButton && "create-issue-attention",
               )}
               aria-label={t("kanban.newIssue", "New issue")}
@@ -260,6 +261,7 @@ export function KanbanFilterBar<
               actionIcon={PlusIcon}
               onClick={() => onCreateIssue()}
               className={cn(
+                "agentos-kanban-filters__create",
                 shouldAnimateCreateButton && "create-issue-attention",
               )}
             />

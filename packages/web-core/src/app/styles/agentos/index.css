@@ -137,6 +137,49 @@
   border-color: var(--agentos-accent);
 }
 
+.agentos-theme .agentos-project-board__menu-button,
+.agentos-theme .agentos-kanban-column__add,
+.agentos-theme .agentos-kanban-filters__filter {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.1rem;
+  min-width: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-project-board__menu-button:hover,
+.agentos-theme .agentos-kanban-column__add:hover,
+.agentos-theme .agentos-kanban-filters__filter:hover {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-kanban-filters {
+  align-items: center;
+}
+
+.agentos-theme .agentos-kanban-filters__view-toggle {
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+  overflow: hidden;
+}
+
+.agentos-theme .agentos-kanban-filters__search input {
+  border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-theme .agentos-kanban-filters__clear {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-kanban-filters__create {
+  min-height: 2.25rem;
+}
+
 .agentos-theme .agentos-kanban-scroll,
 .agentos-theme .agentos-issue-list-scroll {
   scrollbar-color: #514a43 transparent;
@@ -195,6 +238,39 @@
   color: var(--agentos-text-muted);
 }
 
+.agentos-theme .agentos-kanban-card__meta {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-kanban-card__title {
+  color: var(--agentos-text);
+  font-weight: 500;
+}
+
+.agentos-theme .agentos-kanban-card__description {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-kanban-card__properties,
+.agentos-theme .agentos-kanban-card__badges {
+  min-height: 1.65rem;
+}
+
+.agentos-theme .agentos-kanban-card__more {
+  border: 1px solid transparent;
+  min-height: 2rem;
+  min-width: 2rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-kanban-card__more:hover {
+  border-color: var(--agentos-border);
+}
+
 .agentos-theme .agentos-project-inspector {
   background-color: var(--agentos-panel);
   color: var(--agentos-text);
@@ -225,6 +301,36 @@
 .agentos-theme .agentos-issue-property-row > :where(div, button) {
   border-color: var(--agentos-border);
   background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-issue-property-row__creator {
+  border: 1px solid var(--agentos-border);
+  background: var(--agentos-panel-raised);
+}
+
+.agentos-theme .agentos-issue-panel__action {
+  border: 1px solid transparent;
+  min-height: 2.1rem;
+  min-width: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-issue-panel__action:hover {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-panel__properties,
+.agentos-theme .agentos-issue-panel__tags {
+  background: rgb(43 41 38 / 28%);
+}
+
+.agentos-theme .agentos-issue-panel__title textarea,
+.agentos-theme .agentos-issue-panel__description textarea,
+.agentos-theme .agentos-issue-panel__description [contenteditable='true'] {
+  border-radius: var(--agentos-radius-sm);
 }
 
 .agentos-theme .agentos-issue-workspace-card {
@@ -262,13 +368,15 @@
   border-color: var(--agentos-border);
 }
 
-.agentos-theme .agentos-workspaces-sidebar__title-bar
+.agentos-theme
+  .agentos-workspaces-sidebar__title-bar
   :where(button, [role='button']) {
   color: var(--agentos-text-muted);
   min-height: 2.25rem;
 }
 
-.agentos-theme .agentos-workspaces-sidebar__title-bar
+.agentos-theme
+  .agentos-workspaces-sidebar__title-bar
   :where(button, [role='button']):hover {
   color: var(--agentos-text);
 }
@@ -545,9 +653,7 @@
   color: #241b17;
 }
 
-.agentos-theme
-  .agentos-chatbox__footer
-  .agentos-primary-button:disabled {
+.agentos-theme .agentos-chatbox__footer .agentos-primary-button:disabled {
   background: var(--agentos-panel-raised);
   border-color: var(--agentos-border);
   color: var(--agentos-text-subtle);
@@ -793,7 +899,9 @@
     opacity 160ms ease;
 }
 
-.agentos-theme .agentos-context-bar__surface :where(button):hover:not(:disabled) {
+.agentos-theme
+  .agentos-context-bar__surface
+  :where(button):hover:not(:disabled) {
   background: var(--agentos-panel-raised);
   border-color: var(--agentos-border);
   color: var(--agentos-text);

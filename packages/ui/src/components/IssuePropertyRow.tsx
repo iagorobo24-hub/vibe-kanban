@@ -101,7 +101,7 @@ export function IssuePropertyRow({
 
       {creatorUser &&
         (creatorUser.first_name?.trim() || creatorUser.username?.trim()) && (
-          <div className="flex items-center gap-half px-base py-half bg-panel rounded-sm text-sm whitespace-nowrap">
+          <div className="agentos-issue-property-row__creator flex items-center gap-half px-base py-half bg-panel rounded-sm text-sm whitespace-nowrap">
             <span className="text-low">
               {t("kanban.createdBy", "Created by")}
             </span>

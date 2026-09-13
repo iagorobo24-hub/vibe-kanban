@@ -207,7 +207,7 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
       )}
     >
       {/* Row 1: Task ID + sub-issue indicator + loading dots + more actions */}
-      <div className="flex items-center justify-between gap-half">
+      <div className="agentos-kanban-card__meta flex items-center justify-between gap-half">
         <div className="flex items-center gap-half min-w-0">
           {isSubIssue && (
             <span className="text-sm text-low">
@@ -228,7 +228,7 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
             }}
             onMouseDown={(e) => e.stopPropagation()}
             className={cn(
-              "p-half -m-half rounded-sm text-low hover:text-normal hover:bg-secondary shrink-0",
+              "agentos-kanban-card__more p-half -m-half rounded-sm text-low hover:text-normal hover:bg-secondary shrink-0",
               isMobile
                 ? ""
                 : "invisible opacity-0 group-hover:visible group-hover:opacity-100",
@@ -243,13 +243,15 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
       </div>
 
       {/* Row 2: Title */}
-      <span className="text-base text-normal truncate">{title}</span>
+      <span className="agentos-kanban-card__title text-base text-normal truncate">
+        {title}
+      </span>
 
       {/* Row 3: Description (optional, truncated) */}
       {previewDescription && (
         <p
           className={cn(
-            "text-sm text-low m-0",
+            "agentos-kanban-card__description text-sm text-low m-0",
             isMobile
               ? "leading-tight line-clamp-2"
               : "leading-relaxed line-clamp-4",
@@ -260,7 +262,7 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
       )}
 
       {/* Row 4: Priority + Assignee */}
-      <div className="flex items-center justify-between">
+      <div className="agentos-kanban-card__properties flex items-center justify-between">
         <div className="flex items-center gap-half min-w-0">
           {onPriorityClick ? (
             <button
@@ -300,7 +302,7 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
         tagEditProps ||
         pullRequests.length > 0 ||
         relationships.length > 0) && (
-        <div className="flex items-center gap-half flex-wrap min-w-0">
+        <div className="agentos-kanban-card__badges flex items-center gap-half flex-wrap min-w-0">
           {tagEditProps ? (
             (tagEditProps.renderTagEditor?.({
               allTags: tagEditProps.allTags,

@@ -266,7 +266,7 @@ export function KanbanIssuePanel({
             <button
               type="button"
               onClick={onCopyLink}
-              className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+              className="agentos-issue-panel__action p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
               aria-label={t("kanban.copyLink")}
             >
               <LinkIcon className="size-icon-sm" weight="bold" />
@@ -278,7 +278,7 @@ export function KanbanIssuePanel({
             <button
               type="button"
               onClick={onMoreActions}
-              className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+              className="agentos-issue-panel__action p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
               aria-label={t("kanban.moreActions")}
             >
               <DotsThreeIcon className="size-icon-sm" weight="bold" />
@@ -287,7 +287,7 @@ export function KanbanIssuePanel({
           <button
             type="button"
             onClick={onClose}
-            className="p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
+            className="agentos-issue-panel__action p-half rounded-sm text-low hover:text-normal hover:bg-panel transition-colors"
             aria-label={t("kanban.closePanel")}
           >
             <XIcon className="size-icon-sm" weight="bold" />
@@ -298,7 +298,7 @@ export function KanbanIssuePanel({
       {/* Scrollable Content */}
       <div className="agentos-issue-panel__body flex-1 overflow-y-auto">
         {/* Property Row */}
-        <div className="px-base py-base border-b">
+        <div className="agentos-issue-panel__properties px-base py-base border-b">
           <IssuePropertyRow
             statusId={formData.statusId}
             priority={formData.priority}
@@ -319,7 +319,7 @@ export function KanbanIssuePanel({
         </div>
 
         {/* Tags Row */}
-        <div className="px-base py-base border-b">
+        <div className="agentos-issue-panel__tags px-base py-base border-b">
           <IssueTagsRow
             selectedTagIds={formData.tagIds}
             availableTags={tags}
@@ -333,9 +333,9 @@ export function KanbanIssuePanel({
         </div>
 
         {/* Title and Description */}
-        <div className="rounded-sm">
+        <div className="agentos-issue-panel__editor rounded-sm">
           {/* Title Input */}
-          <div className="w-full mt-base">
+          <div className="agentos-issue-panel__title w-full mt-base">
             <AutoResizeTextarea
               ref={titleInputRef}
               value={formData.title}
@@ -369,7 +369,7 @@ export function KanbanIssuePanel({
             ref={descriptionContainerRef}
             {...(isDescriptionEditing ? dropzoneProps?.getRootProps() : {})}
             className={cn(
-              "relative mt-base",
+              "agentos-issue-panel__description relative mt-base",
               !isDescriptionEditing && !isCreateMode && "cursor-text",
             )}
             onClick={() => {

@@ -915,8 +915,9 @@ export function KanbanContainer() {
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
+                className="agentos-project-board__menu-button p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
                 aria-label="Project menu"
+                data-agentos-control="project-menu"
               >
                 <DotsThreeIcon className="size-icon-sm" weight="bold" />
               </button>
@@ -1004,7 +1005,7 @@ export function KanbanContainer() {
                         <button
                           type="button"
                           onClick={() => handleAddTask(status.id)}
-                          className="p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
+                          className="agentos-kanban-column__add p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
                           aria-label="Add task"
                         >
                           <PlusIcon className="size-icon-xs" weight="bold" />
