@@ -28,6 +28,16 @@
   background-color: var(--agentos-bg);
 }
 
+.agentos-theme .agentos-cloud-shutdown-banner {
+  background-color: rgb(228 179 108 / 15%);
+  border-color: rgb(228 179 108 / 28%);
+  color: var(--agentos-warning);
+}
+
+.agentos-theme .agentos-cloud-shutdown-banner:hover {
+  background-color: rgb(228 179 108 / 22%);
+}
+
 .agentos-theme .agentos-app-bar {
   background-color: #211f1d;
   border-color: var(--agentos-border);

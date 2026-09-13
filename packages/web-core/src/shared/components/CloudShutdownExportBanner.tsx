@@ -27,7 +27,7 @@ export function CloudShutdownExportBanner({
       onClick={onClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        'w-full cursor-pointer border-b border-border bg-brand px-base py-half text-center',
+        'agentos-cloud-shutdown-banner w-full cursor-pointer border-b border-border bg-brand px-base py-half text-center',
         'text-sm font-medium text-on-brand hover:bg-brand-hover'
       )}
     >
