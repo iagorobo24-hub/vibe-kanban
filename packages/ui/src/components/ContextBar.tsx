@@ -140,13 +140,7 @@ export function ContextBar({
   secondaryItems = [],
 }: ContextBarProps) {
   return (
-    <div
-      className={cn(
-        'agentos-context-bar absolute z-50',
-        !isDragging && 'transition-all duration-300 ease-out'
-      )}
-      style={style}
-    >
+    <div className="agentos-context-bar absolute z-50" style={style}>
       <div className="agentos-context-bar__surface group bg-secondary/50 backdrop-blur-sm border border-secondary rounded shadow-[inset_2px_2px_5px_rgba(255,255,255,0.03),_0_0_10px_rgba(0,0,0,0.2)] hover:shadow-[inset_2px_2px_5px_rgba(255,255,255,0.06),_0_0_10px_rgba(0,0,0,0.4)] transition-shadow px-base">
         <DragHandle
           onMouseDown={onDragHandleMouseDown}

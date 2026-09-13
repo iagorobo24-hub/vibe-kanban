@@ -199,7 +199,7 @@ export const AskUserQuestionBanner = forwardRef<
                   disabled={disabled}
                   onClick={() => handleSelectOption(opt.label)}
                   className={`
-                    group relative rounded-md border px-2.5 py-1.5 text-xs transition-all
+                    group relative rounded-md border px-2.5 py-1.5 text-xs transition-colors
                     ${
                       isSelected
                         ? 'border-brand bg-brand/10 text-normal'

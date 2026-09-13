@@ -128,10 +128,7 @@ export function ContextUsageGauge({
             strokeLinecap="round"
             strokeDasharray={`${circumference} ${circumference}`}
             strokeDashoffset={dashOffset}
-            className={cn(
-              progressColor,
-              'transition-all duration-500 ease-out'
-            )}
+            className={progressColor}
           />
         </svg>
       </div>

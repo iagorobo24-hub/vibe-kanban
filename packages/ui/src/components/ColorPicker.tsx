@@ -73,7 +73,7 @@ export const InlineColorPicker = forwardRef<
             disabled={disabled}
             onClick={() => onChange(color)}
             className={cn(
-              'w-6 h-6 rounded-full transition-all',
+              'w-6 h-6 rounded-full transition-transform',
               color === value
                 ? 'ring-2 ring-brand ring-offset-1'
                 : 'hover:scale-110',

@@ -304,11 +304,15 @@ function WorkspaceSessionPanel({
                     <button
                       type="button"
                       onClick={() => handleScrollToBottom('auto')}
-                      className="absolute bottom-2 right-4 z-10 pointer-events-auto flex items-center justify-center size-8 rounded-full bg-secondary/80 backdrop-blur-sm border border-secondary text-low hover:text-normal hover:bg-secondary shadow-md transition-all"
+                      className="absolute bottom-2 right-4 z-10 pointer-events-auto flex items-center justify-center size-8 rounded-full bg-secondary/80 backdrop-blur-sm border border-secondary text-low hover:text-normal hover:bg-secondary shadow-md transition-colors"
                       aria-label="Scroll to bottom"
                       title="Scroll to bottom"
                     >
-                      <ArrowDownIcon className="size-icon-base" weight="bold" />
+                      <ArrowDownIcon
+                        className="size-icon-base"
+                        weight="bold"
+                        aria-hidden="true"
+                      />
                     </button>
                   </div>
                 </div>
