@@ -1,6 +1,7 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { CaretLeftIcon, XIcon } from "@phosphor-icons/react";
 import { cn } from "../lib/cn";
+import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
 
 export interface GuideDialogTopic {
   id: string;
@@ -25,6 +26,9 @@ export function GuideDialogShell({
 }: GuideDialogShellProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mobileShowContent, setMobileShowContent] = useState(false);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  useDialogFocusTrap(dialogRef, topics.length > 0);
 
   if (topics.length === 0) {
     return null;
@@ -38,6 +42,7 @@ export function GuideDialogShell({
         data-tauri-drag-region
         className="agentos-dialog-overlay fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
         onClick={onClose}
+        aria-hidden="true"
       />
       {/* Dialog wrapper - handles positioning */}
       <div
@@ -50,6 +55,7 @@ export function GuideDialogShell({
         )}
       >
         <div
+          ref={dialogRef}
           className={cn(
             "agentos-guide-dialog h-full w-full flex overflow-hidden",
             "bg-panel/95 backdrop-blur-sm shadow-lg",
@@ -60,6 +66,9 @@ export function GuideDialogShell({
             "md:w-[800px] md:h-[600px] md:rounded-sm md:border md:border-border/50",
             className,
           )}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="agentos-guide-dialog-title"
         >
           {/* Sidebar - hidden on mobile when showing content */}
           <div
@@ -76,20 +85,27 @@ export function GuideDialogShell({
             <div className="p-3 flex items-center justify-between md:hidden">
               <span className="text-sm font-medium text-high">Topics</span>
               <button
+                type="button"
                 onClick={onClose}
+                aria-label={closeLabel}
                 className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
-                <XIcon className="h-4 w-4" weight="bold" />
+                <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               </button>
             </div>
-            <nav className="flex-1 p-3 flex flex-col gap-1 overflow-y-auto md:pt-3">
+            <nav
+              className="flex-1 p-3 flex flex-col gap-1 overflow-y-auto md:pt-3"
+              aria-label="Guide topics"
+            >
               {topics.map((topic, idx) => (
                 <button
                   key={topic.id}
+                  type="button"
                   onClick={() => {
                     setSelectedIndex(idx);
                     setMobileShowContent(true);
                   }}
+                  aria-pressed={idx === selectedIndex}
                   className={cn(
                     "text-left px-3 py-2 rounded-sm text-sm transition-colors",
                     idx === selectedIndex
@@ -115,29 +131,41 @@ export function GuideDialogShell({
             {/* Mobile header with back button */}
             <div className="flex items-center gap-2 p-3 border-b border-border/50 md:hidden">
               <button
+                type="button"
                 onClick={() => setMobileShowContent(false)}
+                aria-label="Back"
                 className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
-                <CaretLeftIcon className="h-4 w-4" weight="bold" />
+                <CaretLeftIcon
+                  className="h-4 w-4"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
               <span className="text-sm font-medium text-high">Back</span>
               <button
+                type="button"
                 onClick={onClose}
+                aria-label={closeLabel}
                 className="ml-auto p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
               >
-                <XIcon className="h-4 w-4" weight="bold" />
+                <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               </button>
             </div>
             {/* Desktop close button */}
             <button
+              type="button"
               onClick={onClose}
+              aria-label={closeLabel}
               className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 hidden md:block"
             >
-              <XIcon className="h-4 w-4 text-normal" />
-              <span className="sr-only">{closeLabel}</span>
+              <XIcon className="h-4 w-4 text-normal" aria-hidden="true" />
             </button>
             <div className="p-6 pt-4 md:pt-6 flex-1">
-              <h2 className="text-xl font-semibold text-high mb-4 pr-8">
+              <h2
+                id="agentos-guide-dialog-title"
+                className="text-xl font-semibold text-high mb-4 pr-8"
+              >
                 {selectedTopic.title}
               </h2>
               {selectedTopic.imageSrc && (

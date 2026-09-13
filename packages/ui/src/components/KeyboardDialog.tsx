@@ -4,10 +4,12 @@ import { useHotkeys, useHotkeysContext } from "react-hotkeys-hook";
 import { createPortal } from "react-dom";
 
 import { cn } from "../lib/cn";
+import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
 
 const DIALOG_SCOPE = "dialog";
 const KANBAN_SCOPE = "kanban";
 const PROJECTS_SCOPE = "projects";
+const DialogTitleIdContext = React.createContext<string | null>(null);
 
 function assignRef<T>(ref: React.ForwardedRef<T>, value: T | null) {
   if (typeof ref === "function") {
@@ -29,6 +31,7 @@ const Dialog = React.forwardRef<
 >(({ className, open, onOpenChange, children, uncloseable, ...props }, ref) => {
   const { enableScope, disableScope } = useHotkeysContext();
   const dialogRef = React.useRef<HTMLDivElement | null>(null);
+  const dialogTitleId = React.useId();
 
   const setDialogRef = React.useCallback(
     (node: HTMLDivElement | null) => {
@@ -37,6 +40,8 @@ const Dialog = React.forwardRef<
     },
     [ref],
   );
+
+  useDialogFocusTrap(dialogRef, !!open);
 
   // Manage dialog scope when open/closed
   React.useEffect(() => {
@@ -147,17 +152,24 @@ const Dialog = React.forwardRef<
           className,
         )}
         {...props}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={dialogTitleId}
+        tabIndex={-1}
       >
         {!uncloseable && (
           <button
+            type="button"
             className="agentos-dialog-close absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-10"
             onClick={() => onOpenChange?.(false)}
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
             <span className="sr-only">Close</span>
           </button>
         )}
-        {children}
+        <DialogTitleIdContext.Provider value={dialogTitleId}>
+          {children}
+        </DialogTitleIdContext.Provider>
       </div>
     </div>,
     document.body,
@@ -182,16 +194,21 @@ DialogHeader.displayName = "DialogHeader";
 const DialogTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "agentos-dialog-title text-lg font-semibold leading-none tracking-tight",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, id, ...props }, ref) => {
+  const contextId = React.useContext(DialogTitleIdContext);
+
+  return (
+    <h3
+      ref={ref}
+      id={id ?? contextId ?? undefined}
+      className={cn(
+        "agentos-dialog-title text-lg font-semibold leading-none tracking-tight",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 DialogTitle.displayName = "DialogTitle";
 
 const DialogDescription = React.forwardRef<
