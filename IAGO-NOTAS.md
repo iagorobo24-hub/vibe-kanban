@@ -427,6 +427,53 @@ garantía que un hash, pero no todos los agentes del registro estarán firmados.
 
 ---
 
+## Servidor MCP propio: cableado y arreglado
+
+Upstream dejó implementado `crates/mcp` (binario `vibe-kanban-mcp`) y **no lo cableó**.
+Se autodescubre solo: lee el port file y consulta `/api/containers/attempt-context` con su
+propio directorio de trabajo para saber en qué workspace corre. Está pensado para lanzarse
+dentro del worktree del agente.
+
+Verificado con un handshake MCP real contra el servidor en marcha: **34 herramientas**.
+Entre ellas `update_setup_script` (un agente puede configurarse su propio setup),
+y `start_workspace` + `run_session_prompt` + `get_execution`, que son las primitivas de
+enjambre de la Fase E.
+
+### Cambio 1 — el catálogo apuntaba al paquete de upstream
+
+`crates/executors/default_mcp.json` ofrece el MCP propio como
+`npx -y vibe-kanban@latest --mcp`, que baja el paquete publicado por BloopAI
+(0.1.44, del 24 de abril). En un fork eso ejecuta el build de otro. Ahora
+`mcp_config.rs` prefiere el binario `vibe-kanban-mcp` que esté **junto al ejecutable en
+marcha**, y si no existe se queda la entrada `npx`, así que un build sólo-servidor se
+comporta igual que antes.
+
+### Cambio 2 — bug de Windows: el contexto nunca resolvía
+
+`canonicalize()` en Windows devuelve la forma extendida; la base de datos guarda la ruta
+llana. Nunca casaban, así que `get_context` no se registraba y las diez y pico
+herramientas que dicen *"optional if running inside a workspace"* exigían los IDs a mano.
+En modo global el fallo se traga en silencio: sólo salía como una línea de debug.
+
+`path.rs` ya tenía `normalize_macos_private_alias` para esta misma clase de bug **en
+macOS**. Le falta(ba) el equivalente de Windows. Upstream cross-compila desde Ubuntu.
+
+Antes: `VK context not available` · 33 herramientas
+Después: `VK context loaded` · **34 herramientas**
+
+### Aviso para quien toque esto
+
+El prefijo vive en una constante con nombre y hay un test que lo ancla **byte a byte**
+(`assert_eq!(VERBATIM_PREFIX.as_bytes(), &[b'\\', b'\\', b'?', b'\\'])`).
+
+No es celo excesivo: la primera versión del arreglo perdió una barra al escribirse, en la
+función **y** en su test a la vez. El test pasaba en verde comprobando que el código y él
+estaban de acuerdo en la cuenta equivocada. Se detectó midiendo la ruta real que el MCP
+envía, no confiando en el test. Un literal de barras mal contado es silencioso y
+autoconsistente; los literales de byte escapados no lo son.
+
+---
+
 ## Siguiente paso
 
 ```bash
