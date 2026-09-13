@@ -94,8 +94,10 @@ export function SubIssueRow({
           {/* Drag handle */}
           <div
             {...provided.dragHandleProps}
-            className="agentos-sub-issue-row__handle cursor-grab shrink-0"
+            className="agentos-sub-issue-row__handle cursor-grab shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             onClick={(e) => e.stopPropagation()}
+            aria-label={`${t('kanban.dragToRearrange')}: ${simpleId}`}
+            title={`${t('kanban.dragToRearrange')}: ${simpleId}`}
           >
             <DotsSixVerticalIcon
               className="size-icon-xs text-low"
@@ -110,7 +112,8 @@ export function SubIssueRow({
               <button
                 type="button"
                 onClick={onPriorityClick}
-                className="agentos-sub-issue-row__priority flex items-center cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+                className="agentos-sub-issue-row__priority flex items-center cursor-pointer rounded-sm p-half transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                aria-label={t('kanban.priority')}
               >
                 <PriorityIcon priority={priority} />
                 {!priority && (
@@ -154,7 +157,8 @@ export function SubIssueRow({
               <button
                 type="button"
                 onClick={onAssigneeClick}
-                className="cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+                className="cursor-pointer rounded-sm p-half transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                aria-label={t('kanban.assignee')}
               >
                 <KanbanAssignee assignees={assignees} />
               </button>

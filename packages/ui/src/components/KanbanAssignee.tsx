@@ -107,7 +107,11 @@ export const KanbanAssignee = ({
         className={cn('flex items-center justify-center', 'h-6 w-6', className)}
         aria-label="Unassigned"
       >
-        <UsersIcon className="size-icon-xs text-low" weight="bold" />
+        <UsersIcon
+          className="size-icon-xs text-low"
+          weight="bold"
+          aria-hidden="true"
+        />
       </div>
     );
   }

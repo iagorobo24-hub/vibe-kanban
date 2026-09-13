@@ -24,6 +24,7 @@ export const KanbanBadge = ({ name, color, className }: KanbanBadgeProps) => {
         <span
           className="w-2 h-2 rounded-full shrink-0"
           style={{ backgroundColor: `hsl(${color})` }}
+          aria-hidden="true"
         />
       )}
       {name}

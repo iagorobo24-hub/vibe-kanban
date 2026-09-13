@@ -1041,6 +1041,7 @@ export function KanbanContainer() {
                             index={index}
                             className="group"
                             onClick={(e) => handleCardClick(issue.id, e)}
+                            onActivate={() => handleCardClick(issue.id)}
                             isOpen={selectedKanbanIssueId === issue.id}
                             isMobile={isMobile}
                             isSelected={selectedIssueIds.has(issue.id)}
@@ -1049,6 +1050,11 @@ export function KanbanContainer() {
                             <KanbanCardContent
                               displayId={issue.simple_id}
                               title={issue.title}
+                              onTitleClick={
+                                isMobile
+                                  ? (event) => handleCardClick(issue.id, event)
+                                  : undefined
+                              }
                               description={issue.description}
                               priority={issue.priority}
                               tags={getTagObjectsForIssue(issue.id)}
