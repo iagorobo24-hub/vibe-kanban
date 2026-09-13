@@ -587,18 +587,23 @@ export function SessionChatBox<TExecutor extends string = string>({
           key="review-comments"
           className="bg-accent/5 border-b px-double py-base flex items-center gap-base"
         >
-          <ChatCircleIcon className="h-4 w-4 text-brand flex-shrink-0" />
+          <ChatCircleIcon
+            className="h-4 w-4 text-brand flex-shrink-0"
+            aria-hidden="true"
+          />
           <span className="text-sm text-normal flex-1">
             {t('conversation.reviewComments.count', {
               count: reviewComments.count,
             })}
           </span>
           <button
+            type="button"
             onClick={reviewComments.onClear}
-            className="text-low hover:text-normal transition-colors p-1 -m-1"
+            className="-m-1 rounded-sm p-1 text-low transition-colors hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+            aria-label={t('conversation.actions.clearReviewComments')}
             title={t('conversation.actions.clearReviewComments')}
           >
-            <TrashIcon className="h-4 w-4" />
+            <TrashIcon className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
       );
@@ -626,7 +631,7 @@ export function SessionChatBox<TExecutor extends string = string>({
           key="queued"
           className="bg-secondary border-b px-double py-base flex items-center gap-base"
         >
-          <ClockIcon className="h-4 w-4 text-low" />
+          <ClockIcon className="h-4 w-4 text-low" aria-hidden="true" />
           <span className="text-sm text-low">
             {t('followUp.queuedMessage')}
           </span>
@@ -705,7 +710,10 @@ export function SessionChatBox<TExecutor extends string = string>({
             <>
               {isRunning && inProgressTodo ? (
                 <span className="text-sm flex items-center gap-1 min-w-0">
-                  <SpinnerIcon className="size-icon-sm animate-spin flex-shrink-0" />
+                  <SpinnerIcon
+                    className="size-icon-sm animate-spin flex-shrink-0"
+                    aria-hidden="true"
+                  />
                   <span className="truncate">{inProgressTodo.content}</span>
                 </span>
               ) : (
@@ -713,11 +721,14 @@ export function SessionChatBox<TExecutor extends string = string>({
                   {stats?.hasConflicts && (
                     <button
                       type="button"
-                      className="flex items-center gap-1 text-warning text-sm min-w-0 cursor-pointer hover:underline"
+                      className="flex min-w-0 items-center gap-1 rounded-sm text-sm text-warning hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                       title={t('conversation.approval.conflictWarning')}
                       onClick={stats.onResolveConflicts}
                     >
-                      <WarningIcon className="size-icon-sm flex-shrink-0" />
+                      <WarningIcon
+                        className="size-icon-sm flex-shrink-0"
+                        aria-hidden="true"
+                      />
                       <span className="truncate">
                         {t('conversation.approval.conflicts', {
                           count: stats.conflictedFilesCount,
