@@ -115,10 +115,10 @@ export async function makeLocalApiRequest(
   return transport.request(resolveScopedPath(pathOrUrl, init), init);
 }
 
-export async function openLocalApiWebSocket(
+export function openLocalApiWebSocket(
   pathOrUrl: string,
   options: LocalApiWebSocketOptions = {}
-): Promise<WebSocket> {
+): Promise<WebSocket> | WebSocket {
   return transport.openWebSocket(
     resolveScopedPath(pathOrUrl, options),
     options

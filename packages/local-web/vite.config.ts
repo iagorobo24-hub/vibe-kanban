@@ -133,6 +133,10 @@ export default defineConfig({
       '/api': {
         target: `http://localhost:${process.env.BACKEND_PORT || '3001'}`,
         changeOrigin: true,
+        // The local server validates the browser Origin during WebSocket
+        // upgrades. Rewrite it to the backend target so proxied streams are
+        // accepted just like direct local connections.
+        rewriteWsOrigin: true,
         ws: true,
       },
     },

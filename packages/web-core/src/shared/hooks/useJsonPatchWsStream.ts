@@ -9,6 +9,15 @@ type WsReadyMsg = { Ready: true };
 type WsFinishedMsg = { finished: boolean };
 type WsMsg = WsJsonPatchMsg | WsReadyMsg | WsFinishedMsg;
 
+function isPromiseLike<T>(value: T | Promise<T>): value is Promise<T> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'then' in value &&
+    typeof value.then === 'function'
+  );
+}
+
 interface UseJsonPatchStreamOptions<T> {
   /**
    * Called once when the stream starts to inject initial data
@@ -95,114 +104,125 @@ export const useJsonPatchWsStream = <T extends object>(
 
     let cancelled = false;
 
-    // Create WebSocket if it doesn't exist
+    // Create WebSocket if it doesn't exist. The local browser transport returns
+    // a socket synchronously, while desktop/remote transports may resolve it
+    // asynchronously. Attach handlers synchronously whenever possible so an
+    // eager backend cannot deliver its initial JsonPatch/Ready pair before the
+    // hook starts listening.
     if (!wsRef.current) {
       // Reset finished flag for new connection
       finishedRef.current = false;
 
-      void (async () => {
-        try {
-          const ws = await openLocalApiWebSocket(endpoint);
+      const handleOpenError = (error: unknown) => {
+        if (cancelled) return;
 
-          if (cancelled) {
-            ws.close();
-            return;
-          }
+        console.error('Failed to open WebSocket stream:', error);
+        retryAttemptsRef.current += 1;
+        scheduleReconnect();
+      };
 
-          ws.onopen = () => {
-            setError(null);
-            setIsConnected(true);
-            // Reset backoff on successful connection
-            retryAttemptsRef.current = 0;
-            if (retryTimerRef.current) {
-              window.clearTimeout(retryTimerRef.current);
-              retryTimerRef.current = null;
-            }
-          };
-
-          ws.onmessage = (event) => {
-            try {
-              const msg: WsMsg = JSON.parse(event.data);
-
-              // Handle JsonPatch messages (same as SSE json_patch event)
-              if ('JsonPatch' in msg) {
-                const patches: Operation[] = msg.JsonPatch;
-                const filtered = deduplicatePatches
-                  ? deduplicatePatches(patches)
-                  : patches;
-
-                const current = dataRef.current;
-                if (!filtered.length || !current) return;
-
-                // Use Immer for structural sharing - only modified parts get new references
-                const next = produce(current, (draft) => {
-                  applyUpsertPatch(draft, filtered);
-                });
-
-                dataRef.current = next;
-                setData(next);
-              }
-
-              // Handle Ready messages (initial data has been sent)
-              if ('Ready' in msg) {
-                initializedForEndpointRef.current = endpoint;
-                setIsInitialized(true);
-                setError(null);
-              }
-
-              // Handle finished messages ({finished: true})
-              // Treat finished as terminal - do NOT reconnect
-              if ('finished' in msg) {
-                finishedRef.current = true;
-                ws.close(1000, 'finished');
-                wsRef.current = null;
-                setIsConnected(false);
-              }
-            } catch (err) {
-              console.error('Failed to process WebSocket message:', err);
-              setError('Failed to process stream update');
-            }
-          };
-
-          ws.onerror = () => {
-            // Don't set error here — onclose always fires after onerror
-            // and handles retry logic. Setting error eagerly hides data
-            // that was already received.
-          };
-
-          ws.onclose = (evt) => {
-            setIsConnected(false);
-            wsRef.current = null;
-
-            // Do not reconnect if we received a finished message or clean close
-            if (
-              cancelled ||
-              finishedRef.current ||
-              (evt?.code === 1000 && evt?.wasClean)
-            ) {
-              return;
-            }
-
-            // Otherwise, reconnect on unexpected/error closures
-            retryAttemptsRef.current += 1;
-            // Only show error if we haven't received any data yet
-            if (!dataRef.current && retryAttemptsRef.current > 6) {
-              setError('Connection failed');
-            }
-            scheduleReconnect();
-          };
-
-          wsRef.current = ws;
-        } catch (error) {
-          if (cancelled) {
-            return;
-          }
-
-          console.error('Failed to open WebSocket stream:', error);
-          retryAttemptsRef.current += 1;
-          scheduleReconnect();
+      const attachWebSocket = (ws: WebSocket) => {
+        if (cancelled) {
+          ws.close();
+          return;
         }
-      })();
+
+        ws.onopen = () => {
+          setError(null);
+          setIsConnected(true);
+          // Reset backoff on successful connection
+          retryAttemptsRef.current = 0;
+          if (retryTimerRef.current) {
+            window.clearTimeout(retryTimerRef.current);
+            retryTimerRef.current = null;
+          }
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const msg: WsMsg = JSON.parse(event.data);
+
+            // Handle JsonPatch messages (same as SSE json_patch event)
+            if ('JsonPatch' in msg) {
+              const patches: Operation[] = msg.JsonPatch;
+              const filtered = deduplicatePatches
+                ? deduplicatePatches(patches)
+                : patches;
+
+              const current = dataRef.current;
+              if (!filtered.length || !current) return;
+
+              // Use Immer for structural sharing - only modified parts get new references
+              const next = produce(current, (draft) => {
+                applyUpsertPatch(draft, filtered);
+              });
+
+              dataRef.current = next;
+              setData(next);
+            }
+
+            // Handle Ready messages (initial data has been sent)
+            if ('Ready' in msg) {
+              initializedForEndpointRef.current = endpoint;
+              setIsInitialized(true);
+              setError(null);
+            }
+
+            // Handle finished messages ({finished: true})
+            // Treat finished as terminal - do NOT reconnect
+            if ('finished' in msg) {
+              finishedRef.current = true;
+              ws.close(1000, 'finished');
+              wsRef.current = null;
+              setIsConnected(false);
+            }
+          } catch (err) {
+            console.error('Failed to process WebSocket message:', err);
+            setError('Failed to process stream update');
+          }
+        };
+
+        ws.onerror = () => {
+          // Don't set error here — onclose always fires after onerror
+          // and handles retry logic. Setting error eagerly hides data
+          // that was already received.
+        };
+
+        ws.onclose = (evt) => {
+          setIsConnected(false);
+          wsRef.current = null;
+
+          // Do not reconnect if we received a finished message or clean close
+          if (
+            cancelled ||
+            finishedRef.current ||
+            (evt?.code === 1000 && evt?.wasClean)
+          ) {
+            return;
+          }
+
+          // Otherwise, reconnect on unexpected/error closures
+          retryAttemptsRef.current += 1;
+          // Only show error if we haven't received any data yet
+          if (!dataRef.current && retryAttemptsRef.current > 6) {
+            setError('Connection failed');
+          }
+          scheduleReconnect();
+        };
+
+        wsRef.current = ws;
+      };
+
+      try {
+        const opened = openLocalApiWebSocket(endpoint);
+        if (isPromiseLike(opened)) {
+          void opened.then(attachWebSocket).catch(handleOpenError);
+        } else {
+          attachWebSocket(opened);
+        }
+      } catch (error) {
+        handleOpenError(error);
+      }
     }
 
     return () => {
