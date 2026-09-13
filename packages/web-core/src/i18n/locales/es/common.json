@@ -559,6 +559,13 @@
   },
   "export": {
     "title": "Exportar proyectos",
+    "description": "Descarga los datos de tus proyectos e incidencias en archivos CSV. También puedes incluir los archivos adjuntos.",
+    "loading": "Cargando…",
+    "signInTitle": "Inicia sesión para exportar tus datos cloud",
+    "signInDescription": "Inicia sesión para elegir las organizaciones y proyectos disponibles en tu cuenta.",
+    "signInAction": "Iniciar sesión",
+    "navLabel": "Exportación",
+    "navAction": "Exportar datos",
     "organization": "Organización",
     "loadingProjects": "Cargando proyectos…",
     "noProjects": "No se han encontrado proyectos.",

@@ -559,6 +559,13 @@
   },
   "export": {
     "title": "Export projects",
+    "description": "Download your project and issue data to CSV files. Optionally download your file attachments too.",
+    "loading": "Loading…",
+    "signInTitle": "Sign in to export your cloud data",
+    "signInDescription": "Sign in to choose the organizations and projects available to your account.",
+    "signInAction": "Sign in",
+    "navLabel": "Export",
+    "navAction": "Export data",
     "organization": "Organization",
     "loadingProjects": "Loading projects…",
     "noProjects": "No projects found.",

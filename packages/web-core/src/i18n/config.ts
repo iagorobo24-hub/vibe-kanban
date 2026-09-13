@@ -98,6 +98,7 @@ i18n
   .init({
     resources,
     fallbackLng: {
+      'es-ES': ['es'],
       'zh-TW': ['zh-Hant'],
       'zh-HK': ['zh-Hant'],
       'zh-MO': ['zh-Hant'],

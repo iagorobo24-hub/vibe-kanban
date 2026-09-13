@@ -7,6 +7,7 @@ import type {
   ExportProject,
 } from '@/features/export/ui/ExportChooseProjects';
 import { useAuth } from '@/shared/hooks/auth/useAuth';
+import { useTranslation } from 'react-i18next';
 import { useUserOrganizations } from '@/shared/hooks/useUserOrganizations';
 import { useOrganizationProjects } from '@/shared/hooks/useOrganizationProjects';
 import { makeRequest as makeRemoteRequest } from '@/shared/lib/remoteApi';
@@ -31,6 +32,8 @@ export function ExportPage({
   selectedOrgId,
   onOrgChange,
 }: ExportPageProps) {
+  const { t } = useTranslation('common');
+
   return (
     <div className="agentos-theme agentos-export-page agentos-page-shell h-full overflow-auto bg-primary">
       <div className="agentos-export-page__content mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
@@ -39,10 +42,7 @@ export function ExportPage({
             <div className="flex justify-center">
               <AgentOSWordmark />
             </div>
-            <p className="text-sm text-low">
-              Download your project and issue data to CSV files. Optionally
-              downloads your file attachments too.
-            </p>
+            <p className="text-sm text-low">{t('export.description')}</p>
           </header>
           <ExportLayout
             exportFn={exportFn}
@@ -60,6 +60,7 @@ export function ExportPage({
 }
 
 export function ExportPageContainer() {
+  const { t } = useTranslation('common');
   const { isLoaded, isSignedIn } = useAuth();
   const { data: orgsData, isLoading: orgsLoading } = useUserOrganizations();
   const organizations = useMemo<ExportOrganization[]>(
@@ -108,7 +109,9 @@ export function ExportPageContainer() {
   if (!isLoaded) {
     return (
       <div className="agentos-page-shell flex h-full w-full items-center justify-center bg-primary">
-        <p className="text-sm text-low">Loading...</p>
+        <p className="text-sm text-low" role="status" aria-live="polite">
+          {t('export.loading')}
+        </p>
       </div>
     );
   }
@@ -118,9 +121,9 @@ export function ExportPageContainer() {
       <div className="agentos-page-shell flex h-full w-full items-center justify-center bg-primary p-base">
         <LoginRequiredPrompt
           className="max-w-md"
-          title="Sign in to export your cloud data"
-          description="Sign in to choose the organizations and projects available to your account."
-          actionLabel="Sign in"
+          title={t('export.signInTitle')}
+          description={t('export.signInDescription')}
+          actionLabel={t('export.signInAction')}
         />
       </div>
     );

@@ -55,8 +55,10 @@ import { WorkspacesSidebarContainer } from '@/pages/workspaces/WorkspacesSidebar
 import { WorkspacesSidebarReopenTag } from '@vibe/ui/components/WorkspacesSidebar';
 import { useRemoteCloudHostsAppBarModel } from '@/shared/hooks/useRemoteCloudHosts';
 import { CloudShutdownExportBanner } from '@/shared/components/CloudShutdownExportBanner';
+import { useTranslation } from 'react-i18next';
 
 export function SharedAppLayout() {
+  const { t } = useTranslation('common');
   const appNavigation = useAppNavigation();
   const currentDestination = useCurrentAppDestination();
   const isMobile = useIsMobile();
@@ -451,7 +453,7 @@ export function SharedAppLayout() {
               className="agentos-mobile-drawer__item flex items-center gap-2 px-4 py-3 text-sm cursor-pointer"
             >
               <LayoutIcon className="h-4 w-4" aria-hidden="true" />
-              Workspaces
+              {t('workspaces.title')}
             </button>
 
             {/* Divider */}
@@ -461,7 +463,7 @@ export function SharedAppLayout() {
             {isSignedIn && (
               <div className="agentos-mobile-drawer__section px-4 py-3">
                 <p className="agentos-mobile-drawer__label mb-2 text-xs font-medium">
-                  Export
+                  {t('export.navLabel')}
                 </p>
                 <button
                   type="button"
@@ -472,7 +474,7 @@ export function SharedAppLayout() {
                   className="agentos-mobile-drawer__item flex w-full items-center gap-2 px-3 py-2.5 text-sm cursor-pointer"
                 >
                   <DownloadSimpleIcon className="h-4 w-4" aria-hidden="true" />
-                  Export data
+                  {t('export.navAction')}
                 </button>
               </div>
             )}
