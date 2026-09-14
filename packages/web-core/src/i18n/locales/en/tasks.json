@@ -99,6 +99,14 @@
     "filesChanged_one": "{{count}} file changed",
     "filesChanged_other": "{{count}} files changed"
   },
+  "changes": {
+    "status": {
+      "loading": "Loading changes…",
+      "unavailable": "Live changes are unavailable. Reconnect to inspect the workspace.",
+      "stale": "Live changes are unavailable. The visible diff may be out of date.",
+      "retry": "Retry changes"
+    }
+  },
   "processes": {
     "noLogsAvailable": "No logs available",
     "connectionFailed": "The live log connection failed.",

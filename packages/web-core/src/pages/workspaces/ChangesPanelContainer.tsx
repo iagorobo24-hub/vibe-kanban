@@ -1,10 +1,13 @@
 import { memo, useEffect, useCallback, useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  ArrowClockwiseIcon,
   CaretDownIcon,
   CopyIcon,
   GithubLogoIcon,
   PlusIcon,
+  SpinnerGapIcon,
+  WarningCircleIcon,
 } from '@phosphor-icons/react';
 import {
   FileDiff,
@@ -22,6 +25,9 @@ import { useScrollSyncStateMachine } from '@/shared/hooks/useScrollSyncStateMach
 import { useFileInViewStore } from '@/shared/stores/useFileInViewStore';
 import {
   useDiffs,
+  useDiffStreamError,
+  useDiffStreamInitialized,
+  useRetryDiffStream,
   useShowGitHubComments,
   useGetGitHubCommentsForFile,
 } from '@/shared/stores/useWorkspaceDiffStore';
@@ -50,6 +56,11 @@ import { stripLineEnding, splitLines } from '@/shared/lib/string';
 import { ReviewCommentRenderer } from './ReviewCommentRenderer';
 import { GitHubCommentRenderer } from './GitHubCommentRenderer';
 import { CommentWidgetLine } from './CommentWidgetLine';
+import {
+  deriveChangesPanelViewState,
+  type ChangesPanelViewState,
+} from './changesPanelState';
+import { PrimaryButton } from '@vibe/ui/components/PrimaryButton';
 import type { Diff, DiffChangeKind } from 'shared/types';
 
 function workerFactory() {
@@ -613,12 +624,101 @@ interface ChangesPanelContainerProps {
 
 const MOUNT_BATCH_SIZE = 8;
 
+function ChangesStreamStatus({
+  viewState,
+  onRetry,
+  className,
+}: {
+  viewState: Exclude<ChangesPanelViewState, 'diffs' | 'diffs-with-error'>;
+  onRetry: () => void;
+  className?: string;
+}) {
+  const { t } = useTranslation(['tasks', 'common']);
+
+  return (
+    <div
+      className={`agentos-changes-panel flex h-full w-full items-center justify-center bg-secondary px-base ${className ?? ''}`}
+    >
+      <div
+        className="flex max-w-md flex-col items-center gap-base rounded-sm border border-border bg-primary px-double py-double text-center text-low"
+        role={viewState === 'error' ? 'alert' : 'status'}
+        aria-live="polite"
+      >
+        {viewState === 'loading' ? (
+          <SpinnerGapIcon
+            className="size-icon-lg animate-spin"
+            aria-hidden="true"
+          />
+        ) : (
+          <WarningCircleIcon
+            className="size-icon-lg text-warning"
+            weight="fill"
+            aria-hidden="true"
+          />
+        )}
+        <p className="font-medium text-normal">
+          {viewState === 'loading'
+            ? t('changes.status.loading')
+            : viewState === 'empty'
+              ? t('common:empty.noChanges')
+              : t('changes.status.unavailable')}
+        </p>
+        {viewState === 'error' && (
+          <PrimaryButton
+            variant="tertiary"
+            actionIcon={ArrowClockwiseIcon}
+            onClick={onRetry}
+          >
+            {t('changes.status.retry')}
+          </PrimaryButton>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ChangesStreamWarning({ onRetry }: { onRetry: () => void }) {
+  const { t } = useTranslation('tasks');
+
+  return (
+    <div
+      className="mx-base mt-base flex shrink-0 flex-wrap items-center justify-between gap-base rounded-sm border border-warning bg-warning/10 px-base py-half text-sm text-warning"
+      role="alert"
+    >
+      <div className="flex min-w-0 items-center gap-half">
+        <WarningCircleIcon
+          className="size-icon-sm shrink-0"
+          weight="fill"
+          aria-hidden="true"
+        />
+        <span>{t('changes.status.stale')}</span>
+      </div>
+      <PrimaryButton
+        variant="tertiary"
+        actionIcon={ArrowClockwiseIcon}
+        onClick={onRetry}
+        className="shrink-0"
+      >
+        {t('changes.status.retry')}
+      </PrimaryButton>
+    </div>
+  );
+}
+
 export const ChangesPanelContainer = memo(function ChangesPanelContainer({
   className,
   workspaceId,
 }: ChangesPanelContainerProps) {
   const diffs = useDiffs();
+  const diffStreamError = useDiffStreamError();
+  const diffStreamInitialized = useDiffStreamInitialized();
+  const retryDiffStream = useRetryDiffStream();
   const { registerScrollToFile } = useChangesView();
+  const viewState = deriveChangesPanelViewState({
+    diffCount: diffs.length,
+    isInitialized: diffStreamInitialized,
+    hasError: Boolean(diffStreamError),
+  });
   const [processedPaths] = useState(() => new Set<string>());
   const [mountedCount, setMountedCount] = useState(0);
   const rafRef = useRef<number | null>(null);
@@ -871,29 +971,48 @@ export const ChangesPanelContainer = memo(function ChangesPanelContainer({
     };
   }, [registerScrollToFile, handleScrollToFile]);
 
+  if (
+    viewState === 'loading' ||
+    viewState === 'empty' ||
+    viewState === 'error'
+  ) {
+    return (
+      <ChangesStreamStatus
+        viewState={viewState}
+        onRetry={retryDiffStream}
+        className={className}
+      />
+    );
+  }
+
   return (
     <WorkerPoolContextProvider
       poolOptions={POOL_OPTIONS}
       highlighterOptions={HIGHLIGHTER_OPTIONS}
     >
-      <Virtualizer
-        {...({ ref: virtualizerRef } as Record<string, unknown>)}
-        className={`w-full h-full overflow-auto bg-secondary px-base pt-1 ${className}`}
-        contentClassName="flex flex-col gap-1"
-        style={{ contain: 'layout style paint' }}
-      >
-        {itemsToRender.map(({ diff, initialExpanded }) => {
-          const path = diff.newPath || diff.oldPath || '';
-          return (
-            <DiffFileItem
-              key={path}
-              diff={diff}
-              initialExpanded={initialExpanded}
-              workspaceId={workspaceId}
-            />
-          );
-        })}
-      </Virtualizer>
+      <div className="flex h-full min-h-0 flex-col bg-secondary">
+        {viewState === 'diffs-with-error' && (
+          <ChangesStreamWarning onRetry={retryDiffStream} />
+        )}
+        <Virtualizer
+          {...({ ref: virtualizerRef } as Record<string, unknown>)}
+          className={`w-full min-h-0 flex-1 overflow-auto bg-secondary px-base pt-1 ${className}`}
+          contentClassName="flex flex-col gap-1"
+          style={{ contain: 'layout style paint' }}
+        >
+          {itemsToRender.map(({ diff, initialExpanded }) => {
+            const path = diff.newPath || diff.oldPath || '';
+            return (
+              <DiffFileItem
+                key={path}
+                diff={diff}
+                initialExpanded={initialExpanded}
+                workspaceId={workspaceId}
+              />
+            );
+          })}
+        </Virtualizer>
+      </div>
     </WorkerPoolContextProvider>
   );
 });

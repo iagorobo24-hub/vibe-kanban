@@ -143,6 +143,14 @@
     "filesChanged_one": "{{count}} archivo cambiado",
     "filesChanged_other": "{{count}} archivos cambiados"
   },
+  "changes": {
+    "status": {
+      "loading": "Cargando cambios…",
+      "unavailable": "Los cambios en directo no están disponibles. Reconecta para inspeccionar el workspace.",
+      "stale": "Los cambios en directo no están disponibles. El diff visible podría estar desactualizado.",
+      "retry": "Reintentar cambios"
+    }
+  },
   "followUp": {
     "queuedMessage": "Mensaje en cola - se ejecutará cuando finalice la ejecución actual"
   },

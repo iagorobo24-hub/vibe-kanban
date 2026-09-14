@@ -33,6 +33,9 @@ interface WorkspaceDiffData {
   diffs: Diff[];
   diffPaths: Set<string>;
   diffStats: DiffStats;
+  diffStreamInitialized: boolean;
+  diffStreamError: string | null;
+  retryDiffStream: () => void;
   gitHubComments: UnifiedPrComment[];
   isGitHubCommentsLoading: boolean;
   showGitHubComments: boolean;
@@ -54,6 +57,9 @@ const DEFAULT_DATA: WorkspaceDiffData = {
   diffs: EMPTY_DIFFS,
   diffPaths: EMPTY_DIFF_PATHS,
   diffStats: EMPTY_DIFF_STATS,
+  diffStreamInitialized: false,
+  diffStreamError: null,
+  retryDiffStream: () => {},
   gitHubComments: EMPTY_COMMENTS,
   isGitHubCommentsLoading: false,
   showGitHubComments: false,
@@ -85,6 +91,15 @@ export const useDiffs = () => useWorkspaceDiffStore((s) => s.diffs);
 export const useDiffPaths = () => useWorkspaceDiffStore((s) => s.diffPaths);
 
 export const useDiffStats = () => useWorkspaceDiffStore((s) => s.diffStats);
+
+export const useDiffStreamInitialized = () =>
+  useWorkspaceDiffStore((s) => s.diffStreamInitialized);
+
+export const useDiffStreamError = () =>
+  useWorkspaceDiffStore((s) => s.diffStreamError);
+
+export const useRetryDiffStream = () =>
+  useWorkspaceDiffStore((s) => s.retryDiffStream);
 
 export const useStoreDiffGitHubComments = () =>
   useWorkspaceDiffStore((s) => s.gitHubComments);
