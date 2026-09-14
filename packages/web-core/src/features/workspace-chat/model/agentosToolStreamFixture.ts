@@ -1,15 +1,9 @@
-import {
-  BaseCodingAgent,
-  PermissionPolicy,
-  ExecutionProcessStatus,
-  type ExecutionProcess,
-  type NormalizedEntry,
-  type PatchType,
-} from 'shared/types';
+import { type NormalizedEntry, type PatchType } from 'shared/types';
 import {
   AGENTOS_TOOL_FIXTURE_PROCESS_ID,
-  AGENTOS_TOOL_FIXTURE_SESSION_ID,
   AGENTOS_APPROVAL_FIXTURE_ID,
+  createAgentOSQaFixtureProcess,
+  getAgentOSQaApprovalResponse,
   isAgentOSQaFixtureEnabled,
 } from '@/shared/lib/agentOSQaFixtures';
 import type {
@@ -18,8 +12,6 @@ import type {
   PatchTypeWithKey,
 } from '@/shared/hooks/useConversationHistory/types';
 
-const FIXTURE_PROCESS_ID = AGENTOS_TOOL_FIXTURE_PROCESS_ID;
-const FIXTURE_SESSION_ID = AGENTOS_TOOL_FIXTURE_SESSION_ID;
 const FIXTURE_TIMESTAMP = '2026-09-14T10:00:00.000Z';
 
 export function isAgentOSToolStreamFixtureEnabled(): boolean {
@@ -28,39 +20,6 @@ export function isAgentOSToolStreamFixtureEnabled(): boolean {
     isAgentOSQaFixtureEnabled('approval')
   );
 }
-
-const fixtureProcess: ExecutionProcess = {
-  id: FIXTURE_PROCESS_ID,
-  session_id: FIXTURE_SESSION_ID,
-  run_reason: 'codingagent',
-  executor_action: {
-    typ: {
-      type: 'CodingAgentInitialRequest',
-      prompt: 'Revisa el flujo de autenticación y prepara un resumen.',
-      executor_config: {
-        executor: BaseCodingAgent.OPENCODE,
-        variant: 'Build',
-        model_id: 'opencode/zen-free',
-        agent_id: null,
-        reasoning_id: 'high',
-        permission_policy: PermissionPolicy.AUTO,
-      },
-      working_dir: null,
-    },
-    next_action: null,
-  },
-  status: isAgentOSQaFixtureEnabled('approval')
-    ? ExecutionProcessStatus.running
-    : ExecutionProcessStatus.completed,
-  exit_code: 0n,
-  dropped: false,
-  started_at: FIXTURE_TIMESTAMP,
-  completed_at: isAgentOSQaFixtureEnabled('approval')
-    ? null
-    : '2026-09-14T10:00:08.000Z',
-  created_at: FIXTURE_TIMESTAMP,
-  updated_at: '2026-09-14T10:00:08.000Z',
-};
 
 function normalizedEntry(
   index: number,
@@ -78,13 +37,23 @@ function normalizedEntry(
 
   return {
     ...patch,
-    patchKey: `${FIXTURE_PROCESS_ID}:${index}`,
-    executionProcessId: FIXTURE_PROCESS_ID,
+    patchKey: `${AGENTOS_TOOL_FIXTURE_PROCESS_ID}:${index}`,
+    executionProcessId: AGENTOS_TOOL_FIXTURE_PROCESS_ID,
   };
 }
 
 function buildFixtureEntries(): PatchTypeWithKey[] {
   if (isAgentOSQaFixtureEnabled('approval')) {
+    const response = getAgentOSQaApprovalResponse();
+    const status = response
+      ? response.status === 'denied'
+        ? { status: 'denied' as const, reason: response.reason ?? null }
+        : { status: 'created' as const }
+      : {
+          status: 'pending_approval' as const,
+          approval_id: AGENTOS_APPROVAL_FIXTURE_ID,
+        };
+
     return [
       normalizedEntry(
         0,
@@ -108,10 +77,7 @@ function buildFixtureEntries(): PatchTypeWithKey[] {
             category: 'read',
             result: null,
           },
-          status: {
-            status: 'pending_approval',
-            approval_id: AGENTOS_APPROVAL_FIXTURE_ID,
-          },
+          status,
         }
       ),
     ];
@@ -185,6 +151,12 @@ function buildFixtureEntries(): PatchTypeWithKey[] {
 }
 
 export function createAgentOSToolStreamFixture(): ConversationTimelineSource {
+  const response = getAgentOSQaApprovalResponse();
+  const fixtureProcess = createAgentOSQaFixtureProcess(
+    isAgentOSQaFixtureEnabled('approval') && response?.status !== 'denied'
+      ? 'running'
+      : 'completed'
+  );
   const entries = buildFixtureEntries();
   const executionProcessState: ExecutionProcessState = {
     executionProcess: {

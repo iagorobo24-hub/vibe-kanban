@@ -9,6 +9,11 @@ import {
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ApprovalStatus, ToolStatus } from 'shared/types';
+import {
+  AGENTOS_APPROVAL_FIXTURE_ID,
+  isAgentOSQaFixtureEnabled,
+  resolveAgentOSQaApproval,
+} from '@/shared/lib/agentOSQaFixtures';
 import { Button } from '@vibe/ui/components/Button';
 import {
   Tooltip,
@@ -302,10 +307,17 @@ const PendingApprovalEntry = ({
         : { status: 'denied', reason };
 
       try {
-        await approvalsApi.respond(pendingStatus.approval_id, {
-          execution_process_id: executionProcessId,
-          status,
-        });
+        if (
+          isAgentOSQaFixtureEnabled('approval') &&
+          pendingStatus.approval_id === AGENTOS_APPROVAL_FIXTURE_ID
+        ) {
+          resolveAgentOSQaApproval(status);
+        } else {
+          await approvalsApi.respond(pendingStatus.approval_id, {
+            execution_process_id: executionProcessId,
+            status,
+          });
+        }
         setHasResponded(true);
         setResponseStatus(approved ? 'approved' : 'denied');
         clear();

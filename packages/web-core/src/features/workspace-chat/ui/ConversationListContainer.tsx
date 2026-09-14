@@ -48,6 +48,7 @@ import {
   createAgentOSToolStreamFixture,
   isAgentOSToolStreamFixtureEnabled,
 } from '../model/agentosToolStreamFixture';
+import { useAgentOSQaApprovalResponse } from '@/shared/lib/agentOSQaFixtures';
 
 interface ConversationListProps {
   attempt: WorkspaceWithSession;
@@ -166,9 +167,10 @@ export const ConversationList = forwardRef<
   const [hasCleanupScriptRun, setHasCleanupScriptRun] = useState(false);
   const [hasRunningProcess, setHasRunningProcess] = useState(false);
   const toolStreamFixtureEnabled = isAgentOSToolStreamFixtureEnabled();
+  const approvalFixtureResponse = useAgentOSQaApprovalResponse();
   const toolStreamFixtureSource = useMemo(
     () => (toolStreamFixtureEnabled ? createAgentOSToolStreamFixture() : null),
-    [toolStreamFixtureEnabled]
+    [toolStreamFixtureEnabled, approvalFixtureResponse]
   );
   const lastSettledTailStartIndexRef = useRef<number | null>(null);
   const { setEntries, reset } = useEntriesActions();

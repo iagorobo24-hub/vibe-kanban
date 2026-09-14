@@ -4,6 +4,7 @@ import { useJsonPatchWsStream } from './useJsonPatchWsStream';
 import {
   AGENTOS_APPROVAL_FIXTURE_INFO,
   isAgentOSQaFixtureEnabled,
+  useAgentOSQaApprovalResponse,
 } from '@/shared/lib/agentOSQaFixtures';
 
 interface UseApprovalsResult {
@@ -19,6 +20,7 @@ type ApprovalState = {
 
 export function useApprovals(): UseApprovalsResult {
   const approvalFixtureEnabled = isAgentOSQaFixtureEnabled('approval');
+  const approvalFixtureResponse = useAgentOSQaApprovalResponse();
   const { data, isConnected } = useJsonPatchWsStream<ApprovalState>(
     '/api/approvals/stream/ws',
     !approvalFixtureEnabled,
@@ -27,13 +29,13 @@ export function useApprovals(): UseApprovalsResult {
 
   const pendingById = useMemo(
     () =>
-      approvalFixtureEnabled
+      approvalFixtureEnabled && !approvalFixtureResponse
         ? {
             [AGENTOS_APPROVAL_FIXTURE_INFO.approval_id]:
               AGENTOS_APPROVAL_FIXTURE_INFO,
           }
         : (data?.pending ?? {}),
-    [approvalFixtureEnabled, data?.pending]
+    [approvalFixtureEnabled, approvalFixtureResponse, data?.pending]
   );
   const pendingApprovals = useMemo(
     () => Object.values(pendingById),

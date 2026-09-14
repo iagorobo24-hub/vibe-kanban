@@ -2,6 +2,11 @@ import { useCallback } from 'react';
 import { useJsonPatchWsStream } from '@/shared/hooks/useJsonPatchWsStream';
 import { useHostId } from '@/shared/providers/HostIdProvider';
 import type { ExecutionProcess } from 'shared/types';
+import {
+  createAgentOSQaFixtureProcess,
+  isAgentOSQaFixtureEnabled,
+  useAgentOSQaApprovalResponse,
+} from '@/shared/lib/agentOSQaFixtures';
 
 type ExecutionProcessState = {
   execution_processes: Record<string, ExecutionProcess>;
@@ -27,9 +32,11 @@ export const useExecutionProcesses = (
 ): UseExecutionProcessesResult => {
   const hostId = useHostId();
   const showSoftDeleted = opts?.showSoftDeleted;
+  const approvalFixtureEnabled = isAgentOSQaFixtureEnabled('approval');
+  const approvalFixtureResponse = useAgentOSQaApprovalResponse();
   let endpoint: string | undefined;
 
-  if (sessionId) {
+  if (sessionId && !approvalFixtureEnabled) {
     const apiBasePath = hostId ? `/api/host/${hostId}` : '/api';
     const params = new URLSearchParams({ session_id: sessionId });
     if (typeof showSoftDeleted === 'boolean') {
@@ -46,7 +53,7 @@ export const useExecutionProcesses = (
   const { data, isConnected, isInitialized, error } =
     useJsonPatchWsStream<ExecutionProcessState>(
       endpoint,
-      !!sessionId,
+      !!sessionId && !approvalFixtureEnabled,
       initialData
     );
 
@@ -59,11 +66,24 @@ export const useExecutionProcesses = (
   );
 
   // Guard against stale buffered stream data when switching sessions quickly.
-  const executionProcesses = sessionId
-    ? streamedExecutionProcesses.filter(
-        (executionProcess) => executionProcess.session_id === sessionId
-      )
-    : streamedExecutionProcesses;
+  const fixtureExecutionProcesses =
+    approvalFixtureEnabled && sessionId
+      ? [
+          createAgentOSQaFixtureProcess(
+            approvalFixtureResponse?.status === 'denied'
+              ? 'completed'
+              : 'running'
+          ),
+        ]
+      : [];
+
+  const executionProcesses = approvalFixtureEnabled
+    ? fixtureExecutionProcesses
+    : sessionId
+      ? streamedExecutionProcesses.filter(
+          (executionProcess) => executionProcess.session_id === sessionId
+        )
+      : streamedExecutionProcesses;
 
   const executionProcessesById = executionProcesses.reduce<
     Record<string, ExecutionProcess>
@@ -80,14 +100,15 @@ export const useExecutionProcesses = (
         process.run_reason === 'archivescript') &&
       process.status === 'running'
   );
-  const isLoading = !!sessionId && !isInitialized && !error; // until first snapshot
+  const isLoading =
+    !!sessionId && !approvalFixtureEnabled && !isInitialized && !error; // until first snapshot
 
   return {
     executionProcesses,
     executionProcessesById,
     isAttemptRunning,
     isLoading,
-    isConnected,
+    isConnected: approvalFixtureEnabled || isConnected,
     error,
   };
 };
