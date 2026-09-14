@@ -36,14 +36,6 @@ import {
   type PropertyDropdownOption,
 } from '@vibe/ui/components/PropertyDropdown';
 
-const SORT_OPTIONS: PropertyDropdownOption<KanbanSortField>[] = [
-  { value: 'sort_order', label: 'Manual' },
-  { value: 'priority', label: 'Priority' },
-  { value: 'created_at', label: 'Created' },
-  { value: 'updated_at', label: 'Updated' },
-  { value: 'title', label: 'Title' },
-];
-
 interface KanbanFiltersDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -87,6 +79,17 @@ export function KanbanFiltersDialog({
   onHideBlockedChange,
 }: KanbanFiltersDialogProps) {
   const { t } = useTranslation('common');
+
+  const sortOptions = useMemo<PropertyDropdownOption<KanbanSortField>[]>(
+    () => [
+      { value: 'sort_order', label: t('kanban.sortManual', 'Manual') },
+      { value: 'priority', label: t('kanban.sortPriority', 'Priority') },
+      { value: 'created_at', label: t('kanban.sortCreated', 'Created') },
+      { value: 'updated_at', label: t('kanban.sortUpdated', 'Updated') },
+      { value: 'title', label: t('kanban.sortTitle', 'Title') },
+    ],
+    [t]
+  );
 
   const currentUser = useMemo(
     () => users.find((user) => user.user_id === currentUserId) ?? null,
@@ -228,7 +231,8 @@ export function KanbanFiltersDialog({
               onClick={handleOpenAssigneeDialog}
               className={cn(
                 'flex items-center gap-half rounded-sm bg-panel px-base py-half',
-                'text-sm text-normal transition-colors hover:bg-secondary'
+                'text-sm text-normal transition-colors hover:bg-secondary',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
               )}
             >
               <UsersIcon className="size-icon-xs" weight="bold" />
@@ -250,7 +254,7 @@ export function KanbanFiltersDialog({
 
             <PropertyDropdown
               value={filters.sortField}
-              options={SORT_OPTIONS}
+              options={sortOptions}
               onChange={(field) => onSortChange(field, filters.sortDirection)}
               icon={
                 filters.sortDirection === 'asc'
@@ -265,8 +269,14 @@ export function KanbanFiltersDialog({
               onClick={toggleSortDirection}
               className={cn(
                 'flex items-center justify-center rounded-sm p-half',
-                'text-normal transition-colors hover:bg-secondary'
+                'text-normal transition-colors hover:bg-secondary',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
               )}
+              aria-label={
+                filters.sortDirection === 'asc'
+                  ? t('kanban.sortAscending', 'Ascending')
+                  : t('kanban.sortDescending', 'Descending')
+              }
               title={
                 filters.sortDirection === 'asc'
                   ? t('kanban.sortAscending', 'Ascending')
@@ -287,6 +297,7 @@ export function KanbanFiltersDialog({
               <Switch
                 checked={showSubIssues}
                 onCheckedChange={onShowSubIssuesChange}
+                aria-label={t('kanban.subIssuesFilterLabel', 'Sub-issues')}
               />
             </div>
 
@@ -297,6 +308,7 @@ export function KanbanFiltersDialog({
               <Switch
                 checked={showWorkspaces}
                 onCheckedChange={onShowWorkspacesChange}
+                aria-label={t('kanban.workspacesFilterLabel', 'Workspaces')}
               />
             </div>
 
@@ -307,6 +319,7 @@ export function KanbanFiltersDialog({
               <Switch
                 checked={hideBlocked}
                 onCheckedChange={onHideBlockedChange}
+                aria-label={t('kanban.hideBlockedFilterLabel', 'Hide blocked')}
               />
             </div>
           </div>

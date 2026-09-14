@@ -705,6 +705,11 @@
     "filterByPriority": "Filter by priority",
     "tags": "Tags",
     "sortBy": "Sort",
+    "sortManual": "Manual",
+    "sortPriority": "Priority",
+    "sortCreated": "Created",
+    "sortUpdated": "Updated",
+    "sortTitle": "Title",
     "workspaceSidebar": {
       "sortDialogTitle": "Sort workspaces",
       "sortDialogDescription": "Choose how workspaces are ordered in the sidebar.",
@@ -730,6 +735,7 @@
     "priority": "Priority",
     "subIssuesFilterLabel": "Sub-issues",
     "workspacesFilterLabel": "Workspaces",
+    "hideBlockedFilterLabel": "Hide blocked",
     "selectAssignees": "Select assignees...",
     "relationships": "Relationships",
     "relationshipOptions": {

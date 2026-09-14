@@ -640,6 +640,11 @@
     "filterByPriority": "Filtrar por prioridad",
     "tags": "Etiquetas",
     "sortBy": "Ordenar",
+    "sortManual": "Manual",
+    "sortPriority": "Prioridad",
+    "sortCreated": "Creación",
+    "sortUpdated": "Actualización",
+    "sortTitle": "Título",
     "workspaceSidebar": {
       "sortDialogTitle": "Ordenar espacios de trabajo",
       "sortDialogDescription": "Elige cómo se ordenan los espacios de trabajo en la barra lateral.",
@@ -665,6 +670,7 @@
     "priority": "Prioridad",
     "subIssuesFilterLabel": "Subtareas",
     "workspacesFilterLabel": "Espacios de trabajo",
+    "hideBlockedFilterLabel": "Ocultar bloqueados",
     "selectAssignees": "Selecciona responsables...",
     "relationships": "Relaciones",
     "relationshipOptions": {
