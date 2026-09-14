@@ -1218,52 +1218,52 @@ function AggregatedGroupEntry({ group }: { group: AggregatedPatchGroup }) {
     switch (group.aggregationType) {
       case 'file_read':
         return {
-          label: t('conversation.toolGroups.read'),
+          label: t('conversation.toolSummary.toolGroups.read'),
           icon: FileTextIcon,
           unit: (count: number) =>
-            t('conversation.toolUnits.file', { count }),
+            t('conversation.toolSummary.toolUnits.file', { count }),
         };
       case 'search':
         return {
-          label: t('conversation.toolGroups.search'),
+          label: t('conversation.toolSummary.toolGroups.search'),
           icon: ListMagnifyingGlassIcon,
           unit: (count: number) =>
-            t('conversation.toolUnits.file', { count }),
+            t('conversation.toolSummary.toolUnits.file', { count }),
         };
       case 'web_fetch':
         return {
-          label: t('conversation.toolGroups.fetched'),
+          label: t('conversation.toolSummary.toolGroups.fetched'),
           icon: GlobeIcon,
           unit: (count: number) =>
-            t('conversation.toolUnits.url', { count }),
+            t('conversation.toolSummary.toolUnits.url', { count }),
         };
       case 'command_run_read':
         return {
-          label: t('conversation.toolGroups.read'),
+          label: t('conversation.toolSummary.toolGroups.read'),
           icon: FileTextIcon,
           unit: (count: number) =>
-            t('conversation.toolUnits.command', { count }),
+            t('conversation.toolSummary.toolUnits.command', { count }),
         };
       case 'command_run_search':
         return {
-          label: t('conversation.toolGroups.search'),
+          label: t('conversation.toolSummary.toolGroups.search'),
           icon: ListMagnifyingGlassIcon,
           unit: (count: number) =>
-            t('conversation.toolUnits.command', { count }),
+            t('conversation.toolSummary.toolUnits.command', { count }),
         };
       case 'command_run_edit':
         return {
-          label: t('conversation.toolGroups.edit'),
+          label: t('conversation.toolSummary.toolGroups.edit'),
           icon: PencilSimpleIcon,
           unit: (count: number) =>
-            t('conversation.toolUnits.command', { count }),
+            t('conversation.toolSummary.toolUnits.command', { count }),
         };
       case 'command_run_fetch':
         return {
-          label: t('conversation.toolGroups.fetch'),
+          label: t('conversation.toolSummary.toolGroups.fetch'),
           icon: GlobeIcon,
           unit: (count: number) =>
-            t('conversation.toolUnits.command', { count }),
+            t('conversation.toolSummary.toolUnits.command', { count }),
         };
     }
   };
