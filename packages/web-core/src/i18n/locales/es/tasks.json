@@ -143,7 +143,7 @@
     },
     "pr": {
       "number": "PR #{{number}}",
-      "open": "Open PR #{{number}}",
+      "open": "Abrir PR #{{number}}",
       "merged": "PR #{{prNumber}} fusionado"
     },
     "createRepo": {
@@ -255,22 +255,22 @@
   },
   "processes": {
     "noLogsAvailable": "No hay registros disponibles",
-    "agent": "Agent:",
-    "backToList": "Back to list",
-    "completed": "Completed: {{date}}",
-    "deleted": "Deleted",
-    "deletedTooltip": "Deleted by restore: timeline was restored to a checkpoint and later executions were removed",
-    "detailsTitle": "Process Details",
-    "errorLoadingDetails": "Failed to load process details. Please try again.",
-    "errorLoadingUpdates": "Failed to load live updates for processes.",
-    "exit": "Exit: {{code}}",
-    "loading": "Loading execution processes...",
-    "loadingDetails": "Loading process details...",
-    "noProcesses": "No execution processes found for this attempt.",
-    "processId": "Process ID: {{id}}",
-    "reconnecting": "Reconnecting...",
-    "selectAttempt": "Select an attempt to view execution processes.",
-    "started": "Started: {{date}}",
+    "agent": "Agente:",
+    "backToList": "Volver a la lista",
+    "completed": "Completado: {{date}}",
+    "deleted": "Eliminado",
+    "deletedTooltip": "Eliminado al restaurar: la línea temporal se recuperó hasta un checkpoint y se quitaron las ejecuciones posteriores",
+    "detailsTitle": "Detalles del proceso",
+    "errorLoadingDetails": "No se han podido cargar los detalles del proceso. Inténtalo de nuevo.",
+    "errorLoadingUpdates": "No se han podido cargar las actualizaciones en directo de los procesos.",
+    "exit": "Salida: {{code}}",
+    "loading": "Cargando procesos de ejecución...",
+    "loadingDetails": "Cargando detalles del proceso...",
+    "noProcesses": "No se han encontrado procesos de ejecución para este intento.",
+    "processId": "ID del proceso: {{id}}",
+    "reconnecting": "Reconectando...",
+    "selectAttempt": "Selecciona un intento para ver sus procesos de ejecución.",
+    "started": "Iniciado: {{date}}",
     "copyLogs": "Copiar registros",
     "logsCopied": "¡Copiado!"
   },
@@ -295,7 +295,7 @@
     "noTasks": "Sin tareas"
   },
   "viewProcessesDialog": {
-    "title": "Execution processes"
+    "title": "Procesos de ejecución"
   },
   "prComments": {
     "dialog": {
@@ -526,9 +526,9 @@
   },
   "shareDialog": {
     "loginRequired": {
-      "title": "Sign in required",
-      "description": "Sign in to access this feature.",
-      "action": "Sign in"
+      "title": "Se requiere iniciar sesión",
+      "description": "Inicia sesión para acceder a esta función.",
+      "action": "Iniciar sesión"
     }
   },
   "linkPrToIssue": {
