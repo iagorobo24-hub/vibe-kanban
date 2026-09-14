@@ -219,6 +219,12 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        const eventDialog =
+          e.target instanceof Element
+            ? e.target.closest<HTMLElement>('[role="dialog"]')
+            : null;
+        if (eventDialog && eventDialog !== dialogRef.current) return;
+
         handleClose();
       }
     };
