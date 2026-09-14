@@ -36,6 +36,7 @@ import {
   type CreateRemoteProjectResult,
 } from "@/shared/dialogs/org/CreateRemoteProjectDialog";
 import { CloudShutdownExportBanner } from "@/shared/components/CloudShutdownExportBanner";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface RemoteAppShellProps {
   children: ReactNode;
@@ -52,6 +53,7 @@ function getHostInitials(name: string): string {
 }
 
 export function RemoteAppShell({ children }: RemoteAppShellProps) {
+  const { t } = useTranslation("common");
   const navigate = useNavigate();
   const location = useLocation();
   const { hostId: routeHostId } = useParams({ strict: false });
@@ -295,16 +297,18 @@ export function RemoteAppShell({ children }: RemoteAppShellProps) {
         <MobileDrawer
           open={isDrawerOpen && isMobile}
           onClose={() => setIsDrawerOpen(false)}
+          ariaLabel={t("accessibility.agentosNavigation")}
         >
           <div className="flex flex-col h-full">
             {/* Header: org name + close button */}
             <div className="flex items-center justify-between p-4 border-b border-border">
               <span className="text-sm font-medium text-high truncate">
-                {selectedOrgName ?? "Organization"}
+                {selectedOrgName ?? t("appBar.organization")}
               </span>
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
+                aria-label={t("buttons.close")}
                 className="p-1 rounded-sm text-low hover:text-normal cursor-pointer"
               >
                 <XIcon className="h-4 w-4" weight="bold" />

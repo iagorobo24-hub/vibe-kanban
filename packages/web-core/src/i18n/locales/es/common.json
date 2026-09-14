@@ -157,6 +157,9 @@
     "deniedByUser": "{{toolName}} denegado por el usuario",
     "output": "Salida",
     "plan": "Plan",
+    "yourMessages": "Tus mensajes",
+    "turn_one": "{{count}} turno",
+    "turn_other": "{{count}} turnos",
     "tool": "Herramienta",
     "thinking": "Pensando",
     "toolSummary": {

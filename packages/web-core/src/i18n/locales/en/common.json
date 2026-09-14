@@ -147,6 +147,9 @@
   "conversation": {
     "plan": "Plan",
     "output": "Output",
+    "yourMessages": "Your messages",
+    "turn_one": "{{count}} turn",
+    "turn_other": "{{count}} turns",
     "deniedByUser": "{{toolName}} denied by user",
     "tool": "Tool",
     "thinking": "Thinking",
