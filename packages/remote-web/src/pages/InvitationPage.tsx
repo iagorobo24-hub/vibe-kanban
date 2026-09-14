@@ -1,32 +1,34 @@
-import { useEffect, useState } from "react";
-import { useParams } from "@tanstack/react-router";
+import { useEffect, useState } from 'react';
+import { useTranslation } from '@/i18n/useTranslation';
+import { useParams } from '@tanstack/react-router';
 import {
   getInvitation,
   initOAuth,
   type InvitationLookupResponse,
   type OAuthProvider,
-} from "@remote/shared/lib/api";
+} from '@remote/shared/lib/api';
 import {
   generateChallenge,
   generateVerifier,
   storeInvitationToken,
   storeVerifier,
-} from "@remote/shared/lib/pkce";
+} from '@remote/shared/lib/pkce';
 import {
   RemoteCard,
   RemotePage,
   RemoteStatusCard,
-} from "@remote/shared/components/RemotePagePrimitives";
-import { AgentOSWordmark } from "@vibe/web-core/agentos-wordmark";
+} from '@remote/shared/components/RemotePagePrimitives';
+import { AgentOSWordmark } from '@vibe/web-core/agentos-wordmark';
 
 export default function InvitationPage() {
-  const { token } = useParams({ from: "/invitations/$token/accept" });
+  const { t } = useTranslation('common');
+  const { token } = useParams({ from: '/invitations/$token/accept' });
   const [invitation, setInvitation] = useState<InvitationLookupResponse | null>(
-    null,
+    null
   );
   const [error, setError] = useState<string | null>(null);
   const [pendingProvider, setPendingProvider] = useState<OAuthProvider | null>(
-    null,
+    null
   );
 
   useEffect(() => {
@@ -44,7 +46,9 @@ export default function InvitationPage() {
       } catch (e) {
         if (!cancelled) {
           setError(
-            e instanceof Error ? e.message : "Failed to load invitation",
+            e instanceof Error
+              ? e.message
+              : t('remoteAuth.loadInvitationFailed')
           );
         }
       }
@@ -55,7 +59,7 @@ export default function InvitationPage() {
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [token, t]);
 
   const handleOAuthLogin = async (provider: OAuthProvider) => {
     setPendingProvider(provider);
@@ -75,18 +79,23 @@ export default function InvitationPage() {
       const { authorize_url } = await initOAuth(
         provider,
         callbackUrl.toString(),
-        challenge,
+        challenge
       );
       window.location.assign(authorize_url);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "OAuth init failed");
+      setError(
+        e instanceof Error ? e.message : t('remoteAuth.oauthInitFailed')
+      );
       setPendingProvider(null);
     }
   };
 
   if (error && !invitation) {
     return (
-      <RemoteStatusCard title="Invalid or expired invitation" variant="error">
+      <RemoteStatusCard
+        title={t('remoteAuth.invalidInvitation')}
+        variant="error"
+      >
         <p className="mt-base text-sm text-normal">{error}</p>
       </RemoteStatusCard>
     );
@@ -94,8 +103,8 @@ export default function InvitationPage() {
 
   if (!invitation) {
     return (
-      <RemoteStatusCard title="Loading invitation...">
-        <p className="mt-base text-sm text-low">Please wait.</p>
+      <RemoteStatusCard title={t('remoteAuth.loadingInvitation')}>
+        <p className="mt-base text-sm text-low">{t('remoteAuth.pleaseWait')}</p>
       </RemoteStatusCard>
     );
   }
@@ -108,24 +117,24 @@ export default function InvitationPage() {
             <AgentOSWordmark />
           </div>
           <h1 className="text-2xl font-semibold text-high">
-            You&apos;re invited
+            {t('remoteAuth.youAreInvited')}
           </h1>
           <p className="text-sm text-low">
-            You&apos;ve been invited to join{" "}
+            {t('remoteAuth.invitedToJoin')}{' '}
             <span className="font-medium text-high">
               {invitation.organization_name ?? invitation.organization_slug}
-            </span>{" "}
-            on AgentOS.
+            </span>{' '}
+            {t('remoteAuth.onAgentOS')}
           </p>
         </header>
 
         <section className="mx-auto w-full max-w-xs space-y-half border-t border-border pt-base text-sm">
           <div className="flex items-center justify-between gap-base">
-            <span className="text-low">Role</span>
+            <span className="text-low">{t('remoteAuth.role')}</span>
             <span className="font-medium text-high">{invitation.role}</span>
           </div>
           <div className="flex items-center justify-between gap-base">
-            <span className="text-low">Expires</span>
+            <span className="text-low">{t('remoteAuth.expires')}</span>
             <span className="font-medium text-high">
               {new Date(invitation.expires_at).toLocaleDateString()}
             </span>
@@ -139,21 +148,21 @@ export default function InvitationPage() {
         )}
 
         <section className="space-y-base border-t border-border pt-base text-center">
-          <p className="text-sm text-low">Choose a provider to continue:</p>
+          <p className="text-sm text-low">{t('remoteAuth.chooseProvider')}</p>
           <div className="flex flex-col items-center gap-2">
             <OAuthButton
               provider="github"
-              label="Continue with GitHub"
-              onClick={() => void handleOAuthLogin("github")}
+              label={t('remoteAuth.continueWithGitHub')}
+              onClick={() => void handleOAuthLogin('github')}
               disabled={pendingProvider !== null}
-              loading={pendingProvider === "github"}
+              loading={pendingProvider === 'github'}
             />
             <OAuthButton
               provider="google"
-              label="Continue with Google"
-              onClick={() => void handleOAuthLogin("google")}
+              label={t('remoteAuth.continueWithGoogle')}
+              onClick={() => void handleOAuthLogin('google')}
               disabled={pendingProvider !== null}
-              loading={pendingProvider === "google"}
+              loading={pendingProvider === 'google'}
             />
           </div>
         </section>
@@ -175,6 +184,8 @@ function OAuthButton({
   disabled?: boolean;
   loading?: boolean;
 }) {
+  const { t } = useTranslation('common');
+
   return (
     <button
       type="button"
@@ -183,7 +194,9 @@ function OAuthButton({
       disabled={disabled || loading}
     >
       {loading
-        ? `Opening ${provider === "github" ? "GitHub" : "Google"}...`
+        ? t('remoteAuth.openingProvider', {
+            provider: provider === 'github' ? 'GitHub' : 'Google',
+          })
         : label}
     </button>
   );

@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
-import { useParams, useSearch } from "@tanstack/react-router";
-import { acceptInvitation, redeemOAuth } from "@remote/shared/lib/api";
-import { storeTokens } from "@remote/shared/lib/auth";
+import { useEffect, useState } from 'react';
+import { useTranslation } from '@/i18n/useTranslation';
+import { useParams, useSearch } from '@tanstack/react-router';
+import { acceptInvitation, redeemOAuth } from '@remote/shared/lib/api';
+import { storeTokens } from '@remote/shared/lib/auth';
 import {
   clearInvitationToken,
   clearVerifier,
   retrieveInvitationToken,
   retrieveVerifier,
-} from "@remote/shared/lib/pkce";
-import { RemoteStatusCard } from "@remote/shared/components/RemotePagePrimitives";
+} from '@remote/shared/lib/pkce';
+import { RemoteStatusCard } from '@remote/shared/components/RemotePagePrimitives';
 
 export default function InvitationCompletePage() {
+  const { t } = useTranslation('common');
   const { token: urlToken } = useParams({
-    from: "/invitations/$token/complete",
+    from: '/invitations/$token/complete',
   });
-  const search = useSearch({ from: "/invitations/$token/complete" });
+  const search = useSearch({ from: '/invitations/$token/complete' });
   const [error, setError] = useState<string | null>(null);
   const [isAccepted, setIsAccepted] = useState(false);
 
@@ -25,7 +27,7 @@ export default function InvitationCompletePage() {
   useEffect(() => {
     const completeInvitation = async () => {
       if (oauthError) {
-        setError(`OAuth error: ${oauthError}`);
+        setError(t('remoteAuth.oauthError', { error: oauthError }));
         return;
       }
 
@@ -36,20 +38,20 @@ export default function InvitationCompletePage() {
       try {
         const verifier = retrieveVerifier();
         if (!verifier) {
-          setError("OAuth session lost. Please try again.");
+          setError(t('remoteAuth.sessionLost'));
           return;
         }
 
         const token = retrieveInvitationToken() || urlToken;
         if (!token) {
-          setError("Invitation token lost. Please try again.");
+          setError(t('remoteAuth.invitationTokenLost'));
           return;
         }
 
         const { access_token, refresh_token } = await redeemOAuth(
           handoffId,
           appCode,
-          verifier,
+          verifier
         );
 
         await storeTokens(access_token, refresh_token);
@@ -61,7 +63,7 @@ export default function InvitationCompletePage() {
         setIsAccepted(true);
       } catch (e) {
         setError(
-          e instanceof Error ? e.message : "Failed to complete invitation",
+          e instanceof Error ? e.message : t('remoteAuth.invitationFailed')
         );
         clearVerifier();
         clearInvitationToken();
@@ -69,13 +71,16 @@ export default function InvitationCompletePage() {
     };
 
     void completeInvitation();
-  }, [handoffId, appCode, oauthError, urlToken]);
+  }, [handoffId, appCode, oauthError, urlToken, t]);
 
   if (error) {
-    const retryPath = urlToken ? `/invitations/${urlToken}/accept` : "/account";
+    const retryPath = urlToken ? `/invitations/${urlToken}/accept` : '/account';
 
     return (
-      <RemoteStatusCard title="Could not accept invitation" variant="error">
+      <RemoteStatusCard
+        title={t('remoteAuth.couldNotAcceptInvitation')}
+        variant="error"
+      >
         <p className="mt-base text-sm text-normal">{error}</p>
         <button
           type="button"
@@ -84,7 +89,7 @@ export default function InvitationCompletePage() {
             window.location.assign(retryPath);
           }}
         >
-          Try again
+          {t('remoteAuth.tryAgain')}
         </button>
       </RemoteStatusCard>
     );
@@ -92,9 +97,9 @@ export default function InvitationCompletePage() {
 
   if (isAccepted) {
     return (
-      <RemoteStatusCard title="Invitation accepted!">
+      <RemoteStatusCard title={t('remoteAuth.invitationAccepted')}>
         <p className="mt-base text-sm text-normal">
-          Your invitation is confirmed. You can now close this page.
+          {t('remoteAuth.invitationConfirmed')}
         </p>
         <a
           href="https://www.vibekanban.com/docs/getting-started"
@@ -102,15 +107,17 @@ export default function InvitationCompletePage() {
           rel="noopener noreferrer"
           className="agentos-button agentos-button--primary mt-double w-full"
         >
-          Get started
+          {t('remoteAuth.getStarted')}
         </a>
       </RemoteStatusCard>
     );
   }
 
   return (
-    <RemoteStatusCard title="Completing invitation...">
-      <p className="mt-base text-sm text-low">Processing OAuth callback...</p>
+    <RemoteStatusCard title={t('remoteAuth.completingInvitation')}>
+      <p className="mt-base text-sm text-low">
+        {t('remoteAuth.processingOAuth')}
+      </p>
     </RemoteStatusCard>
   );
 }

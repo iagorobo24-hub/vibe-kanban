@@ -382,9 +382,7 @@ export function RemoteCloudHostsSettingsCardContent({
                       key={host.id}
                       className={[
                         'rounded-sm border border-border bg-secondary/30 p-3 flex items-center justify-between gap-3',
-                        isOffline
-                          ? 'opacity-80'
-                          : 'hover:bg-secondary/50',
+                        isOffline ? 'opacity-80' : 'hover:bg-secondary/50',
                       ].join(' ')}
                     >
                       <button
@@ -393,7 +391,12 @@ export function RemoteCloudHostsSettingsCardContent({
                         onClick={() =>
                           void handleGoToHostWorkspaces(host.id, host.status)
                         }
-                        aria-label={`Open ${host.name} workspaces`}
+                        aria-label={t(
+                          'common:accessibility.openHostWorkspaces',
+                          {
+                            name: host.name,
+                          }
+                        )}
                       >
                         <p className="text-sm font-medium text-high truncate">
                           {host.name}
