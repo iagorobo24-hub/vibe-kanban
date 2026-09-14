@@ -28,7 +28,8 @@
     "collapseMessage": "Collapse message",
     "expandMessage": "Expand message",
     "markdownContent": "Markdown content",
-    "markdownEditor": "Markdown editor"
+    "markdownEditor": "Markdown editor",
+    "resizePanels": "Resize panels"
   },
   "relativeTime": {
     "justNow": "just now",

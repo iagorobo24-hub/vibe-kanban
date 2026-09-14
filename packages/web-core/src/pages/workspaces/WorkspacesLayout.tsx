@@ -371,7 +371,8 @@ export function WorkspacesLayout() {
             {isLeftMainPanelVisible && rightMainPanelMode !== null && (
               <Separator
                 id="main-separator"
-                className="w-1 bg-transparent hover:bg-brand/50 transition-colors cursor-col-resize"
+                aria-label={t('accessibility.resizePanels')}
+                className="w-1 bg-transparent transition-colors hover:bg-brand/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset cursor-col-resize"
               />
             )}
 

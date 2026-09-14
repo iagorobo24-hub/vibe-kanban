@@ -108,6 +108,7 @@ function ProjectKanbanBoard() {
 }
 
 function ProjectKanbanLayout({ projectName }: { projectName: string }) {
+  const { t } = useTranslation('common');
   const { issueId, isPanelOpen } = useCurrentKanbanRouteState();
   const isMobile = useIsMobile();
   const { getIssue } = useProjectContext();
@@ -164,7 +165,8 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
       {isRightPanelOpen && (
         <Separator
           id="kanban-separator"
-          className="w-1 bg-panel outline-none hover:bg-brand/50 transition-colors cursor-col-resize"
+          aria-label={t('accessibility.resizePanels')}
+          className="w-1 bg-panel transition-colors hover:bg-brand/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset cursor-col-resize"
         />
       )}
 
