@@ -38,7 +38,9 @@
     "description": "Consulta las invitaciones pendientes de {{orgName}}",
     "loading": "Cargando invitaciones...",
     "invited": "Invitado el {{date}}",
-    "pending": "Pendiente"
+    "pending": "Pendiente",
+    "revoke": "Revocar invitación",
+    "confirmRevoke": "¿Seguro que quieres revocar la invitación para {{email}}? Esta acción no se puede deshacer."
   },
   "settings": {
     "title": "Configuración de la organización",

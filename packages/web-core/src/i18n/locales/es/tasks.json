@@ -25,11 +25,24 @@
     "title": "Iniciar revisión",
     "description": "Pide al agente de codificación que revise tus cambios y proporcione comentarios.",
     "additionalInstructions": "Instrucciones adicionales (opcional)",
+    "additionalInstructionsPlaceholder": "Añade instrucciones específicas para la revisión...",
     "reviewComments": "Comentarios de revisión ({{count}})",
     "includeGitContext": "Incluir contexto de git",
     "includeGitContextDescription": "Indica al agente cómo ver todos los cambios realizados en esta rama",
     "newSession": "Nueva sesión",
     "sessionName": "Revisión"
+  },
+  "approvalEntry": {
+    "question": "¿Quieres aprobar esta solicitud?",
+    "approve": "Aprobar",
+    "approveRequest": "Aprobar solicitud",
+    "deny": "Denegar",
+    "submitting": "Enviando…",
+    "provideDenialReason": "Indicar motivo del rechazo",
+    "denialPlaceholder": "Explica al agente por qué se rechaza esta solicitud... Escribe @ para insertar etiquetas o buscar archivos.",
+    "defaultDenialReason": "El usuario ha rechazado esta solicitud de uso de herramienta.",
+    "missingExecutionProcessId": "Falta el identificador del proceso de ejecución",
+    "responseFailed": "No se pudo enviar la respuesta"
   },
   "actionsMenu": {
     "startReview": "Iniciar revisión",

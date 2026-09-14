@@ -145,7 +145,7 @@ export function RetryEditorInline({
     <div className="space-y-2">
       <div className="relative">
         <WYSIWYGEditor
-          placeholder="Edit and resend your message..."
+          placeholder={t('retryEditor.placeholder')}
           value={message}
           onChange={setMessage}
           disabled={isSending}

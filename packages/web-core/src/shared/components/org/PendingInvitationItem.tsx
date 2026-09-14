@@ -20,7 +20,7 @@ export function PendingInvitationItem({
 
   const handleRevoke = () => {
     const confirmed = window.confirm(
-      `Are you sure you want to revoke the invitation for ${invitation.email}? This action cannot be undone.`
+      t('invitationList.confirmRevoke', { email: invitation.email })
     );
     if (confirmed) {
       onRevoke?.(invitation.id);
@@ -52,7 +52,8 @@ export function PendingInvitationItem({
         size="icon"
         onClick={handleRevoke}
         disabled={isRevoking}
-        title="Revoke invitation"
+        title={t('invitationList.revoke')}
+        aria-label={t('invitationList.revoke')}
       >
         <Trash2 className="h-4 w-4" />
       </Button>

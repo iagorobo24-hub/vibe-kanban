@@ -386,7 +386,7 @@ export function ModelSelectorPopover({
             {showSearch && (
               <div className="border-t border-border">
                 <DropdownMenuSearchInput
-                  placeholder="Filter by name or ID..."
+                  placeholder={t('modelSelector.filterPlaceholder')}
                   value={searchQuery}
                   onValueChange={onSearchChange}
                 />

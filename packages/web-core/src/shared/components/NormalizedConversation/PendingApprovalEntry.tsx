@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ApprovalStatus, ToolStatus } from 'shared/types';
 import { Button } from '@vibe/ui/components/Button';
 import {
@@ -28,8 +29,6 @@ import {
 } from '@/shared/keyboard';
 import { useApprovalForm } from '@/shared/hooks/ApprovalForm';
 import { useApprovals } from '@/shared/hooks/useApprovals';
-
-const DEFAULT_DENIAL_REASON = 'User denied this tool use request.';
 
 // ---------- Types ----------
 interface PendingApprovalEntryProps {
@@ -87,6 +86,8 @@ function ActionButtons({
   onApprove: () => void;
   onStartDeny: () => void;
 }) {
+  const { t } = useTranslation('tasks');
+
   return (
     <div className="flex items-center gap-1.5 pr-4">
       <Tooltip>
@@ -96,14 +97,22 @@ function ActionButtons({
             variant="ghost"
             className="h-8 w-8 rounded-full p-0"
             disabled={disabled}
-            aria-label={isResponding ? 'Submitting approval' : 'Approve'}
+            aria-label={
+              isResponding
+                ? t('approvalEntry.submitting')
+                : t('approvalEntry.approve')
+            }
             aria-busy={isResponding}
           >
             <Check className="h-5 w-5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{isResponding ? 'Submitting…' : 'Approve request'}</p>
+          <p>
+            {isResponding
+              ? t('approvalEntry.submitting')
+              : t('approvalEntry.approveRequest')}
+          </p>
         </TooltipContent>
       </Tooltip>
 
@@ -114,14 +123,22 @@ function ActionButtons({
             variant="ghost"
             className="h-8 w-8 rounded-full p-0"
             disabled={disabled}
-            aria-label={isResponding ? 'Submitting denial' : 'Deny'}
+            aria-label={
+              isResponding
+                ? t('approvalEntry.submitting')
+                : t('approvalEntry.deny')
+            }
             aria-busy={isResponding}
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{isResponding ? 'Submitting…' : 'Provide denial reason'}</p>
+          <p>
+            {isResponding
+              ? t('approvalEntry.submitting')
+              : t('approvalEntry.provideDenialReason')}
+          </p>
         </TooltipContent>
       </Tooltip>
     </div>
@@ -141,12 +158,14 @@ function DenyReasonForm({
   onCancel: () => void;
   onSubmit: () => void;
 }) {
+  const { t } = useTranslation(['tasks', 'common']);
+
   return (
     <div className="agentos-approval-entry__deny-form flex flex-col gap-2 p-4">
       <WYSIWYGEditor
         value={value}
         onChange={onChange}
-        placeholder="Let the agent know why this request was denied... Type @ to insert tags or search files."
+        placeholder={t('approvalEntry.denialPlaceholder')}
         disabled={isResponding}
         className="min-h-[80px]"
         onCmdEnter={onSubmit}
@@ -158,10 +177,10 @@ function DenyReasonForm({
           onClick={onCancel}
           disabled={isResponding}
         >
-          Cancel
+          {t('buttons.cancel', { ns: 'common' })}
         </Button>
         <Button size="sm" onClick={onSubmit} disabled={isResponding}>
-          Deny
+          {t('approvalEntry.deny')}
         </Button>
       </div>
     </div>
@@ -174,6 +193,7 @@ const PendingApprovalEntry = ({
   executionProcessId,
   children,
 }: PendingApprovalEntryProps) => {
+  const { t } = useTranslation('tasks');
   const [isResponding, setIsResponding] = useState(false);
   const [hasResponded, setHasResponded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -246,7 +266,7 @@ const PendingApprovalEntry = ({
     async (approved: boolean, reason?: string) => {
       if (disabled) return;
       if (!executionProcessId) {
-        setError('Missing executionProcessId');
+        setError(t('approvalEntry.missingExecutionProcessId'));
         return;
       }
 
@@ -267,13 +287,13 @@ const PendingApprovalEntry = ({
       } catch (e: unknown) {
         console.error('Approval respond failed:', e);
         const errorMessage =
-          e instanceof Error ? e.message : 'Failed to send response';
+          e instanceof Error ? e.message : t('approvalEntry.responseFailed');
         setError(errorMessage);
       } finally {
         setIsResponding(false);
       }
     },
-    [disabled, executionProcessId, pendingStatus.approval_id, clear]
+    [disabled, executionProcessId, pendingStatus.approval_id, clear, t]
   );
 
   const handleApprove = useCallback(() => respond(true), [respond]);
@@ -290,8 +310,8 @@ const PendingApprovalEntry = ({
 
   const handleSubmitDeny = useCallback(() => {
     const trimmed = denyReason.trim();
-    respond(false, trimmed || DEFAULT_DENIAL_REASON);
-  }, [denyReason, respond]);
+    respond(false, trimmed || t('approvalEntry.defaultDenialReason'));
+  }, [denyReason, respond, t]);
 
   const triggerDeny = useCallback(
     (event?: KeyboardEvent) => {
@@ -326,7 +346,7 @@ const PendingApprovalEntry = ({
               <div className="flex items-center gap-1.5">
                 {!isEnteringReason && (
                   <span className="agentos-approval-entry__question text-muted-foreground">
-                    Would you like to approve this?
+                    {t('approvalEntry.question')}
                   </span>
                 )}
               </div>

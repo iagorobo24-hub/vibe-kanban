@@ -150,10 +150,20 @@
     "loadingEarlierMessages": "Loading earlier messages"
   },
   "folderPicker": {
+    "title": "Select Folder",
+    "description": "Choose a folder for your project",
     "legend": "Click folder names to navigate • Use action buttons to select",
     "manualPathLabel": "Enter path manually:",
+    "pathPlaceholder": "/path/to/your/project",
     "go": "Go",
     "searchLabel": "Search current directory:",
+    "searchPlaceholder": "Filter folders and files...",
+    "home": "Home directory",
+    "parent": "Parent directory",
+    "loading": "Loading...",
+    "noMatches": "No matches found",
+    "noFolders": "No folders found",
+    "openFolder": "Open folder {{name}}",
     "selectCurrent": "Select Current",
     "gitRepo": "git repo",
     "selectPath": "Select Path"
@@ -829,7 +839,11 @@
     "permissionPlan": "Plan",
     "agent": "Agent",
     "default": "Default",
-    "model": "Model"
+    "model": "Model",
+    "filterPlaceholder": "Filter by name or ID..."
+  },
+  "retryEditor": {
+    "placeholder": "Edit and resend your message..."
   },
   "crashScreen": {
     "title": "Something went wrong",

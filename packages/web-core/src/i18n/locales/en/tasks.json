@@ -332,11 +332,24 @@
     "title": "Start Review",
     "description": "Ask the coding agent to review your changes and provide feedback.",
     "additionalInstructions": "Additional Instructions (optional)",
+    "additionalInstructionsPlaceholder": "Add any specific instructions for the review...",
     "reviewComments": "Review Comments ({{count}})",
     "includeGitContext": "Include git context",
     "includeGitContextDescription": "Tells the agent how to view all changes made on this branch",
     "newSession": "New Session",
     "sessionName": "Review"
+  },
+  "approvalEntry": {
+    "question": "Would you like to approve this?",
+    "approve": "Approve",
+    "approveRequest": "Approve request",
+    "deny": "Deny",
+    "submitting": "Submitting…",
+    "provideDenialReason": "Provide denial reason",
+    "denialPlaceholder": "Let the agent know why this request was denied... Type @ to insert tags or search files.",
+    "defaultDenialReason": "User denied this tool use request.",
+    "missingExecutionProcessId": "Missing execution process ID",
+    "responseFailed": "Failed to send response"
   },
   "actionsMenu": {
     "startReview": "Start Review",
