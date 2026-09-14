@@ -44,6 +44,10 @@ import type { RepoWithTargetBranch } from 'shared/types';
 import { ChatEmptyState } from '@vibe/ui/components/ChatEmptyState';
 import { ChatScriptPlaceholder } from '@vibe/ui/components/ChatScriptPlaceholder';
 import { ScriptFixerDialog } from '@/shared/dialogs/scripts/ScriptFixerDialog';
+import {
+  createAgentOSToolStreamFixture,
+  isAgentOSToolStreamFixtureEnabled,
+} from '../model/agentosToolStreamFixture';
 
 interface ConversationListProps {
   attempt: WorkspaceWithSession;
@@ -161,6 +165,11 @@ export const ConversationList = forwardRef<
   const [hasSetupScriptRun, setHasSetupScriptRun] = useState(false);
   const [hasCleanupScriptRun, setHasCleanupScriptRun] = useState(false);
   const [hasRunningProcess, setHasRunningProcess] = useState(false);
+  const toolStreamFixtureEnabled = isAgentOSToolStreamFixtureEnabled();
+  const toolStreamFixtureSource = useMemo(
+    () => (toolStreamFixtureEnabled ? createAgentOSToolStreamFixture() : null),
+    [toolStreamFixtureEnabled]
+  );
   const lastSettledTailStartIndexRef = useRef<number | null>(null);
   const { setEntries, reset } = useEntriesActions();
   const setTokenUsageInfo = useSetTokenUsageInfo();
@@ -372,7 +381,7 @@ export const ConversationList = forwardRef<
     newLoading: boolean
   ) => {
     pendingUpdateRef.current = {
-      source,
+      source: toolStreamFixtureSource ?? source,
       addType,
       loading: newLoading,
       isInitialLoad: addType === 'initial',
