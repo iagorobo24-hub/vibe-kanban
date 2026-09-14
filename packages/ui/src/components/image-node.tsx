@@ -484,7 +484,7 @@ export function createImageNode(options: CreateImageNodeOptions) {
           className="inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           onClick={handleClick}
           onDoubleClick={onDoubleClickEdit}
-          aria-label={`Open ${displayName}`}
+          aria-label={t('accessibility.openMedia', { name: displayName })}
         >
           {thumbnailContent}
           <span className="flex flex-col min-w-0 text-left">

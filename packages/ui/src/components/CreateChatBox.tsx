@@ -1,12 +1,12 @@
-import { type ReactNode, useRef } from "react";
-import { CheckIcon, PaperclipIcon, XIcon } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
-import { Checkbox } from "./Checkbox";
-import { ChatBoxBase, VisualVariant, type DropzoneProps } from "./ChatBoxBase";
-import { DropdownMenuItem, DropdownMenuLabel } from "./Dropdown";
-import { PrimaryButton } from "./PrimaryButton";
-import type { LocalAttachmentMetadata } from "./WorkspaceContext";
-import { ToolbarDropdown, ToolbarIconButton } from "./Toolbar";
+import { type ReactNode, useRef } from 'react';
+import { CheckIcon, PaperclipIcon, XIcon } from '@phosphor-icons/react';
+import { useTranslation } from 'react-i18next';
+import { Checkbox } from './Checkbox';
+import { ChatBoxBase, VisualVariant, type DropzoneProps } from './ChatBoxBase';
+import { DropdownMenuItem, DropdownMenuLabel } from './Dropdown';
+import { PrimaryButton } from './PrimaryButton';
+import type { LocalAttachmentMetadata } from './WorkspaceContext';
+import { ToolbarDropdown, ToolbarIconButton } from './Toolbar';
 
 export interface EditorProps {
   value: string;
@@ -85,7 +85,7 @@ interface CreateChatBoxProps<TExecutor extends string = string> {
  */
 function defaultExecutorLabel(executor: string) {
   return executor
-    .replace(/[_-]+/g, " ")
+    .replace(/[_-]+/g, ' ')
     .toLowerCase()
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
@@ -99,7 +99,7 @@ export function CreateChatBox<TExecutor extends string = string>({
   disabled = false,
   executor,
   formatExecutorLabel = defaultExecutorLabel,
-  emptyExecutorLabel = "Select Executor",
+  emptyExecutorLabel = 'Select Executor',
   saveAsDefault,
   error,
   repoIds,
@@ -113,7 +113,7 @@ export function CreateChatBox<TExecutor extends string = string>({
   repoSummaryTitle,
   linkedIssue,
 }: CreateChatBoxProps<TExecutor>) {
-  const { t } = useTranslation(["common", "tasks"]);
+  const { t } = useTranslation(['common', 'tasks']);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isDisabled = disabled || isSending;
   const canSend = editor.value.trim().length > 0 && !isDisabled;
@@ -133,7 +133,7 @@ export function CreateChatBox<TExecutor extends string = string>({
     if (files.length > 0 && onPasteFiles) {
       onPasteFiles(files);
     }
-    e.target.value = "";
+    e.target.value = '';
   };
 
   const executorLabel = executor.selected
@@ -162,7 +162,7 @@ export function CreateChatBox<TExecutor extends string = string>({
           {agentIcon}
           <ToolbarDropdown label={executorLabel} disabled={isDisabled}>
             <DropdownMenuLabel>
-              {t("tasks:conversation.executors")}
+              {t('tasks:conversation.executors')}
             </DropdownMenuLabel>
             {executor.options.map((exec) => (
               <DropdownMenuItem
@@ -182,7 +182,7 @@ export function CreateChatBox<TExecutor extends string = string>({
                 className="h-3.5 w-3.5"
                 disabled={isDisabled}
               />
-              <span>{t("tasks:conversation.saveAsDefault")}</span>
+              <span>{t('tasks:conversation.saveAsDefault')}</span>
             </label>
           )}
         </>
@@ -191,8 +191,8 @@ export function CreateChatBox<TExecutor extends string = string>({
         <>
           <ToolbarIconButton
             icon={PaperclipIcon}
-            aria-label={t("tasks:taskFormDialog.attachFile")}
-            title={t("tasks:taskFormDialog.attachFile")}
+            aria-label={t('tasks:taskFormDialog.attachFile')}
+            title={t('tasks:taskFormDialog.attachFile')}
             onClick={handleAttachClick}
             disabled={isDisabled}
           />
@@ -226,9 +226,15 @@ export function CreateChatBox<TExecutor extends string = string>({
                   onClick={linkedIssue.onRemove}
                   disabled={isDisabled}
                   className="inline-flex items-center text-low hover:text-error transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-                  aria-label={`Remove link to ${linkedIssue.simpleId}`}
+                  aria-label={t('common:accessibility.removeLinkedIssue', {
+                    id: linkedIssue.simpleId,
+                  })}
                 >
-                  <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
+                  <XIcon
+                    className="size-icon-xs"
+                    weight="bold"
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
             </>
@@ -239,12 +245,12 @@ export function CreateChatBox<TExecutor extends string = string>({
         <PrimaryButton
           onClick={onSend}
           disabled={!canSend}
-          actionIcon={isSending ? "spinner" : undefined}
+          actionIcon={isSending ? 'spinner' : undefined}
           className="agentos-chatbox__submit"
           value={
             isSending
-              ? t("tasks:conversation.workspace.creating")
-              : t("tasks:conversation.workspace.create")
+              ? t('tasks:conversation.workspace.creating')
+              : t('tasks:conversation.workspace.create')
           }
         />
       }

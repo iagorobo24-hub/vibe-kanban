@@ -260,7 +260,7 @@ export function ModelList({
                         'size-5 rounded-sm bg-border/80 text-normal',
                         'dark:bg-secondary/70'
                       )}
-                      title="Reasoning supported"
+                      title={t('accessibility.reasoningSupported')}
                     >
                       <BrainIcon className="size-icon-xs" weight="fill" />
                     </span>

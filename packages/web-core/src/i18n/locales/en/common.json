@@ -53,7 +53,14 @@
     "reorderColumn": "Reorder {{name}}",
     "collapseDiff": "Collapse diff for {{filePath}}",
     "expandDiff": "Expand diff for {{filePath}}",
-    "selectOption": "Select option {{index}}"
+    "selectOption": "Select option {{index}}",
+    "noData": "No data",
+    "activateTableRow": "Activate table row",
+    "dismissError": "Dismiss error",
+    "openAttachment": "Open attachment {{name}}",
+    "openMedia": "Open {{name}}",
+    "removeLinkedIssue": "Remove link to {{id}}",
+    "reasoningSupported": "Reasoning supported"
   },
   "relativeTime": {
     "justNow": "just now",

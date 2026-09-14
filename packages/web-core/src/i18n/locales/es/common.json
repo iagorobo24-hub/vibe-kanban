@@ -72,7 +72,14 @@
     "reorderColumn": "Reordenar {{name}}",
     "collapseDiff": "Contraer diff de {{filePath}}",
     "expandDiff": "Expandir diff de {{filePath}}",
-    "selectOption": "Seleccionar opción {{index}}"
+    "selectOption": "Seleccionar opción {{index}}",
+    "noData": "Sin datos",
+    "activateTableRow": "Activar fila de la tabla",
+    "dismissError": "Cerrar error",
+    "openAttachment": "Abrir adjunto {{name}}",
+    "openMedia": "Abrir {{name}}",
+    "removeLinkedIssue": "Quitar vínculo con {{id}}",
+    "reasoningSupported": "Admite razonamiento"
   },
   "relativeTime": {
     "justNow": "ahora mismo",

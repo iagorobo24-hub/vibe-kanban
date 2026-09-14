@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Table,
   TableHead,
@@ -37,6 +38,7 @@ export function DataTable<T>({
   emptyState,
   headerContent,
 }: DataTableProps<T>) {
+  const { t } = useTranslation('common');
   const colSpan = columns.length;
 
   return (
@@ -61,7 +63,9 @@ export function DataTable<T>({
         {isLoading ? (
           <TableLoading colSpan={colSpan} />
         ) : data.length === 0 ? (
-          <TableEmpty colSpan={colSpan}>{emptyState || 'No data'}</TableEmpty>
+          <TableEmpty colSpan={colSpan}>
+            {emptyState || t('accessibility.noData')}
+          </TableEmpty>
         ) : (
           data.map((row) => {
             const key = keyExtractor(row);
@@ -82,7 +86,9 @@ export function DataTable<T>({
                 tabIndex={onRowClick ? 0 : undefined}
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
-                aria-label={onRowClick ? 'Activate table row' : undefined}
+                aria-label={
+                  onRowClick ? t('accessibility.activateTableRow') : undefined
+                }
               >
                 {columns.map((column) => (
                   <TableCell key={column.id} className={column.className}>

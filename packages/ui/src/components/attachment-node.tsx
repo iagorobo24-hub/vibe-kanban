@@ -273,7 +273,7 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
             });
           }}
           onDoubleClick={onDoubleClickEdit}
-          aria-label={`Open attachment ${displayName}`}
+          aria-label={t('accessibility.openAttachment', { name: displayName })}
         >
           <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
             {icon}
