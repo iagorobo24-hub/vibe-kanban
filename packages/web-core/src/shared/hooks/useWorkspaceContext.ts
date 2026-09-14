@@ -34,6 +34,8 @@ export interface WorkspaceContextValue {
   /** Archived workspaces for sidebar display */
   archivedWorkspaces: SidebarWorkspace[];
   isWorkspacesListLoading: boolean;
+  workspacesListError: string | null;
+  retryWorkspacesList: () => void;
   isLoading: boolean;
   isCreateMode: boolean;
   selectWorkspace: (id: string) => void;

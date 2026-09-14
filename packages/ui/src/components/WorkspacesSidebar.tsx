@@ -6,6 +6,7 @@ import {
   ArchiveIcon,
   StackIcon,
   SpinnerIcon,
+  WarningCircleIcon,
 } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { cn } from "../lib/cn";
@@ -18,6 +19,13 @@ import {
 } from "./CollapsibleSectionHeader";
 
 export type WorkspaceLayoutMode = "flat" | "accordion";
+
+export type WorkspacesSidebarListState =
+  | "loading"
+  | "empty"
+  | "workspaces"
+  | "error"
+  | "workspaces-with-error";
 
 export interface WorkspacesSidebarWorkspace {
   id: string;
@@ -52,6 +60,8 @@ export interface WorkspacesSidebarProps {
   totalWorkspacesCount: number;
   archivedWorkspaces?: WorkspacesSidebarWorkspace[];
   isLoading?: boolean;
+  workspaceListState?: WorkspacesSidebarListState;
+  onRetryWorkspaceList?: () => void;
   selectedWorkspaceId: string | null;
   onSelectWorkspace: (id: string) => void;
   onAddWorkspace?: () => void;
@@ -168,11 +178,53 @@ function WorkspaceList({
   );
 }
 
+function WorkspaceStreamNotice({
+  stale,
+  onRetry,
+}: {
+  stale: boolean;
+  onRetry?: () => void;
+}) {
+  const { t } = useTranslation("common");
+
+  return (
+    <div
+      className="mx-base mb-base flex items-start gap-half rounded-md border border-error/30 bg-error/5 px-base py-half text-sm"
+      role={stale ? "status" : "alert"}
+    >
+      <WarningCircleIcon
+        className="mt-0.5 size-icon-sm shrink-0 text-error"
+        aria-hidden="true"
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-high">
+          {t(
+            stale
+              ? "common:workspaces.streamMayBeStale"
+              : "common:workspaces.streamUnavailable"
+          )}
+        </p>
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-half text-xs font-medium text-brand hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+          >
+            {t("common:workspaces.retry")}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function WorkspacesSidebar({
   workspaces,
   totalWorkspacesCount,
   archivedWorkspaces = [],
   isLoading = false,
+  workspaceListState = isLoading ? "loading" : "workspaces",
+  onRetryWorkspaceList,
   selectedWorkspaceId,
   onSelectWorkspace,
   onAddWorkspace,
@@ -320,13 +372,28 @@ export function WorkspacesSidebar({
         onScroll={handleScroll}
         className="agentos-workspaces-sidebar__list flex-1 overflow-y-auto py-base"
       >
-        {isLoading ? (
+        {workspaceListState === "loading" ? (
           <div className="flex h-full min-h-[220px] items-center justify-center px-base">
             <div className="flex items-center justify-center text-low">
               <SpinnerIcon className="size-6 animate-spin" weight="bold" />
             </div>
           </div>
-        ) : showArchive ? (
+        ) : workspaceListState === "error" ? (
+          <div className="flex min-h-[220px] flex-col justify-center px-base">
+            <WorkspaceStreamNotice
+              stale={false}
+              onRetry={onRetryWorkspaceList}
+            />
+          </div>
+        ) : (
+          <>
+            {workspaceListState === "workspaces-with-error" && (
+              <WorkspaceStreamNotice
+                stale
+                onRetry={onRetryWorkspaceList}
+              />
+            )}
+            {showArchive ? (
           /* Archived workspaces view */
           <div className="flex flex-col gap-base">
             <span className="text-sm font-medium text-low px-base">
@@ -361,7 +428,7 @@ export function WorkspacesSidebar({
               ))
             )}
           </div>
-        ) : layoutMode === "accordion" ? (
+            ) : layoutMode === "accordion" ? (
           /* Accordion layout view */
           <div className="flex flex-col gap-base">
             {/* Needs Attention section */}
@@ -438,7 +505,7 @@ export function WorkspacesSidebar({
               </div>
             </CollapsibleSectionHeader>
           </div>
-        ) : (
+            ) : (
           /* Active workspaces flat view */
           <div className="flex flex-col gap-base">
             <div className="flex items-center justify-between px-base">
@@ -477,6 +544,8 @@ export function WorkspacesSidebar({
               />
             ))}
           </div>
+            )}
+          </>
         )}
       </div>
 

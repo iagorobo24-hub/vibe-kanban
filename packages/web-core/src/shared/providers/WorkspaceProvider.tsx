@@ -32,6 +32,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     workspaces: activeWorkspaces,
     archivedWorkspaces,
     isLoading: isLoadingList,
+    error: workspacesListError,
+    retry: retryWorkspacesList,
   } = useWorkspaces();
 
   const { data: workspace, isLoading: isLoadingWorkspace } = useWorkspaceRecord(
@@ -211,6 +213,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       activeWorkspaces,
       archivedWorkspaces,
       isWorkspacesListLoading: isLoadingList,
+      workspacesListError,
+      retryWorkspacesList,
       isLoading,
       isCreateMode,
       selectWorkspace,
@@ -232,6 +236,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       activeWorkspaces,
       archivedWorkspaces,
       isLoadingList,
+      workspacesListError,
+      retryWorkspacesList,
       isLoading,
       isCreateMode,
       selectWorkspace,
