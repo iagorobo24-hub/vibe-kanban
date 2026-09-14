@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowRightIcon,
   ArrowUpRightIcon,
+  ArrowClockwiseIcon,
   CheckCircleIcon,
   FolderIcon,
   LightningIcon,
@@ -14,6 +15,7 @@ import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { usePageTitle } from '@/shared/hooks/usePageTitle';
 import { useWorkspaces, type Workspace } from '@/shared/hooks/useWorkspaces';
 import { setCreateModeSeedState } from '@/features/create-mode/model/createModeSeedStore';
+import { deriveAgentOSOverviewStreamState } from './agentosOverviewState';
 import './agentos-overview.css';
 
 type WorkspaceState = 'running' | 'attention' | 'failed' | 'idle';
@@ -140,7 +142,7 @@ export function AgentOSOverview() {
   const { t, i18n } = useTranslation('common');
   const appNavigation = useAppNavigation();
   const isMobile = useIsMobile();
-  const { workspaces, isLoading, isConnected, error } = useWorkspaces();
+  const { workspaces, isLoading, isConnected, error, retry } = useWorkspaces();
   const [objective, setObjective] = useState('');
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -174,13 +176,16 @@ export function AgentOSOverview() {
         .slice(0, isMobile ? 5 : 8),
     [isMobile, workspaces]
   );
-  const planeStatus = isLoading
-    ? { label: t('agentosOverview.status.connecting'), tone: 'connecting' }
-    : isConnected && !error
-      ? { label: t('agentosOverview.status.online'), tone: 'online' }
-      : { label: t('agentosOverview.status.offline'), tone: 'offline' };
-  const streamUnavailable = !isLoading && (!isConnected || Boolean(error));
-  const metricsUnavailable = isLoading || streamUnavailable;
+  const streamState = deriveAgentOSOverviewStreamState({
+    isLoading,
+    isConnected,
+    error,
+  });
+  const planeStatus = {
+    label: t(`agentosOverview.status.${streamState.connection}`),
+    tone: streamState.connection,
+  };
+  const { metricsUnavailable, streamUnavailable } = streamState;
   const approvalsUnavailable = metricsUnavailable;
   const locale = i18n.resolvedLanguage === 'es' ? 'es-ES' : 'en-US';
 
@@ -411,6 +416,14 @@ export function AgentOSOverview() {
                 <WarningCircleIcon aria-hidden="true" size={22} />
                 <p>{t('agentosOverview.streamUnavailableTitle')}</p>
                 <span>{t('agentosOverview.streamError')}</span>
+                <button
+                  type="button"
+                  className="agentos-secondary-button"
+                  onClick={retry}
+                >
+                  <ArrowClockwiseIcon aria-hidden="true" size={15} />
+                  {t('agentosOverview.retryStream')}
+                </button>
               </div>
             ) : recentWorkspaces.length === 0 ? (
               <div className="agentos-panel__empty">

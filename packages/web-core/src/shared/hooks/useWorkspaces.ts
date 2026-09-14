@@ -45,6 +45,7 @@ export interface UseWorkspacesResult {
   isLoading: boolean;
   isConnected: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 // State shape from the WebSocket stream
@@ -150,6 +151,7 @@ export function useWorkspaces(): UseWorkspacesResult {
     isConnected: activeIsConnected,
     isInitialized: activeIsInitialized,
     error: activeError,
+    retry: retryActive,
   } = useJsonPatchWsStream<WorkspacesState>(
     activeEndpoint,
     !streamErrorFixture,
@@ -161,6 +163,7 @@ export function useWorkspaces(): UseWorkspacesResult {
     isConnected: archivedIsConnected,
     isInitialized: archivedIsInitialized,
     error: archivedError,
+    retry: retryArchived,
   } = useJsonPatchWsStream<WorkspacesState>(
     archivedEndpoint,
     !streamErrorFixture,
@@ -234,6 +237,10 @@ export function useWorkspaces(): UseWorkspacesResult {
 
   // Combined error (show first error if any)
   const error = activeError || archivedError;
+  const retry = useCallback(() => {
+    retryActive();
+    retryArchived();
+  }, [retryActive, retryArchived]);
 
   if (streamErrorFixture) {
     return {
@@ -244,6 +251,7 @@ export function useWorkspaces(): UseWorkspacesResult {
       // error precedence: a stream error must still render as degraded.
       isConnected: true,
       error: 'QA fixture: workspace stream unavailable',
+      retry,
     };
   }
 
@@ -253,5 +261,6 @@ export function useWorkspaces(): UseWorkspacesResult {
     isLoading,
     isConnected,
     error,
+    retry,
   };
 }

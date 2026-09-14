@@ -464,6 +464,10 @@
   font-size: 11px;
 }
 
+.agentos-panel__empty .agentos-secondary-button {
+  margin-top: 6px;
+}
+
 .agentos-signal-list {
   display: flex;
   flex-direction: column;

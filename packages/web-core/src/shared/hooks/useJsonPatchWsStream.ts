@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { produce } from 'immer';
 import type { Operation } from 'rfc6902';
 import { applyUpsertPatch } from '@/shared/lib/jsonPatch';
@@ -34,6 +34,7 @@ interface UseJsonPatchStreamResult<T> {
   isConnected: boolean;
   isInitialized: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -261,10 +262,33 @@ export const useJsonPatchWsStream = <T extends object>(
   const isInitializedForCurrentEndpoint =
     isInitialized && initializedForEndpointRef.current === endpoint;
 
+  const retry = useCallback(() => {
+    if (retryTimerRef.current) {
+      window.clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = null;
+    }
+
+    if (wsRef.current) {
+      const ws = wsRef.current;
+      ws.onopen = null;
+      ws.onmessage = null;
+      ws.onerror = null;
+      ws.onclose = null;
+      ws.close();
+      wsRef.current = null;
+    }
+
+    retryAttemptsRef.current = 0;
+    finishedRef.current = false;
+    setError(null);
+    setRetryNonce((nonce) => nonce + 1);
+  }, []);
+
   return {
     data,
     isConnected,
     isInitialized: isInitializedForCurrentEndpoint,
     error,
+    retry,
   };
 };

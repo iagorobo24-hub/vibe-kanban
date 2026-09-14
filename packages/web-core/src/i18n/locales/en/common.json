@@ -1117,6 +1117,7 @@
     "newWorkspace": "New",
     "loadingWorkspaces": "Loading workspaces…",
     "streamUnavailableTitle": "Workspace data is unavailable.",
+    "retryStream": "Retry connection",
     "emptyTitle": "No active workspaces yet.",
     "emptyDescription": "Prepare an execution to create the first one.",
     "signals": "SIGNALS",
