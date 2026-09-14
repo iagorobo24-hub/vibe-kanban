@@ -2756,6 +2756,17 @@ mod tests {
     use super::*;
     use crate::logs::utils::{EntryIndexProvider, patch::extract_normalized_entry_from_patch};
 
+    /// Worktree root for path-stripping tests, as a forward-slash string under the
+    /// host temp dir. A drive-less literal like `/tmp/test-worktree` parses as
+    /// *relative* on Windows, which skips the stripping these tests exercise.
+    fn test_worktree() -> String {
+        let prefix = std::env::temp_dir()
+            .display()
+            .to_string()
+            .replace('\\', "/");
+        format!("{prefix}/vibe-kanban-test-worktree")
+    }
+
     fn patches_to_entries(patches: &[json_patch::Patch]) -> Vec<NormalizedEntry> {
         patches
             .iter()
@@ -2905,30 +2916,28 @@ mod tests {
     #[test]
     fn test_ls_tool_content_extraction() {
         // Test LS with path
+        let worktree = test_worktree();
         let ls_data = ClaudeToolData::LS {
-            path: "/tmp/test-worktree/components".to_string(),
+            path: format!("{worktree}/components"),
         };
 
-        let action_type = ClaudeLogProcessor::extract_action_type(&ls_data, "/tmp/test-worktree");
-        let result = ClaudeLogProcessor::generate_concise_content(
-            &ls_data,
-            &action_type,
-            "/tmp/test-worktree",
-        );
+        let action_type = ClaudeLogProcessor::extract_action_type(&ls_data, &worktree);
+        let result =
+            ClaudeLogProcessor::generate_concise_content(&ls_data, &action_type, &worktree);
 
         assert_eq!(result, "List directory: components");
     }
 
     #[test]
     fn test_path_relative_conversion() {
+        let worktree = test_worktree();
         // Test with relative path (should remain unchanged)
-        let relative_result = make_path_relative("src/main.rs", "/tmp/test-worktree");
+        let relative_result = make_path_relative("src/main.rs", &worktree);
         assert_eq!(relative_result, "src/main.rs");
 
         // Test with absolute path (should become relative if possible)
-        let test_worktree = "/tmp/test-worktree";
-        let absolute_path = format!("{test_worktree}/src/main.rs");
-        let absolute_result = make_path_relative(&absolute_path, test_worktree);
+        let absolute_path = format!("{worktree}/src/main.rs");
+        let absolute_result = make_path_relative(&absolute_path, &worktree);
         assert_eq!(absolute_result, "src/main.rs");
     }
 
@@ -3002,18 +3011,21 @@ mod tests {
 
     #[test]
     fn test_amp_tool_aliases_create_file_and_edit_file() {
+        let worktree = test_worktree();
         // Amp "create_file" should deserialize into Write with alias field "path"
-        let assistant_with_create = r#"{
+        let assistant_with_create = format!(
+            r#"{{
             "type":"assistant",
-            "message":{
+            "message":{{
                 "role":"assistant",
                 "content":[
-                    {"type":"tool_use","id":"t1","name":"create_file","input":{"path":"/tmp/work/src/new.txt","content":"hello"}}
+                    {{"type":"tool_use","id":"t1","name":"create_file","input":{{"path":"{worktree}/src/new.txt","content":"hello"}}}}
                 ]
-            }
-        }"#;
-        let parsed: ClaudeJson = serde_json::from_str(assistant_with_create).unwrap();
-        let entries = normalize(&parsed, "/tmp/work");
+            }}
+        }}"#
+        );
+        let parsed: ClaudeJson = serde_json::from_str(&assistant_with_create).unwrap();
+        let entries = normalize(&parsed, &worktree);
         assert_eq!(entries.len(), 1);
         match &entries[0].entry_type {
             NormalizedEntryType::ToolUse { action_type, .. } => match action_type {
@@ -3024,17 +3036,19 @@ mod tests {
         }
 
         // Amp "edit_file" should deserialize into Edit with aliases for path/old_str/new_str
-        let assistant_with_edit = r#"{
+        let assistant_with_edit = format!(
+            r#"{{
             "type":"assistant",
-            "message":{
+            "message":{{
                 "role":"assistant",
                 "content":[
-                    {"type":"tool_use","id":"t2","name":"edit_file","input":{"path":"/tmp/work/README.md","old_str":"foo","new_str":"bar"}}
+                    {{"type":"tool_use","id":"t2","name":"edit_file","input":{{"path":"{worktree}/README.md","old_str":"foo","new_str":"bar"}}}}
                 ]
-            }
-        }"#;
-        let parsed_edit: ClaudeJson = serde_json::from_str(assistant_with_edit).unwrap();
-        let entries = normalize(&parsed_edit, "/tmp/work");
+            }}
+        }}"#
+        );
+        let parsed_edit: ClaudeJson = serde_json::from_str(&assistant_with_edit).unwrap();
+        let entries = normalize(&parsed_edit, &worktree);
         assert_eq!(entries.len(), 1);
         match &entries[0].entry_type {
             NormalizedEntryType::ToolUse { action_type, .. } => match action_type {
