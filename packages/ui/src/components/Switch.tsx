@@ -25,6 +25,7 @@ const Switch = React.forwardRef<
   <SwitchPrimitives.Root
     ref={ref}
     className={cn(switchRootClassName, className)}
+    data-agentos-primitive="switch"
     {...props}
   >
     <SwitchPrimitives.Thumb className={switchThumbClassName} />

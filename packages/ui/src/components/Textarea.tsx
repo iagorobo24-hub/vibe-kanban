@@ -9,9 +9,10 @@ const Textarea = React.forwardRef<
   return (
     <textarea
       className={cn(
-        'flex min-h-[80px] w-full bg-transparent border px-3 py-2 text-sm ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+        'agentos-textarea-primitive flex min-h-[80px] w-full bg-transparent border px-3 py-2 text-sm ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
+      data-agentos-primitive="textarea"
       ref={ref}
       {...props}
     />

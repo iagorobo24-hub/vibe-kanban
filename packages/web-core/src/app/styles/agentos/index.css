@@ -2046,6 +2046,91 @@
   width: 2.5rem;
 }
 
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive) {
+  background: var(--agentos-bg);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive)::placeholder {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive):focus {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-accent);
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 12%);
+}
+
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive):disabled {
+  background: var(--agentos-panel);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.agentos-theme [data-agentos-primitive='checkbox'] {
+  background: var(--agentos-bg);
+  border: 1px solid var(--agentos-border-strong);
+  border-radius: 4px;
+  color: #241b17;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.agentos-theme
+  [data-agentos-primitive='checkbox'][aria-checked='true'] {
+  background: var(--agentos-accent);
+  border-color: var(--agentos-accent);
+}
+
+.agentos-theme
+  [data-agentos-primitive='checkbox']:hover:not(:disabled) {
+  border-color: var(--agentos-accent);
+}
+
+.agentos-theme
+  [data-agentos-primitive='checkbox']:focus-visible,
+.agentos-theme [data-agentos-primitive='switch']:focus-visible {
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 18%);
+}
+
+.agentos-theme [data-agentos-primitive='switch'] {
+  background: var(--agentos-border-strong);
+  border-color: transparent;
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.agentos-theme
+  [data-agentos-primitive='switch'][data-state='checked'] {
+  background: var(--agentos-accent);
+}
+
+.agentos-theme [data-agentos-primitive='switch'] > span {
+  background: var(--agentos-text-muted);
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme
+  [data-agentos-primitive='switch'][data-state='checked']
+  > span {
+  background: #241b17;
+}
+
 .agentos-oauth-button {
   background: var(--agentos-panel-raised);
   border-color: var(--agentos-border);
