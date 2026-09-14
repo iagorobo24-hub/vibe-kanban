@@ -65,10 +65,13 @@
     "openHostWorkspaces": "Open {{name}} workspaces"
   },
   "richTextToolbar": {
+    "undo": "Undo",
     "bold": "Bold (Cmd+B)",
     "italic": "Italic (Cmd+I)",
     "strikethrough": "Strikethrough",
-    "inlineCode": "Inline code (Cmd+E)"
+    "inlineCode": "Inline code (Cmd+E)",
+    "bulletList": "Bullet list",
+    "numberedList": "Numbered list"
   },
   "remoteAuth": {
     "oauthError": "OAuth error: {{error}}",

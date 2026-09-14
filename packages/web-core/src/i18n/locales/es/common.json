@@ -94,10 +94,13 @@
     "openHostWorkspaces": "Abrir espacios de trabajo de {{name}}"
   },
   "richTextToolbar": {
+    "undo": "Deshacer",
     "bold": "Negrita (Cmd+B)",
     "italic": "Cursiva (Cmd+I)",
     "strikethrough": "Tachado",
-    "inlineCode": "Código en línea (Cmd+E)"
+    "inlineCode": "Código en línea (Cmd+E)",
+    "bulletList": "Lista con viñetas",
+    "numberedList": "Lista numerada"
   },
   "remoteAuth": {
     "oauthError": "Error de OAuth: {{error}}",
