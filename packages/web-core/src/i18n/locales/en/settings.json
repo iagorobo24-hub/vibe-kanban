@@ -581,10 +581,62 @@
         "show": "Show pairing code"
       },
       "host": {
-        "label": "Host"
+        "label": "Host",
+        "description": "Allow other devices to remotely control workspaces on this machine.",
+        "title": "Accept incoming connections",
+        "enabled": {
+          "helper": "Allow incoming remote connections to this device."
+        },
+        "hostName": {
+          "label": "Display name",
+          "helper": "How this device appears when pairing. Leave blank for the default.",
+          "placeholder": "<os_type> host (<user_id>)"
+        },
+        "enrollmentCode": {
+          "show": "Generate pairing code",
+          "label": "Pairing code",
+          "helper": "Enter this code on the device you want to connect from.",
+          "loginRequired": "Sign in to generate a pairing code."
+        },
+        "pairedClients": {
+          "title": "Paired devices",
+          "checking": "Polling for changes",
+          "loading": "Loading paired client devices...",
+          "empty": "No devices paired yet.",
+          "remove": "Remove"
+        }
       },
       "client": {
-        "label": "Client"
+        "label": "Client",
+        "description": "Control workspaces on another device by pairing to it with a one-time code.",
+        "title": "Connect to a host",
+        "panelTitle": "Connect to a host",
+        "panelDescription": "Control workspaces on another device by pairing to it with a one-time code.",
+        "pair": {
+          "hostLabel": "Host to pair to",
+          "nameLabel": "How this device appears on that host (optional)",
+          "pairingCodeLabel": "Pairing code from the host",
+          "pairingCodeHelp": "Enter the 6-character code shown on the host you want to connect to.",
+          "confirm": "Pair this device"
+        },
+        "connectedHosts": {
+          "title": "Connected hosts"
+        }
+      },
+      "signInRequired": "Sign in to pair and manage remote connections.",
+      "docsLink": "Read docs",
+      "remoteCloudHost": {
+        "hostPlaceholder": "Select a host",
+        "loadingHosts": "Loading hosts...",
+        "noHostsAvailable": "No hosts available",
+        "hostsUnavailable": "No hosts found yet. Make sure another device is running as a host and has paired with this account.",
+        "namePlaceholder": "{{defaultClientName}}",
+        "hostRequired": "Select a host to connect.",
+        "hostMissing": "Selected host is no longer available.",
+        "connectSuccess": "Remote Cloud Host connected.",
+        "removeConfirm": "Remove this remote cloud host from local settings?",
+        "empty": "No hosts paired yet.",
+        "remove": "Remove"
       }
     },
     "remoteProjects": {

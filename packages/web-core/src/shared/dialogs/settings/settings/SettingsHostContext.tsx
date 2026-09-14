@@ -146,7 +146,7 @@ export function SettingsHostProvider({
         id: host.id,
         apiHostId: host.id,
         label: host.name,
-        description: t('settings.hostPicker.remoteHost', 'Remote host'),
+        description: t('settings.hostPicker.remoteHost'),
         status:
           host.status === 'online' ? ('online' as const) : ('offline' as const),
         kind: 'remote',

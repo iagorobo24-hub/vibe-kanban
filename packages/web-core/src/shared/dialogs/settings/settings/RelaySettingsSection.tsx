@@ -78,22 +78,16 @@ function RelayRoleChooser({
         role="host"
         selected={selectedRole === 'host'}
         icon={<BroadcastIcon className="size-icon-sm" weight="bold" />}
-        label={t('settings.relay.host.label', 'Host')}
-        description={t(
-          'settings.relay.host.description',
-          'Allow other devices to remotely control workspaces on this machine.'
-        )}
+        label={t('settings.relay.host.label')}
+        description={t('settings.relay.host.description')}
         onSelect={onSelect}
       />
       <RelayRoleChoice
         role="client"
         selected={selectedRole === 'client'}
         icon={<DesktopIcon className="size-icon-sm" weight="bold" />}
-        label={t('settings.relay.client.label', 'Client')}
-        description={t(
-          'settings.relay.client.panelDescription',
-          'Control workspaces on another device by pairing to it with a one-time code.'
-        )}
+        label={t('settings.relay.client.label')}
+        description={t('settings.relay.client.panelDescription')}
         onSelect={onSelect}
       />
     </div>
@@ -169,14 +163,11 @@ function SignInPrompt() {
   return (
     <div className="space-y-3">
       <InlineNotice>
-        {t(
-          'settings.relay.signInRequired',
-          'Sign in to pair and manage remote connections.'
-        )}
+        {t('settings.relay.signInRequired')}
       </InlineNotice>
       <PrimaryButton
         variant="secondary"
-        value={t('settings.remoteProjects.loginRequired.action', 'Sign in')}
+        value={t('settings.remoteProjects.loginRequired.action')}
         onClick={() => void OAuthDialog.show({})}
       >
         <SignInIcon className="size-icon-xs mr-1" weight="bold" />
@@ -351,7 +342,7 @@ function LocalRelaySettingsSectionContent({
 
       {selectedRole === 'host' && (
         <SettingsCard
-          title={t('settings.relay.host.title', 'Accept incoming connections')}
+          title={t('settings.relay.host.title')}
           headerAction={
             <a
               href={RELAY_REMOTE_CONTROL_DOCS_URL}
@@ -359,17 +350,14 @@ function LocalRelaySettingsSectionContent({
               rel="noreferrer"
               className="text-sm text-brand hover:underline"
             >
-              {t('settings.relay.docsLink', 'Read docs')}
+              {t('settings.relay.docsLink')}
             </a>
           }
         >
           <SettingsCheckbox
             id="relay-enabled"
             label={t('settings.relay.enabled.label')}
-            description={t(
-              'settings.relay.host.enabled.helper',
-              'Allow incoming remote connections to this device.'
-            )}
+            description={t('settings.relay.host.enabled.helper')}
             checked={draft?.relay_enabled ?? true}
             onChange={(checked) => updateDraft({ relay_enabled: checked })}
           />
@@ -377,11 +365,8 @@ function LocalRelaySettingsSectionContent({
           {draft?.relay_enabled && (
             <div className="mt-2 space-y-3">
               <SettingsField
-                label={t('settings.relay.hostName.label', 'Display name')}
-                description={t(
-                  'settings.relay.hostName.helper',
-                  'How this device appears when pairing. Leave blank for the default.'
-                )}
+                label={t('settings.relay.hostName.label')}
+                description={t('settings.relay.hostName.helper')}
               >
                 <SettingsInput
                   value={draft.host_nickname ?? ''}
@@ -390,10 +375,7 @@ function LocalRelaySettingsSectionContent({
                       host_nickname: value === '' ? null : value,
                     })
                   }
-                  placeholder={t(
-                    'settings.relay.hostName.placeholder',
-                    '<os_type> host (<user_id>)'
-                  )}
+                  placeholder={t('settings.relay.hostName.placeholder')}
                 />
               </SettingsField>
 
@@ -403,8 +385,7 @@ function LocalRelaySettingsSectionContent({
                     <PrimaryButton
                       variant="secondary"
                       value={t(
-                        'settings.relay.host.enrollmentCode.show',
-                        'Generate pairing code'
+                        'settings.relay.host.enrollmentCode.show'
                       )}
                       onClick={handleShowEnrollmentCode}
                       disabled={enrollmentLoading}
@@ -420,8 +401,7 @@ function LocalRelaySettingsSectionContent({
                     <div className="space-y-1">
                       <label className="text-sm font-medium text-normal">
                         {t(
-                          'settings.relay.host.enrollmentCode.label',
-                          'Pairing code'
+                          'settings.relay.host.enrollmentCode.label'
                         )}
                       </label>
                       <div className="relative bg-secondary border border-border rounded-sm px-base py-half font-mono text-lg text-high tracking-widest select-all pr-10">
@@ -437,8 +417,7 @@ function LocalRelaySettingsSectionContent({
                           }}
                           className="absolute right-1 top-1/2 -translate-y-1/2 p-1 text-low hover:text-normal transition-colors rounded-sm"
                           aria-label={t(
-                            'settings.relay.enrollmentCode.copy',
-                            'Copy code'
+                            'settings.relay.enrollmentCode.copy'
                           )}
                         >
                           {enrollmentCodeCopied ? (
@@ -453,8 +432,7 @@ function LocalRelaySettingsSectionContent({
                       </div>
                       <p className="text-sm text-low">
                         {t(
-                          'settings.relay.host.enrollmentCode.helper',
-                          'Enter this code on the device you want to connect from.'
+                          'settings.relay.host.enrollmentCode.helper'
                         )}
                       </p>
                     </div>
@@ -464,8 +442,7 @@ function LocalRelaySettingsSectionContent({
                     <div className="flex items-center justify-between gap-2">
                       <h4 className="text-sm font-medium text-normal">
                         {t(
-                          'settings.relay.host.pairedClients.title',
-                          'Paired devices'
+                          'settings.relay.host.pairedClients.title'
                         )}
                       </h4>
                       <div className="flex items-center gap-2 text-xs text-low">
@@ -475,8 +452,7 @@ function LocalRelaySettingsSectionContent({
                         />
                         <span>
                           {t(
-                            'settings.relay.host.pairedClients.checking',
-                            'Polling for changes'
+                            'settings.relay.host.pairedClients.checking'
                           )}
                         </span>
                       </div>
@@ -490,8 +466,7 @@ function LocalRelaySettingsSectionContent({
                         />
                         <span>
                           {t(
-                            'settings.relay.host.pairedClients.loading',
-                            'Loading paired client devices...'
+                            'settings.relay.host.pairedClients.loading'
                           )}
                         </span>
                       </div>
@@ -512,8 +487,7 @@ function LocalRelaySettingsSectionContent({
                     {!pairedClientsLoading && pairedClients.length === 0 && (
                       <div className="rounded-sm border border-border bg-secondary/30 p-3 text-sm text-low">
                         {t(
-                          'settings.relay.host.pairedClients.empty',
-                          'No devices paired yet.'
+                          'settings.relay.host.pairedClients.empty'
                         )}
                       </div>
                     )}
@@ -537,8 +511,7 @@ function LocalRelaySettingsSectionContent({
                             <PrimaryButton
                               variant="tertiary"
                               value={t(
-                                'settings.relay.host.pairedClients.remove',
-                                'Remove'
+                                'settings.relay.host.pairedClients.remove'
                               )}
                               onClick={() =>
                                 void handleRemovePairedClient(client.client_id)
@@ -564,15 +537,13 @@ function LocalRelaySettingsSectionContent({
                 <div className="space-y-2">
                   <p className="text-sm text-low">
                     {t(
-                      'settings.relay.host.enrollmentCode.loginRequired',
-                      'Sign in to generate a pairing code.'
+                      'settings.relay.host.enrollmentCode.loginRequired'
                     )}
                   </p>
                   <PrimaryButton
                     variant="secondary"
                     value={t(
-                      'settings.remoteProjects.loginRequired.action',
-                      'Sign in'
+                      'settings.remoteProjects.loginRequired.action'
                     )}
                     onClick={() => void OAuthDialog.show({})}
                   >
@@ -587,7 +558,7 @@ function LocalRelaySettingsSectionContent({
 
       {selectedRole === 'client' && (
         <SettingsCard
-          title={t('settings.relay.client.panelTitle', 'Connect to a host')}
+          title={t('settings.relay.client.panelTitle')}
           headerAction={
             <a
               href={RELAY_REMOTE_CONTROL_DOCS_URL}
@@ -595,7 +566,7 @@ function LocalRelaySettingsSectionContent({
               rel="noreferrer"
               className="text-sm text-brand hover:underline"
             >
-              {t('settings.relay.docsLink', 'Read docs')}
+              {t('settings.relay.docsLink')}
             </a>
           }
         >
@@ -630,11 +601,8 @@ function RemoteRelaySettingsSectionContent({
   if (!isSignedIn) {
     return (
       <SettingsCard
-        title={t('settings.relay.client.title', 'Connect to a host')}
-        description={t(
-          'settings.relay.client.description',
-          'Control workspaces on another device by pairing to it with a one-time code.'
-        )}
+        title={t('settings.relay.client.title')}
+        description={t('settings.relay.client.description')}
       >
         <SignInPrompt />
       </SettingsCard>
@@ -643,11 +611,8 @@ function RemoteRelaySettingsSectionContent({
 
   return (
     <SettingsCard
-      title={t('settings.relay.client.panelTitle', 'Connect to a host')}
-      description={t(
-        'settings.relay.client.panelDescription',
-        'Control workspaces on another device by pairing to it with a one-time code.'
-      )}
+      title={t('settings.relay.client.panelTitle')}
+      description={t('settings.relay.client.panelDescription')}
       headerAction={
         <a
           href={RELAY_REMOTE_CONTROL_DOCS_URL}
@@ -655,7 +620,7 @@ function RemoteRelaySettingsSectionContent({
           rel="noreferrer"
           className="text-sm text-brand hover:underline"
         >
-          {t('settings.relay.docsLink', 'Read docs')}
+          {t('settings.relay.docsLink')}
         </a>
       }
     >

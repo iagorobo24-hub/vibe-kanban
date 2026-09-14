@@ -569,10 +569,62 @@
         "show": "Mostrar código de vinculación"
       },
       "host": {
-        "label": "Host"
+        "label": "Host",
+        "description": "Permite que otros dispositivos controlen de forma remota los workspaces de este equipo.",
+        "title": "Aceptar conexiones entrantes",
+        "enabled": {
+          "helper": "Permite conexiones remotas entrantes a este equipo."
+        },
+        "hostName": {
+          "label": "Nombre visible",
+          "helper": "Así aparece este equipo al vincularlo. Déjalo vacío para usar el valor predeterminado.",
+          "placeholder": "Host <tipo_de_sistema> (<id_de_usuario>)"
+        },
+        "enrollmentCode": {
+          "show": "Generar código de vinculación",
+          "label": "Código de vinculación",
+          "helper": "Introduce este código en el dispositivo desde el que quieres conectarte.",
+          "loginRequired": "Inicia sesión para generar un código de vinculación."
+        },
+        "pairedClients": {
+          "title": "Dispositivos vinculados",
+          "checking": "Comprobando cambios",
+          "loading": "Cargando dispositivos cliente vinculados...",
+          "empty": "Todavía no hay dispositivos vinculados.",
+          "remove": "Quitar"
+        }
       },
       "client": {
-        "label": "Cliente"
+        "label": "Cliente",
+        "description": "Controla los workspaces de otro equipo vinculándote a él con un código de un solo uso.",
+        "title": "Conectar con un host",
+        "panelTitle": "Conectar con un host",
+        "panelDescription": "Controla los workspaces de otro equipo vinculándote a él con un código de un solo uso.",
+        "pair": {
+          "hostLabel": "Host al que vincularse",
+          "nameLabel": "Cómo aparece este dispositivo en ese host (opcional)",
+          "pairingCodeLabel": "Código de vinculación del host",
+          "pairingCodeHelp": "Introduce el código de 6 caracteres que aparece en el host al que quieres conectarte.",
+          "confirm": "Vincular este dispositivo"
+        },
+        "connectedHosts": {
+          "title": "Hosts conectados"
+        }
+      },
+      "signInRequired": "Inicia sesión para vincular y gestionar conexiones remotas.",
+      "docsLink": "Leer documentación",
+      "remoteCloudHost": {
+        "hostPlaceholder": "Seleccionar un host",
+        "loadingHosts": "Cargando hosts...",
+        "noHostsAvailable": "No hay hosts disponibles",
+        "hostsUnavailable": "Todavía no se han encontrado hosts. Asegúrate de que otro equipo esté funcionando como host y se haya vinculado con esta cuenta.",
+        "namePlaceholder": "{{defaultClientName}}",
+        "hostRequired": "Selecciona un host al que conectarte.",
+        "hostMissing": "El host seleccionado ya no está disponible.",
+        "connectSuccess": "Host remoto conectado correctamente.",
+        "removeConfirm": "¿Quieres quitar este host remoto de la configuración local?",
+        "empty": "Todavía no hay hosts vinculados.",
+        "remove": "Quitar"
       },
       "overview": {
         "available": "Disponible",

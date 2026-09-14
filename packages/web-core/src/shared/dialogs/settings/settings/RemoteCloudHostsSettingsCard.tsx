@@ -169,8 +169,7 @@ export function RemoteCloudHostsSettingsCardContent({
     if (!selectedHostId) {
       setErrorMessage(
         t(
-          'settings.relay.remoteCloudHost.hostRequired',
-          'Select a host to connect.'
+          'settings.relay.remoteCloudHost.hostRequired'
         )
       );
       return;
@@ -182,8 +181,7 @@ export function RemoteCloudHostsSettingsCardContent({
     if (!selectedHost) {
       setErrorMessage(
         t(
-          'settings.relay.remoteCloudHost.hostMissing',
-          'Selected host is no longer available.'
+          'settings.relay.remoteCloudHost.hostMissing'
         )
       );
       return;
@@ -208,8 +206,7 @@ export function RemoteCloudHostsSettingsCardContent({
       }
       setSuccessMessage(
         t(
-          'settings.relay.remoteCloudHost.connectSuccess',
-          'Remote Cloud Host connected.'
+          'settings.relay.remoteCloudHost.connectSuccess'
         )
       );
       resetForm();
@@ -221,8 +218,7 @@ export function RemoteCloudHostsSettingsCardContent({
   const handleRemove = async (hostId: string) => {
     const confirmed = window.confirm(
       t(
-        'settings.relay.remoteCloudHost.removeConfirm',
-        'Remove this remote cloud host from local settings?'
+        'settings.relay.remoteCloudHost.removeConfirm'
       )
     );
 
@@ -277,30 +273,26 @@ export function RemoteCloudHostsSettingsCardContent({
       )}
 
       <SettingsField
-        label={t('settings.relay.client.pair.hostLabel', 'Host to pair to')}
+        label={t('settings.relay.client.pair.hostLabel')}
       >
         <SettingsSelect
           value={selectedHostId}
           options={relayHostOptions}
           onChange={setSelectedHostId}
-          placeholder={t(
-            'settings.relay.remoteCloudHost.hostPlaceholder',
+          placeholder={
             relayHostsLoading
-              ? 'Loading hosts...'
+              ? t('settings.relay.remoteCloudHost.loadingHosts')
               : pairableRelayHosts.length === 0
-                ? 'No hosts available'
-                : 'Select a host'
-          )}
+                ? t('settings.relay.remoteCloudHost.noHostsAvailable')
+                : t('settings.relay.remoteCloudHost.hostPlaceholder')
+          }
           disabled={relayHostsLoading || relayHostOptions.length === 0}
         />
       </SettingsField>
 
       {!relayHostsLoading && pairableRelayHosts.length === 0 && (
         <p className="text-sm text-low">
-          {t(
-            'settings.relay.remoteCloudHost.hostsUnavailable',
-            'No hosts found yet. Make sure another device is running as a host and has paired with this account.'
-          )}
+          {t('settings.relay.remoteCloudHost.hostsUnavailable')}
         </p>
       )}
 
@@ -308,8 +300,7 @@ export function RemoteCloudHostsSettingsCardContent({
         <>
           <SettingsField
             label={t(
-              'settings.relay.client.pair.nameLabel',
-              'How this device appears on that host (optional)'
+              'settings.relay.client.pair.nameLabel'
             )}
           >
             <SettingsInput
@@ -317,19 +308,17 @@ export function RemoteCloudHostsSettingsCardContent({
               onChange={setHostName}
               placeholder={t(
                 'settings.relay.remoteCloudHost.namePlaceholder',
-                defaultClientName
+                { defaultClientName }
               )}
             />
           </SettingsField>
 
           <SettingsField
             label={t(
-              'settings.relay.client.pair.pairingCodeLabel',
-              'Pairing code from the host'
+              'settings.relay.client.pair.pairingCodeLabel'
             )}
             description={t(
-              'settings.relay.client.pair.pairingCodeHelp',
-              'Enter the 6-character code shown on the host you want to connect to.'
+              'settings.relay.client.pair.pairingCodeHelp'
             )}
           >
             <PairingCodeInput value={pairingCode} onChange={setPairingCode} />
@@ -338,8 +327,7 @@ export function RemoteCloudHostsSettingsCardContent({
           <div className="flex items-center gap-2">
             <PrimaryButton
               value={t(
-                'settings.relay.client.pair.confirm',
-                'Pair this device'
+                'settings.relay.client.pair.confirm'
               )}
               onClick={() => void handleConnect()}
               disabled={!canSubmitPairing}
@@ -358,16 +346,14 @@ export function RemoteCloudHostsSettingsCardContent({
           <div className="space-y-2">
             <span className="text-sm font-medium text-normal">
               {t(
-                'settings.relay.client.connectedHosts.title',
-                'Connected hosts'
+                'settings.relay.client.connectedHosts.title'
               )}
             </span>
 
             {!isLoading && connectedHosts.length === 0 && (
               <div className="rounded-sm border border-border bg-secondary/30 p-3 text-sm text-low">
                 {t(
-                  'settings.relay.remoteCloudHost.empty',
-                  'No hosts paired yet.'
+                  'settings.relay.remoteCloudHost.empty'
                 )}
               </div>
             )}
@@ -410,8 +396,7 @@ export function RemoteCloudHostsSettingsCardContent({
                       <PrimaryButton
                         variant="tertiary"
                         value={t(
-                          'settings.relay.remoteCloudHost.remove',
-                          'Remove'
+                          'settings.relay.remoteCloudHost.remove'
                         )}
                         onClick={() => void handleRemove(host.id)}
                         disabled={isRemoving}
