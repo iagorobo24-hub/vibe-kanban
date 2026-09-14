@@ -46,10 +46,27 @@ import {
   getMobileTabPanelId,
   type MobileTabId,
 } from '@vibe/ui/components/Navbar';
+import {
+  getWorkspaceUrlPanelFromLayout,
+  resolveWorkspacePanelUrlOverride,
+  type WorkspacePanelUrlChangeOptions,
+  type WorkspaceUrlPanel,
+} from './workspacePanelUrlState';
 
 const WORKSPACES_GUIDE_ID = 'workspaces-guide';
 
-export function WorkspacesLayout() {
+type WorkspacesLayoutProps = {
+  urlPanel?: WorkspaceUrlPanel;
+  onUrlPanelChange?: (
+    panel: WorkspaceUrlPanel,
+    options: WorkspacePanelUrlChangeOptions
+  ) => void;
+};
+
+export function WorkspacesLayout({
+  urlPanel,
+  onUrlPanelChange,
+}: WorkspacesLayoutProps = {}) {
   const appNavigation = useAppNavigation();
   const {
     workspaceId,
@@ -115,7 +132,7 @@ export function WorkspacesLayout() {
       : 'create-mode-seed-default';
 
   const isMobile = useIsMobile();
-  const [mobileTab] = useMobileActiveTab();
+  const [mobileTab, setMobileTab] = useMobileActiveTab();
   const mainContainerRef = useRef<WorkspacesMainContainerHandle>(null);
 
   const handleScrollToBottom = useCallback(
@@ -140,7 +157,72 @@ export function WorkspacesLayout() {
     rightMainPanelMode,
     setLeftSidebarVisible,
     setLeftMainPanelVisible,
+    setRightMainPanelMode,
   } = useWorkspacePanelState(isCreateMode ? undefined : workspaceId);
+
+  const isApplyingUrlPanelRef = useRef(false);
+  const lastAppliedUrlKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (isCreateMode || !workspaceId || urlPanel === undefined) {
+      lastAppliedUrlKeyRef.current = null;
+      return;
+    }
+
+    const urlKey = `${workspaceId}:${urlPanel}`;
+    if (lastAppliedUrlKeyRef.current === urlKey) return;
+
+    lastAppliedUrlKeyRef.current = urlKey;
+    const override = resolveWorkspacePanelUrlOverride(urlPanel);
+    if (!override) return;
+
+    const mobileTabNeedsUpdate = mobileTab !== override.mobileTab;
+    const rightPanelNeedsUpdate =
+      rightMainPanelMode !== override.rightMainPanelMode;
+
+    if (!mobileTabNeedsUpdate && !rightPanelNeedsUpdate) {
+      isApplyingUrlPanelRef.current = false;
+      return;
+    }
+
+    isApplyingUrlPanelRef.current = true;
+    if (mobileTabNeedsUpdate) setMobileTab(override.mobileTab);
+    if (rightPanelNeedsUpdate) {
+      setRightMainPanelMode(override.rightMainPanelMode);
+    }
+  }, [
+    isCreateMode,
+    mobileTab,
+    rightMainPanelMode,
+    setMobileTab,
+    setRightMainPanelMode,
+    urlPanel,
+    workspaceId,
+  ]);
+
+  const activeUrlPanel = getWorkspaceUrlPanelFromLayout({
+    isMobile,
+    mobileTab,
+    rightMainPanelMode,
+    currentUrlPanel: urlPanel,
+  });
+
+  useEffect(() => {
+    if (isCreateMode || !workspaceId || !onUrlPanelChange) return;
+
+    if (isApplyingUrlPanelRef.current) {
+      if (activeUrlPanel === urlPanel) {
+        isApplyingUrlPanelRef.current = false;
+      }
+      return;
+    }
+
+    if (activeUrlPanel === urlPanel) return;
+
+    onUrlPanelChange(activeUrlPanel, {
+      replace: urlPanel === undefined,
+    });
+  }, [activeUrlPanel, isCreateMode, onUrlPanelChange, urlPanel, workspaceId]);
 
   const {
     config,
