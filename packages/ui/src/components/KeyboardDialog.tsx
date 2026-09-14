@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 
 import { cn } from "../lib/cn";
 import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
+import { useDialogScrollLock } from "../lib/useDialogScrollLock";
 
 const DIALOG_SCOPE = "dialog";
 const KANBAN_SCOPE = "kanban";
@@ -46,17 +47,7 @@ const Dialog = React.forwardRef<
   );
 
   useDialogFocusTrap(dialogRef, !!open);
-
-  React.useEffect(() => {
-    if (!open) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open]);
+  useDialogScrollLock(!!open);
 
   // Manage dialog scope when open/closed
   React.useEffect(() => {

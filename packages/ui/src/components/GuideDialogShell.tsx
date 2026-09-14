@@ -1,7 +1,8 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import { CaretLeftIcon, XIcon } from "@phosphor-icons/react";
 import { cn } from "../lib/cn";
 import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
+import { useDialogScrollLock } from "../lib/useDialogScrollLock";
 
 export interface GuideDialogTopic {
   id: string;
@@ -33,8 +34,10 @@ export function GuideDialogShell({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mobileShowContent, setMobileShowContent] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const dialogTitleId = useId();
 
   useDialogFocusTrap(dialogRef, topics.length > 0);
+  useDialogScrollLock(topics.length > 0);
 
   if (topics.length === 0) {
     return null;
@@ -59,6 +62,10 @@ export function GuideDialogShell({
           // Desktop: centered with fixed size
           "md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
         )}
+        style={{
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+        }}
       >
         <div
           ref={dialogRef}
@@ -74,7 +81,7 @@ export function GuideDialogShell({
           )}
           role="dialog"
           aria-modal="true"
-          aria-labelledby="agentos-guide-dialog-title"
+          aria-labelledby={dialogTitleId}
         >
           {/* Sidebar - hidden on mobile when showing content */}
           <div
@@ -171,7 +178,7 @@ export function GuideDialogShell({
             </button>
             <div className="p-6 pt-4 md:pt-6 flex-1">
               <h2
-                id="agentos-guide-dialog-title"
+                id={dialogTitleId}
                 className="text-xl font-semibold text-high mb-4 pr-8"
               >
                 {selectedTopic.title}

@@ -15,6 +15,7 @@ import {
 import { isMac, getModifierKey } from '@/shared/lib/platform';
 import { Tooltip } from '@vibe/ui/components/Tooltip';
 import { useDialogFocusTrap } from '@vibe/ui/lib/useDialogFocusTrap';
+import { useDialogScrollLock } from '@vibe/ui/lib/useDialogScrollLock';
 
 interface ShortcutItem {
   keys: string | string[];
@@ -206,6 +207,7 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
   const dialogRef = useRef<HTMLDivElement | null>(null);
 
   useDialogFocusTrap(dialogRef, true);
+  useDialogScrollLock(true);
 
   const handleClose = useCallback(() => {
     modal.hide();

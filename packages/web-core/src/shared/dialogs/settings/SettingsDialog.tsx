@@ -26,6 +26,8 @@ import {
 } from './settings/SettingsHostContext';
 import { SettingsMachineUserSystemProvider } from './settings/SettingsMachineUserSystemProvider';
 import { ConfirmDialog } from '@vibe/ui/components/ConfirmDialog';
+import { useDialogFocusTrap } from '@vibe/ui/lib/useDialogFocusTrap';
+import { useDialogScrollLock } from '@vibe/ui/lib/useDialogScrollLock';
 
 export interface SettingsDialogProps {
   initialSection?: SettingsSectionType;
@@ -190,6 +192,10 @@ function SettingsDialogContent({
     initialSection === resolvedInitialSection
   );
   const isConfirmingRef = useRef(false);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  useDialogFocusTrap(dialogRef, true);
+  useDialogScrollLock(true);
 
   const handleCloseWithConfirmation = useCallback(async () => {
     if (isConfirmingRef.current) return;
@@ -266,6 +272,7 @@ function SettingsDialogContent({
       >
         {/* Dialog content - handles animation */}
         <div
+          ref={dialogRef}
           className={cn(
             'agentos-settings-dialog h-full w-full flex overflow-hidden',
             'bg-panel/95 backdrop-blur-sm shadow-lg',
@@ -275,6 +282,10 @@ function SettingsDialogContent({
             // Desktop: fixed size with rounded corners
             'md:w-[900px] md:h-[700px] md:rounded-sm md:border md:border-border/50'
           )}
+          style={{
+            paddingTop: 'env(safe-area-inset-top)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+          }}
           role="dialog"
           aria-modal="true"
           aria-labelledby="agentos-settings-title"

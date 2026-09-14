@@ -1,7 +1,9 @@
-import { type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useRef, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-import { cn } from '../lib/cn';
+import { cn } from "../lib/cn";
+import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
+import { useDialogScrollLock } from "../lib/useDialogScrollLock";
 
 interface MobileDrawerProps {
   open: boolean;
@@ -14,40 +16,46 @@ export function MobileDrawer({
   open,
   onClose,
   children,
-  ariaLabel = 'AgentOS navigation',
+  ariaLabel = "AgentOS navigation",
 }: MobileDrawerProps) {
+  const drawerRef = useRef<HTMLDivElement | null>(null);
+
+  useDialogFocusTrap(drawerRef, open);
+  useDialogScrollLock(open);
+
   return createPortal(
     <>
       {/* Backdrop overlay */}
       <div
         data-tauri-drag-region
         className={cn(
-          'agentos-mobile-drawer__backdrop',
-          'fixed inset-0 bg-black/50 z-[100]',
-          'transition-opacity duration-200 ease-out',
-          open ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          "agentos-mobile-drawer__backdrop",
+          "fixed inset-0 bg-black/50 z-[100]",
+          "transition-opacity duration-200 ease-out",
+          open ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={onClose}
         aria-hidden="true"
       />
       {/* Drawer panel */}
       <div
+        ref={drawerRef}
         role="dialog"
         aria-modal={open || undefined}
         aria-hidden={!open}
         aria-label={ariaLabel}
         tabIndex={-1}
         className={cn(
-          'agentos-theme agentos-mobile-drawer',
-          'fixed left-0 top-0 h-full w-[280px] bg-primary z-[101]',
-          'pb-[env(safe-area-inset-bottom)]',
-          'transition-transform duration-200 ease-out',
-          open ? 'translate-x-0' : '-translate-x-full pointer-events-none'
+          "agentos-theme agentos-mobile-drawer",
+          "fixed left-0 top-0 h-full w-[280px] bg-primary z-[101]",
+          "pb-[env(safe-area-inset-bottom)]",
+          "transition-transform duration-200 ease-out",
+          open ? "translate-x-0" : "-translate-x-full pointer-events-none",
         )}
       >
         {children}
       </div>
     </>,
-    document.body
+    document.body,
   );
 }
