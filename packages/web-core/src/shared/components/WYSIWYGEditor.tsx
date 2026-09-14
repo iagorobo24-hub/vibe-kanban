@@ -9,6 +9,7 @@ import {
   useEffect,
   type ReactNode,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
@@ -279,6 +280,7 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
     }: WysiwygProps,
     ref: React.ForwardedRef<WYSIWYGEditorRef>
   ) {
+    const { t } = useTranslation('common');
     // Ref to capture the Lexical editor instance for imperative methods
     const editorInstanceRef = useRef<LexicalEditor | null>(null);
 
@@ -531,7 +533,9 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
                       <ContentEditable
                         className={cn('outline-none', className)}
                         aria-label={
-                          disabled ? 'Markdown content' : 'Markdown editor'
+                          disabled
+                            ? t('accessibility.markdownContent')
+                            : t('accessibility.markdownEditor')
                         }
                         onPasteCapture={handlePaste}
                       />
@@ -621,8 +625,16 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
               {/* Copy button */}
               <Button
                 type="button"
-                aria-label={copied ? 'Copied!' : 'Copy as Markdown'}
-                title={copied ? 'Copied!' : 'Copy as Markdown'}
+                aria-label={
+                  copied
+                    ? `${t('actions.copied')}!`
+                    : t('actions.copyAsMarkdown')
+                }
+                title={
+                  copied
+                    ? `${t('actions.copied')}!`
+                    : t('actions.copyAsMarkdown')
+                }
                 variant="icon"
                 size="icon"
                 onClick={handleCopy}

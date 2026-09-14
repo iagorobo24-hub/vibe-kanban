@@ -378,7 +378,7 @@ export function SharedAppLayout() {
                     active={sidebarPreview.isPreviewOpen}
                     onHoverStart={sidebarPreview.handleHandleHoverStart}
                     onHoverEnd={sidebarPreview.handleHandleHoverEnd}
-                    ariaLabel="Workspaces"
+                    ariaLabel={t('workspaces.previewSidebar')}
                   />
                 </div>
               )}

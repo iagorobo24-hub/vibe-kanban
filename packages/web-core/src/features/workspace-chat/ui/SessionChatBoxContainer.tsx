@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { useDropzone } from 'react-dropzone';
 import {
@@ -141,6 +142,8 @@ type SessionChatBoxContainerProps =
   | PlaceholderProps;
 
 export function SessionChatBoxContainer(props: SessionChatBoxContainerProps) {
+  const { t } = useTranslation('tasks');
+
   const {
     mode,
     sessions,
@@ -776,20 +779,27 @@ export function SessionChatBoxContainer(props: SessionChatBoxContainerProps) {
           return [];
         }
 
-        const label = action.label;
+        const label =
+          action.id === 'start-review'
+            ? t('actionsMenu.startReview')
+            : action.label;
+        const tooltip =
+          action.id === 'start-review'
+            ? t('actionsMenu.reviewChangesWithAgent')
+            : getActionTooltip(action, actionCtx);
 
         return [
           {
             id: action.id,
             icon: action.icon,
             label,
-            tooltip: getActionTooltip(action, actionCtx),
+            tooltip,
             disabled: !isActionEnabled(action, actionCtx),
             onClick: () => handleToolbarAction(action),
           },
         ];
       }),
-    [toolbarActionsList, actionCtx, handleToolbarAction]
+    [toolbarActionsList, actionCtx, handleToolbarAction, t]
   );
 
   // Handle approve action

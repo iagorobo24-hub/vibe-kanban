@@ -68,7 +68,12 @@
       "responsiveView": "Responsive view (resizable)",
       "startDevServer": "Start dev server",
       "submitUrl": "Submit URL",
-      "toggleDevTools": "Toggle DevTools"
+      "toggleDevTools": "Toggle DevTools",
+      "goBack": "Go back",
+      "goForward": "Go forward",
+      "showUrl": "Show URL",
+      "selectElement": "Select element as context",
+      "urlPlaceholder": "Enter URL..."
     },
     "loading": {
       "startingServer": "Starting dev server...",
@@ -145,8 +150,19 @@
       "clearReviewComments": "Clear review comments",
       "edit": "Edit message",
       "scrollToPreviousMessage": "Go to previous message",
+      "openWorkspace": "Open workspace",
+      "addPrComments": "Add PR comments",
+      "insertPrComments": "Insert PR comments into message",
       "reset": "Reset",
       "resetTooltip": "Reset to this point"
+    },
+    "placeholders": {
+      "feedback": "Provide feedback for the plan...",
+      "edit": "Edit your message...",
+      "approval": "Provide feedback to request changes...",
+      "differentAnswer": "Type a different answer...",
+      "newConversation": "Start a new conversation...",
+      "continueTask": "Continue working on this task..."
     },
     "approval": {
       "conflictWarning": "Conflicted files need manual resolution",
@@ -204,6 +220,11 @@
   "git": {
     "labels": {
       "taskBranch": "Task Branch"
+    },
+    "repoActions": {
+      "pull-request": "Open pull request",
+      "link-pr": "Link pull request",
+      "merge": "Merge"
     },
     "branch": {
       "current": "current"
@@ -319,7 +340,8 @@
   },
   "actionsMenu": {
     "startReview": "Start Review",
-    "startingReview": "Starting Review..."
+    "startingReview": "Starting Review...",
+    "reviewChangesWithAgent": "Review changes with agent"
   },
   "resolveConflicts": {
     "dialog": {

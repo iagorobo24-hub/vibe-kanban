@@ -22,6 +22,14 @@
     "retry": "Retry",
     "add": "Add"
   },
+  "accessibility": {
+    "collapse": "Collapse {{title}}",
+    "expand": "Expand {{title}}",
+    "collapseMessage": "Collapse message",
+    "expandMessage": "Expand message",
+    "markdownContent": "Markdown content",
+    "markdownEditor": "Markdown editor"
+  },
   "form": {
     "notSpecified": "Not specified",
     "selectOption": "Select an option..."
@@ -190,6 +198,9 @@
     "needsAttention": "Needs Attention",
     "idle": "Idle",
     "running": "Running",
+    "toggleLayout": "Toggle workspace layout",
+    "addWorkspace": "Add workspace",
+    "previewSidebar": "Preview workspaces sidebar",
     "pin": "Pin",
     "unpin": "Unpin",
     "archive": "Archive",
@@ -241,8 +252,57 @@
     "recent": "Recent",
     "other": "Other",
     "devServerPreview": "Dev Server Preview",
+    "git": "Git",
+    "logs": "Logs",
+    "preview": "Preview",
     "terminal": "Terminal",
-    "notes": "Notes"
+    "notes": "Notes",
+    "expandTerminal": "Expand terminal"
+  },
+  "contextBar": {
+    "openInEditor": "Open in {{editor}}",
+    "copyWorkspacePath": "Copy workspace path",
+    "startDevServer": "Start dev server",
+    "stopDevServer": "Stop dev server",
+    "showPreview": "Show preview panel",
+    "hidePreview": "Hide preview panel",
+    "showChanges": "Show changes panel",
+    "hideChanges": "Hide changes panel"
+  },
+  "navbar": {
+    "back": "Back",
+    "openMenu": "Open menu",
+    "projects": "Projects",
+    "board": "Board",
+    "reload": "Reload",
+    "settings": "Settings",
+    "commandBar": "Command bar",
+    "mobileTabs": {
+      "workspaces": "Workspaces",
+      "chat": "Chat",
+      "changes": "Diff",
+      "logs": "Logs",
+      "preview": "Preview",
+      "git": "Git"
+    },
+    "actions": {
+      "archive": "Archive workspace",
+      "unarchive": "Restore workspace",
+      "diffSideBySide": "Switch to side-by-side view",
+      "diffInline": "Switch to inline view",
+      "collapseAllDiffs": "Collapse all diffs",
+      "expandAllDiffs": "Expand all diffs",
+      "toggleLeftSidebar": "Toggle left sidebar",
+      "toggleChat": "Toggle chat panel",
+      "toggleChanges": "Toggle changes panel",
+      "toggleLogs": "Toggle logs panel",
+      "togglePreview": "Toggle preview panel",
+      "toggleRightSidebar": "Toggle right sidebar",
+      "commandBar": "Open command bar",
+      "feedback": "Give feedback",
+      "workspacesGuide": "Workspaces guide",
+      "settings": "Open settings"
+    }
   },
   "notes": {
     "placeholder": "Add notes about this workspace...",
@@ -253,6 +313,7 @@
     "cancel": "Cancel",
     "saveChanges": "Save Changes",
     "copied": "Copied",
+    "copyAsMarkdown": "Copy as Markdown",
     "collapse": "Collapse"
   },
   "comments": {

@@ -86,7 +86,11 @@ function filterNavbarItems(
 function toNavbarSectionItems(
   items: readonly ActionNavbarItem[],
   ctx: ActionVisibilityContext,
-  onExecuteAction: (action: ActionDefinition) => void
+  onExecuteAction: (action: ActionDefinition) => void,
+  getTooltip: (
+    action: ActionDefinition,
+    ctx: ActionVisibilityContext
+  ) => string
 ): NavbarSectionItem[] {
   return items.reduce<NavbarSectionItem[]>((result, item) => {
     if (isDivider(item)) {
@@ -104,7 +108,7 @@ function toNavbarSectionItems(
       id: item.id,
       icon,
       isActive: isActionActive(item, ctx),
-      tooltip: getActionTooltip(item, ctx),
+      tooltip: getTooltip(item, ctx),
       shortcut: item.shortcut,
       disabled: !isActionEnabled(item, ctx),
       onClick: () => onExecuteAction(item),
@@ -157,6 +161,48 @@ export function NavbarContainer({
   // Get action visibility context (includes all state for visibility/active/enabled)
   const actionCtx = useActionVisibilityContext();
 
+  const getNavbarTooltip = useCallback(
+    (action: ActionDefinition, context: ActionVisibilityContext) => {
+      switch (action.id) {
+        case 'archive-workspace':
+          return context.workspaceArchived
+            ? t('navbar.actions.unarchive')
+            : t('navbar.actions.archive');
+        case 'toggle-diff-view-mode':
+          return context.diffViewMode === 'unified'
+            ? t('navbar.actions.diffSideBySide')
+            : t('navbar.actions.diffInline');
+        case 'toggle-all-diffs':
+          return context.isAllDiffsExpanded
+            ? t('navbar.actions.collapseAllDiffs')
+            : t('navbar.actions.expandAllDiffs');
+        case 'toggle-left-sidebar':
+          return t('navbar.actions.toggleLeftSidebar');
+        case 'toggle-left-main-panel':
+          return t('navbar.actions.toggleChat');
+        case 'toggle-changes-mode':
+          return t('navbar.actions.toggleChanges');
+        case 'toggle-logs-mode':
+          return t('navbar.actions.toggleLogs');
+        case 'toggle-preview-mode':
+          return t('navbar.actions.togglePreview');
+        case 'toggle-right-sidebar':
+          return t('navbar.actions.toggleRightSidebar');
+        case 'open-command-bar':
+          return t('navbar.actions.commandBar');
+        case 'feedback':
+          return t('navbar.actions.feedback');
+        case 'workspaces-guide':
+          return t('navbar.actions.workspacesGuide');
+        case 'settings':
+          return t('navbar.actions.settings');
+        default:
+          return getActionTooltip(action, context);
+      }
+    },
+    [t]
+  );
+
   // Action handler - all actions go through the standard executeAction
   const handleExecuteAction = useCallback(
     (action: ActionDefinition) => {
@@ -174,9 +220,10 @@ export function NavbarContainer({
       toNavbarSectionItems(
         filterNavbarItems(NavbarActionGroups.left, actionCtx),
         actionCtx,
-        handleExecuteAction
+        handleExecuteAction,
+        getNavbarTooltip
       ),
-    [actionCtx, handleExecuteAction]
+    [actionCtx, handleExecuteAction, getNavbarTooltip]
   );
 
   const rightItems = useMemo(
@@ -184,9 +231,10 @@ export function NavbarContainer({
       toNavbarSectionItems(
         filterNavbarItems(NavbarActionGroups.right, actionCtx),
         actionCtx,
-        handleExecuteAction
+        handleExecuteAction,
+        getNavbarTooltip
       ),
-    [actionCtx, handleExecuteAction]
+    [actionCtx, handleExecuteAction, getNavbarTooltip]
   );
 
   const navbarTitle = isCreateMode

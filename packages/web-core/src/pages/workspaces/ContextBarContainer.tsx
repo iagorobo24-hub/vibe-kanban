@@ -1,4 +1,5 @@
 import { useMemo, useCallback, type RefObject } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CopyIcon } from '@phosphor-icons/react';
 import {
   ContextBar,
@@ -26,6 +27,8 @@ import type { EditorType } from 'shared/types';
 import { useActionVisibilityContext } from '@/shared/hooks/useActionVisibilityContext';
 import { CopyButton } from '@/shared/components/CopyButton';
 import { isRealMobileDevice } from '@/shared/hooks/useIsMobile';
+import { getIdeName } from '@/shared/lib/ideName';
+import { RIGHT_MAIN_PANEL_MODES } from '@/shared/stores/useUiPreferencesStore';
 
 /**
  * Check if a ContextBarItem is a divider
@@ -153,6 +156,7 @@ export interface ContextBarContainerProps {
 export function ContextBarContainer({
   containerRef,
 }: ContextBarContainerProps) {
+  const { t } = useTranslation('common');
   const { executeAction } = useActions();
   const { config } = useUserSystem();
   const editorType =
@@ -182,7 +186,32 @@ export function ContextBarContainer({
 
         const action = item;
         const enabled = isActionEnabled(action, actionCtx);
-        const tooltip = getActionTooltip(action, actionCtx);
+        const tooltip = (() => {
+          switch (action.id) {
+            case 'open-in-ide':
+              return t('contextBar.openInEditor', {
+                editor: getIdeName(actionCtx.editorType),
+              });
+            case 'copy-workspace-path':
+              return t('contextBar.copyWorkspacePath');
+            case 'toggle-dev-server':
+              return actionCtx.devServerState === 'running'
+                ? t('contextBar.stopDevServer')
+                : t('contextBar.startDevServer');
+            case 'toggle-preview-mode':
+              return actionCtx.rightMainPanelMode ===
+                RIGHT_MAIN_PANEL_MODES.PREVIEW
+                ? t('contextBar.hidePreview')
+                : t('contextBar.showPreview');
+            case 'toggle-changes-mode':
+              return actionCtx.rightMainPanelMode ===
+                RIGHT_MAIN_PANEL_MODES.CHANGES
+                ? t('contextBar.hideChanges')
+                : t('contextBar.showChanges');
+            default:
+              return getActionTooltip(action, actionCtx);
+          }
+        })();
         const shortcut = action.shortcut;
         const iconClassName = getIconClassName(action, actionCtx, !enabled);
         const key = `${prefix}-${action.id}-${index}`;
@@ -225,7 +254,7 @@ export function ContextBarContainer({
         ];
       });
     },
-    [actionCtx, editorType, handleExecuteAction]
+    [actionCtx, editorType, handleExecuteAction, t]
   );
 
   // Filter visible actions and map to render items

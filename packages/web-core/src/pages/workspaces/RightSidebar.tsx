@@ -91,7 +91,7 @@ export const RightSidebar = memo(function RightSidebar({
   const sections: SectionDef[] = useMemo(() => {
     const result: SectionDef[] = [
       {
-        title: 'Git',
+        title: t('common:sections.git'),
         persistKey: PERSIST_KEYS.gitPanelRepositories,
         visible: true,
         expanded: gitExpanded,
@@ -104,7 +104,7 @@ export const RightSidebar = memo(function RightSidebar({
         actions: [],
       },
       {
-        title: 'Terminal',
+        title: t('common:sections.terminal'),
         persistKey: PERSIST_KEYS.terminalSection,
         visible: isTerminalVisible && !isTerminalExpanded,
         expanded: terminalExpanded,
@@ -113,7 +113,7 @@ export const RightSidebar = memo(function RightSidebar({
           {
             icon: ArrowsOutSimpleIcon,
             onClick: expandTerminal,
-            label: 'Expand terminal',
+            label: t('common:sections.expandTerminal'),
           },
         ],
       },
@@ -131,7 +131,7 @@ export const RightSidebar = memo(function RightSidebar({
       case RIGHT_MAIN_PANEL_MODES.CHANGES:
         if (selectedWorkspace) {
           result.unshift({
-            title: 'Changes',
+            title: t('common:sections.changes'),
             persistKey: PERSIST_KEYS.changesSection,
             visible: hasUpperContent,
             expanded: upperExpanded,
@@ -149,7 +149,7 @@ export const RightSidebar = memo(function RightSidebar({
         break;
       case RIGHT_MAIN_PANEL_MODES.LOGS:
         result.unshift({
-          title: 'Logs',
+          title: t('common:sections.logs'),
           persistKey: PERSIST_KEYS.rightPanelprocesses,
           visible: hasUpperContent,
           expanded: upperExpanded,
@@ -160,7 +160,7 @@ export const RightSidebar = memo(function RightSidebar({
       case RIGHT_MAIN_PANEL_MODES.PREVIEW:
         if (selectedWorkspace) {
           result.unshift({
-            title: 'Preview',
+            title: t('common:sections.preview'),
             persistKey: PERSIST_KEYS.rightPanelPreview,
             visible: hasUpperContent,
             expanded: upperExpanded,

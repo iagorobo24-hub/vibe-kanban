@@ -41,6 +41,14 @@
     "retry": "Retry",
     "add": "Agregar"
   },
+  "accessibility": {
+    "collapse": "Contraer {{title}}",
+    "expand": "Expandir {{title}}",
+    "collapseMessage": "Contraer mensaje",
+    "expandMessage": "Expandir mensaje",
+    "markdownContent": "Contenido Markdown",
+    "markdownEditor": "Editor Markdown"
+  },
   "form": {
     "notSpecified": "No especificado",
     "selectOption": "Seleccionar una opción..."
@@ -124,6 +132,9 @@
     "needsAttention": "Necesita Atención",
     "idle": "Inactivo",
     "running": "En Ejecución",
+    "toggleLayout": "Alternar diseño de espacios de trabajo",
+    "addWorkspace": "Añadir espacio de trabajo",
+    "previewSidebar": "Mostrar barra lateral de espacios de trabajo",
     "pin": "Fijar",
     "unpin": "Desfijar",
     "archive": "Archivar",
@@ -152,7 +163,7 @@
       "cannotDeleteOpenPr": "No se puede eliminar la rama mientras el PR está abierto",
       "unlinkFromIssueLabel": "También desvincular del issue"
     },
-    "linkError": "Failed to link workspace"
+    "linkError": "No se pudo vincular el espacio de trabajo"
   },
   "fileTree": {
     "searchPlaceholder": "Buscar archivos...",
@@ -175,8 +186,57 @@
     "recent": "Reciente",
     "other": "Otro",
     "devServerPreview": "Vista previa del servidor de desarrollo",
+    "git": "Git",
+    "logs": "Registros",
+    "preview": "Vista previa",
     "terminal": "Terminal",
-    "notes": "Notas"
+    "notes": "Notas",
+    "expandTerminal": "Expandir terminal"
+  },
+  "contextBar": {
+    "openInEditor": "Abrir en {{editor}}",
+    "copyWorkspacePath": "Copiar ruta del espacio de trabajo",
+    "startDevServer": "Iniciar servidor de desarrollo",
+    "stopDevServer": "Detener servidor de desarrollo",
+    "showPreview": "Mostrar panel de vista previa",
+    "hidePreview": "Ocultar panel de vista previa",
+    "showChanges": "Mostrar panel de cambios",
+    "hideChanges": "Ocultar panel de cambios"
+  },
+  "navbar": {
+    "back": "Atrás",
+    "openMenu": "Abrir menú",
+    "projects": "Proyectos",
+    "board": "Tablero",
+    "reload": "Recargar",
+    "settings": "Ajustes",
+    "commandBar": "Barra de comandos",
+    "mobileTabs": {
+      "workspaces": "Espacios de trabajo",
+      "chat": "Chat",
+      "changes": "Cambios",
+      "logs": "Registros",
+      "preview": "Vista previa",
+      "git": "Git"
+    },
+    "actions": {
+      "archive": "Archivar espacio de trabajo",
+      "unarchive": "Restaurar espacio de trabajo",
+      "diffSideBySide": "Cambiar a vista en paralelo",
+      "diffInline": "Cambiar a vista integrada",
+      "collapseAllDiffs": "Contraer todas las diferencias",
+      "expandAllDiffs": "Expandir todas las diferencias",
+      "toggleLeftSidebar": "Alternar barra lateral izquierda",
+      "toggleChat": "Alternar panel de chat",
+      "toggleChanges": "Alternar panel de cambios",
+      "toggleLogs": "Alternar panel de registros",
+      "togglePreview": "Alternar panel de vista previa",
+      "toggleRightSidebar": "Alternar barra lateral derecha",
+      "commandBar": "Abrir barra de comandos",
+      "feedback": "Enviar comentarios",
+      "workspacesGuide": "Guía de espacios de trabajo",
+      "settings": "Abrir ajustes"
+    }
   },
   "notes": {
     "placeholder": "Agregar notas sobre este espacio de trabajo...",
@@ -187,6 +247,7 @@
     "cancel": "Cancelar",
     "saveChanges": "Guardar cambios",
     "copied": "Copiado",
+    "copyAsMarkdown": "Copiar como Markdown",
     "collapse": "Contraer"
   },
   "comments": {
@@ -438,22 +499,22 @@
     "tags": "Tags",
     "sortBy": "Sort",
     "workspaceSidebar": {
-      "sortDialogTitle": "Sort workspaces",
-      "sortDialogDescription": "Choose how workspaces are ordered in the sidebar.",
-      "sortByLabel": "Sort by",
-      "sortOrderLabel": "Sort order",
-      "sortUpdatedAt": "Updated at",
-      "sortCreatedAt": "Created at",
-      "filterDialogTitle": "Filter workspaces",
-      "filterDialogDescription": "Narrow down workspaces by project and PR state.",
-      "projectFilterLabel": "Project",
+      "sortDialogTitle": "Ordenar espacios de trabajo",
+      "sortDialogDescription": "Elige cómo se ordenan los espacios de trabajo en la barra lateral.",
+      "sortByLabel": "Ordenar por",
+      "sortOrderLabel": "Orden",
+      "sortUpdatedAt": "Actualización",
+      "sortCreatedAt": "Creación",
+      "filterDialogTitle": "Filtrar espacios de trabajo",
+      "filterDialogDescription": "Limita los espacios por proyecto y estado del PR.",
+      "projectFilterLabel": "Proyecto",
       "prFilterLabel": "PR",
-      "prFilterAll": "All",
-      "prFilterHasPr": "Has PR",
-      "prFilterNoPr": "No PR",
-      "noProject": "No project",
-      "sortButtonTitle": "Sort workspaces",
-      "filterButtonTitle": "Filter workspaces"
+      "prFilterAll": "Todos",
+      "prFilterHasPr": "Con PR",
+      "prFilterNoPr": "Sin PR",
+      "noProject": "Sin proyecto",
+      "sortButtonTitle": "Ordenar espacios de trabajo",
+      "filterButtonTitle": "Filtrar espacios de trabajo"
     },
     "sortAscending": "Ascending",
     "sortDescending": "Descending",

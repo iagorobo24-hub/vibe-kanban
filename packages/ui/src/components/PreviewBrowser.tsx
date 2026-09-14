@@ -198,7 +198,9 @@ export function PreviewBrowser({
                       onMobileUrlExpandedChange?.(false);
                     }
                   }}
-                  placeholder={autoDetectedUrl ?? "Enter URL..."}
+                  placeholder={
+                    autoDetectedUrl ?? t("preview.toolbar.urlPlaceholder")
+                  }
                   disabled={!isServerRunning}
                   className={cn(
                     "flex-1 font-mono text-sm bg-transparent border-none outline-none min-w-0",
@@ -237,8 +239,8 @@ export function PreviewBrowser({
                   icon={GlobeIcon}
                   onClick={() => onMobileUrlExpandedChange?.(true)}
                   disabled={!isServerRunning}
-                  aria-label="Show URL"
-                  title="Show URL"
+                  aria-label={t("preview.toolbar.showUrl")}
+                  title={t("preview.toolbar.showUrl")}
                 />
               </IconButtonGroup>
 
@@ -313,8 +315,8 @@ export function PreviewBrowser({
                   onClick={onToggleInspectMode}
                   active={isInspectMode}
                   disabled={!isServerRunning}
-                  aria-label="Select element as context"
-                  title="Select element as context"
+                  aria-label={t("preview.toolbar.selectElement")}
+                  title={t("preview.toolbar.selectElement")}
                 />
                 <IconButtonGroupItem
                   icon={TerminalIcon}
@@ -345,7 +347,9 @@ export function PreviewBrowser({
                       onUrlEscape?.();
                     }
                   }}
-                  placeholder={autoDetectedUrl ?? "Enter URL..."}
+                  placeholder={
+                    autoDetectedUrl ?? t("preview.toolbar.urlPlaceholder")
+                  }
                   disabled={!isServerRunning}
                   className={cn(
                     "flex-1 font-mono text-sm bg-transparent border-none outline-none min-w-0",

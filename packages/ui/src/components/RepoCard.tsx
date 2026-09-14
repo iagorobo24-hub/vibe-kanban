@@ -103,8 +103,11 @@ export function RepoCard({
         if (opt.value === 'merge' && (hasPrOpen || isTargetRemote))
           return false;
         return true;
-      }),
-    [hasPrOpen, hasPrLinked, isTargetRemote]
+      }).map((option) => ({
+        ...option,
+        label: t(`git.repoActions.${option.value}`),
+      })),
+    [hasPrOpen, hasPrLinked, isTargetRemote, t]
   );
 
   // If current selection is unavailable, fall back to the first available option.

@@ -103,13 +103,15 @@ export function WorkspacesSidebarReopenTag({
   ariaLabel,
   className,
 }: WorkspacesSidebarReopenTagProps) {
+  const { t } = useTranslation("common");
+
   return (
     <button
       type="button"
       onMouseEnter={onHoverStart}
       onMouseLeave={onHoverEnd}
-      aria-label={ariaLabel ?? "Preview workspaces sidebar"}
-      title={ariaLabel ?? "Preview workspaces sidebar"}
+      aria-label={ariaLabel ?? t("workspaces.previewSidebar")}
+      title={ariaLabel ?? t("workspaces.previewSidebar")}
       className={cn(
         "group inline-flex h-24 w-4 items-center justify-center rounded-md border border-border bg-secondary/95 shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 cursor-e-resize",
         active ? "bg-panel text-normal" : "text-low hover:text-normal",
@@ -237,12 +239,12 @@ export function WorkspacesSidebar({
       icon: StackIcon,
       onClick: () => onToggleLayoutMode?.(),
       isActive: layoutMode === "accordion",
-      label: "Toggle workspace layout",
+      label: t("common:workspaces.toggleLayout"),
     },
     {
       icon: PlusIcon,
       onClick: () => onAddWorkspace?.(),
-      label: "Add workspace",
+      label: t("common:workspaces.addWorkspace"),
     },
   ];
 

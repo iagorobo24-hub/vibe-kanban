@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Icon } from '@phosphor-icons/react';
 import { CaretDownIcon } from '@phosphor-icons/react';
 import { cn } from '../lib/cn';
@@ -50,6 +51,7 @@ export function CollapsibleSectionHeader({
   children,
   className,
 }: CollapsibleSectionHeaderProps) {
+  const { t } = useTranslation('common');
   const [expanded, setExpanded] = useState(() =>
     getInitialExpanded(persistKey, defaultExpanded)
   );
@@ -129,7 +131,11 @@ export function CollapsibleSectionHeader({
       <button
         type="button"
         onClick={() => setExpanded((prev) => !prev)}
-        aria-label={expanded ? `Collapse ${title}` : `Expand ${title}`}
+        aria-label={
+          expanded
+            ? t('accessibility.collapse', { title })
+            : t('accessibility.expand', { title })
+        }
         aria-expanded={expanded}
         className="ml-half shrink-0 rounded-sm border-0 bg-transparent p-half text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
       >
