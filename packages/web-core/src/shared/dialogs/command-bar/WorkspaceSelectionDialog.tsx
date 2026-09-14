@@ -146,7 +146,7 @@ function WorkspaceSelectionContent({
       } catch (err) {
         const errorMessage =
           getLinkWorkspaceErrorMessage(err) ??
-          t('workspaces.linkError', 'Failed to link workspace');
+          t('workspaces.linkError');
 
         await ErrorDialog.show({
           title: t('common:error'),
@@ -199,8 +199,7 @@ function WorkspaceSelectionContent({
         await ErrorDialog.show({
           title: t('common:error'),
           message: t(
-            'workspaces.createDraftError',
-            'Failed to prepare workspace draft. Please try again.'
+            'workspaces.createDraftError'
           ),
           buttonText: t('common:ok'),
         });
@@ -249,14 +248,14 @@ function WorkspaceSelectionContent({
       >
         <div className="flex items-center border-b border-border">
           <CommandInput
-            placeholder={t('kanban.linkWorkspace', 'Link workspace...')}
+            placeholder={t('kanban.linkWorkspace')}
             value={search}
             onValueChange={setSearch}
           />
         </div>
         <CommandList className="min-h-[200px]">
           <CommandEmpty>
-            {t('commandBar.noResults', 'No results found')}
+            {t('commandBar.noResults')}
           </CommandEmpty>
 
           {/* Create new workspace option - stubbed */}
@@ -268,14 +267,14 @@ function WorkspaceSelectionContent({
             >
               <PlusIcon className="h-4 w-4" weight="bold" />
               <span>
-                {t('kanban.createNewWorkspace', 'Create new workspace')}
+                {t('kanban.createNewWorkspace')}
               </span>
             </CommandItem>
           </CommandGroup>
 
           {/* Available workspaces */}
           {displayedWorkspaces.length > 0 && (
-            <CommandGroup heading={t('kanban.workspaces', 'Workspaces')}>
+            <CommandGroup heading={t('kanban.workspaces')}>
               {displayedWorkspaces.map((workspace) => (
                 <CommandItem
                   key={workspace.id}
@@ -308,7 +307,7 @@ function WorkspaceSelectionContent({
           {/* Show count when paginated */}
           {!isSearching && filteredWorkspaces.length > PAGE_SIZE && (
             <div className="px-base py-half text-xs text-low text-center">
-              {t('kanban.showingWorkspaces', 'Showing {{count}} of {{total}}', {
+              {t('kanban.showingWorkspaces', {
                 count: PAGE_SIZE,
                 total: filteredWorkspaces.length,
               })}

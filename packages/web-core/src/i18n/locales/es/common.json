@@ -298,7 +298,8 @@
       "cannotDeleteOpenPr": "No se puede eliminar la rama mientras el PR está abierto",
       "unlinkFromIssueLabel": "También desvincular del issue"
     },
-    "linkError": "No se pudo vincular el espacio de trabajo"
+    "linkError": "No se pudo vincular el espacio de trabajo",
+    "createDraftError": "No se pudo preparar el borrador del espacio de trabajo. Inténtalo de nuevo."
   },
   "fileTree": {
     "searchPlaceholder": "Buscar archivos...",

@@ -358,6 +358,7 @@
     "unlinkError": "Failed to unlink workspace",
     "deleteError": "Failed to delete workspace",
     "linkError": "Failed to link workspace",
+    "createDraftError": "Failed to prepare workspace draft. Please try again.",
     "filesChanged": "{{count}} files",
     "deleteDialog": {
       "title": "Delete Workspace",

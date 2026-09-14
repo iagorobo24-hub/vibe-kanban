@@ -268,13 +268,13 @@ function LinkPrToIssueContent({ issueId }: { issueId: string }) {
   const statusLabel = (status: string) => {
     switch (status) {
       case 'open':
-        return t('linkPrToIssue.status.open', 'Open');
+        return t('linkPrToIssue.status.open');
       case 'merged':
-        return t('linkPrToIssue.status.merged', 'Merged');
+        return t('linkPrToIssue.status.merged');
       case 'closed':
-        return t('linkPrToIssue.status.closed', 'Closed');
+        return t('linkPrToIssue.status.closed');
       default:
-        return t('linkPrToIssue.status.unknown', 'Unknown');
+        return t('linkPrToIssue.status.unknown');
     }
   };
 
@@ -332,7 +332,7 @@ function LinkPrToIssueContent({ issueId }: { issueId: string }) {
           {activeTab === 'url' && (
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label>{t('linkPrToIssue.urlLabel', 'Pull Request URL')}</Label>
+                <Label>{t('linkPrToIssue.urlLabel')}</Label>
                 <Input
                   placeholder={t('linkPrToIssue.urlPlaceholder')}
                   value={prUrl}
@@ -376,7 +376,7 @@ function LinkPrToIssueContent({ issueId }: { issueId: string }) {
                     </span>
                     {prInfo.base_branch && (
                       <span className="text-muted-foreground">
-                        {t('linkPrToIssue.baseBranch', 'Base:')}{' '}
+                        {t('linkPrToIssue.baseBranch')}{' '}
                         {prInfo.base_branch}
                       </span>
                     )}
