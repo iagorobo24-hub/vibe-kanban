@@ -461,6 +461,7 @@
     "closePanel": "Close panel",
     "copyLink": "Copy link",
     "issueTitlePlaceholder": "Issue Title...",
+    "deleteDraft": "Delete draft",
     "issueDescriptionPlaceholder": "Enter task description here...",
     "createDraftWorkspaceImmediately": "Create draft workspace immediately",
     "createDraftWorkspaceDescription": "After creating the issue, open the workspace creation form pre-filled with the issue details",
