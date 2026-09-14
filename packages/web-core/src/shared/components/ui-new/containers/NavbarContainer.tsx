@@ -194,6 +194,8 @@ export function NavbarContainer({
           return t('navbar.actions.feedback');
         case 'workspaces-guide':
           return t('navbar.actions.workspacesGuide');
+        case 'projects-guide':
+          return t('commandBar.actions.projectsGuide');
         case 'settings':
           return t('navbar.actions.settings');
         default:
