@@ -6,6 +6,15 @@
   "gitPanel": {
     "advanced": {
       "placeholder": "e.g acme Corp"
+    },
+    "status": {
+      "loading": "Loading Git status…",
+      "unavailable": "Git status is unavailable. Commit counts and push availability are hidden until it reconnects.",
+      "retry": "Retry Git status"
+    },
+    "empty": {
+      "title": "No repositories in this workspace",
+      "description": "Add a repository in workspace settings to manage branches and pull requests."
     }
   },
   "loading": "Loading tasks…",

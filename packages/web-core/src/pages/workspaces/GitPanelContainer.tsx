@@ -13,6 +13,7 @@ import { GitPanel, type RepoInfo } from '@vibe/ui/components/GitPanel';
 import { Actions } from '@/shared/actions';
 import type { RepoAction } from '@vibe/ui/components/RepoCard';
 import type { Workspace, RepoWithTargetBranch, Merge } from 'shared/types';
+import { deriveGitPanelStatus, findRepoBranchStatus } from './gitPanelState';
 
 export interface GitPanelContainerProps {
   selectedWorkspace: Workspace | undefined;
@@ -33,7 +34,27 @@ export function GitPanelContainer({
 
   // Hooks for branch management (moved from WorkspacesLayout)
   const renameBranch = useRenameBranch(selectedWorkspace?.id);
-  const { data: branchStatus } = useBranchStatus(selectedWorkspace?.id);
+  const {
+    data: branchStatus,
+    error: branchStatusError,
+    isLoading: branchStatusLoading,
+    refetch: refetchBranchStatus,
+  } = useBranchStatus(selectedWorkspace?.id);
+
+  const gitPanelStatus = useMemo(
+    () =>
+      deriveGitPanelStatus({
+        repoIds: repos.map((repo) => repo.id),
+        branchStatus,
+        isLoading: branchStatusLoading,
+        hasError: !!branchStatusError,
+      }),
+    [repos, branchStatus, branchStatusLoading, branchStatusError]
+  );
+
+  // Cached branch data is not authoritative after a failed refresh. Keep the
+  // panel from presenting stale counts as current while the retry is pending.
+  const branchStatusForDisplay = branchStatusError ? undefined : branchStatus;
 
   // Get PR info from workspace summary (available immediately, no git calls needed)
   const summaryPr = useMemo(() => {
@@ -61,7 +82,10 @@ export function GitPanelContainer({
   const repoInfos: RepoInfo[] = useMemo(
     () =>
       repos.map((repo) => {
-        const repoStatus = branchStatus?.find((s) => s.repo_id === repo.id);
+        const repoStatus = findRepoBranchStatus(
+          branchStatusForDisplay,
+          repo.id
+        );
 
         let prNumber: number | undefined;
         let prUrl: string | undefined;
@@ -93,16 +117,16 @@ export function GitPanelContainer({
           id: repo.id,
           name: repo.display_name || repo.name,
           targetBranch: repo.target_branch || 'main',
-          commitsAhead: repoStatus?.commits_ahead ?? 0,
-          commitsBehind: repoStatus?.commits_behind ?? 0,
-          remoteCommitsAhead: repoStatus?.remote_commits_ahead ?? 0,
+          commitsAhead: repoStatus?.commits_ahead ?? undefined,
+          commitsBehind: repoStatus?.commits_behind ?? undefined,
+          remoteCommitsAhead: repoStatus?.remote_commits_ahead ?? undefined,
           prNumber,
           prUrl,
           prStatus,
-          isTargetRemote: repoStatus?.is_target_remote ?? false,
+          isTargetRemote: repoStatus?.is_target_remote,
         };
       }),
-    [repos, branchStatus, summaryPr]
+    [repos, branchStatusForDisplay, summaryPr]
   );
 
   // Track push state per repo: idle, pending, success, or error
@@ -266,6 +290,8 @@ export function GitPanelContainer({
       onPushClick={handlePushClick}
       onMoreClick={handleMoreClick}
       onAddRepo={() => console.log('Add repo clicked')}
+      gitStatus={gitPanelStatus}
+      onRetryGitStatus={() => void refetchBranchStatus()}
     />
   );
 }

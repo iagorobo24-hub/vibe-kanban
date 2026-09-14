@@ -1,16 +1,23 @@
-import { GitBranchIcon } from "@phosphor-icons/react";
+import {
+  ArrowClockwiseIcon,
+  GitBranchIcon,
+  SpinnerGapIcon,
+  WarningCircleIcon,
+} from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { cn } from "../lib/cn";
 import { RepoCard, type RepoAction } from "./RepoCard";
 import { InputField } from "./InputField";
-import { ErrorAlert } from "./ErrorAlert";
+import { PrimaryButton } from "./PrimaryButton";
+
+export type GitPanelStatus = "loading" | "ready" | "unavailable";
 
 export interface RepoInfo {
   id: string;
   name: string;
   targetBranch: string;
-  commitsAhead: number;
-  commitsBehind: number;
+  commitsAhead?: number;
+  commitsBehind?: number;
   remoteCommitsAhead?: number;
   prNumber?: number;
   prUrl?: string;
@@ -33,7 +40,8 @@ interface GitPanelProps {
   onMoreClick?: (repoId: string) => void;
   onAddRepo?: () => void;
   className?: string;
-  error?: string | null;
+  gitStatus?: GitPanelStatus;
+  onRetryGitStatus?: () => void;
 }
 
 export function GitPanel({
@@ -46,7 +54,8 @@ export function GitPanel({
   onPushClick,
   onMoreClick,
   className,
-  error,
+  gitStatus = "ready",
+  onRetryGitStatus,
 }: GitPanelProps) {
   const { t } = useTranslation(["tasks", "common"]);
 
@@ -57,8 +66,56 @@ export function GitPanel({
         className,
       )}
     >
-      {error && <ErrorAlert message={error} />}
+      {gitStatus === "loading" && repos.length > 0 && (
+        <div
+          className="mx-base mt-base flex items-center gap-half rounded-sm border border-border bg-primary px-base py-half text-sm text-low"
+          role="status"
+          aria-live="polite"
+        >
+          <SpinnerGapIcon
+            className="size-icon-sm animate-spin"
+            aria-hidden="true"
+          />
+          <span>{t("gitPanel.status.loading")}</span>
+        </div>
+      )}
+      {gitStatus === "unavailable" && repos.length > 0 && (
+        <div
+          className="mx-base mt-base flex flex-wrap items-center justify-between gap-base rounded-sm border border-warning bg-warning/10 px-base py-half text-sm text-warning"
+          role="alert"
+        >
+          <div className="flex min-w-0 items-center gap-half">
+            <WarningCircleIcon
+              className="size-icon-sm shrink-0"
+              weight="fill"
+              aria-hidden="true"
+            />
+            <span>{t("gitPanel.status.unavailable")}</span>
+          </div>
+          {onRetryGitStatus && (
+            <PrimaryButton
+              variant="tertiary"
+              actionIcon={ArrowClockwiseIcon}
+              onClick={onRetryGitStatus}
+              className="shrink-0"
+            >
+              {t("gitPanel.status.retry")}
+            </PrimaryButton>
+          )}
+        </div>
+      )}
       <div className="gap-base px-base">
+        {repos.length === 0 && (
+          <div className="flex flex-col items-center gap-half px-base py-double text-center text-low">
+            <GitBranchIcon className="size-icon-lg" aria-hidden="true" />
+            <p className="font-medium text-normal">
+              {t("gitPanel.empty.title")}
+            </p>
+            <p className="max-w-xs text-sm">
+              {t("gitPanel.empty.description")}
+            </p>
+          </div>
+        )}
         {repos.map((repo) => (
           <RepoCard
             key={repo.id}

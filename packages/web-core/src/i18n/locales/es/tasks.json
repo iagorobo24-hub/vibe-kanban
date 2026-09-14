@@ -6,6 +6,15 @@
   "gitPanel": {
     "advanced": {
       "placeholder": "ej. acme Corp"
+    },
+    "status": {
+      "loading": "Cargando el estado de Git…",
+      "unavailable": "El estado de Git no está disponible. Se ocultan los conteos y el push hasta recuperar la conexión.",
+      "retry": "Reintentar estado de Git"
+    },
+    "empty": {
+      "title": "No hay repositorios en este espacio de trabajo",
+      "description": "Añade un repositorio desde los ajustes del espacio de trabajo para gestionar ramas y pull requests."
     }
   },
   "actions": {
