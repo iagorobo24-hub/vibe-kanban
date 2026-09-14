@@ -1291,7 +1291,7 @@ export function RemoteProjectsSettingsSection({
                                     <div className="flex items-center gap-1 shrink-0">
                                       {branch.is_current && (
                                         <span className="text-[10px] text-low bg-secondary border border-border rounded-sm px-1">
-                                          current
+                                          {t('common:branchSelector.badges.current')}
                                         </span>
                                       )}
                                       {branch.name === dr.target_branch && (
