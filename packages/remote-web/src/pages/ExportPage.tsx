@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { ExportPage as ExportPageUI } from "@/pages/export/ExportPage";
 import {
   authenticatedFetch,
@@ -21,11 +21,13 @@ export default function ExportPage() {
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [projectsError, setProjectsError] = useState(false);
   const [projectsRetryKey, setProjectsRetryKey] = useState(0);
+  const previousOrgIdRef = useRef<string | null>(null);
 
   // Fetch organizations on mount
   useEffect(() => {
     let cancelled = false;
     async function fetchOrgs() {
+      setOrgsLoading(true);
       setOrgsError(false);
       try {
         const data = await listOrganizations();
@@ -60,10 +62,12 @@ export default function ExportPage() {
       return;
     }
     let cancelled = false;
+    const orgChanged = previousOrgIdRef.current !== selectedOrgId;
+    previousOrgIdRef.current = selectedOrgId;
     async function fetchProjects() {
       setProjectsLoading(true);
       setProjectsError(false);
-      setProjects([]);
+      if (orgChanged) setProjects([]);
       try {
         const data = await listOrganizationProjects(selectedOrgId!);
         if (!cancelled) {
