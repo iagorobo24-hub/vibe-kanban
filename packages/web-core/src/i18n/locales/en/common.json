@@ -98,6 +98,33 @@
     "errorDescription": "There was a problem authenticating your account",
     "tryAgain": "Try Again"
   },
+  "onboardingLanding": {
+    "loading": "Loading…",
+    "warningPrefix": "AgentOS runs AI coding agents with",
+    "warningSuffix": "by default. Always review what agents are doing.",
+    "learnMore": "Learn more",
+    "codingAgent": "Coding Agent",
+    "codeEditor": "Code Editor",
+    "customCommand": "Custom Command",
+    "customCommandPlaceholder": "e.g. code --wait",
+    "notificationSound": "Notification Sound",
+    "soundOptions": {
+      "abstractSound1": "Abstract Sound 1",
+      "abstractSound2": "Abstract Sound 2",
+      "abstractSound3": "Abstract Sound 3",
+      "abstractSound4": "Abstract Sound 4",
+      "cowMooing": "Cow Mooing",
+      "phoneVibration": "Phone Vibration",
+      "rooster": "Rooster",
+      "noSound": "No sound"
+    },
+    "termsPrefix": "By continuing you agree to the",
+    "terms": "terms and conditions",
+    "and": "and",
+    "privacy": "privacy policy",
+    "saving": "Saving…",
+    "continue": "Continue"
+  },
   "onboardingSignIn": {
     "subtitle": "Sign in to continue",
     "signedInAs": "Signed in as {{name}}.",
@@ -106,7 +133,32 @@
     "signedInHeader": "Signed in",
     "skipSignInHeader": "Don't sign in",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "loading": "Loading…",
+    "continuing": "Continuing…",
+    "continue": "Continue",
+    "openingSignIn": "Opening sign in…",
+    "signIn": "Sign in",
+    "openingProvider": "Opening {{provider}}…",
+    "skipSignIn": "I understand, continue without signing in",
+    "authMethodsError": "Failed to load available sign-in methods.",
+    "fallbackAccount": "your account",
+    "features": {
+      "useKanban": "Use kanban board to track issues",
+      "inviteTeam": "Invite team to collaborate",
+      "organiseWork": "Organise work into projects and organizations",
+      "createWorkspaces": "Create workspaces"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "signInDescription": "Sign in to view notifications from your agents and workspaces.",
+    "markAllRead": "Mark all as read",
+    "emptyTitle": "No notifications yet",
+    "emptyDescription": "Updates that need your attention will appear here.",
+    "markRead": "Mark notification as read",
+    "markReadTitle": "Mark as read",
+    "someone": "Someone"
   },
   "toolbar": {
     "sortBy": "Sort by",

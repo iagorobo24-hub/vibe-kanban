@@ -23,22 +23,22 @@ type OnboardingDestination =
 
 const COMPARISON_ROWS = [
   {
-    feature: 'Use kanban board to track issues',
+    feature: 'useKanban',
     signedIn: true,
     skip: false,
   },
   {
-    feature: 'Invite team to collaborate',
+    feature: 'inviteTeam',
     signedIn: true,
     skip: false,
   },
   {
-    feature: 'Organise work into projects and organizations',
+    feature: 'organiseWork',
     signedIn: true,
     skip: false,
   },
   {
-    feature: 'Create workspaces',
+    feature: 'createWorkspaces',
     signedIn: true,
     skip: true,
   },
@@ -236,7 +236,7 @@ export function OnboardingSignInPage() {
   if (loading || !config) {
     return (
       <div className="agentos-theme agentos-page-shell h-screen bg-primary flex items-center justify-center">
-        <p className="text-low">Loading...</p>
+        <p className="text-low">{t('onboardingSignIn.loading')}</p>
       </div>
     );
   }
@@ -274,7 +274,7 @@ export function OnboardingSignInPage() {
               <p className="text-sm text-high">
                 {authMethodsError instanceof Error
                   ? authMethodsError.message
-                  : 'Failed to load available sign-in methods.'}
+                  : t('onboardingSignIn.authMethodsError')}
               </p>
             </div>
           )}
@@ -286,12 +286,16 @@ export function OnboardingSignInPage() {
                   name:
                     loginStatus.profile?.username ||
                     loginStatus.profile?.email ||
-                    'your account',
+                    t('onboardingSignIn.fallbackAccount'),
                 })}
               </p>
               <div className="flex justify-end">
                 <PrimaryButton
-                  value={saving ? 'Continuing...' : 'Continue'}
+                  value={
+                    saving
+                      ? t('onboardingSignIn.continuing')
+                      : t('onboardingSignIn.continue')
+                  }
                   onClick={() =>
                     void finishOnboarding({ method: 'continue_logged_in' })
                   }
@@ -304,7 +308,11 @@ export function OnboardingSignInPage() {
               <section className="agentos-onboarding-signin__actions flex flex-col items-center gap-2">
                 {!isAuthMethodsError && hasLocalAuth ? (
                   <PrimaryButton
-                    value={isAuthDialogOpen ? 'Opening sign in...' : 'Sign in'}
+                    value={
+                      isAuthDialogOpen
+                        ? t('onboardingSignIn.openingSignIn')
+                        : t('onboardingSignIn.signIn')
+                    }
                     onClick={() => void handleDialogSignIn()}
                     disabled={
                       saving || pendingProvider !== null || isAuthDialogOpen
@@ -318,7 +326,9 @@ export function OnboardingSignInPage() {
                         onClick={() => void handleProviderSignIn('github')}
                         disabled={saving || pendingProvider !== null}
                         loading={pendingProvider === 'github'}
-                        loadingText="Opening GitHub..."
+                        loadingText={t('onboardingSignIn.openingProvider', {
+                          provider: 'GitHub',
+                        })}
                       />
                     )}
                     {hasOAuthProviders && oauthProviders.includes('google') && (
@@ -327,7 +337,9 @@ export function OnboardingSignInPage() {
                         onClick={() => void handleProviderSignIn('google')}
                         disabled={saving || pendingProvider !== null}
                         loading={pendingProvider === 'google'}
-                        loadingText="Opening Google..."
+                        loadingText={t('onboardingSignIn.openingProvider', {
+                          provider: 'Google',
+                        })}
                       />
                     )}
                   </>
@@ -381,7 +393,7 @@ export function OnboardingSignInPage() {
                         className={index > 0 ? 'border-t border-border' : ''}
                       >
                         <td className="px-base py-half text-normal align-top">
-                          {row.feature}
+                          {t(`onboardingSignIn.features.${row.feature}`)}
                         </td>
                         <td className="px-base py-half align-top border-l border-border text-center">
                           {row.signedIn ? (
@@ -442,8 +454,8 @@ export function OnboardingSignInPage() {
                 <PrimaryButton
                   value={
                     saving
-                      ? 'Continuing...'
-                      : 'I understand, continue without signing in'
+                      ? t('onboardingSignIn.continuing')
+                      : t('onboardingSignIn.skipSignIn')
                   }
                   variant="tertiary"
                   onClick={() =>

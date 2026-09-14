@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useRouter } from '@tanstack/react-router';
 import { BellIcon, CheckIcon, ChecksIcon } from '@phosphor-icons/react';
+import { useTranslation } from 'react-i18next';
 import { UserAvatar } from '@vibe/ui/components/UserAvatar';
 import { useNotifications } from '@/shared/hooks/useNotifications';
 import { useNotificationMembers } from '@/shared/hooks/useNotificationMembers';
@@ -15,9 +16,11 @@ import { cn } from '@/shared/lib/utils';
 function NotificationMessage({
   segments,
   membersByUserId,
+  someoneLabel,
 }: {
   segments: MessageSegment[];
   membersByUserId: ReturnType<typeof useNotificationMembers>['membersByUserId'];
+  someoneLabel: string;
 }) {
   return (
     <>
@@ -50,7 +53,7 @@ function NotificationMessage({
             />
           );
         }
-        return <span key={i}>Someone</span>;
+        return <span key={i}>{someoneLabel}</span>;
       })}
     </>
   );
@@ -58,6 +61,7 @@ function NotificationMessage({
 
 export function NotificationsPage() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { data, updateMany, enabled, unseenCount, groupedNotifications } =
     useNotifications();
   const { membersByUserId } = useNotificationMembers(data);
@@ -107,10 +111,10 @@ export function NotificationsPage() {
           id="agentos-notifications-auth-title"
           className="agentos-empty-state__title"
         >
-          Notifications
+          {t('notifications.title')}
         </h1>
         <p className="agentos-empty-state__description">
-          Sign in to view notifications from your agents and workspaces.
+          {t('notifications.signInDescription')}
         </p>
       </div>
     );
@@ -119,7 +123,9 @@ export function NotificationsPage() {
   return (
     <div className="agentos-notifications-page flex flex-col h-full overflow-hidden">
       <div className="agentos-notifications-page__header flex items-center justify-between px-double py-base border-b border-border">
-        <h1 className="text-xl font-medium text-high">Notifications</h1>
+        <h1 className="text-xl font-medium text-high">
+          {t('notifications.title')}
+        </h1>
         {unseenCount > 0 && (
           <button
             type="button"
@@ -127,7 +133,7 @@ export function NotificationsPage() {
             className="agentos-notifications-page__mark-all flex min-h-8 items-center gap-1 rounded-sm px-base py-half text-sm text-low transition-colors cursor-pointer hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
             <ChecksIcon size={16} aria-hidden="true" />
-            Mark all as read
+            {t('notifications.markAllRead')}
           </button>
         )}
       </div>
@@ -136,9 +142,11 @@ export function NotificationsPage() {
         {groupedNotifications.length === 0 ? (
           <div className="agentos-notifications-page__empty agentos-empty-state h-full">
             <BellIcon size={32} weight="light" aria-hidden="true" />
-            <p className="agentos-empty-state__title">No notifications yet</p>
+            <p className="agentos-empty-state__title">
+              {t('notifications.emptyTitle')}
+            </p>
             <p className="agentos-empty-state__description">
-              Updates that need your attention will appear here.
+              {t('notifications.emptyDescription')}
             </p>
           </div>
         ) : (
@@ -174,6 +182,7 @@ export function NotificationsPage() {
                       <NotificationMessage
                         segments={getGroupedNotificationSegments(group)}
                         membersByUserId={membersByUserId}
+                        someoneLabel={t('notifications.someone')}
                       />
                     </span>
                     <span className="agentos-notifications-page__time text-sm text-low mt-0.5">
@@ -194,11 +203,13 @@ export function NotificationsPage() {
                       'hover:bg-secondary hover:text-normal',
                       'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
                     )}
-                    aria-label="Mark notification as read"
-                    title="Mark as read"
+                    aria-label={t('notifications.markRead')}
+                    title={t('notifications.markReadTitle')}
                   >
                     <CheckIcon size={14} weight="bold" aria-hidden="true" />
-                    <span className="hidden sm:inline">Mark as read</span>
+                    <span className="hidden sm:inline">
+                      {t('notifications.markReadTitle')}
+                    </span>
                   </button>
                 )}
               </article>
