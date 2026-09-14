@@ -221,13 +221,37 @@ const PendingApprovalEntry = ({
   const { getPendingById } = useApprovals();
   const approvalInfo = getPendingById(pendingStatus.approval_id);
 
-  const { timeLeft } = useApprovalCountdown(
+  const { timeLeft, percent } = useApprovalCountdown(
     approvalInfo?.created_at ?? new Date().toISOString(),
     approvalInfo?.timeout_at ?? new Date().toISOString(),
     hasResponded
   );
 
-  const disabled = isResponding || hasResponded || timeLeft <= 0;
+  const [responseStatus, setResponseStatus] = useState<
+    'approved' | 'denied' | null
+  >(null);
+  const isLoadingDetails = !approvalInfo && !hasResponded;
+  const isExpired = !!approvalInfo && !hasResponded && timeLeft <= 0;
+  const disabled =
+    isResponding || hasResponded || isLoadingDetails || isExpired;
+  const requestedAtLabel = useMemo(() => {
+    if (!approvalInfo?.created_at) return null;
+    const date = new Date(approvalInfo.created_at);
+    if (Number.isNaN(date.getTime())) return null;
+    return new Intl.DateTimeFormat(undefined, {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    }).format(date);
+  }, [approvalInfo?.created_at]);
+  const responseLabel = responseStatus
+    ? responseStatus === 'approved'
+      ? t('approvalEntry.approved')
+      : t('approvalEntry.denied')
+    : isLoadingDetails
+      ? t('approvalEntry.loadingDetails')
+      : isExpired
+        ? t('approvalEntry.expired')
+        : t('approvalEntry.awaitingResponse');
 
   const shouldEnableApprovalsScope = shouldControlScopes && !disabled;
 
@@ -283,6 +307,7 @@ const PendingApprovalEntry = ({
           status,
         });
         setHasResponded(true);
+        setResponseStatus(approved ? 'approved' : 'denied');
         clear();
       } catch (e: unknown) {
         console.error('Approval respond failed:', e);
@@ -336,12 +361,61 @@ const PendingApprovalEntry = ({
   });
 
   return (
-    <div className="agentos-approval-entry relative mt-3">
+    <div
+      className="agentos-approval-entry relative mt-3"
+      role="region"
+      aria-label={t('approvalEntry.requestTitle')}
+    >
       <div className="agentos-approval-entry__body overflow-hidden">
+        <div className="agentos-approval-entry__meta flex flex-wrap items-center gap-x-3 gap-y-1 px-4 pt-3 text-xs">
+          <span className="agentos-approval-entry__title font-medium">
+            {t('approvalEntry.requestTitle')}
+          </span>
+          <span
+            className="agentos-approval-entry__status"
+            role="status"
+            aria-live="polite"
+          >
+            {responseLabel}
+          </span>
+          {approvalInfo?.tool_name && (
+            <span className="agentos-approval-entry__detail">
+              {t('approvalEntry.tool')}: <code>{approvalInfo.tool_name}</code>
+            </span>
+          )}
+          {requestedAtLabel && (
+            <time
+              className="agentos-approval-entry__detail"
+              dateTime={approvalInfo?.created_at}
+            >
+              {t('approvalEntry.requestedAt', { time: requestedAtLabel })}
+            </time>
+          )}
+        </div>
         {children}
 
         <div className="agentos-approval-entry__actions bg-background px-2 py-1.5 text-xs sm:text-sm">
           <TooltipProvider>
+            {approvalInfo && !hasResponded && !isExpired && (
+              <div
+                className="agentos-approval-entry__countdown"
+                role="progressbar"
+                aria-label={t('approvalEntry.timeRemaining', {
+                  seconds: timeLeft,
+                })}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={percent}
+              >
+                <span
+                  className="agentos-approval-entry__countdown-fill"
+                  style={{ transform: `scaleX(${percent / 100})` }}
+                />
+                <span className="agentos-approval-entry__countdown-label">
+                  {t('approvalEntry.timeRemaining', { seconds: timeLeft })}
+                </span>
+              </div>
+            )}
             <div className="agentos-approval-entry__prompt flex items-center justify-between gap-1.5 pl-4">
               <div className="flex items-center gap-1.5">
                 {!isEnteringReason && (

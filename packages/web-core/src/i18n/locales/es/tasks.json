@@ -33,6 +33,15 @@
     "sessionName": "Revisión"
   },
   "approvalEntry": {
+    "requestTitle": "Se requiere aprobación",
+    "loadingDetails": "Cargando detalles de la solicitud",
+    "awaitingResponse": "Esperando tu respuesta",
+    "approved": "Aprobada",
+    "denied": "Denegada",
+    "expired": "Caducada",
+    "tool": "Herramienta",
+    "requestedAt": "Solicitada {{time}}",
+    "timeRemaining": "Quedan {{seconds}} s",
     "question": "¿Quieres aprobar esta solicitud?",
     "approve": "Aprobar",
     "approveRequest": "Aprobar solicitud",

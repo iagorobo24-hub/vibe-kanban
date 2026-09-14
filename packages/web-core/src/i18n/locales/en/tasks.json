@@ -340,6 +340,15 @@
     "sessionName": "Review"
   },
   "approvalEntry": {
+    "requestTitle": "Approval required",
+    "loadingDetails": "Loading request details",
+    "awaitingResponse": "Awaiting your response",
+    "approved": "Approved",
+    "denied": "Denied",
+    "expired": "Expired",
+    "tool": "Tool",
+    "requestedAt": "Requested {{time}}",
+    "timeRemaining": "{{seconds}}s remaining",
     "question": "Would you like to approve this?",
     "approve": "Approve",
     "approveRequest": "Approve request",

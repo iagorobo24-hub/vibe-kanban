@@ -1688,6 +1688,55 @@
   min-height: 2.35rem;
 }
 
+.agentos-approval-entry__meta {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-approval-entry__title {
+  color: var(--agentos-text);
+}
+
+.agentos-approval-entry__status {
+  color: var(--agentos-accent);
+}
+
+.agentos-approval-entry__detail {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-approval-entry__detail code {
+  color: var(--agentos-text-muted);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+}
+
+.agentos-approval-entry__countdown {
+  position: relative;
+  height: 1.5rem;
+  margin: 0.25rem 0.25rem 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+  background: var(--agentos-bg);
+}
+
+.agentos-approval-entry__countdown-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: rgb(224 139 97 / 18%);
+  transition: transform 160ms linear;
+}
+
+.agentos-approval-entry__countdown-label {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: var(--agentos-text-muted);
+  font-size: 0.7rem;
+}
+
 .agentos-approval-entry__question {
   color: var(--agentos-text-muted);
 }
