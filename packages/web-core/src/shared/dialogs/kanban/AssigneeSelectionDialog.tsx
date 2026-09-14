@@ -225,7 +225,7 @@ function AssigneeSelectionContent({
       onCloseAutoFocus={handleCloseAutoFocus}
     >
       <MultiSelectCommandBar
-        title={t('kanban.selectAssignees', 'Select assignees...')}
+        title={t('kanban.selectAssignees')}
         options={options}
         selectedValues={selectedIds}
         onToggle={handleToggle}

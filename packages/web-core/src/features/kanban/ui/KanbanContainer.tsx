@@ -928,12 +928,12 @@ export function KanbanContainer() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={openProjectsGuide}>
-                {t('kanban.openProjectsGuide', 'Projects guide')}
+                {t('kanban.openProjectsGuide')}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => executeAction(Actions.ProjectSettings)}
               >
-                {t('kanban.editProjectSettings', 'Edit project settings')}
+                {t('kanban.editProjectSettings')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

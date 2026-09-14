@@ -31,7 +31,7 @@ function RepoSelector({
   const [open, setOpen] = useState(false);
 
   const effectivePlaceholder =
-    placeholder ?? t('repos.selector.placeholder', 'Select repository');
+    placeholder ?? t('repos.selector.placeholder');
 
   const selectedRepo = repos.find((r) => r.id === selectedRepoId);
 
@@ -67,7 +67,7 @@ function RepoSelector({
       <DropdownMenuContent className="w-64">
         {repos.length === 0 ? (
           <div className="p-2 text-sm text-muted-foreground text-center">
-            {t('repos.selector.empty', 'No repositories available')}
+            {t('repos.selector.empty')}
           </div>
         ) : (
           repos.map((repo) => {
