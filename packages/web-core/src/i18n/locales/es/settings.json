@@ -418,7 +418,7 @@
         "unsavedChanges": "• Tienes cambios sin guardar"
       }
     },
-      "projects": {
+    "projects": {
       "title": "Configuración de Proyectos",
       "description": "Configura scripts y ajustes específicos del proyecto.",
       "loading": "Cargando proyectos...",
@@ -596,7 +596,8 @@
         "projects": "Proyectos"
       },
       "actions": {
-        "addProject": "Añadir proyecto"
+        "addProject": "Añadir proyecto",
+        "menu": "Acciones del proyecto"
       },
       "form": {
         "name": {

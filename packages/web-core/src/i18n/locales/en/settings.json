@@ -604,7 +604,8 @@
         "projects": "Projects"
       },
       "actions": {
-        "addProject": "Add Project"
+        "addProject": "Add Project",
+        "menu": "Project actions"
       },
       "form": {
         "name": {
