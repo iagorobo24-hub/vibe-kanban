@@ -18,7 +18,7 @@ export function buildBranchSelectionPages(
         : i18n.t('commandBar.selectBranch'),
       buildGroups: () => [
         {
-          label: 'Branches',
+          label: i18n.t('commandBar.selectionGroups.branches'),
           items: branches.map((b) => ({
             type: 'branch' as const,
             branch: b,

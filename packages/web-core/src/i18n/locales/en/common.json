@@ -489,6 +489,11 @@
       "message_one": "Are you sure you want to delete this issue? This action cannot be undone.",
       "message_other": "Are you sure you want to delete these {{count}} issues? This action cannot be undone."
     },
+    "deleteSubIssue": {
+      "title": "Delete sub-issue",
+      "message": "Are you sure you want to delete this sub-issue? This action cannot be undone.",
+      "messageWithTitle": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
+    },
     "errors": {
       "attachPullRequest": "Failed to attach pull request"
     }
@@ -507,6 +512,21 @@
     "defaultPlaceholder": "Type a command or search...",
     "selectBranch": "Select Branch",
     "selectBranchFor": "Select Branch for {{repoName}}",
+    "selectionTitles": {
+      "status": "Select status",
+      "priority": "Select priority",
+      "issue": "Select issue",
+      "repository": "Select repository",
+      "addSubIssue": "Add sub-issue",
+      "makeSubIssueOf": "Make sub-issue of"
+    },
+    "selectionGroups": {
+      "statuses": "Statuses",
+      "priority": "Priority",
+      "issues": "Issues",
+      "repositories": "Repositories",
+      "branches": "Branches"
+    },
     "groups": {
       "actions": "Actions",
       "view": "View",
@@ -538,6 +558,7 @@
       "renameWorkspace": "Rename",
       "deleteWorkspace": "Delete",
       "deleteIssue": "Delete issue",
+      "deleteSubIssue": "Delete sub-issue",
       "startReview": "Start Review",
       "spinOffWorkspace": "Spin off workspace",
       "openInIde": "Open in IDE",
@@ -787,6 +808,10 @@
     "failedToUploadFile": "Failed to upload {{filename}}: {{message}}",
     "downloadAttachment": "Download attachment",
     "subIssues": "Sub-issues",
+    "subIssueActions": {
+      "create": "Create sub-issue",
+      "link": "Link sub-issue"
+    },
     "noSubIssues": "No sub-issues",
     "markIndependentIssue": "Mark as independent issue",
     "parentIssue": "Parent",

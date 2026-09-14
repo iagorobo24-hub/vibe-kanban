@@ -1,4 +1,5 @@
 import type { IssuePriority } from 'shared/remote-types';
+import i18n from '@/i18n';
 import type { PriorityItem } from '@/shared/types/selectionItems';
 import type { SelectionPage } from '../SelectionDialog';
 
@@ -6,13 +7,15 @@ export interface PrioritySelectionResult {
   priority: IssuePriority | null;
 }
 
-const PRIORITY_ITEMS: PriorityItem[] = [
-  { id: null, name: 'No priority' },
-  { id: 'urgent', name: 'Urgent' },
-  { id: 'high', name: 'High' },
-  { id: 'medium', name: 'Medium' },
-  { id: 'low', name: 'Low' },
-];
+function getPriorityItems(): PriorityItem[] {
+  return [
+    { id: null, name: i18n.t('kanban.noPriority') },
+    { id: 'urgent', name: i18n.t('kanban.priorityLevels.urgent') },
+    { id: 'high', name: i18n.t('kanban.priorityLevels.high') },
+    { id: 'medium', name: i18n.t('kanban.priorityLevels.medium') },
+    { id: 'low', name: i18n.t('kanban.priorityLevels.low') },
+  ];
+}
 
 export function buildPrioritySelectionPages(): Record<
   string,
@@ -21,11 +24,11 @@ export function buildPrioritySelectionPages(): Record<
   return {
     selectPriority: {
       id: 'selectPriority',
-      title: 'Select Priority',
+      title: i18n.t('commandBar.selectionTitles.priority'),
       buildGroups: () => [
         {
-          label: 'Priority',
-          items: PRIORITY_ITEMS.map((p) => ({
+          label: i18n.t('commandBar.selectionGroups.priority'),
+          items: getPriorityItems().map((p) => ({
             type: 'priority' as const,
             priority: p,
           })),

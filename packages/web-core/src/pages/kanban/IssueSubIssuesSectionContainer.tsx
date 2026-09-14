@@ -1,4 +1,5 @@
 import { useMemo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { DragDropContext, type DropResult } from '@hello-pangea/dnd';
 import { PlusIcon, LinkIcon } from '@phosphor-icons/react';
@@ -27,6 +28,7 @@ interface IssueSubIssuesSectionContainerProps {
 export function IssueSubIssuesSectionContainer({
   issueId,
 }: IssueSubIssuesSectionContainerProps) {
+  const { t } = useTranslation('common');
   const { projectId } = useParams({ strict: false });
   const appNavigation = useAppNavigation();
   const {
@@ -192,12 +194,14 @@ export function IssueSubIssuesSectionContainer({
     async (subIssueId: string) => {
       const subIssue = issues.find((issue) => issue.id === subIssueId);
       const result = await ConfirmDialog.show({
-        title: 'Delete Sub-issue',
+        title: t('actionDialogs.deleteSubIssue.title'),
         message: subIssue
-          ? `Are you sure you want to delete "${subIssue.title}"? This action cannot be undone.`
-          : 'Are you sure you want to delete this sub-issue? This action cannot be undone.',
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
+          ? t('actionDialogs.deleteSubIssue.messageWithTitle', {
+              title: subIssue.title,
+            })
+          : t('actionDialogs.deleteSubIssue.message'),
+        confirmText: t('commandBar.actions.deleteSubIssue'),
+        cancelText: t('confirm.defaultCancel'),
         variant: 'destructive',
       });
 
@@ -205,7 +209,7 @@ export function IssueSubIssuesSectionContainer({
         removeIssue(subIssueId);
       }
     },
-    [issues, removeIssue]
+    [issues, removeIssue, t]
   );
 
   // Actions for the section header
@@ -214,15 +218,15 @@ export function IssueSubIssuesSectionContainer({
       {
         icon: PlusIcon,
         onClick: handleCreateNewSubIssue,
-        label: 'Create sub-issue',
+        label: t('kanban.subIssueActions.create'),
       },
       {
         icon: LinkIcon,
         onClick: handleLinkSubIssue,
-        label: 'Link sub-issue',
+        label: t('kanban.subIssueActions.link'),
       },
     ],
-    [handleCreateNewSubIssue, handleLinkSubIssue]
+    [handleCreateNewSubIssue, handleLinkSubIssue, t]
   );
 
   return (

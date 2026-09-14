@@ -1,4 +1,5 @@
 import type { Issue } from 'shared/remote-types';
+import i18n from '@/i18n';
 import type { SelectionPage } from '../SelectionDialog';
 
 export interface RelationshipSelectionResult {
@@ -11,10 +12,10 @@ export function buildRelationshipSelectionPages(
   return {
     selectRelationshipIssue: {
       id: 'selectRelationshipIssue',
-      title: 'Select Issue',
+      title: i18n.t('commandBar.selectionTitles.issue'),
       buildGroups: () => [
         {
-          label: 'Issues',
+          label: i18n.t('commandBar.selectionGroups.issues'),
           items: issues.map((issue) => ({ type: 'issue' as const, issue })),
         },
       ],

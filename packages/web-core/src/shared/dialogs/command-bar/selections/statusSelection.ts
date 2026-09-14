@@ -1,4 +1,5 @@
 import type { StatusItem } from '@/shared/types/selectionItems';
+import i18n from '@/i18n';
 import type { SelectionPage } from '../SelectionDialog';
 
 export interface StatusSelectionResult {
@@ -11,10 +12,10 @@ export function buildStatusSelectionPages(
   return {
     selectStatus: {
       id: 'selectStatus',
-      title: 'Select Status',
+      title: i18n.t('commandBar.selectionTitles.status'),
       buildGroups: () => [
         {
-          label: 'Statuses',
+          label: i18n.t('commandBar.selectionGroups.statuses'),
           items: statuses.map((s) => ({ type: 'status' as const, status: s })),
         },
       ],

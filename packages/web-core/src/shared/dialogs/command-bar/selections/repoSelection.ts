@@ -1,4 +1,5 @@
 import type { RepoItem } from '@/shared/types/selectionItems';
+import i18n from '@/i18n';
 import type { SelectionPage } from '../SelectionDialog';
 
 export interface RepoSelectionResult {
@@ -11,10 +12,10 @@ export function buildRepoSelectionPages(
   return {
     selectRepo: {
       id: 'selectRepo',
-      title: 'Select Repository',
+      title: i18n.t('commandBar.selectionTitles.repository'),
       buildGroups: () => [
         {
-          label: 'Repositories',
+          label: i18n.t('commandBar.selectionGroups.repositories'),
           items: repos.map((r) => ({ type: 'repo' as const, repo: r })),
         },
       ],

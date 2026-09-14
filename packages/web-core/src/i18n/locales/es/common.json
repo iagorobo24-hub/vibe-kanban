@@ -422,6 +422,11 @@
       "message_one": "¿Seguro que quieres eliminar esta incidencia? Esta acción no se puede deshacer.",
       "message_other": "¿Seguro que quieres eliminar estas {{count}} incidencias? Esta acción no se puede deshacer."
     },
+    "deleteSubIssue": {
+      "title": "Eliminar subtarea",
+      "message": "¿Seguro que quieres eliminar esta subtarea? Esta acción no se puede deshacer.",
+      "messageWithTitle": "¿Seguro que quieres eliminar \"{{title}}\"? Esta acción no se puede deshacer."
+    },
     "errors": {
       "attachPullRequest": "No se ha podido vincular la pull request"
     }
@@ -440,6 +445,21 @@
     "defaultPlaceholder": "Escribe un comando o busca...",
     "selectBranch": "Seleccionar rama",
     "selectBranchFor": "Seleccionar rama para {{repoName}}",
+    "selectionTitles": {
+      "status": "Seleccionar estado",
+      "priority": "Seleccionar prioridad",
+      "issue": "Seleccionar incidencia",
+      "repository": "Seleccionar repositorio",
+      "addSubIssue": "Añadir subtarea",
+      "makeSubIssueOf": "Convertir en subtarea de"
+    },
+    "selectionGroups": {
+      "statuses": "Estados",
+      "priority": "Prioridad",
+      "issues": "Incidencias",
+      "repositories": "Repositorios",
+      "branches": "Ramas"
+    },
     "groups": {
       "actions": "Acciones",
       "view": "Vista",
@@ -471,6 +491,7 @@
       "renameWorkspace": "Renombrar",
       "deleteWorkspace": "Eliminar",
       "deleteIssue": "Eliminar incidencia",
+      "deleteSubIssue": "Eliminar subtarea",
       "startReview": "Iniciar revisión",
       "spinOffWorkspace": "Crear espacio derivado",
       "openInIde": "Abrir en IDE",
@@ -722,6 +743,10 @@
     "failedToUploadFile": "No se pudo subir {{filename}}: {{message}}",
     "downloadAttachment": "Descargar archivo adjunto",
     "subIssues": "Subtareas",
+    "subIssueActions": {
+      "create": "Crear subtarea",
+      "link": "Vincular subtarea"
+    },
     "noSubIssues": "Sin subtareas",
     "markIndependentIssue": "Marcar como problema independiente",
     "parentIssue": "Padre",
