@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowRightIcon,
   ArrowUpRightIcon,
@@ -36,33 +37,55 @@ function getWorkspaceState(workspace: Workspace): WorkspaceState {
   return 'idle';
 }
 
-function getWorkspaceStateCopy(state: WorkspaceState): {
+function getWorkspaceStateCopy(
+  state: WorkspaceState,
+  translate: (key: string) => string
+): {
   label: string;
   tone: string;
 } {
   switch (state) {
     case 'running':
-      return { label: 'En ejecución', tone: 'running' };
+      return {
+        label: translate('agentosOverview.states.running'),
+        tone: 'running',
+      };
     case 'attention':
-      return { label: 'Requiere atención', tone: 'attention' };
+      return {
+        label: translate('agentosOverview.states.attention'),
+        tone: 'attention',
+      };
     case 'failed':
-      return { label: 'Último intento fallido', tone: 'failed' };
+      return {
+        label: translate('agentosOverview.states.failed'),
+        tone: 'failed',
+      };
     case 'idle':
-      return { label: 'En espera', tone: 'idle' };
+      return { label: translate('agentosOverview.states.idle'), tone: 'idle' };
   }
 }
 
-function formatRelativeTime(value: string): string {
+function formatRelativeTime(
+  value: string,
+  translate: (key: string, options?: { count: number }) => string,
+  locale: string
+): string {
   const elapsedMs = Date.now() - new Date(value).getTime();
   const elapsedMinutes = Math.max(0, Math.round(elapsedMs / 60_000));
 
-  if (elapsedMinutes < 1) return 'ahora';
-  if (elapsedMinutes < 60) return `hace ${elapsedMinutes} min`;
+  if (elapsedMinutes < 1) return translate('agentosOverview.relative.now');
+  if (elapsedMinutes < 60) {
+    return translate('agentosOverview.relative.minutes', {
+      count: elapsedMinutes,
+    });
+  }
 
   const elapsedHours = Math.round(elapsedMinutes / 60);
-  if (elapsedHours < 24) return `hace ${elapsedHours} h`;
+  if (elapsedHours < 24) {
+    return translate('agentosOverview.relative.hours', { count: elapsedHours });
+  }
 
-  return new Intl.DateTimeFormat('es-ES', {
+  return new Intl.DateTimeFormat(locale, {
     day: 'numeric',
     month: 'short',
   }).format(new Date(value));
@@ -71,12 +94,16 @@ function formatRelativeTime(value: string): string {
 function WorkspaceRow({
   workspace,
   onOpen,
+  translate,
+  locale,
 }: {
   workspace: Workspace;
   onOpen: (workspaceId: string) => void;
+  translate: (key: string) => string;
+  locale: string;
 }) {
   const state = getWorkspaceState(workspace);
-  const stateCopy = getWorkspaceStateCopy(state);
+  const stateCopy = getWorkspaceStateCopy(state, translate);
 
   return (
     <button
@@ -96,7 +123,7 @@ function WorkspaceRow({
         </span>
       </span>
       <span className="agentos-workspace-row__time">
-        {formatRelativeTime(workspace.updatedAt)}
+        {formatRelativeTime(workspace.updatedAt, translate, locale)}
       </span>
       <ArrowUpRightIcon
         aria-hidden="true"
@@ -109,6 +136,7 @@ function WorkspaceRow({
 }
 
 export function AgentOSOverview() {
+  const { t, i18n } = useTranslation('common');
   const appNavigation = useAppNavigation();
   const isMobile = useIsMobile();
   const { workspaces, isLoading, isConnected, error } = useWorkspaces();
@@ -146,10 +174,11 @@ export function AgentOSOverview() {
     [isMobile, workspaces]
   );
   const planeStatus = isLoading
-    ? { label: 'Conectando…', tone: 'connecting' }
+    ? { label: t('agentosOverview.status.connecting'), tone: 'connecting' }
     : isConnected
-      ? { label: 'Control plane online', tone: 'online' }
-      : { label: 'Sin conexión', tone: 'offline' };
+      ? { label: t('agentosOverview.status.online'), tone: 'online' }
+      : { label: t('agentosOverview.status.offline'), tone: 'offline' };
+  const locale = i18n.resolvedLanguage === 'es' ? 'es-ES' : 'en-US';
 
   const handleOpenWorkspace = useCallback(
     (workspaceId: string) => {
@@ -163,7 +192,7 @@ export function AgentOSOverview() {
       event.preventDefault();
       const trimmedObjective = objective.trim();
       if (!trimmedObjective) {
-        setSubmitError('Describe el objetivo antes de preparar la ejecución.');
+        setSubmitError(t('agentosOverview.objective.emptyError'));
         return;
       }
 
@@ -171,23 +200,22 @@ export function AgentOSOverview() {
       setCreateModeSeedState({ initialPrompt: trimmedObjective });
       appNavigation.goToWorkspacesCreate();
     },
-    [appNavigation, objective]
+    [appNavigation, objective, t]
   );
 
   return (
     <main className="agentos-overview" id="main-content" tabIndex={-1}>
       <a className="agentos-skip-link" href="#agentos-objective">
-        Saltar al objetivo
+        {t('agentosOverview.skipToObjective')}
       </a>
 
       <div className="agentos-overview__shell">
         <header className="agentos-overview__header">
           <div>
-            <p className="agentos-eyebrow">CENTRO DE OPERACIONES</p>
-            <h1>¿Qué quieres coordinar?</h1>
+            <p className="agentos-eyebrow">{t('agentosOverview.eyebrow')}</p>
+            <h1>{t('agentosOverview.title')}</h1>
             <p className="agentos-overview__lede">
-              Prepara una ejecución y supervisa tus agentes desde un mismo
-              lugar.
+              {t('agentosOverview.lede')}
             </p>
           </div>
           <div className="agentos-plane-status" aria-live="polite">
@@ -204,7 +232,7 @@ export function AgentOSOverview() {
               className="agentos-field-label"
               htmlFor="agentos-objective-input"
             >
-              Objetivo de la ejecución
+              {t('agentosOverview.objective.label')}
             </label>
             <textarea
               id="agentos-objective-input"
@@ -216,7 +244,7 @@ export function AgentOSOverview() {
                 setObjective(event.target.value);
                 if (submitError) setSubmitError(null);
               }}
-              placeholder="Describe qué quieres conseguir…"
+              placeholder={t('agentosOverview.objective.placeholder')}
               rows={isMobile ? 4 : 3}
               aria-describedby={
                 submitError ? 'agentos-objective-error' : undefined
@@ -225,20 +253,22 @@ export function AgentOSOverview() {
             <div className="agentos-objective-card__footer">
               <div
                 className="agentos-context"
-                aria-label="Contexto de ejecución"
+                aria-label={t('agentosOverview.objective.contextAriaLabel')}
               >
-                <span className="agentos-context__label">Se preparará con</span>
+                <span className="agentos-context__label">
+                  {t('agentosOverview.objective.contextLabel')}
+                </span>
                 <span className="agentos-context__chip">
                   <FolderIcon aria-hidden="true" size={14} />
-                  Workspace local
+                  {t('agentosOverview.objective.localWorkspace')}
                 </span>
                 <span className="agentos-context__chip">
                   <LightningIcon aria-hidden="true" size={14} />
-                  Agente recomendado
+                  {t('agentosOverview.objective.recommendedAgent')}
                 </span>
               </div>
               <button className="agentos-primary-button" type="submit">
-                Preparar ejecución
+                {t('agentosOverview.objective.submit')}
                 <ArrowRightIcon aria-hidden="true" size={16} weight="bold" />
               </button>
             </div>
@@ -253,44 +283,58 @@ export function AgentOSOverview() {
             )}
           </form>
           <p className="agentos-objective-card__hint">
-            El siguiente paso te permitirá elegir repositorio, rama, agente y
-            modelo antes de lanzar nada.
+            {t('agentosOverview.objective.hint')}
           </p>
         </section>
 
-        <section className="agentos-metrics" aria-label="Resumen operativo">
+        <section
+          className="agentos-metrics"
+          aria-label={t('agentosOverview.metrics.ariaLabel')}
+        >
           <article className="agentos-metric-card">
-            <span className="agentos-metric-card__label">En ejecución</span>
+            <span className="agentos-metric-card__label">
+              {t('agentosOverview.metrics.running')}
+            </span>
             <strong>{runningWorkspaces.length}</strong>
             <span className="agentos-metric-card__detail">
-              workspaces activos
+              {t('agentosOverview.metrics.runningDetail')}
             </span>
           </article>
           <article className="agentos-metric-card">
             <span className="agentos-metric-card__label">
-              Requieren atención
+              {t('agentosOverview.metrics.attention')}
             </span>
             <strong>{attentionWorkspaces.length}</strong>
             <span className="agentos-metric-card__detail">
-              aprobaciones pendientes
+              {t('agentosOverview.metrics.attentionDetail')}
             </span>
           </article>
           <article className="agentos-metric-card">
-            <span className="agentos-metric-card__label">Completadas hoy</span>
+            <span className="agentos-metric-card__label">
+              {t('agentosOverview.metrics.completedToday')}
+            </span>
             <strong>{completedToday}</strong>
             <span className="agentos-metric-card__detail">
-              último proceso correcto
+              {t('agentosOverview.metrics.completedDetail')}
             </span>
           </article>
           <article className="agentos-metric-card">
-            <span className="agentos-metric-card__label">Control plane</span>
+            <span className="agentos-metric-card__label">
+              {t('agentosOverview.metrics.controlPlane')}
+            </span>
             <strong className="agentos-metric-card__status">
               <span
                 className={`agentos-status-dot agentos-status-dot--${planeStatus.tone}`}
               />
-              {isLoading ? 'Conectando…' : isConnected ? 'Online' : 'Offline'}
+              {isLoading
+                ? t('agentosOverview.status.connecting')
+                : isConnected
+                  ? t('agentosOverview.status.onlineShort')
+                  : t('agentosOverview.status.offlineShort')}
             </strong>
-            <span className="agentos-metric-card__detail">streams locales</span>
+            <span className="agentos-metric-card__detail">
+              {t('agentosOverview.metrics.streams')}
+            </span>
           </article>
         </section>
 
@@ -298,8 +342,10 @@ export function AgentOSOverview() {
           <div className="agentos-panel agentos-panel--workspaces">
             <div className="agentos-panel__header">
               <div>
-                <p className="agentos-eyebrow">SUPERVISIÓN</p>
-                <h2>Workspaces recientes</h2>
+                <p className="agentos-eyebrow">
+                  {t('agentosOverview.supervision')}
+                </p>
+                <h2>{t('agentosOverview.recentWorkspaces')}</h2>
               </div>
               <button
                 type="button"
@@ -307,19 +353,19 @@ export function AgentOSOverview() {
                 onClick={() => appNavigation.goToWorkspacesCreate()}
               >
                 <PlusIcon aria-hidden="true" size={15} weight="bold" />
-                Nuevo
+                {t('agentosOverview.newWorkspace')}
               </button>
             </div>
 
             {isLoading ? (
               <p className="agentos-panel__empty" aria-live="polite">
-                Cargando workspaces…
+                {t('agentosOverview.loadingWorkspaces')}
               </p>
             ) : recentWorkspaces.length === 0 ? (
               <div className="agentos-panel__empty">
                 <CheckCircleIcon aria-hidden="true" size={22} />
-                <p>Aún no hay workspaces activos.</p>
-                <span>Prepara una ejecución para crear el primero.</span>
+                <p>{t('agentosOverview.emptyTitle')}</p>
+                <span>{t('agentosOverview.emptyDescription')}</span>
               </div>
             ) : (
               <div className="agentos-workspace-list">
@@ -328,6 +374,8 @@ export function AgentOSOverview() {
                     key={workspace.id}
                     workspace={workspace}
                     onOpen={handleOpenWorkspace}
+                    translate={t}
+                    locale={locale}
                   />
                 ))}
               </div>
@@ -337,8 +385,10 @@ export function AgentOSOverview() {
           <aside className="agentos-panel agentos-panel--activity">
             <div className="agentos-panel__header">
               <div>
-                <p className="agentos-eyebrow">SEÑALES</p>
-                <h2>Estado de la operación</h2>
+                <p className="agentos-eyebrow">
+                  {t('agentosOverview.signals')}
+                </p>
+                <h2>{t('agentosOverview.operationStatus')}</h2>
               </div>
             </div>
             <div className="agentos-signal-list">
@@ -347,8 +397,8 @@ export function AgentOSOverview() {
                   <CheckCircleIcon aria-hidden="true" size={16} weight="fill" />
                 </span>
                 <div>
-                  <strong>Persistencia local</strong>
-                  <span>Estados y sesiones viven en tu instalación.</span>
+                  <strong>{t('agentosOverview.persistence')}</strong>
+                  <span>{t('agentosOverview.persistenceDetail')}</span>
                 </div>
               </div>
               <div className="agentos-signal">
@@ -360,11 +410,13 @@ export function AgentOSOverview() {
                   />
                 </span>
                 <div>
-                  <strong>Control humano</strong>
+                  <strong>{t('agentosOverview.humanControl')}</strong>
                   <span>
                     {attentionWorkspaces.length > 0
-                      ? `${attentionWorkspaces.length} aprobación${attentionWorkspaces.length === 1 ? '' : 'es'} pendiente${attentionWorkspaces.length === 1 ? '' : 's'}.`
-                      : 'No hay aprobaciones pendientes.'}
+                      ? t('agentosOverview.pendingApprovals', {
+                          count: attentionWorkspaces.length,
+                        })
+                      : t('agentosOverview.noPendingApprovals')}
                   </span>
                 </div>
               </div>
@@ -373,8 +425,8 @@ export function AgentOSOverview() {
                   <LightningIcon aria-hidden="true" size={16} weight="fill" />
                 </span>
                 <div>
-                  <strong>Routing</strong>
-                  <span>La selección automática aún no está activada.</span>
+                  <strong>{t('agentosOverview.routing')}</strong>
+                  <span>{t('agentosOverview.routingDetail')}</span>
                 </div>
               </div>
             </div>
@@ -383,18 +435,15 @@ export function AgentOSOverview() {
                 className="agentos-inline-error agentos-inline-error--panel"
                 role="alert"
               >
-                No se pudo actualizar el stream de workspaces. Comprueba el
-                servidor local antes de iniciar una tarea.
+                {t('agentosOverview.streamError')}
               </p>
             )}
           </aside>
         </section>
 
         <footer className="agentos-overview__footer">
-          <span>AgentOS · supervisión local-first</span>
-          <span>
-            Los estados reflejan eventos observados, no inferencias de pantalla.
-          </span>
+          <span>{t('agentosOverview.footerLabel')}</span>
+          <span>{t('agentosOverview.footerEvidence')}</span>
         </footer>
       </div>
     </main>

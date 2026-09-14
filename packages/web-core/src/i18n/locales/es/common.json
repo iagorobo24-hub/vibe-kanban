@@ -533,6 +533,73 @@
     "refreshPage": "Actualizar página",
     "remoteAuthUnavailable": "La autenticación remota no está disponible temporalmente. Es posible que algunas funciones remotas no funcionen hasta que se recupere."
   },
+  "agentosOverview": {
+    "skipToObjective": "Saltar al objetivo de ejecución",
+    "eyebrow": "CENTRO DE OPERACIONES",
+    "title": "¿Qué quieres coordinar?",
+    "lede": "Prepara una ejecución y supervisa tus agentes desde un mismo lugar.",
+    "status": {
+      "connecting": "Conectando…",
+      "online": "Control plane online",
+      "offline": "Sin conexión",
+      "onlineShort": "Online",
+      "offlineShort": "Offline"
+    },
+    "states": {
+      "running": "En ejecución",
+      "attention": "Requiere atención",
+      "failed": "Último intento fallido",
+      "idle": "En espera"
+    },
+    "relative": {
+      "now": "ahora",
+      "minutes_one": "hace {{count}} min",
+      "minutes_other": "hace {{count}} min",
+      "hours_one": "hace {{count}} h",
+      "hours_other": "hace {{count}} h"
+    },
+    "objective": {
+      "label": "Objetivo de la ejecución",
+      "placeholder": "Describe qué quieres conseguir…",
+      "contextAriaLabel": "Contexto de ejecución",
+      "contextLabel": "Se preparará con",
+      "localWorkspace": "Workspace local",
+      "recommendedAgent": "Agente recomendado",
+      "submit": "Preparar ejecución",
+      "hint": "El siguiente paso te permitirá elegir repositorio, rama, agente y modelo antes de lanzar nada.",
+      "emptyError": "Describe el objetivo antes de preparar la ejecución."
+    },
+    "metrics": {
+      "ariaLabel": "Resumen operativo",
+      "running": "En ejecución",
+      "runningDetail": "workspaces activos",
+      "attention": "Requieren atención",
+      "attentionDetail": "aprobaciones pendientes",
+      "completedToday": "Completadas hoy",
+      "completedDetail": "último proceso correcto",
+      "controlPlane": "Control plane",
+      "streams": "streams locales"
+    },
+    "supervision": "SUPERVISIÓN",
+    "recentWorkspaces": "Workspaces recientes",
+    "newWorkspace": "Nuevo",
+    "loadingWorkspaces": "Cargando workspaces…",
+    "emptyTitle": "Aún no hay workspaces activos.",
+    "emptyDescription": "Prepara una ejecución para crear el primero.",
+    "signals": "SEÑALES",
+    "operationStatus": "Estado de la operación",
+    "persistence": "Persistencia local",
+    "persistenceDetail": "Los estados y las sesiones viven en tu instalación.",
+    "humanControl": "Control humano",
+    "pendingApprovals_one": "{{count}} aprobación pendiente.",
+    "pendingApprovals_other": "{{count}} aprobaciones pendientes.",
+    "noPendingApprovals": "No hay aprobaciones pendientes.",
+    "routing": "Routing",
+    "routingDetail": "La selección automática aún no está activada.",
+    "streamError": "No se pudo actualizar el stream de workspaces. Comprueba el servidor local antes de iniciar una tarea.",
+    "footerLabel": "AgentOS · supervisión local-first",
+    "footerEvidence": "Los estados reflejan eventos observados, no inferencias de pantalla."
+  },
   "onboardingLanding": {
     "loading": "Cargando…",
     "warningPrefix": "AgentOS ejecuta agentes de codificación con",

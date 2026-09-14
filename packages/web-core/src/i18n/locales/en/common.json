@@ -599,6 +599,73 @@
     "refreshPage": "Refresh Page",
     "remoteAuthUnavailable": "Remote authentication is temporarily unavailable. Some remote features may not work until it recovers."
   },
+  "agentosOverview": {
+    "skipToObjective": "Skip to execution objective",
+    "eyebrow": "OPERATIONS CENTER",
+    "title": "What do you want to coordinate?",
+    "lede": "Prepare an execution and supervise your agents from one place.",
+    "status": {
+      "connecting": "Connecting…",
+      "online": "Control plane online",
+      "offline": "Disconnected",
+      "onlineShort": "Online",
+      "offlineShort": "Offline"
+    },
+    "states": {
+      "running": "Running",
+      "attention": "Needs attention",
+      "failed": "Last attempt failed",
+      "idle": "Waiting"
+    },
+    "relative": {
+      "now": "now",
+      "minutes_one": "{{count}} min ago",
+      "minutes_other": "{{count}} mins ago",
+      "hours_one": "{{count}} hr ago",
+      "hours_other": "{{count}} hrs ago"
+    },
+    "objective": {
+      "label": "Execution objective",
+      "placeholder": "Describe what you want to achieve…",
+      "contextAriaLabel": "Execution context",
+      "contextLabel": "Will prepare with",
+      "localWorkspace": "Local workspace",
+      "recommendedAgent": "Recommended agent",
+      "submit": "Prepare execution",
+      "hint": "The next step lets you choose a repository, branch, agent and model before launching anything.",
+      "emptyError": "Describe the objective before preparing the execution."
+    },
+    "metrics": {
+      "ariaLabel": "Operational summary",
+      "running": "Running",
+      "runningDetail": "active workspaces",
+      "attention": "Needs attention",
+      "attentionDetail": "pending approvals",
+      "completedToday": "Completed today",
+      "completedDetail": "last successful process",
+      "controlPlane": "Control plane",
+      "streams": "local streams"
+    },
+    "supervision": "SUPERVISION",
+    "recentWorkspaces": "Recent workspaces",
+    "newWorkspace": "New",
+    "loadingWorkspaces": "Loading workspaces…",
+    "emptyTitle": "No active workspaces yet.",
+    "emptyDescription": "Prepare an execution to create the first one.",
+    "signals": "SIGNALS",
+    "operationStatus": "Operation status",
+    "persistence": "Local persistence",
+    "persistenceDetail": "States and sessions live in your installation.",
+    "humanControl": "Human control",
+    "pendingApprovals_one": "{{count}} approval pending.",
+    "pendingApprovals_other": "{{count}} approvals pending.",
+    "noPendingApprovals": "No pending approvals.",
+    "routing": "Routing",
+    "routingDetail": "Automatic selection is not active yet.",
+    "streamError": "The workspace stream could not be updated. Check the local server before starting a task.",
+    "footerLabel": "AgentOS · local-first supervision",
+    "footerEvidence": "States reflect observed events, not screen inferences."
+  },
   "appBar": {
     "local": "Local",
     "localWorkspaces": "Local workspaces",
