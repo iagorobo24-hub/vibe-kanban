@@ -717,7 +717,7 @@
       "placeholder": "Describe qué quieres conseguir…",
       "contextAriaLabel": "Contexto de ejecución",
       "contextLabel": "Se preparará con",
-      "localWorkspace": "Workspace local",
+      "localWorkspace": "Espacio de trabajo local",
       "recommendedAgent": "Agente recomendado",
       "submit": "Preparar ejecución",
       "hint": "El siguiente paso te permitirá elegir repositorio, rama, agente y modelo antes de lanzar nada.",
