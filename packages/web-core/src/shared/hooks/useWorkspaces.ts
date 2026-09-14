@@ -127,8 +127,22 @@ async function fetchWorkspaceSummariesByArchived(
   }
 }
 
+function isAgentOSStreamErrorFixtureEnabled(): boolean {
+  if (!import.meta.env.DEV || typeof window === 'undefined') {
+    return false;
+  }
+
+  return (
+    new URLSearchParams(window.location.search).get('agentosFixture') ===
+    'stream-error'
+  );
+}
+
 export function useWorkspaces(): UseWorkspacesResult {
   const hostId = useHostId();
+  // Development-only fixture for reproducing a degraded workspace stream.
+  // It never opens a socket or runs in a production build.
+  const streamErrorFixture = isAgentOSStreamErrorFixtureEnabled();
 
   // Two separate WebSocket connections: one for active, one for archived
   // No limit param - we fetch all and slice on frontend so backfill works when archiving
@@ -146,7 +160,11 @@ export function useWorkspaces(): UseWorkspacesResult {
     isConnected: activeIsConnected,
     isInitialized: activeIsInitialized,
     error: activeError,
-  } = useJsonPatchWsStream<WorkspacesState>(activeEndpoint, true, initialData);
+  } = useJsonPatchWsStream<WorkspacesState>(
+    activeEndpoint,
+    !streamErrorFixture,
+    initialData
+  );
 
   const {
     data: archivedData,
@@ -155,7 +173,7 @@ export function useWorkspaces(): UseWorkspacesResult {
     error: archivedError,
   } = useJsonPatchWsStream<WorkspacesState>(
     archivedEndpoint,
-    true,
+    !streamErrorFixture,
     initialData
   );
 
@@ -165,7 +183,7 @@ export function useWorkspaces(): UseWorkspacesResult {
     useQuery({
       queryKey: workspaceSummaryKeys.byArchived(false, hostId),
       queryFn: () => fetchWorkspaceSummariesByArchived(false, hostId),
-      enabled: activeIsInitialized,
+      enabled: activeIsInitialized && !streamErrorFixture,
       staleTime: 1000,
       refetchInterval: 15000,
       refetchOnWindowFocus: false,
@@ -178,7 +196,7 @@ export function useWorkspaces(): UseWorkspacesResult {
     useQuery({
       queryKey: workspaceSummaryKeys.byArchived(true, hostId),
       queryFn: () => fetchWorkspaceSummariesByArchived(true, hostId),
-      enabled: archivedIsInitialized,
+      enabled: archivedIsInitialized && !streamErrorFixture,
       staleTime: 1000,
       refetchInterval: 15000,
       refetchOnWindowFocus: false,
@@ -226,6 +244,18 @@ export function useWorkspaces(): UseWorkspacesResult {
 
   // Combined error (show first error if any)
   const error = activeError || archivedError;
+
+  if (streamErrorFixture) {
+    return {
+      workspaces: [],
+      archivedWorkspaces: [],
+      isLoading: false,
+      // Keep the transport flag true so the fixture exercises the UI's
+      // error precedence: a stream error must still render as degraded.
+      isConnected: true,
+      error: 'QA fixture: workspace stream unavailable',
+    };
+  }
 
   return {
     workspaces,
