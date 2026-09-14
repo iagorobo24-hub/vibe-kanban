@@ -37,7 +37,10 @@
     "configuration": "Configuration",
     "selectConfiguration": "Select configuration",
     "attachFile": "Attach file",
-    "closeNavigation": "Close navigation menu"
+    "closeNavigation": "Close navigation menu",
+    "account": "Account",
+    "userAvatar": "User avatar",
+    "agentosNavigation": "AgentOS navigation"
   },
   "relativeTime": {
     "justNow": "just now",

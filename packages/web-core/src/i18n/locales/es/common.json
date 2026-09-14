@@ -56,7 +56,10 @@
     "configuration": "Configuración",
     "selectConfiguration": "Seleccionar configuración",
     "attachFile": "Adjuntar archivo",
-    "closeNavigation": "Cerrar menú de navegación"
+    "closeNavigation": "Cerrar menú de navegación",
+    "account": "Cuenta",
+    "userAvatar": "Avatar del usuario",
+    "agentosNavigation": "Navegación de AgentOS"
   },
   "relativeTime": {
     "justNow": "ahora mismo",

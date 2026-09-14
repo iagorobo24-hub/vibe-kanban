@@ -71,7 +71,7 @@ export function AppBarUserPopover({
               'hover:bg-panel/70',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand'
             )}
-            aria-label="Sign in"
+            aria-label={t('signIn')}
           >
             <UserIcon
               className="size-icon-sm"
@@ -110,12 +110,12 @@ export function AppBarUserPopover({
               'bg-panel text-normal font-medium text-sm',
             (!avatarUrl || avatarError) && 'hover:bg-panel/70'
           )}
-          aria-label="Account"
+          aria-label={t('accessibility.account')}
         >
           {avatarUrl && !avatarError ? (
             <img
               src={avatarUrl}
-              alt="User avatar"
+              alt={t('accessibility.userAvatar')}
               className="w-full h-full object-cover"
               onError={onAvatarError}
             />

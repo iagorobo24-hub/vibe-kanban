@@ -425,6 +425,7 @@ export function SharedAppLayout() {
         <MobileDrawer
           open={isDrawerOpen && isMobile}
           onClose={() => setIsDrawerOpen(false)}
+          ariaLabel={t('accessibility.agentosNavigation')}
         >
           <div className="flex flex-col h-full">
             {/* Header: org name + close button */}
