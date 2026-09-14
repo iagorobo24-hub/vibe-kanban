@@ -713,6 +713,11 @@
   "kanban": {
     "noVisibleStatuses": "Todos los estados están ocultos. Usa la configuración de visualización o cambia a otra pestaña para ver los problemas.",
     "noProjectFound": "No se encontró el proyecto",
+    "projectDataUnavailable": {
+      "title": "Datos del proyecto no disponibles",
+      "description": "No se ha podido cargar el proyecto desde el stream remoto. Los datos no están confirmados, así que el tablero queda en pausa.",
+      "retry": "Reintentar datos del proyecto"
+    },
     "remoteAuthUnavailable": {
       "title": "La conexión remota necesita atención",
       "description": "El plano local sigue disponible, pero no se puede acceder ahora a los proyectos remotos. Actualiza la conexión para reintentarlo.",

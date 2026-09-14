@@ -785,6 +785,11 @@
   "kanban": {
     "noVisibleStatuses": "All statuses are hidden. Use display settings or switch to another tab to view issues.",
     "noProjectFound": "No project found",
+    "projectDataUnavailable": {
+      "title": "Project data unavailable",
+      "description": "The project could not be loaded from the remote stream. Your project data was not confirmed, so the board is paused.",
+      "retry": "Retry project data"
+    },
     "remoteAuthUnavailable": {
       "title": "Remote connection needs attention",
       "description": "The local plane is still available, but remote projects cannot be reached right now. Refresh the connection to retry.",

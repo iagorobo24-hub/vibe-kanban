@@ -27,9 +27,10 @@ import {
   closeKanbanIssueComposer,
 } from '@/shared/stores/useKanbanIssueComposerStore';
 import { getRemoteAuthDegradedMessage } from '@/shared/lib/auth/remoteAuthDegraded';
-import { WifiOff } from 'lucide-react';
+import { RotateCw, WifiOff } from 'lucide-react';
 import { Alert } from '@vibe/ui/components/Alert';
 import { Button } from '@vibe/ui/components/Button';
+import { deriveProjectDataState } from './projectDataState';
 /**
  * Component that registers project mutations with ActionsContext.
  * Must be rendered inside both ActionsProvider and ProjectProvider.
@@ -189,11 +190,16 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
  */
 function ProjectKanbanInner({ projectId }: { projectId: string }) {
   const { t } = useTranslation('common');
-  const { projects, isLoading } = useOrgContext();
+  const { projects, isLoading, error, retry } = useOrgContext();
 
   const project = projects.find((p) => p.id === projectId);
+  const state = deriveProjectDataState({
+    isLoading,
+    hasError: Boolean(error),
+    hasProject: Boolean(project),
+  });
 
-  if (isLoading) {
+  if (state === 'loading') {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <p className="text-low">{t('states.loading')}</p>
@@ -201,7 +207,11 @@ function ProjectKanbanInner({ projectId }: { projectId: string }) {
     );
   }
 
-  if (!project) {
+  if (state === 'unavailable') {
+    return <ProjectDataUnavailablePrompt onRetry={retry} />;
+  }
+
+  if (state === 'missing' || !project) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <p className="text-low">{t('kanban.noProjectFound')}</p>
@@ -215,6 +225,34 @@ function ProjectKanbanInner({ projectId }: { projectId: string }) {
         <ProjectKanbanLayout projectName={project.name} />
       </ProjectMutationsRegistration>
     </ProjectProvider>
+  );
+}
+
+function ProjectDataUnavailablePrompt({ onRetry }: { onRetry: () => void }) {
+  const { t } = useTranslation('common');
+
+  return (
+    <div className="flex h-full w-full items-center justify-center p-base">
+      <Alert
+        variant="default"
+        className="flex max-w-xl items-start gap-3"
+        role="alert"
+      >
+        <WifiOff className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+        <div className="space-y-2">
+          <h2 className="font-medium">
+            {t('kanban.projectDataUnavailable.title')}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {t('kanban.projectDataUnavailable.description')}
+          </p>
+          <Button variant="outline" onClick={onRetry}>
+            <RotateCw className="mr-2 h-4 w-4" aria-hidden="true" />
+            {t('kanban.projectDataUnavailable.retry')}
+          </Button>
+        </div>
+      </Alert>
+    </div>
   );
 }
 
