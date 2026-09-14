@@ -21,6 +21,8 @@ interface UseWorkspaceSessionsResult {
   selectSession: (sessionId: string) => void;
   selectLatestSession: () => void;
   isLoading: boolean;
+  error: string | null;
+  retry: () => void;
   /** Whether user is creating a new session */
   isNewSessionMode: boolean;
   /** Enter new session mode */
@@ -43,11 +45,26 @@ export function useWorkspaceSessions(
   );
   const prevWorkspaceIdRef = useRef(workspaceId);
 
-  const { data: sessions = [], isLoading } = useQuery<Session[]>({
+  const {
+    data: sessionsData,
+    isLoading,
+    isFetched,
+    error: queryError,
+    refetch,
+  } = useQuery<Session[]>({
     queryKey: workspaceSessionKeys.byWorkspace(workspaceId, hostId),
     queryFn: () => sessionsApi.getByWorkspace(workspaceId!),
     enabled: enabled && !!workspaceId,
   });
+  const sessions = sessionsData ?? [];
+  const error = queryError
+    ? queryError instanceof Error
+      ? queryError.message
+      : String(queryError)
+    : null;
+  const retry = useCallback(() => {
+    void refetch();
+  }, [refetch]);
 
   // Combined effect: handle workspace changes and auto-select sessions
   // This replaces two separate effects that had a race condition where the reset
@@ -69,7 +86,9 @@ export function useWorkspaceSessions(
     }
   }, [workspaceId, sessions]);
 
-  const isNewSessionMode = selection?.mode === 'new' || sessions.length === 0;
+  const isNewSessionMode =
+    selection?.mode === 'new' ||
+    (isFetched && !queryError && sessions.length === 0);
   const selectedSessionId =
     selection?.mode === 'existing' ? selection.sessionId : undefined;
 
@@ -99,6 +118,8 @@ export function useWorkspaceSessions(
     selectSession,
     selectLatestSession,
     isLoading,
+    error,
+    retry,
     isNewSessionMode,
     startNewSession,
   };

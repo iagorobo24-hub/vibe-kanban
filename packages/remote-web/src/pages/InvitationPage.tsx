@@ -1,26 +1,34 @@
-import { useEffect, useState } from "react";
-import { useParams } from "@tanstack/react-router";
+import { useEffect, useState } from 'react';
+import { useTranslation } from '@/i18n/useTranslation';
+import { useParams } from '@tanstack/react-router';
 import {
   getInvitation,
   initOAuth,
   type InvitationLookupResponse,
   type OAuthProvider,
-} from "@remote/shared/lib/api";
+} from '@remote/shared/lib/api';
 import {
   generateChallenge,
   generateVerifier,
   storeInvitationToken,
   storeVerifier,
-} from "@remote/shared/lib/pkce";
+} from '@remote/shared/lib/pkce';
+import {
+  RemoteCard,
+  RemotePage,
+  RemoteStatusCard,
+} from '@remote/shared/components/RemotePagePrimitives';
+import { AgentOSWordmark } from '@vibe/web-core/agentos-wordmark';
 
 export default function InvitationPage() {
-  const { token } = useParams({ from: "/invitations/$token/accept" });
+  const { t } = useTranslation('common');
+  const { token } = useParams({ from: '/invitations/$token/accept' });
   const [invitation, setInvitation] = useState<InvitationLookupResponse | null>(
-    null,
+    null
   );
   const [error, setError] = useState<string | null>(null);
   const [pendingProvider, setPendingProvider] = useState<OAuthProvider | null>(
-    null,
+    null
   );
 
   useEffect(() => {
@@ -38,7 +46,9 @@ export default function InvitationPage() {
       } catch (e) {
         if (!cancelled) {
           setError(
-            e instanceof Error ? e.message : "Failed to load invitation",
+            e instanceof Error
+              ? e.message
+              : t('remoteAuth.loadInvitationFailed')
           );
         }
       }
@@ -49,7 +59,7 @@ export default function InvitationPage() {
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [token, t]);
 
   const handleOAuthLogin = async (provider: OAuthProvider) => {
     setPendingProvider(provider);
@@ -69,89 +79,95 @@ export default function InvitationPage() {
       const { authorize_url } = await initOAuth(
         provider,
         callbackUrl.toString(),
-        challenge,
+        challenge
       );
       window.location.assign(authorize_url);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "OAuth init failed");
+      setError(
+        e instanceof Error ? e.message : t('remoteAuth.oauthInitFailed')
+      );
       setPendingProvider(null);
     }
   };
 
   if (error && !invitation) {
     return (
-      <StatusCard title="Invalid or expired invitation" variant="error">
+      <RemoteStatusCard
+        title={t('remoteAuth.invalidInvitation')}
+        variant="error"
+      >
         <p className="mt-base text-sm text-normal">{error}</p>
-      </StatusCard>
+      </RemoteStatusCard>
     );
   }
 
   if (!invitation) {
     return (
-      <StatusCard title="Loading invitation...">
-        <p className="mt-base text-sm text-low">Please wait.</p>
-      </StatusCard>
+      <RemoteStatusCard title={t('remoteAuth.loadingInvitation')}>
+        <p className="mt-base text-sm text-low">{t('remoteAuth.pleaseWait')}</p>
+      </RemoteStatusCard>
     );
   }
 
   return (
-    <div className="h-screen overflow-auto bg-primary">
-      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-base py-double">
-        <div className="space-y-double rounded-sm border border-border bg-secondary p-double">
-          <header className="space-y-half text-center">
-            <h1 className="text-2xl font-semibold text-high">
-              You&apos;re invited
-            </h1>
-            <p className="text-sm text-low">
-              You&apos;ve been invited to join{" "}
-              <span className="font-medium text-high">
-                {invitation.organization_name ?? invitation.organization_slug}
-              </span>{" "}
-              on Vibe Kanban.
-            </p>
-          </header>
+    <RemotePage>
+      <RemoteCard className="space-y-double p-double">
+        <header className="space-y-half text-center">
+          <div className="mb-double flex justify-center">
+            <AgentOSWordmark />
+          </div>
+          <h1 className="text-2xl font-semibold text-high">
+            {t('remoteAuth.youAreInvited')}
+          </h1>
+          <p className="text-sm text-low">
+            {t('remoteAuth.invitedToJoin')}{' '}
+            <span className="font-medium text-high">
+              {invitation.organization_name ?? invitation.organization_slug}
+            </span>{' '}
+            {t('remoteAuth.onAgentOS')}
+          </p>
+        </header>
 
-          <section className="mx-auto w-full max-w-xs space-y-half border-t border-border pt-base text-sm">
-            <div className="flex items-center justify-between gap-base">
-              <span className="text-low">Role</span>
-              <span className="font-medium text-high">{invitation.role}</span>
-            </div>
-            <div className="flex items-center justify-between gap-base">
-              <span className="text-low">Expires</span>
-              <span className="font-medium text-high">
-                {new Date(invitation.expires_at).toLocaleDateString()}
-              </span>
-            </div>
-          </section>
+        <section className="mx-auto w-full max-w-xs space-y-half border-t border-border pt-base text-sm">
+          <div className="flex items-center justify-between gap-base">
+            <span className="text-low">{t('remoteAuth.role')}</span>
+            <span className="font-medium text-high">{invitation.role}</span>
+          </div>
+          <div className="flex items-center justify-between gap-base">
+            <span className="text-low">{t('remoteAuth.expires')}</span>
+            <span className="font-medium text-high">
+              {new Date(invitation.expires_at).toLocaleDateString()}
+            </span>
+          </div>
+        </section>
 
-          {error && (
-            <div className="rounded-sm border border-error/30 bg-error/10 p-base">
-              <p className="text-sm text-high">{error}</p>
-            </div>
-          )}
+        {error && (
+          <div className="rounded-sm border border-error/30 bg-error/10 p-base">
+            <p className="text-sm text-high">{error}</p>
+          </div>
+        )}
 
-          <section className="space-y-base border-t border-border pt-base text-center">
-            <p className="text-sm text-low">Choose a provider to continue:</p>
-            <div className="flex flex-col items-center gap-2">
-              <OAuthButton
-                provider="github"
-                label="Continue with GitHub"
-                onClick={() => void handleOAuthLogin("github")}
-                disabled={pendingProvider !== null}
-                loading={pendingProvider === "github"}
-              />
-              <OAuthButton
-                provider="google"
-                label="Continue with Google"
-                onClick={() => void handleOAuthLogin("google")}
-                disabled={pendingProvider !== null}
-                loading={pendingProvider === "google"}
-              />
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
+        <section className="space-y-base border-t border-border pt-base text-center">
+          <p className="text-sm text-low">{t('remoteAuth.chooseProvider')}</p>
+          <div className="flex flex-col items-center gap-2">
+            <OAuthButton
+              provider="github"
+              label={t('remoteAuth.continueWithGitHub')}
+              onClick={() => void handleOAuthLogin('github')}
+              disabled={pendingProvider !== null}
+              loading={pendingProvider === 'github'}
+            />
+            <OAuthButton
+              provider="google"
+              label={t('remoteAuth.continueWithGoogle')}
+              onClick={() => void handleOAuthLogin('google')}
+              disabled={pendingProvider !== null}
+              loading={pendingProvider === 'google'}
+            />
+          </div>
+        </section>
+      </RemoteCard>
+    </RemotePage>
   );
 }
 
@@ -168,42 +184,20 @@ function OAuthButton({
   disabled?: boolean;
   loading?: boolean;
 }) {
+  const { t } = useTranslation('common');
+
   return (
     <button
       type="button"
-      className="flex h-10 min-w-[280px] items-center justify-center rounded-[4px] border border-[#dadce0] bg-[#f2f2f2] px-3 text-[14px] font-medium text-[#1f1f1f] transition-colors hover:bg-[#e8eaed] active:bg-[#e2e3e5] disabled:cursor-not-allowed disabled:opacity-50"
-      style={{ fontFamily: "'Roboto', Arial, sans-serif" }}
+      className="agentos-button agentos-button--secondary min-h-10 w-full min-w-[280px] disabled:cursor-not-allowed"
       onClick={onClick}
       disabled={disabled || loading}
     >
       {loading
-        ? `Opening ${provider === "github" ? "GitHub" : "Google"}...`
+        ? t('remoteAuth.openingProvider', {
+            provider: provider === 'github' ? 'GitHub' : 'Google',
+          })
         : label}
     </button>
-  );
-}
-
-function StatusCard({
-  title,
-  variant,
-  children,
-}: {
-  title: string;
-  variant?: "error";
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="h-screen overflow-auto bg-primary">
-      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-base py-double">
-        <div className="rounded-sm border border-border bg-secondary p-double">
-          <h2
-            className={`text-lg font-semibold ${variant === "error" ? "text-error" : "text-high"}`}
-          >
-            {title}
-          </h2>
-          {children}
-        </div>
-      </div>
-    </div>
   );
 }

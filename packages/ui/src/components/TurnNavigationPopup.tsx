@@ -4,9 +4,10 @@ import {
   useCallback,
   useLayoutEffect,
   type ReactNode,
-} from 'react';
-import { cn } from '../lib/cn';
-import { Popover, PopoverTrigger, PopoverContent } from './Popover';
+} from "react";
+import { useTranslation } from "react-i18next";
+import { cn } from "../lib/cn";
+import { Popover, PopoverTrigger, PopoverContent } from "./Popover";
 
 export interface TurnNavigationItem {
   /** Unique key for this entry (patchKey from DisplayEntry) */
@@ -34,6 +35,7 @@ export function TurnNavigationPopup({
   getActiveTurnPatchKey,
   children,
 }: TurnNavigationPopupProps) {
+  const { t } = useTranslation("common");
   const [open, setOpen] = useState(false);
   const [activePatchKey, setActivePatchKey] = useState<string | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -84,7 +86,7 @@ export function TurnNavigationPopup({
       setOpen(false);
       onNavigateToTurn(patchKey);
     },
-    [onNavigateToTurn]
+    [onNavigateToTurn],
   );
 
   // Scroll the list to show the active turn (or bottom if none).
@@ -94,7 +96,7 @@ export function TurnNavigationPopup({
     if (!open || !list) return;
     if (activePatchKey) {
       const activeEl = list.querySelector<HTMLElement>(
-        `[data-patch-key="${activePatchKey}"]`
+        `[data-patch-key="${activePatchKey}"]`,
       );
       if (activeEl) {
         const top = activeEl.offsetTop - list.offsetTop;
@@ -135,9 +137,11 @@ export function TurnNavigationPopup({
       >
         <div className="flex flex-col gap-base min-h-0">
           <div className="flex items-center justify-between shrink-0">
-            <h4 className="text-sm font-medium text-normal">Your Messages</h4>
+            <h4 className="text-sm font-medium text-normal">
+              {t("conversation.yourMessages")}
+            </h4>
             <span className="text-xs text-low">
-              {turns.length} turn{turns.length === 1 ? '' : 's'}
+              {t("conversation.turn", { count: turns.length })}
             </span>
           </div>
 
@@ -149,28 +153,29 @@ export function TurnNavigationPopup({
                   <button
                     type="button"
                     className={cn(
-                      'w-full text-left px-base py-half rounded transition-colors group',
+                      "w-full text-left px-base py-half rounded transition-colors group",
                       isActive
-                        ? 'bg-brand/10 border-l-2 border-brand'
-                        : 'hover:bg-secondary'
+                        ? "bg-tertiary text-normal ring-1 ring-inset ring-brand/40"
+                        : "hover:bg-secondary",
                     )}
+                    aria-current={isActive ? "step" : undefined}
                     onClick={() => handleNavigate(turn.patchKey)}
                   >
                     <div className="flex items-baseline gap-2">
                       <span
                         className={cn(
-                          'text-xs shrink-0 tabular-nums',
-                          isActive ? 'text-brand' : 'text-low'
+                          "text-xs shrink-0 tabular-nums",
+                          isActive ? "text-brand" : "text-low",
                         )}
                       >
                         #{turn.turnNumber}
                       </span>
                       <span
                         className={cn(
-                          'text-sm truncate',
+                          "text-sm truncate",
                           isActive
-                            ? 'text-brand font-medium'
-                            : 'text-normal group-hover:text-high'
+                            ? "text-brand font-medium"
+                            : "text-normal group-hover:text-high",
                         )}
                       >
                         {turn.content}

@@ -7,7 +7,13 @@ import {
   useState,
 } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ApprovalStatus, ToolStatus } from 'shared/types';
+import {
+  AGENTOS_APPROVAL_FIXTURE_ID,
+  isAgentOSQaFixtureEnabled,
+  resolveAgentOSQaApproval,
+} from '@/shared/lib/agentOSQaFixtures';
 import { Button } from '@vibe/ui/components/Button';
 import {
   Tooltip,
@@ -28,8 +34,6 @@ import {
 } from '@/shared/keyboard';
 import { useApprovalForm } from '@/shared/hooks/ApprovalForm';
 import { useApprovals } from '@/shared/hooks/useApprovals';
-
-const DEFAULT_DENIAL_REASON = 'User denied this tool use request.';
 
 // ---------- Types ----------
 interface PendingApprovalEntryProps {
@@ -87,6 +91,8 @@ function ActionButtons({
   onApprove: () => void;
   onStartDeny: () => void;
 }) {
+  const { t } = useTranslation('tasks');
+
   return (
     <div className="flex items-center gap-1.5 pr-4">
       <Tooltip>
@@ -96,14 +102,22 @@ function ActionButtons({
             variant="ghost"
             className="h-8 w-8 rounded-full p-0"
             disabled={disabled}
-            aria-label={isResponding ? 'Submitting approval' : 'Approve'}
+            aria-label={
+              isResponding
+                ? t('approvalEntry.submitting')
+                : t('approvalEntry.approve')
+            }
             aria-busy={isResponding}
           >
             <Check className="h-5 w-5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{isResponding ? 'Submitting…' : 'Approve request'}</p>
+          <p>
+            {isResponding
+              ? t('approvalEntry.submitting')
+              : t('approvalEntry.approveRequest')}
+          </p>
         </TooltipContent>
       </Tooltip>
 
@@ -114,14 +128,22 @@ function ActionButtons({
             variant="ghost"
             className="h-8 w-8 rounded-full p-0"
             disabled={disabled}
-            aria-label={isResponding ? 'Submitting denial' : 'Deny'}
+            aria-label={
+              isResponding
+                ? t('approvalEntry.submitting')
+                : t('approvalEntry.deny')
+            }
             aria-busy={isResponding}
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{isResponding ? 'Submitting…' : 'Provide denial reason'}</p>
+          <p>
+            {isResponding
+              ? t('approvalEntry.submitting')
+              : t('approvalEntry.provideDenialReason')}
+          </p>
         </TooltipContent>
       </Tooltip>
     </div>
@@ -141,12 +163,14 @@ function DenyReasonForm({
   onCancel: () => void;
   onSubmit: () => void;
 }) {
+  const { t } = useTranslation(['tasks', 'common']);
+
   return (
-    <div className="flex flex-col gap-2 p-4">
+    <div className="agentos-approval-entry__deny-form flex flex-col gap-2 p-4">
       <WYSIWYGEditor
         value={value}
         onChange={onChange}
-        placeholder="Let the agent know why this request was denied... Type @ to insert tags or search files."
+        placeholder={t('approvalEntry.denialPlaceholder')}
         disabled={isResponding}
         className="min-h-[80px]"
         onCmdEnter={onSubmit}
@@ -158,10 +182,10 @@ function DenyReasonForm({
           onClick={onCancel}
           disabled={isResponding}
         >
-          Cancel
+          {t('buttons.cancel', { ns: 'common' })}
         </Button>
         <Button size="sm" onClick={onSubmit} disabled={isResponding}>
-          Deny
+          {t('approvalEntry.deny')}
         </Button>
       </div>
     </div>
@@ -174,6 +198,7 @@ const PendingApprovalEntry = ({
   executionProcessId,
   children,
 }: PendingApprovalEntryProps) => {
+  const { t } = useTranslation('tasks');
   const [isResponding, setIsResponding] = useState(false);
   const [hasResponded, setHasResponded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -198,16 +223,54 @@ const PendingApprovalEntry = ({
     dialogScopeActiveRef.current = dialogScopeActive;
   }, [dialogScopeActive]);
 
-  const { getPendingById } = useApprovals();
+  const {
+    getPendingById,
+    isLoading: isApprovalStreamLoading,
+    error: approvalStreamError,
+    retry: retryApprovalStream,
+  } = useApprovals();
   const approvalInfo = getPendingById(pendingStatus.approval_id);
 
-  const { timeLeft } = useApprovalCountdown(
+  const { timeLeft, percent } = useApprovalCountdown(
     approvalInfo?.created_at ?? new Date().toISOString(),
     approvalInfo?.timeout_at ?? new Date().toISOString(),
     hasResponded
   );
 
-  const disabled = isResponding || hasResponded || timeLeft <= 0;
+  const [responseStatus, setResponseStatus] = useState<
+    'approved' | 'denied' | null
+  >(null);
+  const isLoadingDetails =
+    !approvalInfo && !hasResponded && isApprovalStreamLoading;
+  const isApprovalStreamUnavailable =
+    !approvalInfo && !hasResponded && Boolean(approvalStreamError);
+  const isExpired = !!approvalInfo && !hasResponded && timeLeft <= 0;
+  const disabled =
+    isResponding ||
+    hasResponded ||
+    isLoadingDetails ||
+    isApprovalStreamUnavailable ||
+    isExpired;
+  const requestedAtLabel = useMemo(() => {
+    if (!approvalInfo?.created_at) return null;
+    const date = new Date(approvalInfo.created_at);
+    if (Number.isNaN(date.getTime())) return null;
+    return new Intl.DateTimeFormat(undefined, {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    }).format(date);
+  }, [approvalInfo?.created_at]);
+  const responseLabel = responseStatus
+    ? responseStatus === 'approved'
+      ? t('approvalEntry.approved')
+      : t('approvalEntry.denied')
+    : isApprovalStreamUnavailable
+      ? t('approvalEntry.streamUnavailable')
+      : isLoadingDetails
+        ? t('approvalEntry.loadingDetails')
+        : isExpired
+          ? t('approvalEntry.expired')
+          : t('approvalEntry.awaitingResponse');
 
   const shouldEnableApprovalsScope = shouldControlScopes && !disabled;
 
@@ -246,7 +309,7 @@ const PendingApprovalEntry = ({
     async (approved: boolean, reason?: string) => {
       if (disabled) return;
       if (!executionProcessId) {
-        setError('Missing executionProcessId');
+        setError(t('approvalEntry.missingExecutionProcessId'));
         return;
       }
 
@@ -258,22 +321,30 @@ const PendingApprovalEntry = ({
         : { status: 'denied', reason };
 
       try {
-        await approvalsApi.respond(pendingStatus.approval_id, {
-          execution_process_id: executionProcessId,
-          status,
-        });
+        if (
+          isAgentOSQaFixtureEnabled('approval') &&
+          pendingStatus.approval_id === AGENTOS_APPROVAL_FIXTURE_ID
+        ) {
+          resolveAgentOSQaApproval(status);
+        } else {
+          await approvalsApi.respond(pendingStatus.approval_id, {
+            execution_process_id: executionProcessId,
+            status,
+          });
+        }
         setHasResponded(true);
+        setResponseStatus(approved ? 'approved' : 'denied');
         clear();
       } catch (e: unknown) {
         console.error('Approval respond failed:', e);
         const errorMessage =
-          e instanceof Error ? e.message : 'Failed to send response';
+          e instanceof Error ? e.message : t('approvalEntry.responseFailed');
         setError(errorMessage);
       } finally {
         setIsResponding(false);
       }
     },
-    [disabled, executionProcessId, pendingStatus.approval_id, clear]
+    [disabled, executionProcessId, pendingStatus.approval_id, clear, t]
   );
 
   const handleApprove = useCallback(() => respond(true), [respond]);
@@ -290,8 +361,8 @@ const PendingApprovalEntry = ({
 
   const handleSubmitDeny = useCallback(() => {
     const trimmed = denyReason.trim();
-    respond(false, trimmed || DEFAULT_DENIAL_REASON);
-  }, [denyReason, respond]);
+    respond(false, trimmed || t('approvalEntry.defaultDenialReason'));
+  }, [denyReason, respond, t]);
 
   const triggerDeny = useCallback(
     (event?: KeyboardEvent) => {
@@ -316,33 +387,91 @@ const PendingApprovalEntry = ({
   });
 
   return (
-    <div className="relative mt-3">
-      <div className="overflow-hidden">
+    <div
+      className="agentos-approval-entry relative mt-3"
+      role="region"
+      aria-label={t('approvalEntry.requestTitle')}
+    >
+      <div className="agentos-approval-entry__body overflow-hidden">
+        <div className="agentos-approval-entry__meta flex flex-wrap items-center gap-x-3 gap-y-1 px-4 pt-3 text-xs">
+          <span className="agentos-approval-entry__title font-medium">
+            {t('approvalEntry.requestTitle')}
+          </span>
+          <span
+            className="agentos-approval-entry__status"
+            role="status"
+            aria-live="polite"
+          >
+            {responseLabel}
+          </span>
+          {approvalInfo?.tool_name && (
+            <span className="agentos-approval-entry__detail">
+              {t('approvalEntry.tool')}: <code>{approvalInfo.tool_name}</code>
+            </span>
+          )}
+          {requestedAtLabel && (
+            <time
+              className="agentos-approval-entry__detail"
+              dateTime={approvalInfo?.created_at}
+            >
+              {t('approvalEntry.requestedAt', { time: requestedAtLabel })}
+            </time>
+          )}
+        </div>
         {children}
 
-        <div className="bg-background px-2 py-1.5 text-xs sm:text-sm">
+        <div className="agentos-approval-entry__actions bg-background px-2 py-1.5 text-xs sm:text-sm">
           <TooltipProvider>
-            <div className="flex items-center justify-between gap-1.5 pl-4">
+            {approvalInfo && !hasResponded && !isExpired && (
+              <div
+                className="agentos-approval-entry__countdown"
+                role="progressbar"
+                aria-label={t('approvalEntry.timeRemaining', {
+                  seconds: timeLeft,
+                })}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={percent}
+              >
+                <span
+                  className="agentos-approval-entry__countdown-fill"
+                  style={{ transform: `scaleX(${percent / 100})` }}
+                />
+                <span className="agentos-approval-entry__countdown-label">
+                  {t('approvalEntry.timeRemaining', { seconds: timeLeft })}
+                </span>
+              </div>
+            )}
+            <div className="agentos-approval-entry__prompt flex items-center justify-between gap-1.5 pl-4">
               <div className="flex items-center gap-1.5">
                 {!isEnteringReason && (
-                  <span className="text-muted-foreground">
-                    Would you like to approve this?
+                  <span className="agentos-approval-entry__question text-muted-foreground">
+                    {t('approvalEntry.question')}
                   </span>
                 )}
               </div>
-              {!isEnteringReason && (
-                <ActionButtons
-                  disabled={disabled}
-                  isResponding={isResponding}
-                  onApprove={handleApprove}
-                  onStartDeny={handleStartDeny}
-                />
-              )}
+              {!isEnteringReason &&
+                (isApprovalStreamUnavailable ? (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={retryApprovalStream}
+                  >
+                    {t('approvalEntry.retryStream')}
+                  </Button>
+                ) : isLoadingDetails ? null : (
+                  <ActionButtons
+                    disabled={disabled}
+                    isResponding={isResponding}
+                    onApprove={handleApprove}
+                    onStartDeny={handleStartDeny}
+                  />
+                ))}
             </div>
 
             {error && (
               <div
-                className="mt-1 text-xs text-red-600"
+                className="agentos-approval-entry__error mt-1 text-xs text-red-600"
                 role="alert"
                 aria-live="polite"
               >

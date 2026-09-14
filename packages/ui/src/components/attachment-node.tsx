@@ -54,7 +54,7 @@ export type SerializedAttachmentNode = Spread<
 function truncatePath(path: string, maxLength = 24): string {
   const filename = path.split('/').pop() || path;
   if (filename.length <= maxLength) return filename;
-  return filename.slice(0, maxLength - 3) + '...';
+  return filename.slice(0, maxLength - 3) + '…';
 }
 
 function formatFileSize(bytes: bigint | number | null | undefined): string {
@@ -254,44 +254,49 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
 
     const icon =
       isWorkspaceAttachment || isAttachment ? (
-        <File className="w-5 h-5 text-muted-foreground" />
+        <File className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
       ) : (
-        <HelpCircle className="w-5 h-5 text-muted-foreground" />
+        <HelpCircle
+          className="w-5 h-5 text-muted-foreground"
+          aria-hidden="true"
+        />
       );
 
     return (
-      <span
-        className="group relative inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 ml-0.5 mr-0.5 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors align-bottom"
-        onClick={(event) => {
-          openUrl(event).catch((error) => {
-            console.error('Failed to open attachment:', error);
-          });
-        }}
-        onDoubleClick={onDoubleClickEdit}
-        role="button"
-        tabIndex={0}
-      >
-        <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
-          {icon}
-        </span>
-        <span className="flex flex-col min-w-0">
-          <span className="text-xs text-muted-foreground truncate max-w-[120px]">
-            {displayName}
+      <span className="group relative inline-flex align-bottom">
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 pl-1.5 pr-5 py-1 bg-muted rounded border cursor-pointer border-border hover:border-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          onClick={(event) => {
+            openUrl(event).catch((error) => {
+              console.error('Failed to open attachment:', error);
+            });
+          }}
+          onDoubleClick={onDoubleClickEdit}
+          aria-label={t('accessibility.openAttachment', { name: displayName })}
+        >
+          <span className="w-10 h-10 flex items-center justify-center bg-muted rounded flex-shrink-0">
+            {icon}
           </span>
-          {metadataLine && (
-            <span className="text-[10px] text-muted-foreground/70 truncate max-w-[120px]">
-              {metadataLine}
+          <span className="flex flex-col min-w-0 text-left">
+            <span className="text-xs text-muted-foreground truncate max-w-[120px]">
+              {displayName}
             </span>
-          )}
-        </span>
+            {metadataLine && (
+              <span className="text-[10px] text-muted-foreground/70 truncate max-w-[120px]">
+                {metadataLine}
+              </span>
+            )}
+          </span>
+        </button>
         {editor.isEditable() && (
           <button
             onClick={handleDelete}
-            className="absolute top-1 right-1 w-4 h-4 rounded-full bg-foreground/70 hover:bg-destructive flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/70 opacity-0 transition-opacity hover:bg-destructive focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100 group-focus-within:opacity-100"
             aria-label={t('kanban.removeImage')}
             type="button"
           >
-            <X className="w-2.5 h-2.5 text-background" />
+            <X className="w-2.5 h-2.5 text-background" aria-hidden="true" />
           </button>
         )}
         {resolvedUrl && (
@@ -299,13 +304,16 @@ export function createAttachmentNode(options: CreateAttachmentNodeOptions) {
             onClick={handleDownload}
             className={
               editor.isEditable()
-                ? 'absolute top-1 right-6 w-4 h-4 rounded-full bg-foreground/70 hover:bg-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'
-                : 'absolute top-1 right-1 w-4 h-4 rounded-full bg-foreground/70 hover:bg-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'
+                ? 'absolute right-6 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/70 opacity-0 transition-opacity hover:bg-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100 group-focus-within:opacity-100'
+                : 'absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-foreground/70 opacity-0 transition-opacity hover:bg-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100 group-focus-within:opacity-100'
             }
             aria-label={t('kanban.downloadAttachment')}
             type="button"
           >
-            <Download className="w-2.5 h-2.5 text-background" />
+            <Download
+              className="w-2.5 h-2.5 text-background"
+              aria-hidden="true"
+            />
           </button>
         )}
       </span>

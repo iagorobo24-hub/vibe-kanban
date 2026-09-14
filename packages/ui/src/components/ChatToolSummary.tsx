@@ -66,18 +66,10 @@ export const ChatToolSummary = forwardRef<
   };
   const Icon = getIcon();
 
-  return (
-    <div
-      className={cn(
-        'flex items-center gap-base text-sm text-low',
-        isClickable && 'cursor-pointer',
-        className
-      )}
-      onClick={isClickable ? handleClick : undefined}
-      role={isClickable ? 'button' : undefined}
-    >
+  const content = (
+    <>
       <span className="relative shrink-0 pt-0.5">
-        <Icon className="size-icon-base" />
+        <Icon aria-hidden="true" className="size-icon-base" />
         {status && (
           <ToolStatusDot
             status={status}
@@ -94,6 +86,28 @@ export const ChatToolSummary = forwardRef<
       >
         {summary}
       </span>
+    </>
+  );
+
+  if (isClickable) {
+    return (
+      <button
+        type="button"
+        className={cn(
+          'flex w-full items-center gap-base border-0 bg-transparent p-0 text-left text-sm text-low cursor-pointer',
+          className
+        )}
+        onClick={handleClick}
+        aria-expanded={onViewContent ? undefined : expanded}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <div className={cn('flex items-center gap-base text-sm text-low', className)}>
+      {content}
     </div>
   );
 });

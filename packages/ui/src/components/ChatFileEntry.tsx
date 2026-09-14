@@ -1,4 +1,3 @@
-import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CaretDownIcon,
@@ -73,13 +72,52 @@ export function ChatFileEntry({
     }
     onToggle?.();
   };
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.target !== event.currentTarget) return;
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    handleClick();
-  };
   const isInteractive = Boolean(onToggle || isVSCode);
+  const fileHeaderContent = (
+    <>
+      <span className="relative shrink-0">
+        <FileIcon aria-hidden="true" className="size-icon-base" />
+        {status && (
+          <ToolStatusDot
+            status={status}
+            className="absolute -bottom-0.5 -right-0.5"
+          />
+        )}
+      </span>
+      <span className="text-sm text-normal truncate">{filename}</span>
+      {hasStats && (
+        <span className="text-sm shrink-0">
+          {additions !== undefined && additions > 0 && (
+            <span className="text-success">+{additions}</span>
+          )}
+          {additions !== undefined && deletions !== undefined && ' '}
+          {deletions !== undefined && deletions > 0 && (
+            <span className="text-error">-{deletions}</span>
+          )}
+        </span>
+      )}
+      {!isVSCode && onToggle && (
+        <CaretDownIcon
+          aria-hidden="true"
+          className={cn(
+            'size-icon-xs shrink-0 text-low transition-transform',
+            !expanded && '-rotate-90'
+          )}
+        />
+      )}
+    </>
+  );
+  const openInChangesButton = onOpenInChanges ? (
+    <button
+      type="button"
+      onClick={onOpenInChanges}
+      className="shrink-0 rounded p-0.5 text-low hover:bg-muted hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+      aria-label={t('conversation.viewInChangesPanel')}
+      title={t('conversation.viewInChangesPanel')}
+    >
+      <ArrowSquareUpRightIcon aria-hidden="true" className="size-icon-xs" />
+    </button>
+  ) : null;
 
   // If we have diff content, wrap in a container with the diff body
   if (hasDiffContent) {
@@ -95,60 +133,25 @@ export function ChatFileEntry({
         <div
           className={cn(
             'flex items-center p-base w-full',
-            isDenied ? 'bg-error/20' : 'bg-panel',
-            isInteractive && 'cursor-pointer'
+            isDenied ? 'bg-error/20' : 'bg-panel'
           )}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          role={isInteractive ? 'button' : undefined}
-          aria-expanded={onToggle ? expanded : undefined}
-          tabIndex={isInteractive ? 0 : undefined}
           data-scroll-anchor-target={isInteractive ? '' : undefined}
         >
-          <div className="flex-1 flex items-center gap-base min-w-0">
-            <span className="relative shrink-0">
-              <FileIcon className="size-icon-base" />
-              {status && (
-                <ToolStatusDot
-                  status={status}
-                  className="absolute -bottom-0.5 -right-0.5"
-                />
-              )}
-            </span>
-            <span className="text-sm text-normal truncate">{filename}</span>
-            {onOpenInChanges && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOpenInChanges();
-                }}
-                className="shrink-0 p-0.5 rounded hover:bg-muted text-low hover:text-normal transition-colors"
-                title={t('conversation.viewInChangesPanel')}
-              >
-                <ArrowSquareUpRightIcon className="size-icon-xs" />
-              </button>
-            )}
-            {hasStats && (
-              <span className="text-sm shrink-0">
-                {additions !== undefined && additions > 0 && (
-                  <span className="text-success">+{additions}</span>
-                )}
-                {additions !== undefined && deletions !== undefined && ' '}
-                {deletions !== undefined && deletions > 0 && (
-                  <span className="text-error">-{deletions}</span>
-                )}
-              </span>
-            )}
-          </div>
-          {!isVSCode && onToggle && (
-            <CaretDownIcon
-              className={cn(
-                'size-icon-xs shrink-0 text-low transition-transform',
-                !expanded && '-rotate-90'
-              )}
-            />
+          {isInteractive ? (
+            <button
+              type="button"
+              onClick={handleClick}
+              className="flex min-w-0 flex-1 items-center gap-base border-0 bg-transparent p-0 text-left"
+              aria-expanded={onToggle ? expanded : undefined}
+            >
+              {fileHeaderContent}
+            </button>
+          ) : (
+            <div className="flex min-w-0 flex-1 items-center gap-base">
+              {fileHeaderContent}
+            </div>
           )}
+          {openInChangesButton}
         </div>
 
         {/* Diff body - shown when expanded */}
@@ -163,60 +166,25 @@ export function ChatFileEntry({
       className={cn(
         'flex items-center border rounded-sm p-base w-full',
         isDenied ? 'bg-error/20 border-error' : 'bg-panel',
-        isInteractive && 'cursor-pointer',
         className
       )}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      role={isInteractive ? 'button' : undefined}
-      aria-expanded={onToggle ? expanded : undefined}
-      tabIndex={isInteractive ? 0 : undefined}
       data-scroll-anchor-target={isInteractive ? '' : undefined}
     >
-      <div className="flex-1 flex items-center gap-base min-w-0">
-        <span className="relative shrink-0">
-          <FileIcon className="size-icon-base" />
-          {status && (
-            <ToolStatusDot
-              status={status}
-              className="absolute -bottom-0.5 -right-0.5"
-            />
-          )}
-        </span>
-        <span className="text-sm text-normal truncate">{filename}</span>
-        {onOpenInChanges && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onOpenInChanges();
-            }}
-            className="shrink-0 p-0.5 rounded hover:bg-muted text-low hover:text-normal transition-colors"
-            title={t('conversation.viewInChangesPanel')}
-          >
-            <ArrowSquareUpRightIcon className="size-icon-xs" />
-          </button>
-        )}
-        {hasStats && (
-          <span className="text-sm shrink-0">
-            {additions !== undefined && additions > 0 && (
-              <span className="text-success">+{additions}</span>
-            )}
-            {additions !== undefined && deletions !== undefined && ' '}
-            {deletions !== undefined && deletions > 0 && (
-              <span className="text-error">-{deletions}</span>
-            )}
-          </span>
-        )}
-      </div>
-      {!isVSCode && onToggle && (
-        <CaretDownIcon
-          className={cn(
-            'size-icon-xs shrink-0 text-low transition-transform',
-            !expanded && '-rotate-90'
-          )}
-        />
+      {isInteractive ? (
+        <button
+          type="button"
+          onClick={handleClick}
+          className="flex min-w-0 flex-1 items-center gap-base border-0 bg-transparent p-0 text-left"
+          aria-expanded={onToggle ? expanded : undefined}
+        >
+          {fileHeaderContent}
+        </button>
+      ) : (
+        <div className="flex min-w-0 flex-1 items-center gap-base">
+          {fileHeaderContent}
+        </div>
       )}
+      {openInChangesButton}
     </div>
   );
 }

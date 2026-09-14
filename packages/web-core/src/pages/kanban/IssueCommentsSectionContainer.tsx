@@ -423,7 +423,7 @@ function IssueCommentsSectionContent() {
       // Get first line of the message for the quote
       const firstLine = message.split('\n')[0].trim();
       const truncatedLine =
-        firstLine.length > 100 ? `${firstLine.slice(0, 100)}...` : firstLine;
+        firstLine.length > 100 ? `${firstLine.slice(0, 100)}…` : firstLine;
       const quote = `> ${authorName} ${t('kanban.replyQuotePrefix')}\n> ${truncatedLine}`;
       setCommentInput(quote);
       // Focus editor after setting value (setTimeout ensures value is set first)

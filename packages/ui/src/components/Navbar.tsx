@@ -1,5 +1,6 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
-import type { Icon } from '@phosphor-icons/react';
+import type { ButtonHTMLAttributes, KeyboardEvent, ReactNode } from "react";
+import { useTranslation } from "react-i18next";
+import type { Icon } from "@phosphor-icons/react";
 import {
   Layout as LayoutIcon,
   ChatsTeardrop as ChatsTeardropIcon,
@@ -13,19 +14,19 @@ import {
   CaretLeft as CaretLeftIcon,
   ArrowClockwise as ArrowClockwiseIcon,
   SidebarSimple as SidebarSimpleIcon,
-} from '@phosphor-icons/react';
-import { cn } from '../lib/cn';
-import { Tooltip } from './Tooltip';
+} from "@phosphor-icons/react";
+import { cn } from "../lib/cn";
+import { Tooltip } from "./Tooltip";
 import {
   SyncErrorIndicator,
   type SyncErrorIndicatorError,
-} from './SyncErrorIndicator';
+} from "./SyncErrorIndicator";
 
 /**
  * Action item rendered in the navbar.
  */
 export interface NavbarActionItem {
-  type?: 'action';
+  type?: "action";
   id: string;
   icon: Icon;
   isActive?: boolean;
@@ -39,13 +40,13 @@ export interface NavbarActionItem {
  * Divider item rendered in the navbar.
  */
 export interface NavbarDividerItem {
-  type: 'divider';
+  type: "divider";
 }
 
 export type NavbarSectionItem = NavbarActionItem | NavbarDividerItem;
 
 function isDivider(item: NavbarSectionItem): item is NavbarDividerItem {
-  return item.type === 'divider';
+  return item.type === "divider";
 }
 
 // NavbarIconButton - inlined from primitives
@@ -59,7 +60,7 @@ interface NavbarIconButtonProps
 
 function NavbarIconButton({
   icon: IconComponent,
-  isActive = false,
+  isActive,
   tooltip,
   shortcut,
   className,
@@ -69,16 +70,19 @@ function NavbarIconButton({
     <button
       type="button"
       className={cn(
-        'flex items-center justify-center rounded-sm',
-        'text-low hover:text-normal',
-        isActive && 'text-normal',
-        className
+        "agentos-navbar__icon-button flex items-center justify-center rounded-sm",
+        "text-low hover:text-normal",
+        "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
+        isActive && "agentos-navbar__icon-button--active",
+        className,
       )}
       {...props}
+      aria-pressed={isActive}
     >
       <IconComponent
         className="size-icon-base"
-        weight={isActive ? 'fill' : 'regular'}
+        weight={isActive ? "fill" : "regular"}
+        aria-hidden="true"
       />
     </button>
   );
@@ -93,21 +97,29 @@ function NavbarIconButton({
 }
 
 export type MobileTabId =
-  | 'workspaces'
-  | 'chat'
-  | 'changes'
-  | 'logs'
-  | 'preview'
-  | 'git';
+  | "workspaces"
+  | "chat"
+  | "changes"
+  | "logs"
+  | "preview"
+  | "git";
 
 export const MOBILE_TABS: { id: MobileTabId; icon: Icon; label: string }[] = [
-  { id: 'workspaces', icon: LayoutIcon, label: 'Wksps' },
-  { id: 'chat', icon: ChatsTeardropIcon, label: 'Chat' },
-  { id: 'changes', icon: GitDiffIcon, label: 'Diff' },
-  { id: 'logs', icon: TerminalIcon, label: 'Logs' },
-  { id: 'preview', icon: DesktopIcon, label: 'Preview' },
-  { id: 'git', icon: GitForkIcon, label: 'Git' },
+  { id: "workspaces", icon: LayoutIcon, label: "Workspaces" },
+  { id: "chat", icon: ChatsTeardropIcon, label: "Chat" },
+  { id: "changes", icon: GitDiffIcon, label: "Diff" },
+  { id: "logs", icon: TerminalIcon, label: "Logs" },
+  { id: "preview", icon: DesktopIcon, label: "Preview" },
+  { id: "git", icon: GitForkIcon, label: "Git" },
 ];
+
+export function getMobileTabElementId(tab: MobileTabId): string {
+  return `agentos-mobile-tab-${tab}`;
+}
+
+export function getMobileTabPanelId(tab: MobileTabId): string {
+  return `agentos-mobile-panel-${tab}`;
+}
 
 export interface NavbarBreadcrumbItem {
   label: string;
@@ -124,23 +136,27 @@ function NavbarBreadcrumbs({
   textClassName,
 }: NavbarBreadcrumbsProps) {
   return (
-    <div className={cn('flex items-center gap-1 min-w-0', textClassName)}>
+    <div className={cn("flex items-center gap-1 min-w-0", textClassName)}>
       {breadcrumbs.map((crumb, index) => {
         const isLast = index === breadcrumbs.length - 1;
         return (
           <span key={index} className="flex items-center gap-1 min-w-0">
-            {index > 0 && <span className="text-low shrink-0">/</span>}
+            {index > 0 && (
+              <span className="text-low shrink-0" aria-hidden="true">
+                /
+              </span>
+            )}
             {crumb.onClick && !isLast ? (
               <button
                 type="button"
-                className="text-low hover:text-normal truncate cursor-pointer"
+                className="cursor-pointer truncate rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                 onClick={crumb.onClick}
               >
                 {crumb.label}
               </button>
             ) : (
               <span
-                className={cn('truncate', isLast ? 'text-normal' : 'text-low')}
+                className={cn("truncate", isLast ? "text-normal" : "text-low")}
               >
                 {crumb.label}
               </span>
@@ -200,12 +216,48 @@ export function Navbar({
   onReload,
   onOpenDrawer,
   isOnProjectSubRoute = false,
-  mobileActiveTab = 'chat',
+  mobileActiveTab = "chat",
   onMobileTabChange,
   mobileTabs,
   showMobileTabs,
   mobileShowBack,
 }: NavbarProps) {
+  const { t } = useTranslation("common");
+  const localizedMobileTabs =
+    mobileTabs ??
+    MOBILE_TABS.map((tab) => ({
+      ...tab,
+      label: t(`navbar.mobileTabs.${tab.id}`),
+    }));
+
+  const handleMobileTabKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    if (localizedMobileTabs.length < 2) return;
+
+    let nextIndex: number | null = null;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      nextIndex = (index + 1) % localizedMobileTabs.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      nextIndex =
+        (index - 1 + localizedMobileTabs.length) % localizedMobileTabs.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = localizedMobileTabs.length - 1;
+    }
+
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    const nextTab = localizedMobileTabs[nextIndex];
+    onMobileTabChange?.(nextTab.id);
+    requestAnimationFrame(() => {
+      document.getElementById(getMobileTabElementId(nextTab.id))?.focus();
+    });
+  };
+
   const renderItem = (item: NavbarSectionItem, key: string) => {
     // Render divider
     if (isDivider(item)) {
@@ -224,7 +276,7 @@ export function Navbar({
         tooltip={item.tooltip}
         shortcut={item.shortcut}
         disabled={isDisabled}
-        className={isDisabled ? 'opacity-40 cursor-not-allowed' : ''}
+        className={isDisabled ? "opacity-40 cursor-not-allowed" : ""}
       />
     );
   };
@@ -234,8 +286,8 @@ export function Navbar({
     return (
       <nav
         className={cn(
-          'flex flex-col bg-secondary border-b shrink-0',
-          className
+          "agentos-navbar flex flex-col bg-secondary border-b shrink-0",
+          className,
         )}
       >
         {/* Row 1: Tab bar (workspace pages) or minimal header (project pages) */}
@@ -246,21 +298,27 @@ export function Navbar({
                 ? onNavigateBack && (
                     <button
                       type="button"
-                      className="flex items-center justify-center text-low hover:text-normal"
+                      className="flex items-center justify-center rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                       onClick={onNavigateBack}
-                      aria-label="Back"
+                      aria-label={t("navbar.back")}
                     >
-                      <CaretLeftIcon className="size-icon-base" />
+                      <CaretLeftIcon
+                        className="size-icon-base"
+                        aria-hidden="true"
+                      />
                     </button>
                   )
                 : onOpenDrawer && (
                     <button
                       type="button"
-                      className="flex items-center justify-center text-low hover:text-normal"
+                      className="flex items-center justify-center rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                       onClick={onOpenDrawer}
-                      aria-label="Open menu"
+                      aria-label={t("navbar.openMenu")}
                     >
-                      <SidebarSimpleIcon className="size-icon-base" />
+                      <SidebarSimpleIcon
+                        className="size-icon-base"
+                        aria-hidden="true"
+                      />
                     </button>
                   )}
               <p className="text-base text-normal font-medium truncate cursor-default select-none">
@@ -273,11 +331,14 @@ export function Navbar({
                 <>
                   <button
                     type="button"
-                    className="flex items-center justify-center px-1.5 py-1 text-low hover:text-normal"
+                    className="flex items-center justify-center rounded-sm px-1.5 py-1 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                     onClick={onNavigateBack}
-                    aria-label="Back"
+                    aria-label={t("navbar.back")}
                   >
-                    <CaretLeftIcon className="size-icon-sm" />
+                    <CaretLeftIcon
+                      className="size-icon-sm"
+                      aria-hidden="true"
+                    />
                   </button>
                   <div className="h-4 w-px bg-border mx-0.5 shrink-0" />
                 </>
@@ -286,50 +347,70 @@ export function Navbar({
                   <>
                     <button
                       type="button"
-                      className="flex items-center justify-center px-1.5 py-1 text-low hover:text-normal"
+                      className="flex items-center justify-center rounded-sm px-1.5 py-1 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                       onClick={onOpenDrawer}
-                      aria-label="Projects"
+                      aria-label={t("navbar.projects")}
                     >
-                      <KanbanIcon className="size-icon-sm" />
+                      <KanbanIcon className="size-icon-sm" aria-hidden="true" />
                     </button>
                     <div className="h-4 w-px bg-border mx-0.5 shrink-0" />
                   </>
                 )
               )}
-              {showMobileTabs !== false &&
-                (mobileTabs ?? MOBILE_TABS).map((tab) => {
-                  const TabIcon = tab.icon;
-                  const isActive = mobileActiveTab === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      className={cn(
-                        'flex items-center gap-1 px-1.5 py-1 text-xs whitespace-nowrap transition-colors',
-                        isActive
-                          ? 'text-normal border-b-2 border-brand'
-                          : 'text-low hover:text-normal'
-                      )}
-                      onClick={() => onMobileTabChange?.(tab.id)}
-                    >
-                      <TabIcon
-                        className="size-icon-sm"
-                        weight={isActive ? 'fill' : 'regular'}
-                      />
-                      <span className="hidden min-[480px]:inline">
-                        {tab.label}
-                      </span>
-                    </button>
-                  );
-                })}
+              {showMobileTabs !== false && (
+                <div
+                  className="flex items-center gap-0.5"
+                  role="tablist"
+                  aria-label={t("navbar.mobileTabs.label")}
+                >
+                  {localizedMobileTabs.map((tab, index) => {
+                    const TabIcon = tab.icon;
+                    const isActive = mobileActiveTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        id={getMobileTabElementId(tab.id)}
+                        type="button"
+                        role="tab"
+                        aria-label={tab.label}
+                        aria-selected={isActive}
+                        aria-controls={getMobileTabPanelId(tab.id)}
+                        tabIndex={isActive ? 0 : -1}
+                        className={cn(
+                          "flex items-center gap-1 rounded-sm px-1.5 py-1 text-xs whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
+                          isActive
+                            ? "text-normal border-b-2 border-brand"
+                            : "text-low hover:text-normal",
+                        )}
+                        onClick={() => onMobileTabChange?.(tab.id)}
+                        onKeyDown={(event) =>
+                          handleMobileTabKeyDown(event, index)
+                        }
+                      >
+                        <TabIcon
+                          className="size-icon-sm"
+                          weight={isActive ? "fill" : "regular"}
+                          aria-hidden="true"
+                        />
+                        <span className="hidden min-[480px]:inline">
+                          {tab.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               {onNavigateToBoard && (
                 <button
                   type="button"
-                  className="flex items-center gap-1 px-1.5 py-1 text-xs text-low hover:text-normal whitespace-nowrap"
+                  aria-label={t("navbar.board")}
+                  className="flex items-center gap-1 rounded-sm px-1.5 py-1 text-xs text-low hover:text-normal whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                   onClick={onNavigateToBoard}
                 >
-                  <KanbanIcon className="size-icon-sm" />
-                  <span className="hidden min-[480px]:inline">Board</span>
+                  <KanbanIcon className="size-icon-sm" aria-hidden="true" />
+                  <span className="hidden min-[480px]:inline">
+                    {t("navbar.board")}
+                  </span>
                 </button>
               )}
             </div>
@@ -351,38 +432,41 @@ export function Navbar({
                     tooltip={item.tooltip}
                     disabled={!!item.disabled}
                     className={
-                      item.disabled ? 'opacity-40 cursor-not-allowed' : ''
+                      item.disabled ? "opacity-40 cursor-not-allowed" : ""
                     }
                   />
                 ))}
             {onReload && (
               <button
                 type="button"
-                className="flex items-center justify-center text-low hover:text-normal"
+                className="flex items-center justify-center rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                 onClick={onReload}
-                aria-label="Reload"
+                aria-label={t("navbar.reload")}
               >
-                <ArrowClockwiseIcon className="size-icon-sm" />
+                <ArrowClockwiseIcon
+                  className="size-icon-sm"
+                  aria-hidden="true"
+                />
               </button>
             )}
             {!isOnProjectPage && onOpenSettings && (
               <button
                 type="button"
-                className="flex items-center justify-center text-low hover:text-normal"
+                className="flex items-center justify-center rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                 onClick={onOpenSettings}
-                aria-label="Settings"
+                aria-label={t("navbar.settings")}
               >
-                <GearIcon className="size-icon-sm" />
+                <GearIcon className="size-icon-sm" aria-hidden="true" />
               </button>
             )}
             {!isOnProjectPage && onOpenCommandBar && (
               <button
                 type="button"
-                className="flex items-center justify-center text-low hover:text-normal"
+                className="flex items-center justify-center rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                 onClick={onOpenCommandBar}
-                aria-label="Command bar"
+                aria-label={t("navbar.commandBar")}
               >
-                <ListIcon className="size-icon-sm" />
+                <ListIcon className="size-icon-sm" aria-hidden="true" />
               </button>
             )}
             {mobileUserSlot && (
@@ -421,8 +505,8 @@ export function Navbar({
     <nav
       data-tauri-drag-region
       className={cn(
-        'flex items-center justify-between px-base py-half bg-secondary border-b shrink-0',
-        className
+        "agentos-navbar flex items-center justify-between px-base py-half bg-secondary border-b shrink-0",
+        className,
       )}
     >
       {/* Left - Archive & Old UI Link + optional slot */}
@@ -430,8 +514,8 @@ export function Navbar({
         {leftItems.map((item, index) =>
           renderItem(
             item,
-            `left-${isDivider(item) ? 'divider' : item.id}-${index}`
-          )
+            `left-${isDivider(item) ? "divider" : item.id}-${index}`,
+          ),
         )}
         {leftSlot}
       </div>
@@ -451,7 +535,7 @@ export function Navbar({
             data-tauri-drag-region
             className="text-base text-low truncate cursor-default select-none"
           >
-            {workspaceTitle ?? ''}
+            {workspaceTitle ?? ""}
           </p>
         )}
       </div>
@@ -465,8 +549,8 @@ export function Navbar({
         {rightItems.map((item, index) =>
           renderItem(
             item,
-            `right-${isDivider(item) ? 'divider' : item.id}-${index}`
-          )
+            `right-${isDivider(item) ? "divider" : item.id}-${index}`,
+          ),
         )}
       </div>
     </nav>

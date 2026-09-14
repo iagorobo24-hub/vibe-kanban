@@ -79,23 +79,36 @@ export function TwoColumnPickerItem({
   children,
 }: TwoColumnPickerItemProps) {
   return (
-    <div
-      className={cn(
-        'group flex items-center gap-half px-base py-half cursor-pointer transition-colors',
-        'hover:bg-secondary',
-        selected && 'bg-brand/10 text-brand'
+    <div className="flex items-center min-w-0">
+      {onClick ? (
+        <button
+          type="button"
+          className={cn(
+            'group flex min-w-0 flex-1 items-center gap-half px-base py-half text-left transition-colors',
+            'border-0 bg-transparent hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand',
+            selected && 'bg-brand/10 text-brand'
+          )}
+          onClick={onClick}
+          aria-pressed={selected}
+        >
+          {leading}
+          <span
+            className={cn(
+              'text-sm truncate flex-1',
+              selected ? 'text-brand font-medium' : 'text-normal'
+            )}
+          >
+            {children}
+          </span>
+        </button>
+      ) : (
+        <div className="flex min-w-0 flex-1 items-center gap-half px-base py-half">
+          {leading}
+          <span className="text-sm truncate flex-1 text-normal">
+            {children}
+          </span>
+        </div>
       )}
-      onClick={onClick}
-    >
-      {leading}
-      <span
-        className={cn(
-          'text-sm truncate flex-1',
-          selected ? 'text-brand font-medium' : 'text-normal'
-        )}
-      >
-        {children}
-      </span>
       {trailing}
     </div>
   );

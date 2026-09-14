@@ -9,6 +9,7 @@ import {
   COMMAND_PRIORITY_CRITICAL,
 } from 'lexical';
 import { Bold, Italic, Strikethrough, Code } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '../lib/cn';
 
 const TOOLBAR_HEIGHT = 36;
@@ -45,6 +46,7 @@ function ToolbarButton({
 
 export function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
+  const { t } = useTranslation('common');
 
   // Visibility and position state
   const [isVisible, setIsVisible] = useState(false);
@@ -192,13 +194,13 @@ export function ToolbarPlugin() {
     >
       <ToolbarButton
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')}
-        title="Bold (Cmd+B)"
+        title={t('richTextToolbar.bold')}
       >
         <Bold size={iconSize} />
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')}
-        title="Italic (Cmd+I)"
+        title={t('richTextToolbar.italic')}
       >
         <Italic size={iconSize} />
       </ToolbarButton>
@@ -206,13 +208,13 @@ export function ToolbarPlugin() {
         onClick={() =>
           editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
         }
-        title="Strikethrough"
+        title={t('richTextToolbar.strikethrough')}
       >
         <Strikethrough size={iconSize} />
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')}
-        title="Inline Code (Cmd+E)"
+        title={t('richTextToolbar.inlineCode')}
       >
         <Code size={iconSize} />
       </ToolbarButton>

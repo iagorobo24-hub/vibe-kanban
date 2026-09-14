@@ -1,7 +1,7 @@
-import type { ReactNode, RefObject } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ArrowDownIcon, SpinnerIcon } from '@phosphor-icons/react';
-import { cn } from '../lib/cn';
+import type { ReactNode, RefObject } from "react";
+import { useTranslation } from "react-i18next";
+import { ArrowDownIcon, SpinnerIcon } from "@phosphor-icons/react";
+import { cn } from "../lib/cn";
 
 export interface WorkspacesMainWorkspace {
   id: string;
@@ -17,7 +17,7 @@ interface WorkspacesMainProps {
   contextBarContent?: ReactNode;
   isAtBottom?: boolean;
   onAtBottomChange?: (atBottom: boolean) => void;
-  onScrollToBottom?: (behavior?: 'auto' | 'smooth') => void;
+  onScrollToBottom?: (behavior?: "auto" | "smooth") => void;
   isMobile?: boolean;
 }
 
@@ -33,25 +33,25 @@ export function WorkspacesMain({
   onScrollToBottom,
   isMobile,
 }: WorkspacesMainProps) {
-  const { t } = useTranslation(['tasks', 'common']);
+  const { t } = useTranslation(["tasks", "common"]);
 
   // Always render the main structure to prevent chat box flash during workspace transitions
   return (
     <main
       ref={containerRef}
       className={cn(
-        'relative flex flex-1 flex-col bg-primary',
-        isMobile ? 'min-h-0' : 'h-full'
+        "agentos-workspaces-main relative flex flex-1 flex-col bg-primary",
+        isMobile ? "min-h-0" : "h-full",
       )}
     >
       {/* Conversation content - conditional based on loading/workspace state */}
       {isLoading ? (
-        <div className="flex-1 flex items-center justify-center">
+        <div className="agentos-workspaces-feedback flex-1 flex items-center justify-center">
           <SpinnerIcon className="size-6 animate-spin text-low" />
         </div>
       ) : !workspaceWithSession ? (
-        <div className="flex-1 flex items-center justify-center">
-          <p className="text-low">{t('common:workspaces.selectToStart')}</p>
+        <div className="agentos-workspaces-feedback flex-1 flex items-center justify-center">
+          <p className="text-low">{t("common:workspaces.selectToStart")}</p>
         </div>
       ) : (
         <>
@@ -65,23 +65,27 @@ export function WorkspacesMain({
       )}
       {/* Scroll to bottom button */}
       {workspaceWithSession && !isAtBottom && (
-        <div className="flex justify-center pointer-events-none">
+        <div className="agentos-chatbox-dock flex justify-center pointer-events-none">
           <div className="w-chat max-w-full relative">
             <button
               type="button"
-              onClick={() => onScrollToBottom?.('auto')}
-              className="absolute bottom-2 right-4 z-10 pointer-events-auto flex items-center justify-center size-8 rounded-full bg-secondary/80 backdrop-blur-sm border border-secondary text-low hover:text-normal hover:bg-secondary shadow-md transition-all"
-              aria-label="Scroll to bottom"
-              title="Scroll to bottom"
+              onClick={() => onScrollToBottom?.("auto")}
+              className="absolute bottom-2 right-4 z-10 pointer-events-auto flex items-center justify-center size-8 rounded-full bg-secondary/80 backdrop-blur-sm border border-secondary text-low hover:text-normal hover:bg-secondary shadow-md transition-colors"
+              aria-label={t("common:workspaceInspector.scrollToBottom")}
+              title={t("common:workspaceInspector.scrollToBottom")}
             >
-              <ArrowDownIcon className="size-icon-base" weight="bold" />
+              <ArrowDownIcon
+                className="size-icon-base"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           </div>
         </div>
       )}
       {/* Chat box - always rendered to prevent flash during workspace switch */}
       <div
-        className="flex justify-center @container pl-px"
+        className="agentos-workspaces-main__chatbox flex justify-center @container pl-px"
         data-chatbox-container="true"
       >
         {chatBoxContent}

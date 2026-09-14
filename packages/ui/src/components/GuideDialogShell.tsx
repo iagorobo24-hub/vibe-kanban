@@ -1,6 +1,8 @@
-import { useState, type ReactNode } from 'react';
-import { CaretLeftIcon, XIcon } from '@phosphor-icons/react';
-import { cn } from '../lib/cn';
+import { useId, useRef, useState, type ReactNode } from "react";
+import { CaretLeftIcon, XIcon } from "@phosphor-icons/react";
+import { cn } from "../lib/cn";
+import { useDialogFocusTrap } from "../lib/useDialogFocusTrap";
+import { useDialogScrollLock } from "../lib/useDialogScrollLock";
 
 export interface GuideDialogTopic {
   id: string;
@@ -13,6 +15,9 @@ export interface GuideDialogTopic {
 interface GuideDialogShellProps {
   topics: GuideDialogTopic[];
   closeLabel: string;
+  topicsLabel: string;
+  topicsAriaLabel: string;
+  backLabel: string;
   onClose: () => void;
   className?: string;
 }
@@ -20,11 +25,19 @@ interface GuideDialogShellProps {
 export function GuideDialogShell({
   topics,
   closeLabel,
+  topicsLabel,
+  topicsAriaLabel,
+  backLabel,
   onClose,
   className,
 }: GuideDialogShellProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mobileShowContent, setMobileShowContent] = useState(false);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const dialogTitleId = useId();
+
+  useDialogFocusTrap(dialogRef, topics.length > 0);
+  useDialogScrollLock(topics.length > 0);
 
   if (topics.length === 0) {
     return null;
@@ -36,65 +49,83 @@ export function GuideDialogShell({
     <>
       <div
         data-tauri-drag-region
-        className="fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
+        className="agentos-dialog-overlay fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
         onClick={onClose}
+        aria-hidden="true"
       />
       {/* Dialog wrapper - handles positioning */}
       <div
         className={cn(
-          'fixed z-[9999]',
+          "fixed z-[9999]",
           // Mobile: full screen
-          'inset-0',
+          "inset-0",
           // Desktop: centered with fixed size
-          'md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2'
+          "md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2",
         )}
+        style={{
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+        }}
       >
         <div
+          ref={dialogRef}
           className={cn(
-            'h-full w-full flex overflow-hidden',
-            'bg-panel/95 backdrop-blur-sm shadow-lg',
-            'animate-in fade-in-0 slide-in-from-bottom-4 duration-200',
+            "agentos-guide-dialog h-full w-full flex overflow-hidden",
+            "bg-panel/95 backdrop-blur-sm shadow-lg",
+            "animate-in fade-in-0 slide-in-from-bottom-4 duration-200",
             // Mobile: full screen, no rounded corners
-            'rounded-none border-0',
+            "rounded-none border-0",
             // Desktop: fixed size with rounded corners
-            'md:w-[800px] md:h-[600px] md:rounded-sm md:border md:border-border/50',
-            className
+            "md:w-[800px] md:h-[600px] md:rounded-sm md:border md:border-border/50",
+            className,
           )}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={dialogTitleId}
         >
           {/* Sidebar - hidden on mobile when showing content */}
           <div
             className={cn(
-              'bg-secondary/80 border-r border-border/50 flex flex-col',
+              "agentos-guide-dialog__nav bg-secondary/80 border-r border-border/50 flex flex-col",
               // Mobile: full width, hidden when showing content
-              'w-full',
-              mobileShowContent && 'hidden',
+              "w-full",
+              mobileShowContent && "hidden",
               // Desktop: fixed width sidebar, always visible
-              'md:w-52 md:block'
+              "md:w-52 md:block",
             )}
           >
             {/* Header with mobile close button */}
             <div className="p-3 flex items-center justify-between md:hidden">
-              <span className="text-sm font-medium text-high">Topics</span>
+              <span className="text-sm font-medium text-high">
+                {topicsLabel}
+              </span>
               <button
+                type="button"
                 onClick={onClose}
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                aria-label={closeLabel}
+                className="flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
-                <XIcon className="h-4 w-4" weight="bold" />
+                <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               </button>
             </div>
-            <nav className="flex-1 p-3 flex flex-col gap-1 overflow-y-auto md:pt-3">
+            <nav
+              className="flex-1 p-3 flex flex-col gap-1 overflow-y-auto overscroll-contain md:pt-3"
+              aria-label={topicsAriaLabel}
+            >
               {topics.map((topic, idx) => (
                 <button
                   key={topic.id}
+                  type="button"
                   onClick={() => {
                     setSelectedIndex(idx);
                     setMobileShowContent(true);
                   }}
+                  aria-pressed={idx === selectedIndex}
                   className={cn(
-                    'text-left px-3 py-2 rounded-sm text-sm transition-colors',
+                    "min-h-9 rounded-sm px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
                     idx === selectedIndex
-                      ? 'bg-brand/10 text-brand font-medium'
-                      : 'text-normal hover:bg-primary/10'
+                      ? "bg-brand/10 text-brand font-medium"
+                      : "text-normal hover:bg-primary/10",
                   )}
                 >
                   {topic.title}
@@ -105,39 +136,51 @@ export function GuideDialogShell({
           {/* Content - hidden on mobile when showing nav */}
           <div
             className={cn(
-              'flex-1 flex flex-col relative overflow-y-auto',
+              "agentos-guide-dialog__body flex-1 flex flex-col relative overflow-y-auto overscroll-contain",
               // Mobile: full width, hidden when showing nav
-              !mobileShowContent && 'hidden',
+              !mobileShowContent && "hidden",
               // Desktop: always visible
-              'md:flex'
+              "md:flex",
             )}
           >
             {/* Mobile header with back button */}
             <div className="flex items-center gap-2 p-3 border-b border-border/50 md:hidden">
               <button
+                type="button"
                 onClick={() => setMobileShowContent(false)}
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                aria-label={backLabel}
+                className="flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
-                <CaretLeftIcon className="h-4 w-4" weight="bold" />
+                <CaretLeftIcon
+                  className="h-4 w-4"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
-              <span className="text-sm font-medium text-high">Back</span>
+              <span className="text-sm font-medium text-high">{backLabel}</span>
               <button
+                type="button"
                 onClick={onClose}
-                className="ml-auto p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                aria-label={closeLabel}
+                className="ml-auto flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
-                <XIcon className="h-4 w-4" weight="bold" />
+                <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />
               </button>
             </div>
             {/* Desktop close button */}
             <button
+              type="button"
               onClick={onClose}
-              className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 hidden md:block"
+              aria-label={closeLabel}
+              className="absolute right-4 top-4 hidden size-8 items-center justify-center rounded-sm opacity-70 ring-offset-panel transition-colors hover:bg-secondary hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 md:flex"
             >
-              <XIcon className="h-4 w-4 text-normal" />
-              <span className="sr-only">{closeLabel}</span>
+              <XIcon className="h-4 w-4 text-normal" aria-hidden="true" />
             </button>
             <div className="p-6 pt-4 md:pt-6 flex-1">
-              <h2 className="text-xl font-semibold text-high mb-4 pr-8">
+              <h2
+                id={dialogTitleId}
+                className="text-xl font-semibold text-high mb-4 pr-8"
+              >
                 {selectedTopic.title}
               </h2>
               {selectedTopic.imageSrc && (
@@ -148,7 +191,7 @@ export function GuideDialogShell({
                 />
               )}
               <div className="text-normal text-sm leading-relaxed space-y-3">
-                {typeof selectedTopic.content === 'string' ? (
+                {typeof selectedTopic.content === "string" ? (
                   <p>{selectedTopic.content}</p>
                 ) : (
                   selectedTopic.content

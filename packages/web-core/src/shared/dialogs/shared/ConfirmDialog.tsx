@@ -44,13 +44,28 @@ const ConfirmDialogImpl = create<ConfirmDialogProps>((props) => {
 
     switch (variant) {
       case 'destructive':
-        return <AlertTriangle className="h-6 w-6 text-destructive" />;
+        return (
+          <AlertTriangle
+            className="h-6 w-6 text-destructive"
+            aria-hidden="true"
+          />
+        );
       case 'info':
-        return <Info className="h-6 w-6 text-blue-500" />;
+        return <Info className="h-6 w-6 text-blue-500" aria-hidden="true" />;
       case 'success':
-        return <CheckCircle className="h-6 w-6 text-green-500" />;
+        return (
+          <CheckCircle
+            className="h-6 w-6 text-green-500"
+            aria-hidden="true"
+          />
+        );
       default:
-        return <XCircle className="h-6 w-6 text-muted-foreground" />;
+        return (
+          <XCircle
+            className="h-6 w-6 text-muted-foreground"
+            aria-hidden="true"
+          />
+        );
     }
   };
 

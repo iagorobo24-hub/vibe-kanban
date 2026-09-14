@@ -47,29 +47,31 @@ export function ChatCollapsedThinking({
   return (
     <div className={cn('flex flex-col', className)}>
       {/* Header row - clickable to expand/collapse */}
-      <div
-        className="flex items-center gap-base text-sm text-low cursor-pointer group"
+      <button
+        type="button"
+        className="flex w-full items-center gap-base border-0 bg-transparent p-0 text-left text-sm text-low cursor-pointer group"
         onClick={onToggle}
         onMouseEnter={() => onHoverChange(true)}
         onMouseLeave={() => onHoverChange(false)}
-        role="button"
         aria-expanded={expanded}
+        aria-label={t('conversation.thinking')}
         data-scroll-anchor-target=""
       >
         <span className="shrink-0 pt-0.5">
           {isHovered ? (
             <CaretRightIcon
+              aria-hidden="true"
               className={cn(
                 'size-icon-base transition-transform duration-150',
                 expanded && 'rotate-90'
               )}
             />
           ) : (
-            <ChatDotsIcon className="size-icon-base" />
+            <ChatDotsIcon aria-hidden="true" className="size-icon-base" />
           )}
         </span>
         <span className="truncate">{t('conversation.thinking')}</span>
-      </div>
+      </button>
 
       {/* Expanded content */}
       {expanded && (

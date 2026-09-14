@@ -1,5 +1,7 @@
 'use client';
 
+import type { ReactNode } from 'react';
+
 import { cn } from '../lib/cn';
 import {
   ArrowBendUpRightIcon,
@@ -56,37 +58,40 @@ export function RelationshipBadge({
   const Icon = RELATIONSHIP_ICONS[displayType];
   const label = getRelationshipLabel(displayType);
   const isBlocking = displayType === 'blocks' || displayType === 'blocked_by';
-
-  return (
-    <span
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onClick={onClick}
-      onKeyDown={
-        onClick
-          ? (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onClick(e as unknown as React.MouseEvent);
-              }
-            }
-          : undefined
-      }
-      className={cn(
-        'inline-flex items-center gap-half',
-        'h-5 px-half',
-        'rounded-sm',
-        'text-sm font-medium',
-        'whitespace-nowrap',
-        isBlocking ? 'bg-error/10 text-error' : 'bg-panel text-low',
-        onClick && 'cursor-pointer hover:opacity-80',
-        className
-      )}
-    >
-      <Icon className="size-icon-xs" weight="bold" />
+  const badgeClassName = cn(
+    'inline-flex items-center gap-half',
+    'h-5 px-half',
+    'rounded-sm',
+    'text-sm font-medium',
+    'whitespace-nowrap',
+    isBlocking ? 'bg-error/10 text-error' : 'bg-panel text-low',
+    onClick && 'cursor-pointer hover:opacity-80',
+    className
+  );
+  const badgeContent: ReactNode = (
+    <>
+      <Icon className="size-icon-xs" weight="bold" aria-hidden="true" />
       <span>
         {compact ? relatedIssueDisplayId : `${label} ${relatedIssueDisplayId}`}
       </span>
-    </span>
+    </>
   );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={cn(
+          badgeClassName,
+          'border-0 appearance-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
+        )}
+        onClick={onClick}
+        aria-label={`${label} ${relatedIssueDisplayId}`}
+      >
+        {badgeContent}
+      </button>
+    );
+  }
+
+  return <span className={badgeClassName}>{badgeContent}</span>;
 }

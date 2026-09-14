@@ -2,10 +2,16 @@ import type { Workspace } from 'shared/types';
 import { Pages, getPageActions } from '@/shared/command-bar/actions/pages';
 import type { StaticPageId, ResolvedGroup } from '@/shared/types/commandBar';
 import {
-  resolveLabel,
   isActionVisible,
+  type ActionDefinition,
   type ActionVisibilityContext,
 } from '@/shared/types/actions';
+
+type ActionLabelResolver = (
+  action: ActionDefinition,
+  workspace?: Workspace,
+  ctx?: ActionVisibilityContext
+) => string;
 
 // Derive injectable pages from Pages - all child pages of root
 const INJECTABLE_PAGE_IDS = (Object.keys(Pages) as StaticPageId[]).filter(
@@ -15,7 +21,8 @@ const INJECTABLE_PAGE_IDS = (Object.keys(Pages) as StaticPageId[]).filter(
 export function injectSearchMatches(
   searchQuery: string,
   ctx: ActionVisibilityContext,
-  workspace: Workspace | undefined
+  workspace: Workspace | undefined,
+  getLabel: ActionLabelResolver
 ): ResolvedGroup[] {
   const searchLower = searchQuery.toLowerCase();
 
@@ -28,7 +35,7 @@ export function injectSearchMatches(
     const items = getPageActions(id)
       .filter((a) => isActionVisible(a, ctx))
       .filter((a) => {
-        const label = resolveLabel(a, workspace);
+        const label = getLabel(a, workspace, ctx);
         return (
           label.toLowerCase().includes(searchLower) ||
           a.id.toLowerCase().includes(searchLower) ||

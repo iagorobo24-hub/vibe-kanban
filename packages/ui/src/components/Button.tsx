@@ -48,7 +48,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : 'button';
     return (
       <Comp
-        className={twMerge(cn(buttonVariants({ variant, size, className })))}
+        className={twMerge(
+          cn(
+            'agentos-button-primitive',
+            buttonVariants({ variant, size, className }),
+          ),
+        )}
+        data-agentos-primitive="button"
+        data-agentos-size={size ?? 'default'}
+        data-agentos-variant={variant ?? 'default'}
         ref={ref}
         {...props}
       />

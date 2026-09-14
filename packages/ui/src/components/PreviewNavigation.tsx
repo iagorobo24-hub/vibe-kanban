@@ -1,5 +1,6 @@
-import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react';
-import { IconButtonGroup, IconButtonGroupItem } from './IconButtonGroup';
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
+import { IconButtonGroup, IconButtonGroupItem } from "./IconButtonGroup";
 
 export interface PreviewNavigationState {
   canGoBack: boolean;
@@ -21,21 +22,23 @@ export function PreviewNavigation({
   disabled = false,
   className,
 }: PreviewNavigationProps) {
+  const { t } = useTranslation(["tasks"]);
+
   return (
     <IconButtonGroup className={className}>
       <IconButtonGroupItem
         icon={ArrowLeftIcon}
         onClick={onBack}
         disabled={!navigation?.canGoBack || disabled}
-        aria-label="Go back"
-        title="Go back"
+        aria-label={t("preview.toolbar.goBack")}
+        title={t("preview.toolbar.goBack")}
       />
       <IconButtonGroupItem
         icon={ArrowRightIcon}
         onClick={onForward}
         disabled={!navigation?.canGoForward || disabled}
-        aria-label="Go forward"
-        title="Go forward"
+        aria-label={t("preview.toolbar.goForward")}
+        title={t("preview.toolbar.goForward")}
       />
     </IconButtonGroup>
   );

@@ -6,16 +6,25 @@
   "gitPanel": {
     "advanced": {
       "placeholder": "e.g acme Corp"
+    },
+    "status": {
+      "loading": "Loading Git status…",
+      "unavailable": "Git status is unavailable. Commit counts and push availability are hidden until it reconnects.",
+      "retry": "Retry Git status"
+    },
+    "empty": {
+      "title": "No repositories in this workspace",
+      "description": "Add a repository in workspace settings to manage branches and pull requests."
     }
   },
-  "loading": "Loading tasks...",
+  "loading": "Loading tasks…",
   "actions": {
     "addTask": "Add task"
   },
   "rebase": {
     "common": {
       "action": "Rebase",
-      "inProgress": "Rebasing..."
+      "inProgress": "Rebasing…"
     },
     "dialog": {
       "title": "Rebase Task Attempt",
@@ -34,7 +43,7 @@
         "description": "Choose a new target branch for the workspace.",
         "placeholder": "Select a target branch",
         "action": "Change Branch",
-        "inProgress": "Changing..."
+        "inProgress": "Changing…"
       }
     }
   },
@@ -68,12 +77,17 @@
       "responsiveView": "Responsive view (resizable)",
       "startDevServer": "Start dev server",
       "submitUrl": "Submit URL",
-      "toggleDevTools": "Toggle DevTools"
+      "toggleDevTools": "Toggle DevTools",
+      "goBack": "Go back",
+      "goForward": "Go forward",
+      "showUrl": "Show URL",
+      "selectElement": "Select element as context",
+      "urlPlaceholder": "Enter URL…"
     },
     "loading": {
-      "startingServer": "Starting dev server...",
-      "waitingForServer": "Waiting for server...",
-      "loadingPreview": "Loading preview...",
+      "startingServer": "Starting dev server…",
+      "waitingForServer": "Waiting for server…",
+      "loadingPreview": "Loading preview…",
       "manualUrlHint": "No URL detected yet. You can manually enter a URL in the toolbar above."
     },
     "browser": {
@@ -85,12 +99,26 @@
     "filesChanged_one": "{{count}} file changed",
     "filesChanged_other": "{{count}} files changed"
   },
+  "changes": {
+    "status": {
+      "loading": "Loading changes…",
+      "unavailable": "Live changes are unavailable. Reconnect to inspect the workspace.",
+      "stale": "Live changes are unavailable. The visible diff may be out of date.",
+      "retry": "Retry changes"
+    }
+  },
   "processes": {
     "noLogsAvailable": "No logs available",
+    "connectionFailed": "The live log connection failed.",
+    "retryLogs": "Retry log stream",
+    "loadingLogs": "Connecting to live logs…",
     "selectAttempt": "Select an attempt to view execution processes.",
     "errorLoadingUpdates": "Failed to load live updates for processes.",
-    "reconnecting": "Reconnecting...",
-    "loading": "Loading execution processes...",
+    "processesUnavailable": "Live execution processes are unavailable.",
+    "processesMayBeStale": "Live process updates are unavailable. The list may be out of date.",
+    "retryProcesses": "Retry processes",
+    "reconnecting": "Reconnecting…",
+    "loading": "Loading execution processes…",
     "noProcesses": "No execution processes found for this attempt.",
     "processId": "Process ID: {{id}}",
     "deleted": "Deleted",
@@ -101,7 +129,7 @@
     "completed": "Completed: {{date}}",
     "detailsTitle": "Process Details",
     "backToList": "Back to list",
-    "loadingDetails": "Loading process details...",
+    "loadingDetails": "Loading process details…",
     "errorLoadingDetails": "Failed to load process details. Please try again.",
     "copyLogs": "Copy logs",
     "logsCopied": "Copied!"
@@ -145,8 +173,19 @@
       "clearReviewComments": "Clear review comments",
       "edit": "Edit message",
       "scrollToPreviousMessage": "Go to previous message",
+      "openWorkspace": "Open workspace",
+      "addPrComments": "Add PR comments",
+      "insertPrComments": "Insert PR comments into message",
       "reset": "Reset",
       "resetTooltip": "Reset to this point"
+    },
+    "placeholders": {
+      "feedback": "Provide feedback for the plan…",
+      "edit": "Edit your message…",
+      "approval": "Provide feedback to request changes…",
+      "differentAnswer": "Type a different answer…",
+      "newConversation": "Start a new conversation…",
+      "continueTask": "Continue working on this task…"
     },
     "approval": {
       "conflictWarning": "Conflicted files need manual resolution",
@@ -163,7 +202,7 @@
       "renameTitle": "Rename Session",
       "renameDescription": "Enter a new name for this session.",
       "renamePlaceholder": "Enter session name",
-      "renaming": "Renaming..."
+      "renaming": "Renaming…"
     },
     "reviewComments": {
       "count_one": "{{count}} review comment will be included",
@@ -171,7 +210,7 @@
     },
     "workspace": {
       "create": "Create",
-      "creating": "Creating..."
+      "creating": "Creating…"
     },
     "fileEntry": {
       "created": "Created",
@@ -180,7 +219,7 @@
       "renamed": "Renamed"
     },
     "script": {
-      "running": "Running...",
+      "running": "Running…",
       "exitCode": "Exit code: {{code}}",
       "completedSuccessfully": "Completed successfully",
       "clickToViewLogs": "Click to view logs"
@@ -205,6 +244,11 @@
     "labels": {
       "taskBranch": "Task Branch"
     },
+    "repoActions": {
+      "pull-request": "Open pull request",
+      "link-pr": "Link pull request",
+      "merge": "Merge"
+    },
     "branch": {
       "current": "current"
     },
@@ -225,17 +269,17 @@
     },
     "states": {
       "merged": "Merged!",
-      "merging": "Merging...",
+      "merging": "Merging…",
       "merge": "Merge",
-      "rebasing": "Rebasing...",
+      "rebasing": "Rebasing…",
       "rebase": "Rebase",
       "pushed": "Pushed!",
-      "pushing": "Pushing...",
+      "pushing": "Pushing…",
       "push": "Push",
       "pushFailed": "Failed",
       "forcePush": "Force Push",
-      "forcePushing": "Force Pushing...",
-      "creating": "Creating...",
+      "forcePushing": "Force Pushing…",
+      "creating": "Creating…",
       "createPr": "Create PR"
     },
     "errors": {
@@ -256,7 +300,7 @@
       "prMerged": "PR #{{number}} is already merged",
       "loginRequired": {
         "title": "Sign in to manage git actions",
-        "description": "Sign in to Vibe Kanban so you can push branches, merge changes, or open pull requests for this task.",
+        "description": "Sign in to AgentOS so you can push branches, merge changes, or open pull requests for this task.",
         "action": "Sign in"
       }
     },
@@ -287,7 +331,7 @@
         "createRepository": "Create Repository"
       },
       "states": {
-        "creating": "Creating..."
+        "creating": "Creating…"
       }
     }
   },
@@ -303,7 +347,7 @@
       "description": "Enter a new name for the branch. Cannot rename if an open PR exists.",
       "branchNameLabel": "Branch Name",
       "placeholder": "e.g., feature/my-branch",
-      "renaming": "Renaming...",
+      "renaming": "Renaming…",
       "action": "Rename Branch"
     }
   },
@@ -311,15 +355,40 @@
     "title": "Start Review",
     "description": "Ask the coding agent to review your changes and provide feedback.",
     "additionalInstructions": "Additional Instructions (optional)",
+    "additionalInstructionsPlaceholder": "Add any specific instructions for the review…",
     "reviewComments": "Review Comments ({{count}})",
     "includeGitContext": "Include git context",
     "includeGitContextDescription": "Tells the agent how to view all changes made on this branch",
     "newSession": "New Session",
     "sessionName": "Review"
   },
+  "approvalEntry": {
+    "requestTitle": "Approval required",
+    "loadingDetails": "Loading request details",
+    "streamUnavailable": "Approval details are unavailable. Actions remain blocked until the stream reconnects.",
+    "retryStream": "Retry approvals",
+    "awaitingResponse": "Awaiting your response",
+    "approved": "Approved",
+    "denied": "Denied",
+    "expired": "Expired",
+    "tool": "Tool",
+    "requestedAt": "Requested {{time}}",
+    "timeRemaining": "{{seconds}}s remaining",
+    "question": "Would you like to approve this?",
+    "approve": "Approve",
+    "approveRequest": "Approve request",
+    "deny": "Deny",
+    "submitting": "Submitting…",
+    "provideDenialReason": "Provide denial reason",
+    "denialPlaceholder": "Let the agent know why this request was denied… Type @ to insert tags or search files.",
+    "defaultDenialReason": "User denied this tool use request.",
+    "missingExecutionProcessId": "Missing execution process ID",
+    "responseFailed": "Failed to send response"
+  },
   "actionsMenu": {
     "startReview": "Start Review",
-    "startingReview": "Starting Review..."
+    "startingReview": "Starting Review…",
+    "reviewChangesWithAgent": "Review changes with agent"
   },
   "resolveConflicts": {
     "dialog": {
@@ -327,10 +396,10 @@
       "description": "Conflicts were detected. Choose how you want the agent to resolve them.",
       "newSession": "Start a new session",
       "resolve": "Resolve Conflicts",
-      "resolving": "Starting...",
+      "resolving": "Starting…",
       "filesWithConflicts_one": "{{count}} file has conflicts",
       "filesWithConflicts_other": "{{count}} files have conflicts",
-      "andMore": "...and {{count}} more",
+      "andMore": "…and {{count}} more",
       "sessionName": "Resolve conflicts"
     }
   },
@@ -340,9 +409,9 @@
       "description": "A rebase onto {{targetBranch}} is in progress with no conflicts. Choose how to proceed.",
       "hint": "You can continue the rebase to complete it, or abort to return to your previous state.",
       "continue": "Continue Rebase",
-      "continuing": "Continuing...",
+      "continuing": "Continuing…",
       "abort": "Abort Rebase",
-      "aborting": "Aborting...",
+      "aborting": "Aborting…",
       "continueError": "Failed to continue rebase. There may be unresolved conflicts.",
       "abortError": "Failed to abort rebase. Please try again."
     }
@@ -355,11 +424,11 @@
     "descriptionLabel": "Description (optional)",
     "descriptionPlaceholder": "Enter PR description",
     "baseBranchLabel": "Base Branch",
-    "loadingBranches": "Loading branches...",
+    "loadingBranches": "Loading branches…",
     "selectBaseBranch": "Select base branch",
     "draftLabel": "Create as draft",
     "autoGenerateLabel": "Auto-generate PR description with AI",
-    "creating": "Creating...",
+    "creating": "Creating…",
     "createButton": "Create PR",
     "errors": {
       "failedToCreate": "Failed to create PR",
@@ -379,13 +448,15 @@
     },
     "card": {
       "review": "Review",
-      "tooltip": "Click to view, double-click to edit"
+      "tooltip": "Click to view, double-click to edit",
+      "openComment": "Open PR comment by @{{author}}",
+      "openInBrowser": "Open in browser"
     }
   },
   "taskFormDialog": {
     "createTitle": "Create New Task",
     "editTitle": "Edit Task",
-    "titlePlaceholder": "Task title...",
+    "titlePlaceholder": "Task title…",
     "descriptionPlaceholder": "Add more details (optional). Type @ to search files.",
     "statusLabel": "Status",
     "statusOptions": {
@@ -398,10 +469,10 @@
     "startLabel": "Start",
     "attachFile": "Attach file",
     "dropImagesHere": "Drop images here",
-    "updating": "Updating...",
+    "updating": "Updating…",
     "updateTask": "Update Task",
-    "starting": "Starting...",
-    "creating": "Creating...",
+    "starting": "Starting…",
+    "creating": "Creating…",
     "create": "Create",
     "discardDialog": {
       "title": "Discard unsaved changes?",
@@ -467,7 +538,7 @@
     "noLogs": "No execution logs available",
     "selectRepo": "Repository",
     "fixScript": "Fix Script",
-    "statusRunning": "Running...",
+    "statusRunning": "Running…",
     "statusSuccess": "Completed successfully",
     "statusFailed": "Failed with exit code {{exitCode}}",
     "statusKilled": "Process was killed"
@@ -485,19 +556,19 @@
     "repositoryLabel": "Repository",
     "remoteLabel": "Remote",
     "pullRequestLabel": "Pull Request",
-    "loadingRepositories": "Loading repositories...",
-    "loadingRemotes": "Loading remotes...",
+    "loadingRepositories": "Loading repositories…",
+    "loadingRemotes": "Loading remotes…",
     "noRepositoriesFound": "No repositories found",
-    "loadingPullRequests": "Loading pull requests...",
+    "loadingPullRequests": "Loading pull requests…",
     "selectRepositoryFirst": "Select a repository first",
     "noPullRequestsFound": "No open pull requests found",
     "runSetupScript": "Run setup script",
-    "creating": "Creating...",
+    "creating": "Creating…",
     "createWorkspace": "Create Workspace",
     "selectRepository": "Select a repository",
     "selectRemote": "Select a remote",
     "selectPullRequest": "Select a pull request",
-    "searchPrsPlaceholder": "Search PRs by number or title...",
+    "searchPrsPlaceholder": "Search PRs by number or title…",
     "noMatchingPrs": "No matching pull requests",
     "default": "default",
     "openPrInBrowser": "Open PR in browser",
@@ -519,11 +590,11 @@
     "repositoryLabel": "Repository",
     "remoteLabel": "Remote",
     "pullRequestLabel": "Pull Request",
-    "loadingPrInfo": "Loading PR info...",
+    "loadingPrInfo": "Loading PR info…",
     "invalidUrl": "Could not load PR info from this URL",
     "baseBranch": "Base:",
     "linkPr": "Link PR",
-    "linking": "Linking...",
+    "linking": "Linking…",
     "status": {
       "open": "Open",
       "merged": "Merged",

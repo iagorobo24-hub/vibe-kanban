@@ -97,7 +97,12 @@ export const FileTree = memo(function FileTree({
   };
 
   return (
-    <div className={cn('flex-1 w-full bg-secondary flex flex-col', className)}>
+    <div
+      className={cn(
+        'agentos-file-tree flex-1 w-full bg-secondary flex flex-col',
+        className
+      )}
+    >
       <div className="px-base pt-base overflow-hidden">
         <div className="flex items-center gap-half">
           <div className="flex-1 min-w-0">
@@ -114,7 +119,7 @@ export const FileTree = memo(function FileTree({
                 <button
                   type="button"
                   onClick={() => onNavigateComments('prev')}
-                  className="p-1 rounded hover:bg-panel transition-colors shrink-0 text-low hover:text-normal"
+                  className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                   aria-label={t('common:fileTree.prevGitHubComment')}
                 >
                   <CaretUpIcon className="size-icon-sm" />
@@ -124,7 +129,7 @@ export const FileTree = memo(function FileTree({
                 <button
                   type="button"
                   onClick={() => onNavigateComments('next')}
-                  className="p-1 rounded hover:bg-panel transition-colors shrink-0 text-low hover:text-normal"
+                  className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                   aria-label={t('common:fileTree.nextGitHubComment')}
                 >
                   <CaretDownIcon className="size-icon-sm" />
@@ -144,10 +149,11 @@ export const FileTree = memo(function FileTree({
                 type="button"
                 onClick={() => onToggleGitHubComments(!showGitHubComments)}
                 className={cn(
-                  'p-1 rounded hover:bg-panel transition-colors shrink-0',
+                  'flex size-7 items-center justify-center rounded-sm transition-colors shrink-0 hover:bg-panel focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
                   showGitHubComments ? 'text-normal' : 'text-low',
                   isGitHubCommentsLoading && 'opacity-50 animate-pulse'
                 )}
+                aria-pressed={showGitHubComments}
                 aria-label={
                   showGitHubComments
                     ? t('common:fileTree.hideGitHubComments')
@@ -169,7 +175,9 @@ export const FileTree = memo(function FileTree({
           renderNodes(nodes)
         ) : (
           <div className="p-base text-low text-sm">
-            {searchQuery ? t('common:fileTree.noResults') : 'No changed files'}
+            {searchQuery
+              ? t('common:fileTree.noResults')
+              : t('common:fileTree.noChangedFiles')}
           </div>
         )}
       </div>

@@ -38,7 +38,9 @@
     "description": "View pending invitations for {{orgName}}",
     "loading": "Loading invitations...",
     "invited": "Invited {{date}}",
-    "pending": "Pending"
+    "pending": "Pending",
+    "revoke": "Revoke invitation",
+    "confirmRevoke": "Are you sure you want to revoke the invitation for {{email}}? This action cannot be undone."
   },
   "settings": {
     "title": "Organization Settings",

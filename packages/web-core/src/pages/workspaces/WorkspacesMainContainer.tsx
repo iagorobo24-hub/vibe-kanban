@@ -7,7 +7,9 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Workspace, Session, RepoWithTargetBranch } from 'shared/types';
+import { WarningCircleIcon } from '@phosphor-icons/react';
 import { createWorkspaceWithSession } from '@/shared/types/attempt';
 import { WorkspacesMain } from '@vibe/ui/components/WorkspacesMain';
 import {
@@ -22,6 +24,47 @@ import { RetryUiProvider } from '@/features/workspace-chat/model/contexts/RetryU
 import { ApprovalFeedbackProvider } from '@/features/workspace-chat/model/contexts/ApprovalFeedbackContext';
 import { forwardWheelToScroller } from '@/features/workspace-chat/ui/forwardWheelToScroller';
 import { useDiffStats } from '@/shared/stores/useWorkspaceDiffStore';
+import { getSessionListViewState } from '@/features/workspace-chat/ui/sessionListState';
+
+function SessionStreamNotice({
+  stale,
+  onRetry,
+}: {
+  stale: boolean;
+  onRetry?: () => void;
+}) {
+  const { t } = useTranslation('common');
+
+  return (
+    <div
+      className="mb-base flex w-chat max-w-full items-start gap-half rounded-md border border-error/30 bg-error/5 px-base py-half text-sm"
+      role={stale ? 'status' : 'alert'}
+    >
+      <WarningCircleIcon
+        className="mt-0.5 size-icon-sm shrink-0 text-error"
+        aria-hidden="true"
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-high">
+          {t(
+            stale
+              ? 'workspaces.sessionsMayBeStale'
+              : 'workspaces.sessionsUnavailable'
+          )}
+        </p>
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-half text-xs font-medium text-brand hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+          >
+            {t('workspaces.retrySessions')}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 /**
  * Isolated component that reads diffStats from WorkspaceContext.
@@ -34,6 +77,9 @@ function ChatBoxWithDiffStats({
   workspaceId,
   isNewSessionMode,
   sessions,
+  isSessionsLoading,
+  sessionsError,
+  onRetrySessions,
   onSelectSession,
   onStartNewSession,
   onScrollToPreviousMessage,
@@ -45,6 +91,9 @@ function ChatBoxWithDiffStats({
   workspaceId: string | undefined;
   isNewSessionMode: boolean;
   sessions: Session[];
+  isSessionsLoading: boolean;
+  sessionsError: string | null;
+  onRetrySessions: () => void;
   onSelectSession: (sessionId: string) => void;
   onStartNewSession: () => void;
   onScrollToPreviousMessage: () => void;
@@ -53,36 +102,57 @@ function ChatBoxWithDiffStats({
   getActiveTurnPatchKey: () => string | null;
 }) {
   const diffStats = useDiffStats();
+  const sessionListState = getSessionListViewState({
+    sessionCount: sessions.length,
+    isLoading: isSessionsLoading,
+    hasError: Boolean(sessionsError),
+  });
+  const sessionDataUnavailable =
+    sessionListState === 'loading' || sessionListState === 'error';
+  const effectiveIsNewSessionMode = sessionDataUnavailable
+    ? false
+    : isNewSessionMode;
 
   return (
-    <SessionChatBoxContainer
-      {...(isNewSessionMode && workspaceId
-        ? {
-            mode: 'new-session' as const,
-            workspaceId,
-            onSelectSession,
-          }
-        : session
+    <div className="flex w-full flex-col items-center">
+      {(sessionListState === 'loading' || sessionListState === 'error') && (
+        <SessionStreamNotice
+          stale={false}
+          onRetry={sessionListState === 'error' ? onRetrySessions : undefined}
+        />
+      )}
+      {sessionListState === 'sessions-with-error' && (
+        <SessionStreamNotice stale onRetry={onRetrySessions} />
+      )}
+      <SessionChatBoxContainer
+        {...(effectiveIsNewSessionMode && workspaceId
           ? {
-              mode: 'existing-session' as const,
-              session,
+              mode: 'new-session' as const,
+              workspaceId,
               onSelectSession,
-              onStartNewSession,
             }
-          : {
-              mode: 'placeholder' as const,
-            })}
-      sessions={sessions}
-      filesChanged={diffStats.files_changed}
-      linesAdded={diffStats.lines_added}
-      linesRemoved={diffStats.lines_removed}
-      disableViewCode={false}
-      showOpenWorkspaceButton={false}
-      onScrollToPreviousMessage={onScrollToPreviousMessage}
-      onScrollToBottom={onScrollToBottom}
-      onScrollToUserMessage={onScrollToUserMessage}
-      getActiveTurnPatchKey={getActiveTurnPatchKey}
-    />
+          : session
+            ? {
+                mode: 'existing-session' as const,
+                session,
+                onSelectSession,
+                onStartNewSession,
+              }
+            : {
+                mode: 'placeholder' as const,
+              })}
+        sessions={sessions}
+        filesChanged={diffStats.files_changed}
+        linesAdded={diffStats.lines_added}
+        linesRemoved={diffStats.lines_removed}
+        disableViewCode={false}
+        showOpenWorkspaceButton={false}
+        onScrollToPreviousMessage={onScrollToPreviousMessage}
+        onScrollToBottom={onScrollToBottom}
+        onScrollToUserMessage={onScrollToUserMessage}
+        getActiveTurnPatchKey={getActiveTurnPatchKey}
+      />
+    </div>
   );
 }
 
@@ -98,7 +168,9 @@ interface WorkspacesMainContainerProps {
   repos: RepoWithTargetBranch[];
   onSelectSession: (sessionId: string) => void;
   isLoading: boolean;
-  isSessionsLoading?: boolean;
+  isSessionsLoading: boolean;
+  sessionsError: string | null;
+  onRetrySessions: () => void;
   isNewSessionMode: boolean;
   onStartNewSession: () => void;
 }
@@ -115,7 +187,9 @@ export const WorkspacesMainContainer = forwardRef<
     repos,
     onSelectSession,
     isLoading,
-    isSessionsLoading: _isSessionsLoading,
+    isSessionsLoading,
+    sessionsError,
+    onRetrySessions,
     isNewSessionMode,
     onStartNewSession,
   },
@@ -202,7 +276,7 @@ export const WorkspacesMainContainer = forwardRef<
 
   const conversationContent = workspaceWithSession ? (
     <div
-      className="flex-1 min-h-0 overflow-hidden flex justify-center"
+      className="agentos-workspaces-main__conversation flex-1 min-h-0 overflow-hidden flex justify-center"
       onWheel={(e) => forwardWheelToScroller(e, conversationListRef)}
     >
       <div className="w-chat max-w-full h-full">
@@ -226,6 +300,9 @@ export const WorkspacesMainContainer = forwardRef<
       workspaceId={workspaceWithSession?.id}
       isNewSessionMode={isNewSessionMode}
       sessions={sessions}
+      isSessionsLoading={isSessionsLoading}
+      sessionsError={sessionsError}
+      onRetrySessions={onRetrySessions}
       onSelectSession={onSelectSession}
       onStartNewSession={onStartNewSession}
       onScrollToPreviousMessage={handleScrollToPreviousMessage}

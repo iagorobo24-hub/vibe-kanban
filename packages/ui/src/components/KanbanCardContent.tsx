@@ -133,6 +133,7 @@ export type KanbanCardContentProps<TTag extends KanbanTag = KanbanTag> = {
   isSubIssue?: boolean;
   isLoading?: boolean;
   className?: string;
+  onTitleClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   onPriorityClick?: (e: MouseEvent) => void;
   onAssigneeClick?: (e: MouseEvent) => void;
   onMoreActionsClick?: () => void;
@@ -152,6 +153,7 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
   isSubIssue,
   isLoading = false,
   className,
+  onTitleClick,
   onPriorityClick,
   onAssigneeClick,
   onMoreActionsClick,
@@ -193,16 +195,22 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
     <button
       type="button"
       onClick={(e) => e.stopPropagation()}
-      className="flex items-center gap-half cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+      className="flex items-center gap-half cursor-pointer rounded-sm transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+      aria-label={t('kanban.tags')}
     >
       {tagsDisplay}
     </button>
   );
 
   return (
-    <div className={cn('flex flex-col gap-half min-w-0', className)}>
+    <div
+      className={cn(
+        'agentos-kanban-card__content flex flex-col gap-half min-w-0',
+        className
+      )}
+    >
       {/* Row 1: Task ID + sub-issue indicator + loading dots + more actions */}
-      <div className="flex items-center justify-between gap-half">
+      <div className="agentos-kanban-card__meta flex items-center justify-between gap-half">
         <div className="flex items-center gap-half min-w-0">
           {isSubIssue && (
             <span className="text-sm text-low">
@@ -223,28 +231,47 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
             }}
             onMouseDown={(e) => e.stopPropagation()}
             className={cn(
-              'p-half -m-half rounded-sm text-low hover:text-normal hover:bg-secondary shrink-0',
+              'agentos-kanban-card__more p-half -m-half rounded-sm text-low hover:text-normal hover:bg-secondary shrink-0',
               isMobile
                 ? ''
-                : 'invisible opacity-0 group-hover:visible group-hover:opacity-100',
+                : 'invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100',
               'transition-[opacity,color,background-color]'
             )}
-            aria-label="More actions"
-            title="More actions"
+            aria-label={t('kanban.moreActions')}
+            title={t('kanban.moreActions')}
           >
-            <DotsThreeIcon className="size-icon-xs" weight="bold" />
+            <DotsThreeIcon
+              className="size-icon-xs"
+              weight="bold"
+              aria-hidden="true"
+            />
           </button>
         )}
       </div>
 
       {/* Row 2: Title */}
-      <span className="text-base text-normal truncate">{title}</span>
+      {onTitleClick ? (
+        <button
+          type="button"
+          className="agentos-kanban-card__title min-w-0 border-0 bg-transparent p-0 text-left text-base text-normal truncate focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          onClick={(event) => {
+            event.stopPropagation();
+            onTitleClick(event);
+          }}
+        >
+          {title}
+        </button>
+      ) : (
+        <span className="agentos-kanban-card__title text-base text-normal truncate">
+          {title}
+        </span>
+      )}
 
       {/* Row 3: Description (optional, truncated) */}
       {previewDescription && (
         <p
           className={cn(
-            'text-sm text-low m-0',
+            'agentos-kanban-card__description text-sm text-low m-0',
             isMobile
               ? 'leading-tight line-clamp-2'
               : 'leading-relaxed line-clamp-4'
@@ -255,14 +282,15 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
       )}
 
       {/* Row 4: Priority + Assignee */}
-      <div className="flex items-center justify-between">
+      <div className="agentos-kanban-card__properties flex items-center justify-between">
         <div className="flex items-center gap-half min-w-0">
           {onPriorityClick ? (
             <button
               type="button"
               onClick={onPriorityClick}
               onMouseDown={(e) => e.stopPropagation()}
-              className="flex items-center cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+              className="flex items-center cursor-pointer rounded-sm p-half transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+              aria-label={t('kanban.priority')}
             >
               <PriorityIcon priority={priority} />
               {!priority && (
@@ -281,7 +309,8 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
             type="button"
             onClick={onAssigneeClick}
             onMouseDown={(e) => e.stopPropagation()}
-            className="cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+            className="cursor-pointer rounded-sm p-half transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+            aria-label={t('kanban.assignee')}
           >
             <KanbanAssignee assignees={assignees} />
           </button>
@@ -295,7 +324,7 @@ export function KanbanCardContent<TTag extends KanbanTag = KanbanTag>({
         tagEditProps ||
         pullRequests.length > 0 ||
         relationships.length > 0) && (
-        <div className="flex items-center gap-half flex-wrap min-w-0">
+        <div className="agentos-kanban-card__badges flex items-center gap-half flex-wrap min-w-0">
           {tagEditProps ? (
             (tagEditProps.renderTagEditor?.({
               allTags: tagEditProps.allTags,

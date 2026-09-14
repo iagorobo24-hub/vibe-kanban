@@ -22,17 +22,124 @@
     "retry": "Retry",
     "add": "Add"
   },
+  "accessibility": {
+    "collapse": "Collapse {{title}}",
+    "expand": "Expand {{title}}",
+    "collapseMessage": "Collapse message",
+    "expandMessage": "Expand message",
+    "markdownContent": "Markdown content",
+    "markdownEditor": "Markdown editor",
+    "resizePanels": "Resize panels",
+    "projectMenu": "Project menu",
+    "addTask": "Add task",
+    "selectAgent": "Select agent",
+    "noAgentsAvailable": "No agents available",
+    "configuration": "Configuration",
+    "selectConfiguration": "Select configuration",
+    "attachFile": "Attach file",
+    "closeNavigation": "Close navigation menu",
+    "account": "Account",
+    "userAvatar": "User avatar",
+    "agentosNavigation": "AgentOS navigation",
+    "selectColor": "Select a color",
+    "removeRelationship": "Remove relationship",
+    "removeParentIssue": "Remove parent issue",
+    "addTag": "Add tag",
+    "removeTag": "Remove tag {{name}}",
+    "linkPullRequest": "Link pull request",
+    "closeDialog": "Close dialog",
+    "subIssueActions": "Sub-issue actions",
+    "addRelationship": "Add relationship",
+    "reorderColumn": "Reorder {{name}}",
+    "collapseDiff": "Collapse diff for {{filePath}}",
+    "expandDiff": "Expand diff for {{filePath}}",
+    "collapseFileContent": "Collapse file content for {{filePath}}",
+    "expandFileContent": "Expand file content for {{filePath}}",
+    "selectOption": "Select option {{index}}",
+    "noData": "No data",
+    "activateTableRow": "Activate table row",
+    "dismissError": "Dismiss error",
+    "openAttachment": "Open attachment {{name}}",
+    "openMedia": "Open {{name}}",
+    "removeLinkedIssue": "Remove link to {{id}}",
+    "reasoningSupported": "Reasoning supported",
+    "workspaceActions": "Workspace actions",
+    "openHostWorkspaces": "Open {{name}} workspaces"
+  },
+  "richTextToolbar": {
+    "undo": "Undo",
+    "bold": "Bold (Cmd+B)",
+    "italic": "Italic (Cmd+I)",
+    "strikethrough": "Strikethrough",
+    "inlineCode": "Inline code (Cmd+E)",
+    "bulletList": "Bullet list",
+    "numberedList": "Numbered list"
+  },
+  "remoteAuth": {
+    "oauthError": "OAuth error: {{error}}",
+    "sessionLost": "OAuth session lost. Please try again.",
+    "loginFailed": "Login failed",
+    "tryAgain": "Try again",
+    "completingLogin": "Completing login…",
+    "processingOAuth": "Processing OAuth callback…",
+    "loadInvitationFailed": "Failed to load invitation",
+    "oauthInitFailed": "OAuth initialization failed",
+    "invalidInvitation": "Invalid or expired invitation",
+    "loadingInvitation": "Loading invitation…",
+    "pleaseWait": "Please wait.",
+    "youAreInvited": "You are invited",
+    "invitedToJoin": "You have been invited to join",
+    "onAgentOS": "on AgentOS.",
+    "role": "Role",
+    "expires": "Expires",
+    "chooseProvider": "Choose a provider to continue:",
+    "continueWithGitHub": "Continue with GitHub",
+    "continueWithGoogle": "Continue with Google",
+    "openingProvider": "Opening {{provider}}…",
+    "invitationTokenLost": "Invitation token lost. Please try again.",
+    "invitationFailed": "Failed to complete invitation",
+    "couldNotAcceptInvitation": "Could not accept invitation",
+    "invitationAccepted": "Invitation accepted!",
+    "invitationConfirmed": "Your invitation is confirmed. You can now close this page.",
+    "getStarted": "Get started",
+    "completingInvitation": "Completing invitation…",
+    "signInToContinue": "Sign in to continue",
+    "localLoginFailed": "Local login failed",
+    "authMethodsLoadFailed": "Failed to load available sign-in methods.",
+    "email": "Email",
+    "password": "Password",
+    "signingIn": "Signing in…",
+    "signInWithEmail": "Sign in with email",
+    "orContinueWith": "or continue with",
+    "needHelp": "Need help getting started?",
+    "readDocs": "Read the docs"
+  },
+  "relativeTime": {
+    "justNow": "just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  },
   "form": {
     "notSpecified": "Not specified",
-    "selectOption": "Select an option..."
+    "selectOption": "Select an option…"
   },
   "states": {
-    "loading": "Loading..."
+    "loading": "Loading…",
+    "loadingDiagram": "Loading diagram…"
   },
   "ok": "OK",
   "error": "Error",
+  "git": {
+    "pushFailed": "Failed to push changes"
+  },
   "errors": {
-    "generic": "An unexpected error occurred"
+    "generic": "An unexpected error occurred",
+    "diagram": "Mermaid diagram error",
+    "diagramRenderFailed": "Failed to render diagram"
+  },
+  "remote": {
+    "pageNotFound": "Page not found"
   },
   "language": {
     "browserDefault": "Browser Default"
@@ -40,6 +147,9 @@
   "conversation": {
     "plan": "Plan",
     "output": "Output",
+    "yourMessages": "Your messages",
+    "turn_one": "{{count}} turn",
+    "turn_other": "{{count}} turns",
     "deniedByUser": "{{toolName}} denied by user",
     "tool": "Tool",
     "thinking": "Thinking",
@@ -48,6 +158,21 @@
       "searched": "Searched for \"{{query}}\"",
       "fetched": "Fetched {{url}}",
       "ranCommand": "Ran command",
+      "toolGroups": {
+        "read": "Read",
+        "search": "Search",
+        "fetched": "Fetched",
+        "edit": "Edit",
+        "fetch": "Fetch"
+      },
+      "toolUnits": {
+        "file_one": "file",
+        "file_other": "files",
+        "url_one": "URL",
+        "url_other": "URLs",
+        "command_one": "command",
+        "command_other": "commands"
+      },
       "createdTask": "Created task: {{description}}",
       "todoOperation": "{{operation}} todos"
     },
@@ -57,17 +182,27 @@
     "loadingEarlierMessages": "Loading earlier messages"
   },
   "folderPicker": {
+    "title": "Select Folder",
+    "description": "Choose a folder for your project",
     "legend": "Click folder names to navigate • Use action buttons to select",
     "manualPathLabel": "Enter path manually:",
+    "pathPlaceholder": "/path/to/your/project",
     "go": "Go",
     "searchLabel": "Search current directory:",
+    "searchPlaceholder": "Filter folders and files…",
+    "home": "Home directory",
+    "parent": "Parent directory",
+    "loading": "Loading…",
+    "noMatches": "No matches found",
+    "noFolders": "No folders found",
+    "openFolder": "Open folder {{name}}",
     "selectCurrent": "Select Current",
     "gitRepo": "git repo",
     "selectPath": "Select Path"
   },
   "branchSelector": {
     "placeholder": "Select a branch",
-    "searchPlaceholder": "Search branches...",
+    "searchPlaceholder": "Search branches…",
     "empty": "No branches found",
     "badges": {
       "current": "current",
@@ -83,20 +218,64 @@
   "signIn": "Sign in",
   "signOut": "Sign out",
   "oauth": {
-    "title": "Sign in to Vibe Kanban",
+    "title": "Sign in to AgentOS",
     "description": "Sign in to join organizations and share tasks with your team",
     "continueWithGitHub": "Continue with GitHub",
     "continueWithGoogle": "Continue with Google",
     "waitingTitle": "Complete Authentication",
     "waitingDescription": "A popup window has been opened for authentication",
-    "waitingForAuth": "Waiting for authentication...",
+    "waitingForAuth": "Waiting for authentication…",
     "popupInstructions": "If the popup window didn't open, please check your popup blocker settings.",
     "back": "Back",
     "successTitle": "Authentication Successful!",
     "welcomeBack": "Welcome back, {{name}}",
     "errorTitle": "Authentication Failed",
     "errorDescription": "There was a problem authenticating your account",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "failedToInitialize": "Failed to initialize OAuth flow",
+    "failedToCheckStatus": "Failed to check OAuth status",
+    "popupClosed": "The OAuth window was closed before authentication completed",
+    "failedToSignIn": "Failed to sign in",
+    "failedToLoadMethods": "Failed to load available sign-in methods.",
+    "retry": "Retry",
+    "email": "Email",
+    "password": "Password",
+    "signingIn": "Signing in…",
+    "signInWithEmail": "Sign in with email"
+  },
+  "releaseNotes": {
+    "title": "What's New",
+    "loadError": "Unable to load release notes.",
+    "viewOnGitHub": "View on GitHub",
+    "openOnGitHub": "Open on GitHub"
+  },
+  "onboardingLanding": {
+    "loading": "Loading…",
+    "warningPrefix": "AgentOS runs AI coding agents with",
+    "warningSuffix": "by default. Always review what agents are doing.",
+    "learnMore": "Learn more",
+    "codingAgent": "Coding Agent",
+    "codeEditor": "Code Editor",
+    "customCommand": "Custom Command",
+    "customCommandPlaceholder": "e.g. code --wait",
+    "notificationSound": "Notification Sound",
+    "soundOptions": {
+      "abstractSound1": "Abstract Sound 1",
+      "abstractSound2": "Abstract Sound 2",
+      "abstractSound3": "Abstract Sound 3",
+      "abstractSound4": "Abstract Sound 4",
+      "cowMooing": "Cow Mooing",
+      "fahhhh": "Fahhhh",
+      "phoneVibration": "Phone Vibration",
+      "rooster": "Rooster",
+      "noSound": "No sound"
+    },
+    "termsPrefix": "By continuing you agree to the",
+    "terms": "terms and conditions",
+    "and": "and",
+    "privacy": "privacy policy",
+    "saving": "Saving…",
+    "continue": "Continue"
   },
   "onboardingSignIn": {
     "subtitle": "Sign in to continue",
@@ -106,7 +285,32 @@
     "signedInHeader": "Signed in",
     "skipSignInHeader": "Don't sign in",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "loading": "Loading…",
+    "continuing": "Continuing…",
+    "continue": "Continue",
+    "openingSignIn": "Opening sign in…",
+    "signIn": "Sign in",
+    "openingProvider": "Opening {{provider}}…",
+    "skipSignIn": "I understand, continue without signing in",
+    "authMethodsError": "Failed to load available sign-in methods.",
+    "fallbackAccount": "your account",
+    "features": {
+      "useKanban": "Use kanban board to track issues",
+      "inviteTeam": "Invite team to collaborate",
+      "organiseWork": "Organise work into projects and organizations",
+      "createWorkspaces": "Create workspaces"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "signInDescription": "Sign in to view notifications from your agents and workspaces.",
+    "markAllRead": "Mark all as read",
+    "emptyTitle": "No notifications yet",
+    "emptyDescription": "Updates that need your attention will appear here.",
+    "markRead": "Mark notification as read",
+    "markReadTitle": "Mark as read",
+    "someone": "Someone"
   },
   "toolbar": {
     "sortBy": "Sort by",
@@ -123,10 +327,10 @@
   },
   "workspaces": {
     "title": "Workspaces",
-    "searchPlaceholder": "Search...",
+    "searchPlaceholder": "Search…",
     "active": "Active",
     "archived": "Archived",
-    "loading": "Loading...",
+    "loading": "Loading…",
     "notFound": "Workspace not found",
     "selectToStart": "Select a workspace to get started",
     "draft": "Draft",
@@ -134,10 +338,20 @@
     "backToActive": "Back to Active",
     "noArchived": "No archived workspaces",
     "noWorkspaces": "No workspaces",
+    "streamUnavailable": "Workspaces are temporarily unavailable.",
+    "streamMayBeStale": "Workspace data may be out of date.",
+    "retry": "Retry workspaces",
+    "sessionsUnavailable": "Sessions are temporarily unavailable.",
+    "sessionsMayBeStale": "Session data may be out of date.",
+    "retrySessions": "Retry sessions",
+    "createFirst": "Create your first workspace",
     "newWorkspace": "New workspace",
     "needsAttention": "Needs Attention",
     "idle": "Idle",
     "running": "Running",
+    "toggleLayout": "Toggle workspace layout",
+    "addWorkspace": "Add workspace",
+    "previewSidebar": "Preview workspaces sidebar",
     "pin": "Pin",
     "unpin": "Unpin",
     "archive": "Archive",
@@ -148,7 +362,7 @@
       "nameLabel": "Name",
       "placeholder": "Enter workspace name",
       "action": "Rename",
-      "renaming": "Renaming..."
+      "renaming": "Renaming…"
     },
     "unlinkFromIssue": "Unlink from issue",
     "deleteWorkspace": "Delete workspace",
@@ -159,6 +373,7 @@
     "unlinkError": "Failed to unlink workspace",
     "deleteError": "Failed to delete workspace",
     "linkError": "Failed to link workspace",
+    "createDraftError": "Failed to prepare workspace draft. Please try again.",
     "filesChanged": "{{count}} files",
     "deleteDialog": {
       "title": "Delete Workspace",
@@ -169,8 +384,9 @@
     }
   },
   "fileTree": {
-    "searchPlaceholder": "Search files...",
+    "searchPlaceholder": "Search files…",
     "noResults": "No matching files",
+    "noChangedFiles": "No changed files",
     "title": "Files",
     "showGitHubComments": "Show GitHub comments",
     "hideGitHubComments": "Hide GitHub comments",
@@ -189,11 +405,61 @@
     "recent": "Recent",
     "other": "Other",
     "devServerPreview": "Dev Server Preview",
+    "git": "Git",
+    "logs": "Logs",
+    "preview": "Preview",
     "terminal": "Terminal",
-    "notes": "Notes"
+    "notes": "Notes",
+    "expandTerminal": "Expand terminal"
+  },
+  "contextBar": {
+    "openInEditor": "Open in {{editor}}",
+    "copyWorkspacePath": "Copy workspace path",
+    "startDevServer": "Start dev server",
+    "stopDevServer": "Stop dev server",
+    "showPreview": "Show preview panel",
+    "hidePreview": "Hide preview panel",
+    "showChanges": "Show changes panel",
+    "hideChanges": "Hide changes panel"
+  },
+  "navbar": {
+    "back": "Back",
+    "openMenu": "Open menu",
+    "projects": "Projects",
+    "board": "Board",
+    "reload": "Reload",
+    "settings": "Settings",
+    "commandBar": "Command bar",
+    "mobileTabs": {
+      "label": "Mobile workspace views",
+      "workspaces": "Workspaces",
+      "chat": "Chat",
+      "changes": "Diff",
+      "logs": "Logs",
+      "preview": "Preview",
+      "git": "Git"
+    },
+    "actions": {
+      "archive": "Archive workspace",
+      "unarchive": "Restore workspace",
+      "diffSideBySide": "Switch to side-by-side view",
+      "diffInline": "Switch to inline view",
+      "collapseAllDiffs": "Collapse all diffs",
+      "expandAllDiffs": "Expand all diffs",
+      "toggleLeftSidebar": "Toggle left sidebar",
+      "toggleChat": "Toggle chat panel",
+      "toggleChanges": "Toggle changes panel",
+      "toggleLogs": "Toggle logs panel",
+      "togglePreview": "Toggle preview panel",
+      "toggleRightSidebar": "Toggle right sidebar",
+      "commandBar": "Open command bar",
+      "feedback": "Give feedback",
+      "workspacesGuide": "Workspaces guide",
+      "settings": "Open settings"
+    }
   },
   "notes": {
-    "placeholder": "Add notes about this workspace...",
+    "placeholder": "Add notes about this workspace…",
     "selectWorkspace": "Select a workspace to view notes"
   },
   "actions": {
@@ -201,17 +467,56 @@
     "cancel": "Cancel",
     "saveChanges": "Save Changes",
     "copied": "Copied",
+    "copyAsMarkdown": "Copy as Markdown",
     "collapse": "Collapse"
   },
   "comments": {
     "addReviewComment": "Add Review Comment",
-    "addPlaceholder": "Add a comment...",
-    "editPlaceholder": "Edit comment...",
+    "addPlaceholder": "Add a comment…",
+    "editPlaceholder": "Edit comment…",
     "copyToReview": "Copy to review"
   },
   "confirm": {
     "defaultConfirm": "Confirm",
     "defaultCancel": "Cancel"
+  },
+  "actionDialogs": {
+    "pullRequestLinked": {
+      "title": "Pull request linked",
+      "message": "Pull request #{{number}} linked",
+      "messageWithUrl": "Pull request #{{number}} linked — {{url}}"
+    },
+    "pullRequestNotFound": {
+      "title": "No pull request found",
+      "message": "No open pull request matches this branch. Make sure a pull request exists for this branch on the remote."
+    },
+    "cannotMerge": {
+      "title": "Cannot merge",
+      "message": "This repository has an open pull request. Close or merge the pull request before merging directly."
+    },
+    "rebaseRequired": {
+      "title": "Rebase required",
+      "message_one": "Your branch is {{count}} commit behind the target branch. Would you like to rebase first?",
+      "message_other": "Your branch is {{count}} commits behind the target branch. Would you like to rebase first?"
+    },
+    "mergeBranch": {
+      "title": "Merge branch",
+      "message": "Are you sure you want to merge this branch into the target branch?"
+    },
+    "deleteIssue": {
+      "title_one": "Delete issue",
+      "title_other": "Delete {{count}} issues",
+      "message_one": "Are you sure you want to delete this issue? This action cannot be undone.",
+      "message_other": "Are you sure you want to delete these {{count}} issues? This action cannot be undone."
+    },
+    "deleteSubIssue": {
+      "title": "Delete sub-issue",
+      "message": "Are you sure you want to delete this sub-issue? This action cannot be undone.",
+      "messageWithTitle": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
+    },
+    "errors": {
+      "attachPullRequest": "Failed to attach pull request"
+    }
   },
   "dialogs": {
     "selectGitRepository": "Select Git Repository",
@@ -220,12 +525,113 @@
   "empty": {
     "noChanges": "No changes to display"
   },
+  "fileChanges": {
+    "rename": "Rename {{path}} to {{newPath}}"
+  },
   "commandBar": {
+    "title": "Command Bar",
     "noResults": "No results found.",
     "back": "Back",
-    "defaultPlaceholder": "Type a command or search...",
+    "defaultPlaceholder": "Type a command or search…",
     "selectBranch": "Select Branch",
-    "selectBranchFor": "Select Branch for {{repoName}}"
+    "selectBranchFor": "Select Branch for {{repoName}}",
+    "selectionTitles": {
+      "status": "Select status",
+      "priority": "Select priority",
+      "issue": "Select issue",
+      "repository": "Select repository",
+      "addSubIssue": "Add sub-issue",
+      "makeSubIssueOf": "Make sub-issue of"
+    },
+    "selectionGroups": {
+      "statuses": "Statuses",
+      "priority": "Priority",
+      "issues": "Issues",
+      "repositories": "Repositories",
+      "branches": "Branches"
+    },
+    "groups": {
+      "actions": "Actions",
+      "view": "View",
+      "general": "General",
+      "workspace": "Workspace",
+      "scripts": "Scripts",
+      "display": "Display",
+      "panels": "Panels"
+    },
+    "pages": {
+      "workspaceActions": "Workspace Actions",
+      "diffOptions": "Diff Options",
+      "viewOptions": "View Options",
+      "repoActions": "Repository Actions",
+      "issueActions": "Issue Actions"
+    },
+    "actions": {
+      "newWorkspace": "New Workspace",
+      "createWorkspaceFromPr": "Create Workspace from PR",
+      "settings": "Settings",
+      "projectSettings": "Project Settings",
+      "signIn": "Sign In",
+      "signOut": "Sign Out",
+      "feedback": "Give Feedback",
+      "workspacesGuide": "Workspaces Guide",
+      "projectsGuide": "Projects Guide",
+      "openCommandBar": "Open Command Bar",
+      "duplicateWorkspace": "Duplicate",
+      "renameWorkspace": "Rename",
+      "deleteWorkspace": "Delete",
+      "deleteIssue": "Delete issue",
+      "deleteSubIssue": "Delete sub-issue",
+      "startReview": "Start Review",
+      "spinOffWorkspace": "Spin off workspace",
+      "openInIde": "Open in IDE",
+      "copyWorkspacePath": "Copy Workspace Path",
+      "copyRawLogs": "Copy Raw Logs",
+      "devServer": "Dev Server",
+      "createPullRequest": "Create Pull Request",
+      "linkPullRequest": "Link Pull Request",
+      "merge": "Merge",
+      "rebase": "Rebase",
+      "changeTargetBranch": "Change Target Branch",
+      "push": "Push",
+      "copyRepoPath": "Copy Repo Path",
+      "openRepoInIde": "Open Repo in IDE",
+      "repositorySettings": "Repository Settings",
+      "runSetupScript": "Run Setup Script",
+      "runCleanupScript": "Run Cleanup Script",
+      "runArchiveScript": "Run Archive Script",
+      "pinWorkspace": "Pin",
+      "unpinWorkspace": "Unpin",
+      "archiveWorkspace": "Archive",
+      "unarchiveWorkspace": "Unarchive",
+      "diffSideBySideView": "Switch to side-by-side view",
+      "diffInlineView": "Switch to inline view",
+      "showWhitespaceChanges": "Show whitespace changes",
+      "ignoreWhitespaceChanges": "Ignore whitespace changes",
+      "disableLineWrapping": "Disable line wrapping",
+      "enableLineWrapping": "Enable line wrapping",
+      "hideLeftSidebar": "Hide left sidebar",
+      "showLeftSidebar": "Show left sidebar",
+      "hideChatPanel": "Hide chat panel",
+      "showChatPanel": "Show chat panel",
+      "hideRightSidebar": "Hide right sidebar",
+      "showRightSidebar": "Show right sidebar",
+      "hideChangesPanel": "Hide changes panel",
+      "showChangesPanel": "Show changes panel",
+      "hideLogsPanel": "Hide logs panel",
+      "showLogsPanel": "Show logs panel",
+      "hidePreviewPanel": "Hide preview panel",
+      "showPreviewPanel": "Show preview panel",
+      "collapseAllDiffs": "Collapse all diffs",
+      "expandAllDiffs": "Expand all diffs",
+      "startDevServer": "Start dev server",
+      "stopDevServer": "Stop dev server"
+    }
+  },
+  "guide": {
+    "topics": "Topics",
+    "topicsAriaLabel": "Guide topics",
+    "back": "Back"
   },
   "workspacesGuide": {
     "welcome": {
@@ -267,7 +673,21 @@
   },
   "logs": {
     "searchLogs": "Search logs",
-    "selectProcessToView": "Select a process to view logs"
+    "selectProcessToView": "Select a process to view logs",
+    "previousMatch": "Previous match",
+    "previousMatchShortcut": "Previous match (Shift+Enter)",
+    "nextMatch": "Next match",
+    "nextMatchShortcut": "Next match (Enter)"
+  },
+  "workspaceInspector": {
+    "issue": "Issue",
+    "workspace": "Workspace",
+    "openLinkedIssue": "Open linked issue",
+    "closeCreateWorkspace": "Close create workspace view",
+    "openWorkspace": "Open workspace",
+    "openWorkspaceView": "Open in workspace view",
+    "closeConversation": "Close conversation view",
+    "scrollToBottom": "Scroll to bottom"
   },
   "processes": {
     "noProcesses": "No processes",
@@ -292,14 +712,14 @@
       "quickActions": "Quick Actions",
       "navigation": "Navigation",
       "modifiers": "Modifiers",
-      "goTo": "Go To (G ...)",
-      "workspace": "Workspace (W ...)",
-      "view": "View (V ...)",
-      "issues": "Issues (I ...)",
-      "git": "Git (X ...)",
-      "yank": "Yank (Y ...)",
-      "toggle": "Toggle (T ...)",
-      "run": "Run (R ...)"
+      "goTo": "Go To (G …)",
+      "workspace": "Workspace (W …)",
+      "view": "View (V …)",
+      "issues": "Issues (I …)",
+      "git": "Git (X …)",
+      "yank": "Yank (Y …)",
+      "toggle": "Toggle (T …)",
+      "run": "Run (R …)"
     },
     "actions": {
       "showHelp": "Show this help",
@@ -358,22 +778,38 @@
     "missingRepo": "Selected repo is no longer available.",
     "noTagsOrFiles": "No tags or files found",
     "createTag": "Create new tag",
-    "noCommands": "No commands available for this agent."
+    "noCommands": "No commands available for this agent.",
+    "loadingCommands": "Loading commands…",
+    "discoveringCommands": "Discovering commands…"
   },
   "kanban": {
     "noVisibleStatuses": "All statuses are hidden. Use display settings or switch to another tab to view issues.",
     "noProjectFound": "No project found",
+    "projectDataUnavailable": {
+      "title": "Project data unavailable",
+      "description": "The project could not be loaded from the remote stream. Your project data was not confirmed, so the board is paused.",
+      "retry": "Retry project data"
+    },
+    "boardDataUnavailable": {
+      "description": "Some board data may be out of date while the remote stream recovers.",
+      "retry": "Retry board data"
+    },
+    "remoteAuthUnavailable": {
+      "title": "Remote connection needs attention",
+      "description": "The local plane is still available, but remote projects cannot be reached right now. Refresh the connection to retry.",
+      "action": "Retry connection"
+    },
     "unassigned": "Unassigned",
     "noTagsAvailable": "No tags available",
     "createNewIssue": "Create new issue",
-    "searchTags": "Search tags...",
+    "searchTags": "Search tags…",
     "selectColorFor": "Select color for",
     "createTag": "Create",
     "noPrCreated": "No PR created",
     "noCommentsYet": "No comments yet",
     "createdBy": "Created by",
     "comments": "Comments",
-    "enterCommentPlaceholder": "Enter your comment here...",
+    "enterCommentPlaceholder": "Enter your comment here…",
     "attachFile": "Attach file",
     "attachFileHint": "Attach files (max 20MB each)",
     "dropFilesHere": "Drop files here",
@@ -384,8 +820,9 @@
     "moreActions": "More actions",
     "closePanel": "Close panel",
     "copyLink": "Copy link",
-    "issueTitlePlaceholder": "Issue Title...",
-    "issueDescriptionPlaceholder": "Enter task description here...",
+    "issueTitlePlaceholder": "Issue Title…",
+    "deleteDraft": "Delete draft",
+    "issueDescriptionPlaceholder": "Enter task description here…",
     "createDraftWorkspaceImmediately": "Create draft workspace immediately",
     "createDraftWorkspaceDescription": "After creating the issue, open the workspace creation form pre-filled with the issue details",
     "createIssue": "Create Issue",
@@ -403,6 +840,10 @@
     "failedToUploadFile": "Failed to upload {{filename}}: {{message}}",
     "downloadAttachment": "Download attachment",
     "subIssues": "Sub-issues",
+    "subIssueActions": {
+      "create": "Create sub-issue",
+      "link": "Link sub-issue"
+    },
     "noSubIssues": "No sub-issues",
     "markIndependentIssue": "Mark as independent issue",
     "parentIssue": "Parent",
@@ -418,7 +859,7 @@
     },
     "team": "Team",
     "personal": "Personal",
-    "searchPlaceholder": "Search issues...",
+    "searchPlaceholder": "Search issues…",
     "filters": "Filters",
     "clearFilters": "Clear filters",
     "filtersDescription": "Adjust filters and sorting for this board view.",
@@ -426,6 +867,11 @@
     "filterByPriority": "Filter by priority",
     "tags": "Tags",
     "sortBy": "Sort",
+    "sortManual": "Manual",
+    "sortPriority": "Priority",
+    "sortCreated": "Created",
+    "sortUpdated": "Updated",
+    "sortTitle": "Title",
     "workspaceSidebar": {
       "sortDialogTitle": "Sort workspaces",
       "sortDialogDescription": "Choose how workspaces are ordered in the sidebar.",
@@ -451,12 +897,27 @@
     "priority": "Priority",
     "subIssuesFilterLabel": "Sub-issues",
     "workspacesFilterLabel": "Workspaces",
-    "selectAssignees": "Select assignees...",
+    "hideBlockedFilterLabel": "Hide blocked",
+    "selectAssignees": "Select assignees…",
     "relationships": "Relationships",
+    "relationshipOptions": {
+      "blocks": "Blocks…",
+      "blockedBy": "Blocked by…",
+      "relatedTo": "Related to…",
+      "duplicateOf": "Duplicate of…"
+    },
+    "selectStatus": "Select status",
+    "noPriority": "No priority",
+    "priorityLevels": {
+      "urgent": "Urgent",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
     "noRelationships": "No relationships",
     "openProjectsGuide": "Projects guide",
     "editProjectSettings": "Edit project settings",
-    "linkWorkspace": "Link workspace...",
+    "linkWorkspace": "Link workspace…",
     "createNewWorkspace": "Create new workspace",
     "workspaces": "Workspaces",
     "showingWorkspaces": "Showing {{count}} of {{total}}",
@@ -474,7 +935,7 @@
     "projectsGuide": {
       "intro": {
         "title": "Welcome",
-        "content": "Welcome to Vibe Kanban. Use the help sections in this panel to learn how things work, then create your first issue. You can re-open this help dialog or give feedback anytime from the navbar."
+        "content": "Welcome to AgentOS. Use the help sections in this panel to learn how things work, then create your first issue. You can re-open this help dialog or give feedback anytime from the navbar."
       },
       "welcome": {
         "title": "Projects",
@@ -490,11 +951,26 @@
       },
       "organizations": {
         "title": "Invite your team",
-        "content": "We've automatically created a personal organization and initial project so you can get started with Vibe Kanban. Export your cloud data before shutdown."
+        "content": "We've automatically created a personal organization and initial project so you can get started with AgentOS. Export your cloud data before shutdown."
       }
     }
   },
   "createMode": {
+    "navbarTitle": "Create Workspace",
+    "eyebrow": "AGENTOS / NEW EXECUTION",
+    "context": "Define the objective, repository and agent before launching any process.",
+    "editorPlaceholder": "Describe the task…",
+    "repoSummary": {
+      "none": "0 repositories selected",
+      "selectBranch": "Select branch",
+      "selected_one": "{{count}} repository selected",
+      "selected_other": "{{count}} repositories selected"
+    },
+    "errors": {
+      "repositoryRequired": "Add at least one repository to create a workspace",
+      "branchRequired": "Select a branch for every repository before creating a workspace",
+      "createFailed": "Failed to create workspace"
+    },
     "headings": {
       "repoStep": "Which repositories would you like to work on?",
       "chatStep": "What would you like to work on?"
@@ -508,7 +984,18 @@
       "setupHintTitle": "Setup Scripts",
       "setupHint": "Tip: Configure setup scripts for this repository in Settings → Repositories",
       "setupHintDismiss": "Dismiss",
-      "setupHintLink": "Configure in Settings"
+      "setupHintLink": "Configure in Settings",
+      "continue": "Continue",
+      "changeBranch": "Change branch",
+      "removeRepository": "Remove {{repository}}",
+      "errors": {
+        "repositoryAlreadySelected": "Repository is already selected",
+        "noRecentRepositories": "No recently used repositories found, please browse repositories instead",
+        "loadRepositories": "Failed to load repositories or branches",
+        "registerRepository": "Failed to register repository",
+        "createRepository": "Failed to create repository",
+        "loadBranches": "Failed to load branches"
+      }
     }
   },
   "modelSelector": {
@@ -520,7 +1007,58 @@
     "permissionPlan": "Plan",
     "agent": "Agent",
     "default": "Default",
-    "model": "Model"
+    "model": "Model",
+    "filterPlaceholder": "Filter by name or ID…"
+  },
+  "retryEditor": {
+    "placeholder": "Edit and resend your message…"
+  },
+  "editorSelection": {
+    "title": "Choose editor",
+    "description": "The default editor failed to open. Please select an alternative editor to open the task worktree.",
+    "label": "Editor",
+    "open": "Open editor"
+  },
+  "remoteHome": {
+    "organizations": "Organizations",
+    "loadingOrganizationsAndProjects": "Loading organizations and projects…",
+    "signInAgain": "Sign in again",
+    "organizationCount_one": "{{count}} organization",
+    "organizationCount_other": "{{count}} organizations",
+    "projectCount_one": "{{count}} project",
+    "projectCount_other": "{{count}} projects",
+    "noOrganizations": "No organizations found",
+    "noOrganizationsDescription": "Create or join an organization to start working on projects.",
+    "noProjects": "No projects yet",
+    "hosts": {
+      "title": "Your hosts",
+      "empty": "No hosts linked yet",
+      "link": "Link a host"
+    },
+    "projects": {
+      "linkHostToOpen": "Link a host to open project",
+      "open": "Open project"
+    },
+    "errors": {
+      "title": "Failed to load",
+      "organizations": "Failed to load organizations"
+    }
+  },
+  "remoteWorkspaceUnavailable": {
+    "title": "Workspaces",
+    "connectingTo": "Connecting to",
+    "selectedHost": "selected host",
+    "ellipsis": "…",
+    "connectFailed": "Could not connect to {{host}}.",
+    "hostUnreachable": "This host is offline or no longer reachable from this browser.",
+    "selectOnlineHost": "Select an online host in the app bar to load local workspaces through relay.",
+    "openRelaySettings": "Open relay settings",
+    "retryHint": "After the host is online again, select it from the app bar and retry.",
+    "lastError": "Last connection error: {{error}}",
+    "steps": {
+      "openAgentOS": "On that machine, open AgentOS and confirm the host is online.",
+      "openRelaySettings": "If it still fails, open relay settings and pair this host again."
+    }
   },
   "crashScreen": {
     "title": "Something went wrong",
@@ -530,6 +1068,8 @@
     "hideDetails": "Hide details"
   },
   "syncError": {
+    "indicatorLabel_one": "{{count}} sync error",
+    "indicatorLabel_other": "{{count}} sync errors",
     "networkErrors": "Network Errors",
     "streamsAffected": "{{count}} stream affected",
     "streamsAffected_other": "{{count}} streams affected",
@@ -537,7 +1077,99 @@
     "refreshPage": "Refresh Page",
     "remoteAuthUnavailable": "Remote authentication is temporarily unavailable. Some remote features may not work until it recovers."
   },
+  "agentosOverview": {
+    "skipToObjective": "Skip to execution objective",
+    "eyebrow": "OPERATIONS CENTER",
+    "title": "What do you want to coordinate?",
+    "lede": "Prepare an execution and supervise your agents from one place.",
+    "status": {
+      "connecting": "Connecting…",
+      "online": "Control plane online",
+      "offline": "Disconnected",
+      "onlineShort": "Online",
+      "offlineShort": "Offline"
+    },
+    "states": {
+      "running": "Running",
+      "attention": "Needs attention",
+      "failed": "Last attempt failed",
+      "idle": "Waiting"
+    },
+    "relative": {
+      "now": "now",
+      "minutes_one": "{{count}} min ago",
+      "minutes_other": "{{count}} mins ago",
+      "hours_one": "{{count}} hr ago",
+      "hours_other": "{{count}} hrs ago"
+    },
+    "objective": {
+      "label": "Execution objective",
+      "placeholder": "Describe what you want to achieve…",
+      "contextAriaLabel": "Execution context",
+      "contextLabel": "Will prepare with",
+      "localWorkspace": "Local workspace",
+      "recommendedAgent": "Recommended agent",
+      "submit": "Prepare execution",
+      "hint": "The next step lets you choose a repository, branch, agent and model before launching anything.",
+      "emptyError": "Describe the objective before preparing the execution."
+    },
+    "metrics": {
+      "ariaLabel": "Operational summary",
+      "running": "Running",
+      "runningDetail": "active workspaces",
+      "attention": "Needs attention",
+      "attentionDetail": "pending approvals",
+      "completedToday": "Completed today",
+      "completedDetail": "last successful process",
+      "unavailable": "—",
+      "unavailableAriaLabel": "Data unavailable",
+      "unavailableDetail": "data unavailable",
+      "controlPlane": "Control plane",
+      "streams": "local streams"
+    },
+    "supervision": "SUPERVISION",
+    "recentWorkspaces": "Recent workspaces",
+    "newWorkspace": "New",
+    "loadingWorkspaces": "Loading workspaces…",
+    "streamUnavailableTitle": "Workspace data is unavailable.",
+    "retryStream": "Retry connection",
+    "emptyTitle": "No active workspaces yet.",
+    "emptyDescription": "Prepare an execution to create the first one.",
+    "signals": "SIGNALS",
+    "operationStatus": "Operation status",
+    "persistence": "Local persistence",
+    "persistenceDetail": "States and sessions live in your installation.",
+    "humanControl": "Human control",
+    "pendingApprovals_one": "{{count}} approval pending.",
+    "pendingApprovals_other": "{{count}} approvals pending.",
+    "noPendingApprovals": "No pending approvals.",
+    "routing": "Routing",
+    "routingDetail": "Automatic selection is not active yet.",
+    "streamError": "The workspace stream could not be updated. Check the local server before starting a task.",
+    "footerLabel": "AgentOS · local-first supervision",
+    "footerEvidence": "States reflect observed events, not screen inferences."
+  },
   "appBar": {
+    "local": "Local",
+    "localWorkspaces": "Local workspaces",
+    "remote": "Remote",
+    "pairRemoteDevice": "Pair a remote device",
+    "organization": "Organization",
+    "createProject": "Create project",
+    "projects": "Projects",
+    "export": "Export",
+    "exportData": "Export data",
+    "social": {
+      "github": "Star on GitHub",
+      "discord": "Join our Discord"
+    },
+    "update": "Update",
+    "updateTooltip": "Update to v{{version}}",
+    "hostStatus": {
+      "online": "Online",
+      "offline": "Offline",
+      "unpaired": "Unpaired"
+    },
     "kanban": {
       "tooltip": "Sign in to view projects",
       "title": "Kanban Boards",
@@ -548,8 +1180,47 @@
     "title": "Agent is asking a question",
     "selectMultiple": "select multiple",
     "confirmSelection": "Confirm selection",
-    "submitting": "Submitting answers...",
+    "submitting": "Submitting answers…",
     "answeredCount": "Answered {{count}} question",
     "answeredCount_other": "Answered {{count}} questions"
+  },
+  "export": {
+    "title": "Export projects",
+    "description": "Download your project and issue data to CSV files. Optionally download your file attachments too.",
+    "loading": "Loading…",
+    "signInTitle": "Sign in to export your cloud data",
+    "signInDescription": "Sign in to choose the organizations and projects available to your account.",
+    "signInAction": "Sign in",
+    "navLabel": "Export",
+    "navAction": "Export data",
+    "organization": "Organization",
+    "loadingProjects": "Loading projects…",
+    "noProjects": "No projects found.",
+    "dataUnavailable": "Organizations or projects are not available right now.",
+    "dataMayBeStale": "Some export data may be out of date while the remote stream recovers.",
+    "retryData": "Retry organization and project data",
+    "selected": "{{selected}} of {{total}} selected",
+    "deselectAll": "Deselect all",
+    "selectAll": "Select all",
+    "includeAttachments": "Include attachments",
+    "includeAttachmentsDescription": "Include files attached to issues.",
+    "start": "Export",
+    "generating": "Generating your export…",
+    "wait": "This may take a moment{{attachments}}.",
+    "withAttachments": ", especially with attachments",
+    "errors": {
+      "failed": "Export failed",
+      "requestFailed": "Export failed (status {{status}}).",
+      "generic": "The export could not be completed."
+    },
+    "retry": "Retry",
+    "complete": "Export complete!",
+    "automaticDownload": "Your download should start automatically. If not, use the button below.",
+    "download": "Download {{filename}}",
+    "more": "Export more projects"
+  },
+  "cloudShutdown": {
+    "message": "Legacy cloud notice: export your Vibe Kanban Cloud data within 30 days.",
+    "moreInfo": "Read more about the shutdown."
   }
 }

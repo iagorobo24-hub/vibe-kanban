@@ -6,11 +6,13 @@ import {
 } from 'shared/remote-types';
 import { useAuth } from '@/shared/hooks/auth/useAuth';
 import { groupNotifications } from '@/shared/lib/notifications';
+import { useRemoteAuthAvailability } from '@/shared/hooks/useRemoteAuthAvailability';
 
 export function useNotifications() {
   const { isSignedIn, userId } = useAuth();
+  const { isRemoteAuthAvailable } = useRemoteAuthAvailability();
 
-  const enabled = isSignedIn && !!userId;
+  const enabled = isSignedIn && isRemoteAuthAvailable && !!userId;
 
   const result = useShape(
     NOTIFICATIONS_SHAPE,

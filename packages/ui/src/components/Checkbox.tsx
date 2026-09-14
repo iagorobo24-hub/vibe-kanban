@@ -26,6 +26,7 @@ const Checkbox = React.forwardRef<HTMLButtonElement, CheckboxProps>(
           checked && 'bg-primary text-primary-foreground',
           className
         )}
+        data-agentos-primitive="checkbox"
         disabled={disabled}
         onClick={() => onCheckedChange?.(!checked)}
         {...props}

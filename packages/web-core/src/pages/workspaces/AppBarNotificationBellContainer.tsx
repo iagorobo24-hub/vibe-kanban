@@ -1,27 +1,29 @@
 import { useNavigate } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { BellIcon } from '@phosphor-icons/react';
 import { cn } from '@vibe/ui/lib/cn';
 import { Tooltip } from '@vibe/ui/components/Tooltip';
 import { useNotifications } from '@/shared/hooks/useNotifications';
 
 export function AppBarNotificationBellContainer() {
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const { unseenCount, enabled } = useNotifications();
 
   if (!enabled) return null;
 
   return (
-    <Tooltip content="Notifications" side="right">
+    <Tooltip content={t('notifications.title')} side="right">
       <button
         type="button"
         onClick={() => navigate({ to: '/notifications' })}
         className={cn(
-          'relative flex items-center justify-center w-10 h-10 rounded-lg',
+          'agentos-app-bar__item agentos-app-bar__notification relative flex items-center justify-center w-10 h-10 rounded-lg',
           'text-sm font-medium transition-colors cursor-pointer',
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-brand',
           'bg-panel text-normal hover:opacity-80'
         )}
-        aria-label="Notifications"
+        aria-label={t('notifications.title')}
       >
         <BellIcon className="w-5 h-5" weight="bold" />
         {unseenCount > 0 && (

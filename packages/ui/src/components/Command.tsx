@@ -11,7 +11,7 @@ const Command = React.forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      'flex h-full w-full flex-col overflow-hidden bg-panel text-high',
+      'agentos-command flex h-full w-full flex-col overflow-hidden bg-panel text-high',
       className
     )}
     {...props}
@@ -20,12 +20,14 @@ const Command = React.forwardRef<
 Command.displayName = CommandPrimitive.displayName;
 
 interface CommandDialogProps extends React.ComponentProps<typeof Dialog> {
+  title?: string;
   onCloseAutoFocus?: (event: Event) => void;
   onOpenAutoFocus?: (event: Event) => void;
 }
 
 function CommandDialog({
   children,
+  title = 'Command Bar',
   onCloseAutoFocus,
   onOpenAutoFocus,
   ...props
@@ -33,13 +35,13 @@ function CommandDialog({
   return (
     <Dialog {...props}>
       <DialogContent
-        className="overflow-hidden p-0"
+        className="agentos-command-dialog overflow-hidden p-0"
         hideCloseButton
         onCloseAutoFocus={onCloseAutoFocus}
         onOpenAutoFocus={onOpenAutoFocus}
         aria-describedby={undefined}
       >
-        <DialogTitle className="sr-only">Command Bar</DialogTitle>
+        <DialogTitle className="sr-only">{title}</DialogTitle>
         {children}
       </DialogContent>
     </Dialog>
@@ -51,12 +53,13 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div
-    className="flex flex-1 items-center border-b border-border px-base"
+    className="agentos-command-input flex flex-1 items-center border-b border-border px-base"
     cmdk-input-wrapper=""
   >
     <MagnifyingGlassIcon
       className="mr-base h-4 w-4 shrink-0 text-low"
       weight="bold"
+      aria-hidden="true"
     />
     <CommandPrimitive.Input
       ref={ref}
@@ -77,7 +80,10 @@ const CommandList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.List
     ref={ref}
-    className={cn('max-h-[300px] overflow-y-auto overflow-x-hidden', className)}
+    className={cn(
+      'agentos-command-list max-h-[300px] overflow-y-auto overflow-x-hidden',
+      className
+    )}
     {...props}
   />
 ));
@@ -89,7 +95,7 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-base text-center text-sm text-low"
+    className="agentos-command-empty py-base text-center text-sm text-low"
     {...props}
   />
 ));
@@ -102,7 +108,7 @@ const CommandGroup = React.forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      'overflow-hidden p-half text-high',
+      'agentos-command-group overflow-hidden p-half text-high',
       '[&_[cmdk-group-heading]]:px-base [&_[cmdk-group-heading]]:py-half',
       '[&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-low',
       className
@@ -131,7 +137,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center gap-base rounded-sm px-base py-half text-sm outline-none',
+      'agentos-command-item relative flex cursor-pointer select-none items-center gap-base rounded-sm px-base py-half text-sm outline-none',
       'data-[selected=true]:bg-secondary data-[selected=true]:text-high',
       'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
       className

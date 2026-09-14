@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { redeemOAuth } from "@remote/shared/lib/api";
-import { storeTokens } from "@remote/shared/lib/auth";
-import { retrieveVerifier, clearVerifier } from "@remote/shared/lib/pkce";
+import { useEffect, useState } from 'react';
+import { useTranslation } from '@/i18n/useTranslation';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { redeemOAuth } from '@remote/shared/lib/api';
+import { storeTokens } from '@remote/shared/lib/auth';
+import { retrieveVerifier, clearVerifier } from '@remote/shared/lib/pkce';
+import { RemoteStatusCard } from '@remote/shared/components/RemotePagePrimitives';
 
 function getSafeNextPath(nextPath: string | undefined): string {
   if (!nextPath) {
-    return "/";
+    return '/';
   }
 
-  if (!nextPath.startsWith("/") || nextPath.startsWith("//")) {
-    return "/";
+  if (!nextPath.startsWith('/') || nextPath.startsWith('//')) {
+    return '/';
   }
 
   return nextPath;
@@ -18,7 +20,8 @@ function getSafeNextPath(nextPath: string | undefined): string {
 
 export default function LoginCompletePage() {
   const navigate = useNavigate();
-  const search = useSearch({ from: "/account_/complete" });
+  const { t } = useTranslation('common');
+  const search = useSearch({ from: '/account_/complete' });
   const [error, setError] = useState<string | null>(null);
 
   const handoffId = search.handoff_id;
@@ -29,7 +32,7 @@ export default function LoginCompletePage() {
   useEffect(() => {
     const complete = async () => {
       if (oauthError) {
-        setError(`OAuth error: ${oauthError}`);
+        setError(t('remoteAuth.oauthError', { error: oauthError }));
         return;
       }
 
@@ -40,14 +43,14 @@ export default function LoginCompletePage() {
       try {
         const verifier = retrieveVerifier();
         if (!verifier) {
-          setError("OAuth session lost. Please try again.");
+          setError(t('remoteAuth.sessionLost'));
           return;
         }
 
         const { access_token, refresh_token } = await redeemOAuth(
           handoffId,
           appCode,
-          verifier,
+          verifier
         );
 
         await storeTokens(access_token, refresh_token);
@@ -55,63 +58,40 @@ export default function LoginCompletePage() {
 
         window.location.replace(nextPath);
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Failed to complete login");
+        setError(e instanceof Error ? e.message : t('remoteAuth.loginFailed'));
         clearVerifier();
       }
     };
 
     void complete();
-  }, [handoffId, appCode, oauthError, nextPath]);
+  }, [handoffId, appCode, oauthError, nextPath, t]);
 
   if (error) {
     return (
-      <StatusCard title="Login failed" variant="error">
+      <RemoteStatusCard title={t('remoteAuth.loginFailed')} variant="error">
         <p className="text-sm text-normal mt-base">{error}</p>
         <button
           type="button"
-          className="mt-double w-full rounded-sm bg-brand px-base py-half text-sm font-medium text-on-brand transition-colors hover:bg-brand-hover"
+          className="agentos-button agentos-button--primary mt-double w-full"
           onClick={() =>
             navigate({
-              to: "/account",
-              search: nextPath !== "/" ? { next: nextPath } : undefined,
+              to: '/account',
+              search: nextPath !== '/' ? { next: nextPath } : undefined,
               replace: true,
             })
           }
         >
-          Try again
+          {t('remoteAuth.tryAgain')}
         </button>
-      </StatusCard>
+      </RemoteStatusCard>
     );
   }
 
   return (
-    <StatusCard title="Completing login...">
-      <p className="text-sm text-low mt-base">Processing OAuth callback...</p>
-    </StatusCard>
-  );
-}
-
-function StatusCard({
-  title,
-  variant,
-  children,
-}: {
-  title: string;
-  variant?: "error";
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="h-screen overflow-auto bg-primary">
-      <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center px-base py-double">
-        <div className="rounded-sm border border-border bg-secondary p-double">
-          <h2
-            className={`text-lg font-semibold ${variant === "error" ? "text-error" : "text-high"}`}
-          >
-            {title}
-          </h2>
-          {children}
-        </div>
-      </div>
-    </div>
+    <RemoteStatusCard title={t('remoteAuth.completingLogin')}>
+      <p className="text-sm text-low mt-base">
+        {t('remoteAuth.processingOAuth')}
+      </p>
+    </RemoteStatusCard>
   );
 }

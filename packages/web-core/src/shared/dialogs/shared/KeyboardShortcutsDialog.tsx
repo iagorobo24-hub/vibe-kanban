@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { XIcon, GearIcon } from '@phosphor-icons/react';
@@ -14,6 +14,8 @@ import {
 } from '@/shared/keyboard/registry';
 import { isMac, getModifierKey } from '@/shared/lib/platform';
 import { Tooltip } from '@vibe/ui/components/Tooltip';
+import { useDialogFocusTrap } from '@vibe/ui/lib/useDialogFocusTrap';
+import { useDialogScrollLock } from '@vibe/ui/lib/useDialogScrollLock';
 
 interface ShortcutItem {
   keys: string | string[];
@@ -157,7 +159,10 @@ function ShortcutRow({ item }: { item: ShortcutItem }) {
         )}
         {item.useHintKey && (
           <Tooltip content={t('shortcuts.configurableHint')} side="top">
-            <GearIcon className="size-icon-xs text-low cursor-help" />
+            <GearIcon
+              className="size-icon-xs text-low cursor-help"
+              aria-hidden="true"
+            />
           </Tooltip>
         )}
       </span>
@@ -199,6 +204,10 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
   const { t } = useTranslation('common');
   const modal = useModal();
   const groups = useShortcutGroups();
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  useDialogFocusTrap(dialogRef, true);
+  useDialogScrollLock(true);
 
   const handleClose = useCallback(() => {
     modal.hide();
@@ -210,6 +219,12 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        const eventDialog =
+          e.target instanceof Element
+            ? e.target.closest<HTMLElement>('[role="dialog"]')
+            : null;
+        if (eventDialog && eventDialog !== dialogRef.current) return;
+
         handleClose();
       }
     };
@@ -224,32 +239,46 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
         data-tauri-drag-region
         className="fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
         onClick={handleClose}
+        aria-hidden="true"
       />
       {/* Dialog wrapper - handles positioning */}
       <div className="fixed z-[9999] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         {/* Dialog content - handles animation */}
         <div
+          ref={dialogRef}
           className={cn(
-            'w-[700px] max-h-[80vh]',
+            'agentos-dialog-content w-[calc(100vw-2rem)] max-w-[700px] max-h-[calc(100dvh-2rem)]',
             'bg-panel/95 backdrop-blur-sm rounded-sm border border-border/50 shadow-lg',
             'animate-in fade-in-0 slide-in-from-bottom-4 duration-200',
             'flex flex-col overflow-hidden'
           )}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="agentos-keyboard-shortcuts-title"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-border">
-            <h2 className="text-lg font-semibold text-high">
+            <h2
+              id="agentos-keyboard-shortcuts-title"
+              className="text-lg font-semibold text-high"
+            >
               {t('shortcuts.title')}
             </h2>
             <button
+              type="button"
               onClick={handleClose}
+              aria-label={t('buttons.close')}
               className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
             >
-              <XIcon className="size-icon-sm" weight="bold" />
+              <XIcon
+                className="size-icon-sm"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           </div>
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
               {groups.map((group, i) => (
                 <ShortcutSection key={i} group={group} />

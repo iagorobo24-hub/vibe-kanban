@@ -114,10 +114,13 @@ export function TodoProgressPopup({
           <div className="h-1.5 w-full bg-border rounded-full overflow-hidden shrink-0">
             <div
               className={cn(
-                'h-full transition-all duration-300 rounded-full',
+                'h-full transition-transform duration-300 rounded-full',
                 percentage === 100 ? 'bg-success' : 'bg-blue-500'
               )}
-              style={{ width: `${percentage}%` }}
+              style={{
+                transform: `scaleX(${percentage / 100})`,
+                transformOrigin: 'left center',
+              }}
             />
           </div>
 

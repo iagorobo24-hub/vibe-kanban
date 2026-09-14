@@ -245,7 +245,17 @@ export function GeneralSettingsSection() {
 
   const soundOptions = Object.values(SoundFile).map((sound) => ({
     value: sound,
-    label: toPrettyCase(sound),
+    label: t(
+      `onboardingLanding.soundOptions.${sound
+        .toLowerCase()
+        .replace(/_([a-z0-9])/g, (_, character: string) =>
+          character.toUpperCase()
+        )}`,
+      {
+        ns: 'common',
+        defaultValue: toPrettyCase(sound),
+      }
+    ),
   }));
 
   return (
@@ -294,18 +304,32 @@ export function GeneralSettingsSection() {
 
         {isMobile && (
           <SettingsField
-            label="Mobile Font Size"
-            description="Scale text size on mobile for better readability"
+            label={t('settings.general.appearance.mobileFontScale.label')}
+            description={t(
+              'settings.general.appearance.mobileFontScale.description'
+            )}
           >
             <SettingsSelect
               value={mobileFontScale}
               options={[
                 {
                   value: 'default' as MobileFontScale,
-                  label: 'Default (100%)',
+                  label: t(
+                    'settings.general.appearance.mobileFontScale.options.default'
+                  ),
                 },
-                { value: 'small' as MobileFontScale, label: 'Small (95%)' },
-                { value: 'smaller' as MobileFontScale, label: 'Smaller (90%)' },
+                {
+                  value: 'small' as MobileFontScale,
+                  label: t(
+                    'settings.general.appearance.mobileFontScale.options.small'
+                  ),
+                },
+                {
+                  value: 'smaller' as MobileFontScale,
+                  label: t(
+                    'settings.general.appearance.mobileFontScale.options.smaller'
+                  ),
+                },
               ]}
               onChange={(value: MobileFontScale) => setMobileFontScale(value)}
             />
@@ -738,8 +762,8 @@ export function GeneralSettingsSection() {
               <IconButton
                 icon={SpeakerHighIcon}
                 onClick={() => previewSound(draft.notifications.sound_file)}
-                aria-label="Preview sound"
-                title="Preview sound"
+                aria-label={t('settings.general.notifications.sound.preview')}
+                title={t('settings.general.notifications.sound.preview')}
               />
             </div>
             <p className="text-sm text-low">

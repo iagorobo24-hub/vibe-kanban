@@ -112,6 +112,7 @@ export const ArrayFieldTemplate = (props: ArrayFieldTemplateProps) => {
 // ArrayFieldItemTemplate - Individual array item with remove button
 export const ArrayFieldItemTemplate = (props: ArrayFieldItemTemplateProps) => {
   const { children, buttonsProps, disabled, readonly } = props;
+  const { t } = useTranslation('settings');
 
   return (
     <div className="flex items-center gap-2">
@@ -128,9 +129,10 @@ export const ArrayFieldItemTemplate = (props: ArrayFieldItemTemplateProps) => {
             'focus:outline-none focus:ring-1 focus:ring-brand',
             'disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
           )}
-          title="Remove item"
+          aria-label={t('settings.agents.environment.removeItem')}
+          title={t('settings.agents.environment.removeItem')}
         >
-          <XIcon className="size-icon-xs" weight="bold" />
+          <XIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
         </button>
       )}
     </div>

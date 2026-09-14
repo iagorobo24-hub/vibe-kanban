@@ -11,6 +11,8 @@
       "cancel": "Keep Editing"
     },
     "layout": {
+      "close": "Close settings",
+      "mobileBack": "Back to settings navigation",
       "nav": {
         "title": "Settings",
         "machineSettings": "Machine Settings",
@@ -65,6 +67,15 @@
           "label": "Language",
           "placeholder": "Select language",
           "helper": "Choose your preferred language. Browser Default follows your system language."
+        },
+        "mobileFontScale": {
+          "label": "Mobile font size",
+          "description": "Scale text size on mobile for better readability.",
+          "options": {
+            "default": "Default (100%)",
+            "small": "Small (95%)",
+            "smaller": "Smaller (90%)"
+          }
         }
       },
       "taskExecution": {
@@ -95,7 +106,7 @@
           "host": {
             "label": "Remote SSH Host (Optional)",
             "placeholder": "e.g., hostname or IP address",
-            "helper": "Set this if Vibe Kanban is running on a remote server. When set, clicking \"Open in Editor\" will generate a URL to open your editor via SSH instead of spawning a local command."
+            "helper": "Set this if AgentOS is running on a remote server. When set, clicking \"Open in Editor\" will generate a URL to open your editor via SSH instead of spawning a local command."
           },
           "user": {
             "label": "Remote SSH User (Optional)",
@@ -207,7 +218,8 @@
           "helper": "Play a sound when workspaces finish running.",
           "fileLabel": "Sound",
           "filePlaceholder": "Select sound",
-          "fileHelper": "Choose the sound to play when tasks complete. Click the volume button to preview."
+          "fileHelper": "Choose the sound to play when tasks complete. Click the volume button to preview.",
+          "preview": "Preview sound"
         },
         "push": {
           "label": "Push Notifications",
@@ -225,7 +237,7 @@
       },
       "privacy": {
         "title": "Privacy",
-        "description": "Help improve Vibe-Kanban by sharing anonymous usage data.",
+        "description": "Help improve AgentOS by sharing anonymous usage data.",
         "telemetry": {
           "label": "Enable Telemetry",
           "helper": "Enables anonymous usage events tracking to help improve the application. No prompts or project information are collected."
@@ -304,6 +316,23 @@
     "agents": {
       "title": "Coding Agent Configurations",
       "description": "Customize the behavior of coding agents with different configurations.",
+      "createDialog": {
+        "title": "Create new configuration",
+        "description": "Add a new configuration for the {{executorType}} executor.",
+        "nameLabel": "Configuration name",
+        "namePlaceholder": "e.g., PRODUCTION, DEVELOPMENT",
+        "cloneLabel": "Clone from (optional)",
+        "clonePlaceholder": "Start blank or clone an existing configuration",
+        "startBlank": "Start blank",
+        "cloneFrom": "Clone from {{configuration}}",
+        "createButton": "Create configuration",
+        "errors": {
+          "nameRequired": "Configuration name cannot be empty",
+          "tooLong": "Configuration name must be 40 characters or less",
+          "invalidCharacters": "Configuration name can only contain letters, numbers, underscores, and hyphens",
+          "duplicate": "A configuration with this name already exists"
+        }
+      },
       "loading": "Loading agent configurations...",
       "selectAgent": "Select agent",
       "save": {
@@ -337,6 +366,18 @@
         "jsonPlaceholder": "Loading profiles...",
         "jsonLoading": "Loading...",
         "pathLabel": "Configuration file location:"
+      },
+      "environment": {
+        "key": "Environment variable key",
+        "value": "Value",
+        "valueFor": "Value for {{key}}",
+        "remove": "Remove {{key}}",
+        "keyPlaceholder": "KEY",
+        "valuePlaceholder": "value",
+        "newKey": "New environment variable key",
+        "newValue": "New environment variable value",
+        "add": "Add environment variable",
+        "removeItem": "Remove item"
       },
       "errors": {
         "deleteFailed": "Failed to delete configuration. Please try again.",
@@ -513,11 +554,11 @@
       },
       "remove": {
         "title": "Remove Repository",
-        "description": "Unlink this repository from Vibe Kanban. Files on disk will not be deleted.",
+        "description": "Unlink this repository from AgentOS. Files on disk will not be deleted.",
         "button": "Remove",
         "confirm": "Remove Repository",
         "dialogTitle": "Remove \"{{name}}\"?",
-        "dialogDescription": "This will unlink the repository from Vibe Kanban. Your files on disk will not be affected. You can re-add it later.",
+        "dialogDescription": "This will unlink the repository from AgentOS. Your files on disk will not be affected. You can re-add it later.",
         "success": "Repository removed successfully.",
         "error": "Failed to remove repository."
       },
@@ -549,10 +590,62 @@
         "show": "Show pairing code"
       },
       "host": {
-        "label": "Host"
+        "label": "Host",
+        "description": "Allow other devices to remotely control workspaces on this machine.",
+        "title": "Accept incoming connections",
+        "enabled": {
+          "helper": "Allow incoming remote connections to this device."
+        },
+        "hostName": {
+          "label": "Display name",
+          "helper": "How this device appears when pairing. Leave blank for the default.",
+          "placeholder": "<os_type> host (<user_id>)"
+        },
+        "enrollmentCode": {
+          "show": "Generate pairing code",
+          "label": "Pairing code",
+          "helper": "Enter this code on the device you want to connect from.",
+          "loginRequired": "Sign in to generate a pairing code."
+        },
+        "pairedClients": {
+          "title": "Paired devices",
+          "checking": "Polling for changes",
+          "loading": "Loading paired client devices...",
+          "empty": "No devices paired yet.",
+          "remove": "Remove"
+        }
       },
       "client": {
-        "label": "Client"
+        "label": "Client",
+        "description": "Control workspaces on another device by pairing to it with a one-time code.",
+        "title": "Connect to a host",
+        "panelTitle": "Connect to a host",
+        "panelDescription": "Control workspaces on another device by pairing to it with a one-time code.",
+        "pair": {
+          "hostLabel": "Host to pair to",
+          "nameLabel": "How this device appears on that host (optional)",
+          "pairingCodeLabel": "Pairing code from the host",
+          "pairingCodeHelp": "Enter the 6-character code shown on the host you want to connect to.",
+          "confirm": "Pair this device"
+        },
+        "connectedHosts": {
+          "title": "Connected hosts"
+        }
+      },
+      "signInRequired": "Sign in to pair and manage remote connections.",
+      "docsLink": "Read docs",
+      "remoteCloudHost": {
+        "hostPlaceholder": "Select a host",
+        "loadingHosts": "Loading hosts...",
+        "noHostsAvailable": "No hosts available",
+        "hostsUnavailable": "No hosts found yet. Make sure another device is running as a host and has paired with this account.",
+        "namePlaceholder": "{{defaultClientName}}",
+        "hostRequired": "Select a host to connect.",
+        "hostMissing": "Selected host is no longer available.",
+        "connectSuccess": "Remote Cloud Host connected.",
+        "removeConfirm": "Remove this remote cloud host from local settings?",
+        "empty": "No hosts paired yet.",
+        "remove": "Remove"
       }
     },
     "remoteProjects": {
@@ -572,7 +665,8 @@
         "projects": "Projects"
       },
       "actions": {
-        "addProject": "Add Project"
+        "addProject": "Add Project",
+        "menu": "Project actions"
       },
       "form": {
         "name": {

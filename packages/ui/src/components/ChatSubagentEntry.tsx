@@ -1,4 +1,4 @@
-import type { KeyboardEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -66,14 +66,29 @@ export function ChatSubagentEntry({
 
     if (isSuccess) {
       return (
-        <CheckCircleIcon className="size-icon-xs text-success" weight="fill" />
+        <CheckCircleIcon
+          className="size-icon-xs text-success"
+          weight="fill"
+          aria-hidden="true"
+        />
       );
     }
     if (isError) {
-      return <XCircleIcon className="size-icon-xs text-error" weight="fill" />;
+      return (
+        <XCircleIcon
+          className="size-icon-xs text-error"
+          weight="fill"
+          aria-hidden="true"
+        />
+      );
     }
     if (isPending) {
-      return <CircleNotchIcon className="size-icon-xs text-low animate-spin" />;
+      return (
+        <CircleNotchIcon
+          className="size-icon-xs text-low animate-spin"
+          aria-hidden="true"
+        />
+      );
     }
     return null;
   }, [status]);
@@ -111,12 +126,41 @@ export function ChatSubagentEntry({
   // Determine if we have content to show
   const hasContent = Boolean(resultContent);
   const isInteractive = Boolean(onToggle && hasContent);
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (!isInteractive || event.target !== event.currentTarget) return;
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    onToggle?.();
-  };
+
+  const headerContent = (
+    <>
+      <span className="relative shrink-0">
+        <CpuIcon className="size-icon-base text-low" aria-hidden="true" />
+      </span>
+      <span className="flex-1 min-w-0">
+        <span className="flex items-center gap-base">
+          <span className="text-xs font-medium text-low uppercase tracking-wide">
+            {formattedType}
+          </span>
+          {StatusIcon}
+        </span>
+        <span className="text-sm text-normal truncate block">
+          {description}
+        </span>
+      </span>
+      {isInteractive && (
+        <CaretDownIcon
+          className={cn(
+            'size-icon-xs shrink-0 text-low transition-transform',
+            !expanded && '-rotate-90'
+          )}
+          aria-hidden="true"
+        />
+      )}
+    </>
+  );
+
+  const headerClassName = cn(
+    'flex items-center px-double py-base gap-base',
+    isErrorStatus && 'bg-error/10',
+    status?.status === 'success' && 'bg-success/5',
+    isInteractive && 'cursor-pointer'
+  );
 
   return (
     <div
@@ -129,43 +173,23 @@ export function ChatSubagentEntry({
       )}
     >
       {/* Header */}
-      <div
-        className={cn(
-          'flex items-center px-double py-base gap-base',
-          isErrorStatus && 'bg-error/10',
-          status?.status === 'success' && 'bg-success/5',
-          isInteractive && 'cursor-pointer'
-        )}
-        onClick={isInteractive ? onToggle : undefined}
-        onKeyDown={handleKeyDown}
-        role={isInteractive ? 'button' : undefined}
-        aria-expanded={isInteractive ? expanded : undefined}
-        tabIndex={isInteractive ? 0 : undefined}
-        data-scroll-anchor-target={isInteractive ? '' : undefined}
-      >
-        <span className="relative shrink-0">
-          <CpuIcon className="size-icon-base text-low" />
-        </span>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-base">
-            <span className="text-xs font-medium text-low uppercase tracking-wide">
-              {formattedType}
-            </span>
-            {StatusIcon}
-          </div>
-          <span className="text-sm text-normal truncate block">
-            {description}
-          </span>
-        </div>
-        {isInteractive && (
-          <CaretDownIcon
-            className={cn(
-              'size-icon-xs shrink-0 text-low transition-transform',
-              !expanded && '-rotate-90'
-            )}
-          />
-        )}
-      </div>
+      {isInteractive ? (
+        <button
+          type="button"
+          className={cn(
+            headerClassName,
+            'w-full border-0 bg-transparent text-left',
+            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
+          )}
+          onClick={onToggle}
+          aria-expanded={expanded}
+          data-scroll-anchor-target=""
+        >
+          {headerContent}
+        </button>
+      ) : (
+        <div className={headerClassName}>{headerContent}</div>
+      )}
 
       {/* Expanded content - shows subagent output */}
       {expanded && hasContent && (

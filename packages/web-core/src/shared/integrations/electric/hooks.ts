@@ -5,6 +5,7 @@ import { useSyncErrorContext } from '@/shared/hooks/useSyncErrorContext';
 import type { MutationDefinition, ShapeDefinition } from 'shared/remote-types';
 import type { SyncError } from '@/shared/lib/electric/types';
 import type { MutationResult, InsertResult } from '@/shared/lib/electric/types';
+import { useRemoteAuthAvailability } from '@/shared/hooks/useRemoteAuthAvailability';
 
 // Type helpers for extracting types from MutationDefinition
 type MutationCreateType<M> =
@@ -96,6 +97,8 @@ export function useShape<
   ? UseShapeMutationResult<T, MutationCreateType<M>, MutationUpdateType<M>>
   : UseShapeResult<T> {
   const { enabled = true, mutation } = options;
+  const { isRemoteAuthAvailable } = useRemoteAuthAvailability();
+  const effectiveEnabled = enabled && isRemoteAuthAvailable;
 
   const [error, setError] = useState<SyncError | null>(null);
   const [retryKey, setRetryKey] = useState(0);
@@ -123,23 +126,31 @@ export function useShape<
   );
 
   useEffect(() => {
-    if (error && registerErrorFn) {
+    if (error && effectiveEnabled && registerErrorFn) {
       registerErrorFn(streamId, shape.table, error, retry);
-    } else if (!error && clearErrorFn) {
+    } else if ((!error || !effectiveEnabled) && clearErrorFn) {
       clearErrorFn(streamId);
     }
 
     return () => {
       clearErrorFn?.(streamId);
     };
-  }, [error, streamId, shape.table, retry, registerErrorFn, clearErrorFn]);
+  }, [
+    error,
+    effectiveEnabled,
+    streamId,
+    shape.table,
+    retry,
+    registerErrorFn,
+    clearErrorFn,
+  ]);
 
   const collection = useMemo(() => {
-    if (!enabled) return null;
+    if (!effectiveEnabled) return null;
     const config = { onError: handleError };
     void retryKey;
     return createShapeCollection(shape, stableParams, config, mutation);
-  }, [enabled, shape, mutation, handleError, retryKey, stableParams]);
+  }, [effectiveEnabled, shape, mutation, handleError, retryKey, stableParams]);
 
   const { data, isLoading: queryLoading } = useLiveQuery(
     (query) => (collection ? query.from({ item: collection }) : undefined),
@@ -147,11 +158,11 @@ export function useShape<
   );
 
   const items = useMemo(() => {
-    if (!enabled || !collection || !data || queryLoading) return [];
+    if (!effectiveEnabled || !collection || !data || queryLoading) return [];
     return data as unknown as T[];
-  }, [enabled, collection, data, queryLoading]);
+  }, [effectiveEnabled, collection, data, queryLoading]);
 
-  const isLoading = enabled ? queryLoading : false;
+  const isLoading = effectiveEnabled ? queryLoading : false;
 
   // --- Mutation support (only used when mutation is provided) ---
 

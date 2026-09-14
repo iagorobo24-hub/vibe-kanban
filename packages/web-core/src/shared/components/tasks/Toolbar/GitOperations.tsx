@@ -431,7 +431,7 @@ function GitOperations({
                 selectedRepoId={getSelectedRepoId() ?? null}
                 onRepoSelect={setSelectedRepoId}
                 disabled={isAttemptRunning}
-                placeholder={t('repos.selector.placeholder', 'Select repo')}
+                placeholder={t('repos.selector.placeholder')}
               />
             )}
             <div className="flex flex-wrap items-center gap-2 min-w-0">
@@ -447,7 +447,7 @@ function GitOperations({
                 selectedRepoId={getSelectedRepoId() ?? null}
                 onRepoSelect={setSelectedRepoId}
                 disabled={isAttemptRunning}
-                placeholder={t('repos.selector.placeholder', 'Select repo')}
+                placeholder={t('repos.selector.placeholder')}
                 className="w-auto max-w-[200px] rounded-full bg-muted border-0 h-6 px-2 py-0.5 text-xs font-medium"
               />
             )}

@@ -18,8 +18,8 @@ interface ChatAggregatedToolEntriesProps {
   onHoverChange: (hovered: boolean) => void;
   /** Label to show before the count (e.g., "Read", "Search") */
   label: string;
-  /** Unit label for counting (e.g., "file", "URL") - will be pluralized automatically */
-  unit: string;
+  /** Unit label for counting, or a localized formatter receiving the count. */
+  unit: string | ((count: number) => string);
   icon?: React.ElementType;
   className?: string;
   onViewContent?: (index: number) => void;
@@ -42,18 +42,10 @@ export function ChatAggregatedToolEntries({
   // If only one entry, don't aggregate
   if (entries.length === 1) {
     const entry = entries[0];
-    return (
-      <div
-        className={cn(
-          'flex items-center gap-base text-sm text-low',
-          onViewContent && 'cursor-pointer',
-          className
-        )}
-        onClick={onViewContent ? () => onViewContent(0) : undefined}
-        role={onViewContent ? 'button' : undefined}
-      >
+    const content = (
+      <>
         <span className="relative shrink-0 pt-0.5">
-          <Icon className="size-icon-base" />
+          <Icon aria-hidden="true" className="size-icon-base" />
           {entry.status && (
             <ToolStatusDot
               status={entry.status}
@@ -62,6 +54,29 @@ export function ChatAggregatedToolEntries({
           )}
         </span>
         <span className="truncate">{entry.summary}</span>
+      </>
+    );
+
+    if (onViewContent) {
+      return (
+        <button
+          type="button"
+          className={cn(
+            'flex w-full items-center gap-base border-0 bg-transparent p-0 text-left text-sm text-low cursor-pointer',
+            className
+          )}
+          onClick={() => onViewContent(0)}
+        >
+          {content}
+        </button>
+      );
+    }
+
+    return (
+      <div
+        className={cn('flex items-center gap-base text-sm text-low', className)}
+      >
+        {content}
       </div>
     );
   }
@@ -93,25 +108,26 @@ export function ChatAggregatedToolEntries({
   return (
     <div className={cn('flex flex-col', className)}>
       {/* Header row - clickable to expand/collapse */}
-      <div
-        className="flex items-center gap-base text-sm text-low cursor-pointer group"
+      <button
+        type="button"
+        className="flex w-full items-center gap-base border-0 bg-transparent p-0 text-left text-sm text-low cursor-pointer group"
         onClick={onToggle}
         onMouseEnter={() => onHoverChange(true)}
         onMouseLeave={() => onHoverChange(false)}
-        role="button"
         aria-expanded={expanded}
         data-scroll-anchor-target=""
       >
         <span className="relative shrink-0 pt-0.5">
           {isHovered ? (
             <CaretRightIcon
+              aria-hidden="true"
               className={cn(
                 'size-icon-base transition-transform duration-150',
                 expanded && 'rotate-90'
               )}
             />
           ) : (
-            <Icon className="size-icon-base" />
+            <Icon aria-hidden="true" className="size-icon-base" />
           )}
           {aggregateStatus && (
             <ToolStatusDot
@@ -121,35 +137,56 @@ export function ChatAggregatedToolEntries({
           )}
         </span>
         <span className="truncate">
-          {label} · {entries.length} {entries.length === 1 ? unit : `${unit}s`}
+          {label} · {entries.length}{' '}
+          {typeof unit === 'function'
+            ? unit(entries.length)
+            : entries.length === 1
+              ? unit
+              : `${unit}s`}
         </span>
-      </div>
+      </button>
 
       {/* Expanded content */}
       {expanded && (
         <div className="ml-6 pt-1 flex flex-col gap-0.5">
-          {entries.map((entry, index) => (
-            <div
-              key={entry.expansionKey}
-              className={cn(
-                'flex items-center gap-base text-sm text-low pl-base',
-                onViewContent && 'cursor-pointer hover:text-normal'
-              )}
-              onClick={onViewContent ? () => onViewContent(index) : undefined}
-              role={onViewContent ? 'button' : undefined}
-            >
-              <span className="relative shrink-0 pt-0.5">
-                <Icon className="size-icon-base" />
-                {entry.status && (
-                  <ToolStatusDot
-                    status={entry.status}
-                    className="absolute -bottom-0.5 -left-0.5"
-                  />
+          {entries.map((entry, index) => {
+            const content = (
+              <>
+                <span className="relative shrink-0 pt-0.5">
+                  <Icon aria-hidden="true" className="size-icon-base" />
+                  {entry.status && (
+                    <ToolStatusDot
+                      status={entry.status}
+                      className="absolute -bottom-0.5 -left-0.5"
+                    />
+                  )}
+                </span>
+                <span className="truncate">{entry.summary}</span>
+              </>
+            );
+            const itemClassName = cn(
+              'flex items-center gap-base text-sm text-low pl-base',
+              onViewContent && 'cursor-pointer hover:text-normal'
+            );
+
+            return onViewContent ? (
+              <button
+                key={entry.expansionKey}
+                type="button"
+                className={cn(
+                  itemClassName,
+                  'w-full border-0 bg-transparent p-0 text-left'
                 )}
-              </span>
-              <span className="truncate">{entry.summary}</span>
-            </div>
-          ))}
+                onClick={() => onViewContent(index)}
+              >
+                {content}
+              </button>
+            ) : (
+              <div key={entry.expansionKey} className={itemClassName}>
+                {content}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

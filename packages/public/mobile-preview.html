@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AgentOS · Mobile preview</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: #100d0c;
+        color: #f6f0eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 50% -10%, #3c2922 0, transparent 48%),
+          #100d0c;
+      }
+
+      body {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 64px;
+        padding: 12px 20px;
+        border-bottom: 1px solid rgba(246, 240, 235, 0.1);
+        background: rgba(16, 13, 12, 0.84);
+        backdrop-filter: blur(18px);
+      }
+
+      .eyebrow {
+        margin: 0 0 3px;
+        color: #cbb8ad;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      label {
+        color: #cbb8ad;
+        font-size: 12px;
+      }
+
+      input,
+      button {
+        border: 1px solid rgba(246, 240, 235, 0.16);
+        border-radius: 8px;
+        background: #211916;
+        color: #f6f0eb;
+        font: inherit;
+      }
+
+      input {
+        width: 186px;
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      button {
+        min-height: 36px;
+        padding: 7px 11px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      button:hover {
+        background: #2d211d;
+      }
+
+      button:focus-visible,
+      input:focus-visible {
+        outline: 2px solid #e7a982;
+        outline-offset: 2px;
+      }
+
+      main {
+        display: grid;
+        min-height: 0;
+        place-items: center;
+        padding: 16px;
+      }
+
+      #stage {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+      }
+
+      #phone-canvas {
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .phone-shell {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: grid;
+        grid-template-rows: 28px minmax(0, 1fr);
+        width: 390px;
+        height: 844px;
+        overflow: hidden;
+        border: 8px solid #090807;
+        border-radius: 38px;
+        background: #090807;
+        box-shadow:
+          0 26px 70px rgba(0, 0, 0, 0.55),
+          0 0 0 1px rgba(246, 240, 235, 0.18);
+        transform: scale(var(--preview-scale, 1));
+        transform-origin: top left;
+      }
+
+      .phone-topbar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #090807;
+      }
+
+      .phone-topbar::before {
+        width: 112px;
+        height: 18px;
+        border-radius: 0 0 13px 13px;
+        background: #000;
+        content: "";
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #100d0c;
+      }
+
+      #status {
+        position: fixed;
+        right: 20px;
+        bottom: 18px;
+        max-width: min(420px, calc(100vw - 40px));
+        padding: 9px 12px;
+        border: 1px solid rgba(246, 240, 235, 0.14);
+        border-radius: 999px;
+        background: rgba(33, 25, 22, 0.94);
+        color: #cbb8ad;
+        font-size: 11px;
+        opacity: 0;
+        transition: opacity 160ms ease;
+      }
+
+      #status.visible {
+        opacity: 1;
+      }
+
+      @media (max-width: 620px) {
+        header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .toolbar {
+          width: 100%;
+        }
+
+        input {
+          flex: 1;
+          width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <p class="eyebrow">AgentOS · visual QA</p>
+        <h1>Vista móvil interactiva · 390 × 844</h1>
+      </div>
+      <form class="toolbar" id="route-form">
+        <label for="route">Ruta</label>
+        <input id="route" name="route" value="/workspaces" autocomplete="off" />
+        <button type="submit">Cargar</button>
+        <button type="button" id="refresh">Recargar</button>
+      </form>
+    </header>
+
+    <main>
+      <div id="stage" aria-label="Marco de teléfono virtual">
+        <div id="phone-canvas">
+          <div class="phone-shell">
+            <div class="phone-topbar" aria-hidden="true"></div>
+            <iframe id="app" title="AgentOS en viewport móvil"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="status" role="status" aria-live="polite"></div>
+
+    <script>
+      const APP_ORIGIN =
+        window.location.protocol === "file:" ? "http://localhost:3002" : window.location.origin;
+      const app = document.getElementById("app");
+      const routeInput = document.getElementById("route");
+      const canvas = document.getElementById("phone-canvas");
+      const stage = document.getElementById("stage");
+      const status = document.getElementById("status");
+      const form = document.getElementById("route-form");
+      const refreshButton = document.getElementById("refresh");
+      let statusTimer;
+
+      function normalizeRoute(value) {
+        const trimmed = value.trim();
+        if (!trimmed) return "/workspaces";
+        return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+      }
+
+      function showStatus(message) {
+        status.textContent = message;
+        status.classList.add("visible");
+        window.clearTimeout(statusTimer);
+        statusTimer = window.setTimeout(() => status.classList.remove("visible"), 1800);
+      }
+
+      function loadRoute(value) {
+        const route = normalizeRoute(value);
+        routeInput.value = route;
+        app.src = `${APP_ORIGIN}${route}`;
+        showStatus(`Cargando ${route} en viewport móvil`);
+      }
+
+      function fitPhone() {
+        const availableWidth = Math.max(stage.clientWidth - 24, 1);
+        const availableHeight = Math.max(stage.clientHeight - 24, 1);
+        const scale = Math.min(1, availableWidth / 390, availableHeight / 844);
+        canvas.style.width = `${390 * scale}px`;
+        canvas.style.height = `${844 * scale}px`;
+        canvas.style.setProperty("--preview-scale", scale);
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        loadRoute(routeInput.value);
+      });
+
+      refreshButton.addEventListener("click", () => {
+        app.contentWindow.location.reload();
+        showStatus("Recargando la ruta actual");
+      });
+
+      app.addEventListener("load", () => showStatus("Vista móvil lista"));
+      window.addEventListener("resize", fitPhone);
+      fitPhone();
+      loadRoute(routeInput.value);
+    </script>
+  </body>
+</html>

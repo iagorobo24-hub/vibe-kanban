@@ -20,6 +20,7 @@ import {
   type WorkspaceSortOrder,
 } from '@/shared/stores/useUiPreferencesStore';
 import type { Workspace } from '@/shared/hooks/useWorkspaces';
+import { getWorkspaceListViewState } from './workspaceListState';
 import { CommandBarDialog } from '@/shared/dialogs/command-bar/CommandBarDialog';
 import { SettingsDialog } from '@/shared/dialogs/settings/SettingsDialog';
 import {
@@ -259,6 +260,8 @@ export function WorkspacesSidebarContainer({
     activeWorkspaces,
     archivedWorkspaces,
     isWorkspacesListLoading,
+    workspacesListError,
+    retryWorkspacesList,
     isCreateMode,
     selectWorkspace,
     navigateToCreate,
@@ -287,6 +290,13 @@ export function WorkspacesSidebarContainer({
     ? 'accordion'
     : 'flat';
   const toggleLayoutMode = () => setAccordionLayout(!isAccordionLayout);
+
+  const workspaceListState = getWorkspaceListViewState({
+    activeCount: activeWorkspaces.length,
+    archivedCount: archivedWorkspaces.length,
+    isLoading: isWorkspacesListLoading,
+    hasError: Boolean(workspacesListError),
+  });
 
   // Workspace sidebar filters + sort
   const workspaceFilters = useUiPreferencesStore((s) => s.workspaceFilters);
@@ -565,7 +575,7 @@ export function WorkspacesSidebarContainer({
     const { title } = splitMessageToTitleDescription(
       scratchData.message.trim()
     );
-    return title || 'New Workspace';
+    return title || t('common:workspaces.newWorkspace');
   }, [draftScratch]);
 
   // Handle workspace selection - scroll to bottom if re-selecting same workspace
@@ -683,6 +693,8 @@ export function WorkspacesSidebarContainer({
       totalWorkspacesCount={activeWorkspaces.length}
       archivedWorkspaces={paginatedArchivedWorkspaces}
       isLoading={isWorkspacesListLoading}
+      workspaceListState={workspaceListState}
+      onRetryWorkspaceList={retryWorkspacesList}
       selectedWorkspaceId={selectedWorkspaceId ?? null}
       onSelectWorkspace={handleSelectWorkspace}
       searchQuery={searchQuery}

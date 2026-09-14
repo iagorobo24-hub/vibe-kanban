@@ -1,14 +1,15 @@
-import { ComponentType, type KeyboardEvent } from 'react';
+import { ComponentType } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CaretDownIcon,
   UserIcon,
   ListChecksIcon,
   GearIcon,
   IconProps,
-} from '@phosphor-icons/react';
-import { cn } from '../lib/cn';
+} from "@phosphor-icons/react";
+import { cn } from "../lib/cn";
 
-type Variant = 'user' | 'plan' | 'plan_denied' | 'system';
+type Variant = "user" | "plan" | "plan_denied" | "system";
 
 export interface ChatEntryStatusLike {
   status: string;
@@ -24,27 +25,27 @@ interface VariantConfig {
 const variantConfig: Record<Variant, VariantConfig> = {
   user: {
     icon: UserIcon,
-    border: 'border-border',
-    headerBg: '',
-    bg: '',
+    border: "border-border",
+    headerBg: "",
+    bg: "",
   },
   plan: {
     icon: ListChecksIcon,
-    border: 'border-brand',
-    headerBg: 'bg-brand/20',
-    bg: 'bg-brand/10',
+    border: "border-brand",
+    headerBg: "bg-brand/20",
+    bg: "bg-brand/10",
   },
   plan_denied: {
     icon: ListChecksIcon,
-    border: 'border-error',
-    headerBg: 'bg-error/20',
-    bg: 'bg-error/10',
+    border: "border-error",
+    headerBg: "bg-error/20",
+    bg: "bg-error/10",
   },
   system: {
     icon: GearIcon,
-    border: 'border-border',
-    headerBg: 'bg-gray-50 dark:bg-gray-900/30',
-    bg: '',
+    border: "border-border",
+    headerBg: "bg-gray-50 dark:bg-gray-900/30",
+    bg: "",
   },
 };
 
@@ -73,57 +74,79 @@ export function ChatEntryContainer({
   status,
   isGreyed,
 }: ChatEntryContainerProps) {
+  const { t } = useTranslation("common");
   // Special case for plan denied
   const config =
-    variant === 'plan' && status?.status === 'denied'
+    variant === "plan" && status?.status === "denied"
       ? variantConfig.plan_denied
       : variantConfig[variant];
   const Icon = config.icon;
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (!onToggle || event.target !== event.currentTarget) return;
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    onToggle();
-  };
+  const headerClassName = cn(
+    "flex items-center px-double py-base gap-base rounded-sm overflow-hidden",
+    config.headerBg,
+  );
+
+  const titleContent = title && (
+    <span className="flex-1 min-w-0 text-sm text-normal truncate">{title}</span>
+  );
+
+  const toggleButtonClassName =
+    "flex min-w-0 flex-1 items-center gap-base border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand";
 
   return (
     <div
       className={cn(
-        'rounded-sm w-full',
-        config.border && 'border',
+        "rounded-sm w-full",
+        config.border && "border",
         config.border,
         config.bg,
-        isGreyed && 'opacity-50 pointer-events-none',
-        className
+        isGreyed && "opacity-50 pointer-events-none",
+        className,
       )}
     >
       {/* Header */}
-      <div
-        className={cn(
-          'flex items-center px-double py-base gap-base rounded-sm overflow-hidden',
-          config.headerBg,
-          onToggle && 'cursor-pointer'
-        )}
-        onClick={onToggle}
-        onKeyDown={handleKeyDown}
-        role={onToggle ? 'button' : undefined}
-        aria-expanded={onToggle ? expanded : undefined}
-        tabIndex={onToggle ? 0 : undefined}
-      >
-        <Icon className="size-icon-xs shrink-0 text-low" />
-        {title && (
-          <span className="flex-1 text-sm text-normal truncate">{title}</span>
-        )}
-        {headerRight}
-        {onToggle && (
-          <CaretDownIcon
-            className={cn(
-              'size-icon-xs shrink-0 text-low transition-transform',
-              !expanded && '-rotate-90'
-            )}
-          />
-        )}
-      </div>
+      {onToggle ? (
+        <div className={cn(headerClassName, "cursor-pointer")}>
+          <button
+            type="button"
+            className={toggleButtonClassName}
+            onClick={onToggle}
+            aria-expanded={expanded}
+          >
+            <Icon
+              className="size-icon-xs shrink-0 text-low"
+              aria-hidden="true"
+            />
+            {titleContent}
+          </button>
+          {headerRight}
+          <button
+            type="button"
+            className="shrink-0 rounded-sm border-0 bg-transparent p-half text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+            onClick={onToggle}
+            aria-label={
+              expanded
+                ? t("accessibility.collapseMessage")
+                : t("accessibility.expandMessage")
+            }
+            aria-expanded={expanded}
+          >
+            <CaretDownIcon
+              className={cn(
+                "size-icon-xs transition-transform",
+                !expanded && "-rotate-90",
+              )}
+              aria-hidden="true"
+            />
+          </button>
+        </div>
+      ) : (
+        <div className={headerClassName}>
+          <Icon className="size-icon-xs shrink-0 text-low" aria-hidden="true" />
+          {titleContent}
+          {headerRight}
+        </div>
+      )}
 
       {/* Content - shown when expanded */}
       {expanded && children && <div className="p-double">{children}</div>}

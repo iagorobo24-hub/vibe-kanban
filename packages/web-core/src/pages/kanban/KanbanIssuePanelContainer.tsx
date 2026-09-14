@@ -1032,7 +1032,7 @@ export function KanbanIssuePanelContainer({
 
   if (isLoading || isResolvingExpectedIssue || hasMissingIssueDataInEditMode) {
     return (
-      <div className="flex items-center justify-center h-full bg-secondary">
+      <div className="agentos-issue-panel flex items-center justify-center h-full bg-secondary">
         <p className="text-low">{t('states.loading')}</p>
       </div>
     );

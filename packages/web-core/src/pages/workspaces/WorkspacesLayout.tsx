@@ -5,6 +5,7 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Group, Layout, Panel, Separator } from 'react-resizable-panels';
 import type { CreateModeInitialState } from '@/shared/types/createMode';
@@ -12,7 +13,6 @@ import { useWorkspaceContext } from '@/shared/hooks/useWorkspaceContext';
 import { usePageTitle } from '@/shared/hooks/usePageTitle';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { useMobileActiveTab } from '@/shared/stores/useUiPreferencesStore';
-import { cn } from '@/shared/lib/utils';
 import { CreateModeProvider } from '@/features/create-mode/model/CreateModeProvider';
 import {
   consumeCreateModeSeedState,
@@ -41,10 +41,32 @@ import {
   RIGHT_MAIN_PANEL_MODES,
 } from '@/shared/stores/useUiPreferencesStore';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
+import {
+  getMobileTabElementId,
+  getMobileTabPanelId,
+  type MobileTabId,
+} from '@vibe/ui/components/Navbar';
+import {
+  getWorkspaceUrlPanelFromLayout,
+  resolveWorkspacePanelUrlOverride,
+  type WorkspacePanelUrlChangeOptions,
+  type WorkspaceUrlPanel,
+} from './workspacePanelUrlState';
 
 const WORKSPACES_GUIDE_ID = 'workspaces-guide';
 
-export function WorkspacesLayout() {
+type WorkspacesLayoutProps = {
+  urlPanel?: WorkspaceUrlPanel;
+  onUrlPanelChange?: (
+    panel: WorkspaceUrlPanel,
+    options: WorkspacePanelUrlChangeOptions
+  ) => void;
+};
+
+export function WorkspacesLayout({
+  urlPanel,
+  onUrlPanelChange,
+}: WorkspacesLayoutProps = {}) {
   const appNavigation = useAppNavigation();
   const {
     workspaceId,
@@ -55,6 +77,8 @@ export function WorkspacesLayout() {
     selectedSessionId,
     sessions,
     isSessionsLoading,
+    sessionsError,
+    retrySessions,
     selectSession,
     repos,
     isNewSessionMode,
@@ -108,7 +132,7 @@ export function WorkspacesLayout() {
       : 'create-mode-seed-default';
 
   const isMobile = useIsMobile();
-  const [mobileTab] = useMobileActiveTab();
+  const [mobileTab, setMobileTab] = useMobileActiveTab();
   const mainContainerRef = useRef<WorkspacesMainContainerHandle>(null);
 
   const handleScrollToBottom = useCallback(
@@ -133,7 +157,72 @@ export function WorkspacesLayout() {
     rightMainPanelMode,
     setLeftSidebarVisible,
     setLeftMainPanelVisible,
+    setRightMainPanelMode,
   } = useWorkspacePanelState(isCreateMode ? undefined : workspaceId);
+
+  const isApplyingUrlPanelRef = useRef(false);
+  const lastAppliedUrlKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (isCreateMode || !workspaceId || urlPanel === undefined) {
+      lastAppliedUrlKeyRef.current = null;
+      return;
+    }
+
+    const urlKey = `${workspaceId}:${urlPanel}`;
+    if (lastAppliedUrlKeyRef.current === urlKey) return;
+
+    lastAppliedUrlKeyRef.current = urlKey;
+    const override = resolveWorkspacePanelUrlOverride(urlPanel);
+    if (!override) return;
+
+    const mobileTabNeedsUpdate = mobileTab !== override.mobileTab;
+    const rightPanelNeedsUpdate =
+      rightMainPanelMode !== override.rightMainPanelMode;
+
+    if (!mobileTabNeedsUpdate && !rightPanelNeedsUpdate) {
+      isApplyingUrlPanelRef.current = false;
+      return;
+    }
+
+    isApplyingUrlPanelRef.current = true;
+    if (mobileTabNeedsUpdate) setMobileTab(override.mobileTab);
+    if (rightPanelNeedsUpdate) {
+      setRightMainPanelMode(override.rightMainPanelMode);
+    }
+  }, [
+    isCreateMode,
+    mobileTab,
+    rightMainPanelMode,
+    setMobileTab,
+    setRightMainPanelMode,
+    urlPanel,
+    workspaceId,
+  ]);
+
+  const activeUrlPanel = getWorkspaceUrlPanelFromLayout({
+    isMobile,
+    mobileTab,
+    rightMainPanelMode,
+    currentUrlPanel: urlPanel,
+  });
+
+  useEffect(() => {
+    if (isCreateMode || !workspaceId || !onUrlPanelChange) return;
+
+    if (isApplyingUrlPanelRef.current) {
+      if (activeUrlPanel === urlPanel) {
+        isApplyingUrlPanelRef.current = false;
+      }
+      return;
+    }
+
+    if (activeUrlPanel === urlPanel) return;
+
+    onUrlPanelChange(activeUrlPanel, {
+      replace: urlPanel === undefined,
+    });
+  }, [activeUrlPanel, isCreateMode, onUrlPanelChange, urlPanel, workspaceId]);
 
   const {
     config,
@@ -204,8 +293,24 @@ export function WorkspacesLayout() {
     [isLeftMainPanelVisible, rightMainPanelMode, setRightMainPanelSize]
   );
 
+  const renderMobileTabPanel = (
+    tab: MobileTabId,
+    content: ReactNode
+  ): ReactNode => (
+    <div
+      id={getMobileTabPanelId(tab)}
+      role="tabpanel"
+      aria-labelledby={getMobileTabElementId(tab)}
+      tabIndex={0}
+      hidden={mobileTab !== tab}
+      className="flex-1 min-h-0 overflow-hidden"
+    >
+      {content}
+    </div>
+  );
+
   // ── Mobile layout ──────────────────────────────────────────────────
-  // Uses `hidden` CSS class (NOT conditional rendering) to preserve
+  // Uses the `hidden` attribute (NOT conditional rendering) to preserve
   // WebSocket connections and scroll positions across tab switches.
   if (isMobile) {
     const mobileContent = (
@@ -213,25 +318,17 @@ export function WorkspacesLayout() {
         <ChangesViewProvider>
           <div className="flex flex-col h-full min-h-0">
             {/* Workspaces tab */}
-            <div
-              className={cn(
-                'flex-1 min-h-0 overflow-hidden',
-                mobileTab !== 'workspaces' && 'hidden'
-              )}
-            >
+            {renderMobileTabPanel(
+              'workspaces',
               <WorkspacesSidebarContainer
                 onScrollToBottom={handleScrollToBottom}
               />
-            </div>
+            )}
 
             {/* Chat tab */}
-            <div
-              className={cn(
-                'flex-1 min-h-0 overflow-hidden',
-                mobileTab !== 'chat' && 'hidden'
-              )}
-            >
-              {isCreateMode ? (
+            {renderMobileTabPanel(
+              'chat',
+              isCreateMode ? (
                 <CreateChatBoxContainer
                   onWorkspaceCreated={handleWorkspaceCreated}
                 />
@@ -246,74 +343,60 @@ export function WorkspacesLayout() {
                   onSelectSession={selectSession}
                   isLoading={isLoading}
                   isSessionsLoading={isSessionsLoading}
+                  sessionsError={sessionsError}
+                  onRetrySessions={retrySessions}
                   isNewSessionMode={isNewSessionMode}
                   onStartNewSession={startNewSession}
                 />
-              )}
-            </div>
+              )
+            )}
 
             {/* Changes tab */}
-            <div
-              className={cn(
-                'flex-1 min-h-0 overflow-hidden',
-                mobileTab !== 'changes' && 'hidden'
-              )}
-            >
-              {selectedWorkspace?.id && (
+            {renderMobileTabPanel(
+              'changes',
+              selectedWorkspace?.id ? (
                 <ChangesPanelContainer
                   className=""
                   workspaceId={selectedWorkspace.id}
                 />
-              )}
-            </div>
+              ) : null
+            )}
 
             {/* Logs tab */}
-            <div
-              className={cn(
-                'flex-1 min-h-0 overflow-hidden',
-                mobileTab !== 'logs' && 'hidden'
-              )}
-            >
+            {renderMobileTabPanel(
+              'logs',
               <LogsContentContainer className="" />
-            </div>
+            )}
 
             {/* Preview tab */}
-            <div
-              className={cn(
-                'flex-1 min-h-0 overflow-hidden',
-                mobileTab !== 'preview' && 'hidden'
-              )}
-            >
-              {selectedWorkspace?.id && (
+            {renderMobileTabPanel(
+              'preview',
+              selectedWorkspace?.id ? (
                 <PreviewBrowserContainer
                   workspaceId={selectedWorkspace.id}
                   className=""
                 />
-              )}
-            </div>
+              ) : null
+            )}
 
             {/* Git tab */}
-            <div
-              className={cn(
-                'flex-1 min-h-0 overflow-hidden',
-                mobileTab !== 'git' && 'hidden'
-              )}
-            >
-              {selectedWorkspace && !isCreateMode && (
+            {renderMobileTabPanel(
+              'git',
+              selectedWorkspace && !isCreateMode ? (
                 <RightSidebar
                   rightMainPanelMode={rightMainPanelMode}
                   selectedWorkspace={selectedWorkspace}
                   repos={repos}
                 />
-              )}
-            </div>
+              ) : null
+            )}
           </div>
         </ChangesViewProvider>
       </ReviewProvider>
     );
 
     return (
-      <div className="flex flex-1 min-h-0 h-full">
+      <div className="agentos-workspaces-layout flex flex-1 min-h-0 h-full">
         <div className="flex-1 min-w-0 h-full">
           {isCreateMode ? (
             <CreateModeProvider
@@ -361,6 +444,8 @@ export function WorkspacesLayout() {
                     onSelectSession={selectSession}
                     isLoading={isLoading}
                     isSessionsLoading={isSessionsLoading}
+                    sessionsError={sessionsError}
+                    onRetrySessions={retrySessions}
                     isNewSessionMode={isNewSessionMode}
                     onStartNewSession={startNewSession}
                   />
@@ -371,7 +456,8 @@ export function WorkspacesLayout() {
             {isLeftMainPanelVisible && rightMainPanelMode !== null && (
               <Separator
                 id="main-separator"
-                className="w-1 bg-transparent hover:bg-brand/50 transition-colors cursor-col-resize"
+                aria-label={t('accessibility.resizePanels')}
+                className="w-1 bg-transparent transition-colors hover:bg-brand/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset cursor-col-resize"
               />
             )}
 
@@ -417,7 +503,7 @@ export function WorkspacesLayout() {
   );
 
   return (
-    <div className="flex flex-1 min-h-0 h-full">
+    <div className="agentos-workspaces-layout flex flex-1 min-h-0 h-full">
       {isLeftSidebarVisible && (
         <div className="w-[300px] shrink-0 h-full overflow-hidden">
           <WorkspacesSidebarContainer onScrollToBottom={handleScrollToBottom} />

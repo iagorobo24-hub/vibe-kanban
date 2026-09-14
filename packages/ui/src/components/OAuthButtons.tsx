@@ -42,25 +42,24 @@ export function OAuthSignInButton({
     <button
       type="button"
       className={cn(
-        'relative flex h-10 min-w-[280px] items-center overflow-hidden rounded-[4px] border px-3',
-        'border-[#dadce0] bg-[#f2f2f2] text-[#1f1f1f] hover:bg-[#e8eaed] active:bg-[#e2e3e5]',
+        'agentos-oauth-button relative flex h-10 w-full min-w-0 items-center overflow-hidden rounded-[4px] border px-3',
         'text-[14px] font-medium leading-5 tracking-[0.25px]',
         'transition-colors duration-150',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a73e8]/40',
-        'disabled:cursor-not-allowed disabled:bg-[#ffffff61] disabled:text-[#1f1f1f]/40 disabled:shadow-none',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40',
+        'disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none',
         className
       )}
       onClick={onClick}
       disabled={disabled || loading}
-      style={{ fontFamily: "'Roboto', Arial, sans-serif" }}
+      aria-busy={loading || undefined}
     >
       <span className="grid w-full grid-cols-[20px_minmax(0,1fr)_20px] items-center gap-[10px]">
-        <span className="flex h-5 w-5 items-center justify-center">
+        <span
+          className="flex h-5 w-5 items-center justify-center"
+          aria-hidden="true"
+        >
           {loading ? (
-            <SpinnerIcon
-              className="size-4 animate-spin text-[#1f1f1f]"
-              weight="bold"
-            />
+            <SpinnerIcon className="size-4 animate-spin" weight="bold" />
           ) : (
             <ProviderIcon />
           )}

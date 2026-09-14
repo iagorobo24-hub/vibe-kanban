@@ -2,14 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { CheckIcon, XIcon } from '@phosphor-icons/react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { ThemeMode } from 'shared/types';
+import { AgentOSWordmark } from '@/shared/components/AgentOSWordmark';
 import {
   OAuthDialog,
   type OAuthProvider,
 } from '@/shared/dialogs/global/OAuthDialog';
 import { usePostHog } from 'posthog-js/react';
 import { useUserSystem } from '@/shared/hooks/useUserSystem';
-import { useTheme } from '@/shared/hooks/useTheme';
 import { OAuthSignInButton } from '@vibe/ui/components/OAuthButtons';
 import { PrimaryButton } from '@vibe/ui/components/PrimaryButton';
 import { oauthApi, type AuthMethodsResponse } from '@/shared/lib/api';
@@ -24,22 +23,22 @@ type OnboardingDestination =
 
 const COMPARISON_ROWS = [
   {
-    feature: 'Use kanban board to track issues',
+    feature: 'useKanban',
     signedIn: true,
     skip: false,
   },
   {
-    feature: 'Invite team to collaborate',
+    feature: 'inviteTeam',
     signedIn: true,
     skip: false,
   },
   {
-    feature: 'Organise work into projects and organizations',
+    feature: 'organiseWork',
     signedIn: true,
     skip: false,
   },
   {
-    feature: 'Create workspaces',
+    feature: 'createWorkspaces',
     signedIn: true,
     skip: true,
   },
@@ -62,19 +61,9 @@ type SignInCompletionMethod =
   | 'local_auth'
   | 'oauth_github'
   | 'oauth_google';
-function resolveTheme(theme: ThemeMode): 'light' | 'dark' {
-  if (theme === ThemeMode.SYSTEM) {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
-  }
-  return theme === ThemeMode.DARK ? 'dark' : 'light';
-}
-
 export function OnboardingSignInPage() {
   const appNavigation = useAppNavigation();
   const { t } = useTranslation('common');
-  const { theme } = useTheme();
   const posthog = usePostHog();
   const { config, loginStatus, loading, updateAndSaveConfig } = useUserSystem();
   const setSelectedOrgId = useOrganizationStore((s) => s.setSelectedOrgId);
@@ -111,11 +100,6 @@ export function OnboardingSignInPage() {
     },
     [posthog]
   );
-
-  const logoSrc =
-    resolveTheme(theme) === 'dark'
-      ? '/vibe-kanban-logo-dark.svg'
-      : '/vibe-kanban-logo.svg';
 
   const isLoggedIn = loginStatus?.status === 'loggedin';
 
@@ -251,8 +235,8 @@ export function OnboardingSignInPage() {
 
   if (loading || !config) {
     return (
-      <div className="h-screen bg-primary flex items-center justify-center">
-        <p className="text-low">Loading...</p>
+      <div className="agentos-theme agentos-page-shell h-screen bg-primary flex items-center justify-center">
+        <p className="text-low">{t('onboardingSignIn.loading')}</p>
       </div>
     );
   }
@@ -265,22 +249,18 @@ export function OnboardingSignInPage() {
   }
 
   return (
-    <div className="h-screen overflow-auto bg-primary">
+    <div className="agentos-theme agentos-page-shell agentos-onboarding-signin h-screen overflow-auto bg-primary">
       {isTauriApp() && (
         <div
           data-tauri-drag-region
           className="fixed inset-x-0 top-0 h-10 z-10"
         />
       )}
-      <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
-        <div className="rounded-sm border border-border bg-secondary p-double space-y-double">
-          <header className="space-y-double text-center">
+      <div className="agentos-onboarding-signin__container mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-base py-double">
+        <div className="agentos-page-card agentos-onboarding-signin__card rounded-sm border border-border bg-secondary p-double space-y-double">
+          <header className="agentos-onboarding-signin__header space-y-double text-center">
             <div className="flex justify-center">
-              <img
-                src={logoSrc}
-                alt="Vibe Kanban"
-                className="h-8 w-auto logo"
-              />
+              <AgentOSWordmark />
             </div>
             {!isLoggedIn && (
               <p className="text-sm text-low">
@@ -290,28 +270,32 @@ export function OnboardingSignInPage() {
           </header>
 
           {isAuthMethodsError && !isLoggedIn && (
-            <div className="rounded-sm border border-error/30 bg-error/10 p-base">
+            <div className="agentos-onboarding-signin__error rounded-sm border border-error/30 bg-error/10 p-base">
               <p className="text-sm text-high">
                 {authMethodsError instanceof Error
                   ? authMethodsError.message
-                  : 'Failed to load available sign-in methods.'}
+                  : t('onboardingSignIn.authMethodsError')}
               </p>
             </div>
           )}
 
           {isLoggedIn ? (
-            <section className="space-y-base">
+            <section className="agentos-onboarding-signin__signed-in space-y-base">
               <p className="text-sm text-normal text-center">
                 {t('onboardingSignIn.signedInAs', {
                   name:
                     loginStatus.profile?.username ||
                     loginStatus.profile?.email ||
-                    'your account',
+                    t('onboardingSignIn.fallbackAccount'),
                 })}
               </p>
               <div className="flex justify-end">
                 <PrimaryButton
-                  value={saving ? 'Continuing...' : 'Continue'}
+                  value={
+                    saving
+                      ? t('onboardingSignIn.continuing')
+                      : t('onboardingSignIn.continue')
+                  }
                   onClick={() =>
                     void finishOnboarding({ method: 'continue_logged_in' })
                   }
@@ -321,10 +305,14 @@ export function OnboardingSignInPage() {
             </section>
           ) : (
             <>
-              <section className="flex flex-col items-center gap-2">
+              <section className="agentos-onboarding-signin__actions flex flex-col items-center gap-2">
                 {!isAuthMethodsError && hasLocalAuth ? (
                   <PrimaryButton
-                    value={isAuthDialogOpen ? 'Opening sign in...' : 'Sign in'}
+                    value={
+                      isAuthDialogOpen
+                        ? t('onboardingSignIn.openingSignIn')
+                        : t('onboardingSignIn.signIn')
+                    }
                     onClick={() => void handleDialogSignIn()}
                     disabled={
                       saving || pendingProvider !== null || isAuthDialogOpen
@@ -338,7 +326,9 @@ export function OnboardingSignInPage() {
                         onClick={() => void handleProviderSignIn('github')}
                         disabled={saving || pendingProvider !== null}
                         loading={pendingProvider === 'github'}
-                        loadingText="Opening GitHub..."
+                        loadingText={t('onboardingSignIn.openingProvider', {
+                          provider: 'GitHub',
+                        })}
                       />
                     )}
                     {hasOAuthProviders && oauthProviders.includes('google') && (
@@ -347,7 +337,9 @@ export function OnboardingSignInPage() {
                         onClick={() => void handleProviderSignIn('google')}
                         disabled={saving || pendingProvider !== null}
                         loading={pendingProvider === 'google'}
-                        loadingText="Opening Google..."
+                        loadingText={t('onboardingSignIn.openingProvider', {
+                          provider: 'Google',
+                        })}
                       />
                     )}
                   </>
@@ -357,7 +349,7 @@ export function OnboardingSignInPage() {
               <div className="flex justify-center">
                 <button
                   type="button"
-                  className="text-sm text-low hover:text-normal underline underline-offset-2"
+                  className="agentos-onboarding-signin__more-options text-sm text-low hover:text-normal underline underline-offset-2"
                   onClick={() => {
                     if (!showComparison) {
                       trackRemoteOnboardingEvent(
@@ -378,7 +370,7 @@ export function OnboardingSignInPage() {
           )}
 
           {showComparison && !isLoggedIn && (
-            <section className="space-y-base rounded-sm border border-border bg-panel p-base">
+            <section className="agentos-onboarding-signin__comparison space-y-base rounded-sm border border-border bg-panel p-base">
               <div className="overflow-x-auto rounded-sm border border-border">
                 <table className="w-full border-collapse">
                   <thead className="bg-secondary text-xs font-medium text-low">
@@ -401,7 +393,7 @@ export function OnboardingSignInPage() {
                         className={index > 0 ? 'border-t border-border' : ''}
                       >
                         <td className="px-base py-half text-normal align-top">
-                          {row.feature}
+                          {t(`onboardingSignIn.features.${row.feature}`)}
                         </td>
                         <td className="px-base py-half align-top border-l border-border text-center">
                           {row.signedIn ? (
@@ -409,6 +401,7 @@ export function OnboardingSignInPage() {
                               <CheckIcon
                                 className="size-icon-xs text-success inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.yes')}
@@ -419,6 +412,7 @@ export function OnboardingSignInPage() {
                               <XIcon
                                 className="size-icon-xs text-warning inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.no')}
@@ -432,6 +426,7 @@ export function OnboardingSignInPage() {
                               <CheckIcon
                                 className="size-icon-xs text-success inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.yes')}
@@ -442,6 +437,7 @@ export function OnboardingSignInPage() {
                               <XIcon
                                 className="size-icon-xs text-warning inline"
                                 weight="bold"
+                                aria-hidden="true"
                               />
                               <span className="sr-only">
                                 {t('onboardingSignIn.no')}
@@ -458,8 +454,8 @@ export function OnboardingSignInPage() {
                 <PrimaryButton
                   value={
                     saving
-                      ? 'Continuing...'
-                      : 'I understand, continue without signing in'
+                      ? t('onboardingSignIn.continuing')
+                      : t('onboardingSignIn.skipSignIn')
                   }
                   variant="tertiary"
                   onClick={() =>

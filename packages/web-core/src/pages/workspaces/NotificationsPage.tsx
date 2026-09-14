@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useRouter } from '@tanstack/react-router';
 import { BellIcon, CheckIcon, ChecksIcon } from '@phosphor-icons/react';
+import { useTranslation } from 'react-i18next';
 import { UserAvatar } from '@vibe/ui/components/UserAvatar';
 import { useNotifications } from '@/shared/hooks/useNotifications';
 import { useNotificationMembers } from '@/shared/hooks/useNotificationMembers';
@@ -15,9 +16,11 @@ import { cn } from '@/shared/lib/utils';
 function NotificationMessage({
   segments,
   membersByUserId,
+  someoneLabel,
 }: {
   segments: MessageSegment[];
   membersByUserId: ReturnType<typeof useNotificationMembers>['membersByUserId'];
+  someoneLabel: string;
 }) {
   return (
     <>
@@ -50,7 +53,7 @@ function NotificationMessage({
             />
           );
         }
-        return <span key={i}>Someone</span>;
+        return <span key={i}>{someoneLabel}</span>;
       })}
     </>
   );
@@ -58,6 +61,7 @@ function NotificationMessage({
 
 export function NotificationsPage() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { data, updateMany, enabled, unseenCount, groupedNotifications } =
     useNotifications();
   const { membersByUserId } = useNotificationMembers(data);
@@ -97,78 +101,95 @@ export function NotificationsPage() {
 
   if (!enabled) {
     return (
-      <div className="flex items-center justify-center h-full text-low">
-        Sign in to view notifications
+      <div
+        className="agentos-theme agentos-page-shell agentos-empty-state h-full"
+        role="status"
+        aria-labelledby="agentos-notifications-auth-title"
+      >
+        <BellIcon size={32} weight="light" aria-hidden="true" />
+        <h1
+          id="agentos-notifications-auth-title"
+          className="agentos-empty-state__title"
+        >
+          {t('notifications.title')}
+        </h1>
+        <p className="agentos-empty-state__description">
+          {t('notifications.signInDescription')}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <div className="flex items-center justify-between px-double py-base border-b border-border">
-        <h1 className="text-xl font-medium text-high">Notifications</h1>
+    <div className="agentos-notifications-page flex flex-col h-full overflow-hidden">
+      <div className="agentos-notifications-page__header flex items-center justify-between px-double py-base border-b border-border">
+        <h1 className="text-xl font-medium text-high">
+          {t('notifications.title')}
+        </h1>
         {unseenCount > 0 && (
           <button
             type="button"
             onClick={handleMarkAllSeen}
-            className="flex items-center gap-1 px-base py-half text-sm text-low hover:text-normal transition-colors cursor-pointer"
+            className="agentos-notifications-page__mark-all flex min-h-8 items-center gap-1 rounded-sm px-base py-half text-sm text-low transition-colors cursor-pointer hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
-            <ChecksIcon size={16} />
-            Mark all as read
+            <ChecksIcon size={16} aria-hidden="true" />
+            {t('notifications.markAllRead')}
           </button>
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="agentos-notifications-page__list flex-1 overflow-y-auto">
         {groupedNotifications.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full gap-2 text-low">
-            <BellIcon size={32} weight="light" />
-            <p className="text-base">No notifications yet</p>
+          <div className="agentos-notifications-page__empty agentos-empty-state h-full">
+            <BellIcon size={32} weight="light" aria-hidden="true" />
+            <p className="agentos-empty-state__title">
+              {t('notifications.emptyTitle')}
+            </p>
+            <p className="agentos-empty-state__description">
+              {t('notifications.emptyDescription')}
+            </p>
           </div>
         ) : (
           <div className="divide-y divide-border">
             {groupedNotifications.map((group) => (
-              <div
+              <article
                 key={group.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => handleClick(group)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleClick(group);
-                  }
-                }}
                 className={cn(
-                  'w-full flex items-center gap-base px-double py-base text-left transition-colors cursor-pointer outline-none',
+                  'agentos-notifications-page__row w-full flex items-center gap-base px-double py-base transition-colors',
                   'hover:bg-secondary',
-                  'focus-visible:bg-secondary',
-                  'focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand',
                   !group.seen && 'bg-brand/5'
                 )}
               >
-                <span
-                  className={cn(
-                    'shrink-0 w-2 h-2 rounded-full',
-                    !group.seen && 'bg-brand'
-                  )}
-                />
-                <div className="flex-1 min-w-0">
-                  <p
+                <button
+                  type="button"
+                  onClick={() => handleClick(group)}
+                  className="agentos-notifications-page__open flex min-w-0 flex-1 items-center gap-base text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand"
+                >
+                  <span
                     className={cn(
-                      'text-base truncate',
-                      group.seen ? 'text-normal' : 'text-high'
+                      'agentos-notifications-page__unread-dot shrink-0 w-2 h-2 rounded-full',
+                      !group.seen && 'bg-brand'
                     )}
-                  >
-                    <NotificationMessage
-                      segments={getGroupedNotificationSegments(group)}
-                      membersByUserId={membersByUserId}
-                    />
-                  </p>
-                  <p className="text-sm text-low mt-0.5">
-                    {formatRelativeTime(group.latest.created_at)}
-                  </p>
-                </div>
+                    aria-hidden="true"
+                  />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span
+                      className={cn(
+                        'agentos-notifications-page__message text-base truncate',
+                        group.seen ? 'text-normal' : 'text-high'
+                      )}
+                    >
+                      <NotificationMessage
+                        segments={getGroupedNotificationSegments(group)}
+                        membersByUserId={membersByUserId}
+                        someoneLabel={t('notifications.someone')}
+                      />
+                    </span>
+                    <span className="agentos-notifications-page__time text-sm text-low mt-0.5">
+                      {formatRelativeTime(group.latest.created_at)}
+                    </span>
+                  </span>
+                </button>
                 {!group.seen && (
                   <button
                     type="button"
@@ -178,18 +199,20 @@ export function NotificationsPage() {
                     }}
                     onKeyDown={(e) => e.stopPropagation()}
                     className={cn(
-                      'shrink-0 inline-flex items-center gap-half rounded-sm px-half py-half text-sm text-low transition-colors cursor-pointer',
+                      'agentos-notifications-page__mark shrink-0 inline-flex items-center gap-half rounded-sm px-half py-half text-sm text-low transition-colors cursor-pointer',
                       'hover:bg-secondary hover:text-normal',
                       'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
                     )}
-                    aria-label="Mark notification as read"
-                    title="Mark as read"
+                    aria-label={t('notifications.markRead')}
+                    title={t('notifications.markReadTitle')}
                   >
-                    <CheckIcon size={14} weight="bold" />
-                    <span className="hidden sm:inline">Mark as read</span>
+                    <CheckIcon size={14} weight="bold" aria-hidden="true" />
+                    <span className="hidden sm:inline">
+                      {t('notifications.markReadTitle')}
+                    </span>
                   </button>
                 )}
-              </div>
+              </article>
             ))}
           </div>
         )}

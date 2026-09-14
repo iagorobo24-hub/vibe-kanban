@@ -30,20 +30,25 @@ export function ChatTodoList({ todos, expanded, onToggle }: ChatTodoListProps) {
 
   return (
     <div className="text-sm">
-      <div
-        className="flex items-center gap-base text-low cursor-pointer"
+      <button
+        type="button"
+        className="flex w-full items-center gap-base border-0 bg-transparent p-0 text-left text-low cursor-pointer"
         onClick={onToggle}
-        role="button"
+        aria-expanded={expanded}
       >
-        <ListChecksIcon className="shrink-0 size-icon-base" />
+        <ListChecksIcon
+          aria-hidden="true"
+          className="shrink-0 size-icon-base"
+        />
         <span className="flex-1">{t('conversation.updatedTodos')}</span>
         <CaretDownIcon
+          aria-hidden="true"
           className={cn(
             'shrink-0 size-icon-base transition-transform',
             expanded && 'rotate-180'
           )}
         />
-      </div>
+      </button>
       {expanded && todos.length > 0 && (
         <ul className="pt-base ml-6 [&>li+li]:pt-1">
           {todos.map((todo, index) => (

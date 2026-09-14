@@ -75,6 +75,7 @@ import { SettingsDialog } from '@/shared/dialogs/settings/SettingsDialog';
 import { CreateWorkspaceFromPrDialog } from '@/shared/dialogs/command-bar/CreateWorkspaceFromPrDialog';
 import { buildWorkspaceCreateInitialState } from '@/shared/lib/workspaceCreateState';
 import { setCreateModeSeedState } from '@/features/create-mode/model/createModeSeedStore';
+import i18n from '@/i18n';
 
 // Mirrored sidebar icon for right sidebar toggle
 const RightSidebarIcon: Icon = forwardRef<SVGSVGElement, IconProps>(
@@ -176,6 +177,7 @@ export const Actions = {
   DuplicateWorkspace: {
     id: 'duplicate-workspace',
     label: 'Duplicate',
+    translationKey: 'commandBar.actions.duplicateWorkspace',
     icon: CopyIcon,
     shortcut: 'W D',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -221,6 +223,7 @@ export const Actions = {
   RenameWorkspace: {
     id: 'rename-workspace',
     label: 'Rename',
+    translationKey: 'commandBar.actions.renameWorkspace',
     icon: PencilSimpleIcon,
     shortcut: 'W R',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -239,6 +242,10 @@ export const Actions = {
   PinWorkspace: {
     id: 'pin-workspace',
     label: (workspace?: Workspace) => (workspace?.pinned ? 'Unpin' : 'Pin'),
+    getTranslationKey: (_ctx, workspace) =>
+      workspace?.pinned
+        ? 'commandBar.actions.unpinWorkspace'
+        : 'commandBar.actions.pinWorkspace',
     icon: PushPinIcon,
     shortcut: 'W P',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -255,6 +262,10 @@ export const Actions = {
     id: 'archive-workspace',
     label: (workspace?: Workspace) =>
       workspace?.archived ? 'Unarchive' : 'Archive',
+    getTranslationKey: (_ctx, workspace) =>
+      workspace?.archived
+        ? 'commandBar.actions.unarchiveWorkspace'
+        : 'commandBar.actions.archiveWorkspace',
     icon: ArchiveIcon,
     shortcut: 'W A',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -283,6 +294,7 @@ export const Actions = {
   DeleteWorkspace: {
     id: 'delete-workspace',
     label: 'Delete',
+    translationKey: 'commandBar.actions.deleteWorkspace',
     icon: TrashIcon,
     shortcut: 'W X',
     variant: 'destructive',
@@ -342,6 +354,7 @@ export const Actions = {
   StartReview: {
     id: 'start-review',
     label: 'Start Review',
+    translationKey: 'commandBar.actions.startReview',
     icon: HighlighterIcon,
     requiresTarget: ActionTargetType.WORKSPACE,
     isVisible: (ctx) => ctx.hasWorkspace,
@@ -356,6 +369,7 @@ export const Actions = {
   SpinOffWorkspace: {
     id: 'spin-off-workspace',
     label: 'Spin off workspace',
+    translationKey: 'commandBar.actions.spinOffWorkspace',
     icon: GitForkIcon,
     requiresTarget: ActionTargetType.WORKSPACE,
     isVisible: (ctx) => ctx.hasWorkspace,
@@ -392,6 +406,7 @@ export const Actions = {
   NewWorkspace: {
     id: 'new-workspace',
     label: 'New Workspace',
+    translationKey: 'commandBar.actions.newWorkspace',
     icon: PlusIcon,
     shortcut: 'G N',
     requiresTarget: ActionTargetType.NONE,
@@ -403,6 +418,7 @@ export const Actions = {
   CreateWorkspaceFromPR: {
     id: 'create-workspace-from-pr',
     label: 'Create Workspace from PR',
+    translationKey: 'commandBar.actions.createWorkspaceFromPr',
     icon: GitPullRequestIcon,
     keywords: ['pull request'],
     requiresTarget: ActionTargetType.NONE,
@@ -415,6 +431,7 @@ export const Actions = {
   Settings: {
     id: 'settings',
     label: 'Settings',
+    translationKey: 'commandBar.actions.settings',
     icon: GearIcon,
     shortcut: 'G S',
     requiresTarget: ActionTargetType.NONE,
@@ -426,6 +443,7 @@ export const Actions = {
   ProjectSettings: {
     id: 'project-settings',
     label: 'Project Settings',
+    translationKey: 'commandBar.actions.projectSettings',
     icon: GearIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'kanban',
@@ -443,6 +461,7 @@ export const Actions = {
   SignIn: {
     id: 'sign-in',
     label: 'Sign In',
+    translationKey: 'commandBar.actions.signIn',
     icon: SignInIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => !ctx.isSignedIn,
@@ -457,6 +476,7 @@ export const Actions = {
   SignOut: {
     id: 'sign-out',
     label: 'Sign Out',
+    translationKey: 'commandBar.actions.signOut',
     icon: SignOutIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.isSignedIn,
@@ -481,6 +501,7 @@ export const Actions = {
   Feedback: {
     id: 'feedback',
     label: 'Give Feedback',
+    translationKey: 'commandBar.actions.feedback',
     icon: MegaphoneIcon,
     requiresTarget: ActionTargetType.NONE,
     execute: () => {
@@ -491,6 +512,7 @@ export const Actions = {
   WorkspacesGuide: {
     id: 'workspaces-guide',
     label: 'Workspaces Guide',
+    translationKey: 'commandBar.actions.workspacesGuide',
     icon: QuestionIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'workspaces',
@@ -502,6 +524,7 @@ export const Actions = {
   ProjectsGuide: {
     id: 'projects-guide',
     label: 'Projects Guide',
+    translationKey: 'commandBar.actions.projectsGuide',
     icon: QuestionIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'kanban',
@@ -513,6 +536,7 @@ export const Actions = {
   OpenCommandBar: {
     id: 'open-command-bar',
     label: 'Open Command Bar',
+    translationKey: 'commandBar.actions.openCommandBar',
     icon: ListIcon,
     shortcut: '{mod} K',
     requiresTarget: ActionTargetType.NONE,
@@ -532,6 +556,10 @@ export const Actions = {
       useDiffViewStore.getState().mode === 'unified'
         ? 'Switch to Side-by-Side View'
         : 'Switch to Inline View',
+    getTranslationKey: () =>
+      useDiffViewStore.getState().mode === 'unified'
+        ? 'commandBar.actions.diffSideBySideView'
+        : 'commandBar.actions.diffInlineView',
     icon: ColumnsIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) =>
@@ -552,6 +580,10 @@ export const Actions = {
       useDiffViewStore.getState().ignoreWhitespace
         ? 'Show Whitespace Changes'
         : 'Ignore Whitespace Changes',
+    getTranslationKey: () =>
+      useDiffViewStore.getState().ignoreWhitespace
+        ? 'commandBar.actions.showWhitespaceChanges'
+        : 'commandBar.actions.ignoreWhitespaceChanges',
     icon: EyeSlashIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) =>
@@ -569,6 +601,10 @@ export const Actions = {
       useDiffViewStore.getState().wrapText
         ? 'Disable Line Wrapping'
         : 'Enable Line Wrapping',
+    getTranslationKey: () =>
+      useDiffViewStore.getState().wrapText
+        ? 'commandBar.actions.disableLineWrapping'
+        : 'commandBar.actions.enableLineWrapping',
     icon: TextAlignLeftIcon,
     shortcut: 'T W',
     requiresTarget: ActionTargetType.NONE,
@@ -588,6 +624,10 @@ export const Actions = {
       useUiPreferencesStore.getState().isLeftSidebarVisible
         ? 'Hide Left Sidebar'
         : 'Show Left Sidebar',
+    getTranslationKey: () =>
+      useUiPreferencesStore.getState().isLeftSidebarVisible
+        ? 'commandBar.actions.hideLeftSidebar'
+        : 'commandBar.actions.showLeftSidebar',
     icon: SidebarSimpleIcon,
     shortcut: 'V S',
     requiresTarget: ActionTargetType.NONE,
@@ -610,6 +650,10 @@ export const Actions = {
       !(ctx.isLeftMainPanelVisible && ctx.rightMainPanelMode === null),
     getLabel: (ctx) =>
       ctx.isLeftMainPanelVisible ? 'Hide Chat Panel' : 'Show Chat Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.isLeftMainPanelVisible
+        ? 'commandBar.actions.hideChatPanel'
+        : 'commandBar.actions.showChatPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -623,6 +667,10 @@ export const Actions = {
       useUiPreferencesStore.getState().isRightSidebarVisible
         ? 'Hide Right Sidebar'
         : 'Show Right Sidebar',
+    getTranslationKey: () =>
+      useUiPreferencesStore.getState().isRightSidebarVisible
+        ? 'commandBar.actions.hideRightSidebar'
+        : 'commandBar.actions.showRightSidebar',
     icon: RightSidebarIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'workspaces',
@@ -646,6 +694,10 @@ export const Actions = {
       ctx.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.CHANGES
         ? 'Hide Changes Panel'
         : 'Show Changes Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.CHANGES
+        ? 'commandBar.actions.hideChangesPanel'
+        : 'commandBar.actions.showChangesPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -669,6 +721,10 @@ export const Actions = {
       ctx.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.LOGS
         ? 'Hide Logs Panel'
         : 'Show Logs Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.LOGS
+        ? 'commandBar.actions.hideLogsPanel'
+        : 'commandBar.actions.showLogsPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -693,6 +749,10 @@ export const Actions = {
       ctx.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.PREVIEW
         ? 'Hide Preview Panel'
         : 'Show Preview Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.PREVIEW
+        ? 'commandBar.actions.hidePreviewPanel'
+        : 'commandBar.actions.showPreviewPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -714,6 +774,10 @@ export const Actions = {
         keys.length > 0 && keys.every((k) => expanded[k] !== false);
       return isAllExpanded ? 'Collapse All Diffs' : 'Expand All Diffs';
     },
+    getTranslationKey: (ctx) =>
+      ctx?.isAllDiffsExpanded
+        ? 'commandBar.actions.collapseAllDiffs'
+        : 'commandBar.actions.expandAllDiffs',
     icon: CaretDoubleUpIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) =>
@@ -737,6 +801,7 @@ export const Actions = {
   OpenInIDE: {
     id: 'open-in-ide',
     label: 'Open in IDE',
+    translationKey: 'commandBar.actions.openInIde',
     icon: 'ide-icon' as const,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.hasWorkspace,
@@ -771,6 +836,7 @@ export const Actions = {
   CopyWorkspacePath: {
     id: 'copy-workspace-path',
     label: 'Copy Workspace Path',
+    translationKey: 'commandBar.actions.copyWorkspacePath',
     icon: 'copy-icon' as const,
     shortcut: 'Y P',
     requiresTarget: ActionTargetType.NONE,
@@ -784,6 +850,7 @@ export const Actions = {
   CopyRawLogs: {
     id: 'copy-raw-logs',
     label: 'Copy Raw Logs',
+    translationKey: 'commandBar.actions.copyRawLogs',
     icon: CopyIcon,
     shortcut: 'Y L',
     requiresTarget: ActionTargetType.NONE,
@@ -800,6 +867,7 @@ export const Actions = {
   ToggleDevServer: {
     id: 'toggle-dev-server',
     label: 'Dev Server',
+    translationKey: 'commandBar.actions.devServer',
     icon: PlayIcon,
     shortcut: 'T D',
     requiresTarget: ActionTargetType.NONE,
@@ -832,6 +900,10 @@ export const Actions = {
     },
     getLabel: (ctx) =>
       ctx.devServerState === 'running' ? 'Stop Dev Server' : 'Start Dev Server',
+    getTranslationKey: (ctx) =>
+      ctx?.devServerState === 'running'
+        ? 'commandBar.actions.stopDevServer'
+        : 'commandBar.actions.startDevServer',
     execute: (ctx) => {
       if (ctx.runningDevServers.length > 0) {
         ctx.stopDevServer();
@@ -852,6 +924,7 @@ export const Actions = {
   GitCreatePR: {
     id: 'git-create-pr',
     label: 'Create Pull Request',
+    translationKey: 'commandBar.actions.createPullRequest',
     icon: GitPullRequestIcon,
     shortcut: 'X P',
     requiresTarget: ActionTargetType.GIT,
@@ -888,6 +961,7 @@ export const Actions = {
   GitLinkPR: {
     id: 'git-link-pr',
     label: 'Link Pull Request',
+    translationKey: 'commandBar.actions.linkPullRequest',
     icon: LinkIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos && !ctx.hasOpenPR,
@@ -903,23 +977,31 @@ export const Actions = {
         });
 
         await ConfirmDialog.show({
-          title: 'Pull Request Linked',
-          message: `Linked PR #${result.data.pr_number}${result.data.pr_url ? ` — ${result.data.pr_url}` : ''}`,
-          confirmText: 'OK',
+          title: i18n.t('actionDialogs.pullRequestLinked.title'),
+          message: result.data.pr_url
+            ? i18n.t('actionDialogs.pullRequestLinked.messageWithUrl', {
+                number: result.data.pr_number,
+                url: result.data.pr_url,
+              })
+            : i18n.t('actionDialogs.pullRequestLinked.message', {
+                number: result.data.pr_number,
+              }),
+          confirmText: i18n.t('ok'),
           showCancelButton: false,
           variant: 'success',
         });
       } else if (result.success && !result.data.pr_attached) {
         await ConfirmDialog.show({
-          title: 'No Pull Request Found',
-          message:
-            'No open pull request was found matching this branch. Make sure a PR exists for this branch on the remote.',
-          confirmText: 'OK',
+          title: i18n.t('actionDialogs.pullRequestNotFound.title'),
+          message: i18n.t('actionDialogs.pullRequestNotFound.message'),
+          confirmText: i18n.t('ok'),
           showCancelButton: false,
           variant: 'info',
         });
       } else if (!result.success) {
-        throw new Error(result.message || 'Failed to attach PR');
+        throw new Error(
+          result.message || i18n.t('actionDialogs.errors.attachPullRequest')
+        );
       }
     },
   },
@@ -927,6 +1009,7 @@ export const Actions = {
   GitMerge: {
     id: 'git-merge',
     label: 'Merge',
+    translationKey: 'commandBar.actions.merge',
     icon: GitMergeIcon,
     shortcut: 'X M',
     requiresTarget: ActionTargetType.GIT,
@@ -942,10 +1025,9 @@ export const Actions = {
       );
       if (hasOpenPR) {
         await ConfirmDialog.show({
-          title: 'Cannot Merge',
-          message:
-            'This repository has an open pull request. Please close or merge the PR before merging directly.',
-          confirmText: 'OK',
+          title: i18n.t('actionDialogs.cannotMerge.title'),
+          message: i18n.t('actionDialogs.cannotMerge.message'),
+          confirmText: i18n.t('ok'),
           showCancelButton: false,
         });
         return;
@@ -985,10 +1067,12 @@ export const Actions = {
       if (commitsBehind > 0) {
         // Prompt user to rebase first
         const confirmRebase = await ConfirmDialog.show({
-          title: 'Rebase Required',
-          message: `Your branch is ${commitsBehind} commit${commitsBehind === 1 ? '' : 's'} behind the target branch. Would you like to rebase first?`,
-          confirmText: 'Rebase',
-          cancelText: 'Cancel',
+          title: i18n.t('actionDialogs.rebaseRequired.title'),
+          message: i18n.t('actionDialogs.rebaseRequired.message', {
+            count: commitsBehind,
+          }),
+          confirmText: i18n.t('commandBar.actions.rebase'),
+          cancelText: i18n.t('confirm.defaultCancel'),
         });
 
         if (confirmRebase === 'confirmed') {
@@ -1002,11 +1086,10 @@ export const Actions = {
       }
 
       const confirmResult = await ConfirmDialog.show({
-        title: 'Merge Branch',
-        message:
-          'Are you sure you want to merge this branch into the target branch?',
-        confirmText: 'Merge',
-        cancelText: 'Cancel',
+        title: i18n.t('actionDialogs.mergeBranch.title'),
+        message: i18n.t('actionDialogs.mergeBranch.message'),
+        confirmText: i18n.t('commandBar.actions.merge'),
+        cancelText: i18n.t('confirm.defaultCancel'),
       });
 
       if (confirmResult === 'confirmed') {
@@ -1019,6 +1102,7 @@ export const Actions = {
   GitRebase: {
     id: 'git-rebase',
     label: 'Rebase',
+    translationKey: 'commandBar.actions.rebase',
     icon: ArrowsClockwiseIcon,
     shortcut: 'X R',
     requiresTarget: ActionTargetType.GIT,
@@ -1035,6 +1119,7 @@ export const Actions = {
   GitChangeTarget: {
     id: 'git-change-target',
     label: 'Change Target Branch',
+    translationKey: 'commandBar.actions.changeTargetBranch',
     icon: CrosshairIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1071,6 +1156,7 @@ export const Actions = {
   GitPush: {
     id: 'git-push',
     label: 'Push',
+    translationKey: 'commandBar.actions.push',
     icon: ArrowUpIcon,
     shortcut: 'X U',
     requiresTarget: ActionTargetType.GIT,
@@ -1097,6 +1183,7 @@ export const Actions = {
   RepoCopyPath: {
     id: 'repo-copy-path',
     label: 'Copy Repo Path',
+    translationKey: 'commandBar.actions.copyRepoPath',
     icon: CopyIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1116,6 +1203,7 @@ export const Actions = {
   RepoOpenInIDE: {
     id: 'repo-open-in-ide',
     label: 'Open Repo in IDE',
+    translationKey: 'commandBar.actions.openRepoInIde',
     icon: DesktopIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1138,6 +1226,7 @@ export const Actions = {
   RepoSettings: {
     id: 'repo-settings',
     label: 'Repository Settings',
+    translationKey: 'commandBar.actions.repositorySettings',
     icon: GearIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1155,6 +1244,7 @@ export const Actions = {
   RunSetupScript: {
     id: 'run-setup-script',
     label: 'Run Setup Script',
+    translationKey: 'commandBar.actions.runSetupScript',
     icon: TerminalIcon,
     shortcut: 'R S',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -1177,6 +1267,7 @@ export const Actions = {
   RunCleanupScript: {
     id: 'run-cleanup-script',
     label: 'Run Cleanup Script',
+    translationKey: 'commandBar.actions.runCleanupScript',
     icon: TerminalIcon,
     shortcut: 'R C',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -1199,6 +1290,7 @@ export const Actions = {
   RunArchiveScript: {
     id: 'run-archive-script',
     label: 'Run Archive Script',
+    translationKey: 'commandBar.actions.runArchiveScript',
     icon: TerminalIcon,
     shortcut: 'R A',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -1422,13 +1514,10 @@ export const Actions = {
     execute: async (ctx, _projectId, issueIds) => {
       const count = issueIds.length;
       const result = await ConfirmDialog.show({
-        title: count === 1 ? 'Delete Issue' : `Delete ${count} Issues`,
-        message:
-          count === 1
-            ? 'Are you sure you want to delete this issue? This action cannot be undone.'
-            : `Are you sure you want to delete these ${count} issues? This action cannot be undone.`,
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
+        title: i18n.t('actionDialogs.deleteIssue.title', { count }),
+        message: i18n.t('actionDialogs.deleteIssue.message', { count }),
+        confirmText: i18n.t('commandBar.actions.deleteIssue'),
+        cancelText: i18n.t('confirm.defaultCancel'),
         variant: 'destructive',
       });
       if (result === 'confirmed' && ctx.projectMutations?.removeIssue) {

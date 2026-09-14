@@ -6,6 +6,7 @@ import {
   UserContext,
   type UserContextValue,
 } from '@/shared/hooks/useUserContext';
+import { useRemoteAuthAvailability } from '@/shared/hooks/useRemoteAuthAvailability';
 
 interface UserProviderProps {
   children: ReactNode;
@@ -13,10 +14,11 @@ interface UserProviderProps {
 
 export function UserProvider({ children }: UserProviderProps) {
   const { isSignedIn } = useAuth();
+  const { isRemoteAuthAvailable } = useRemoteAuthAvailability();
 
   // No params needed - backend gets user from auth context
   const params = useMemo(() => ({}), []);
-  const enabled = isSignedIn;
+  const enabled = isSignedIn && isRemoteAuthAvailable;
 
   // Shape subscriptions
   const workspacesResult = useShape(USER_WORKSPACES_SHAPE, params, { enabled });

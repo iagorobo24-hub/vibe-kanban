@@ -32,6 +32,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     workspaces: activeWorkspaces,
     archivedWorkspaces,
     isLoading: isLoadingList,
+    error: workspacesListError,
+    retry: retryWorkspacesList,
   } = useWorkspaces();
 
   const { data: workspace, isLoading: isLoadingWorkspace } = useWorkspaceRecord(
@@ -46,6 +48,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     selectSession,
     selectLatestSession,
     isLoading: isSessionsLoading,
+    error: sessionsError,
+    retry: retrySessions,
     isNewSessionMode,
     startNewSession,
   } = useWorkspaceSessions(workspaceId, { enabled: !isCreateMode });
@@ -77,7 +81,12 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     enabled: !isCreateMode && hasPrAttached,
   });
 
-  const { diffs } = useDiffStream(workspaceId ?? null, !isCreateMode);
+  const {
+    diffs,
+    error: diffStreamError,
+    isInitialized: diffStreamInitialized,
+    retry: retryDiffStream,
+  } = useDiffStream(workspaceId ?? null, !isCreateMode);
 
   const diffPaths = useMemo(
     () =>
@@ -101,6 +110,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     diffs,
     diffPaths,
     diffStats,
+    diffStreamInitialized,
+    diffStreamError,
+    retryDiffStream,
     gitHubComments,
     isGitHubCommentsLoading,
     showGitHubComments,
@@ -114,6 +126,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     diffs,
     diffPaths,
     diffStats,
+    diffStreamInitialized,
+    diffStreamError,
+    retryDiffStream,
     gitHubComments,
     isGitHubCommentsLoading,
     showGitHubComments,
@@ -145,6 +160,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     diffs,
     diffPaths,
     diffStats,
+    diffStreamInitialized,
+    diffStreamError,
+    retryDiffStream,
     gitHubComments,
     isGitHubCommentsLoading,
     showGitHubComments,
@@ -197,6 +215,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       activeWorkspaces,
       archivedWorkspaces,
       isWorkspacesListLoading: isLoadingList,
+      workspacesListError,
+      retryWorkspacesList,
       isLoading,
       isCreateMode,
       selectWorkspace,
@@ -207,6 +227,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       selectSession,
       selectLatestSession,
       isSessionsLoading,
+      sessionsError,
+      retrySessions,
       isNewSessionMode,
       startNewSession,
       repos,
@@ -218,6 +240,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       activeWorkspaces,
       archivedWorkspaces,
       isLoadingList,
+      workspacesListError,
+      retryWorkspacesList,
       isLoading,
       isCreateMode,
       selectWorkspace,
@@ -228,6 +252,8 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       selectSession,
       selectLatestSession,
       isSessionsLoading,
+      sessionsError,
+      retrySessions,
       isNewSessionMode,
       startNewSession,
       repos,

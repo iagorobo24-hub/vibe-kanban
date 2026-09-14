@@ -167,14 +167,18 @@ function ActionItemIcon({
 }) {
   if (typeof icon === 'string') {
     if (icon === 'copy-icon') {
-      return <CopyIcon className="h-4 w-4" weight="regular" />;
+      return (
+        <CopyIcon className="h-4 w-4" weight="regular" aria-hidden="true" />
+      );
     }
     const customIcon = renderSpecialActionIcon?.(icon);
     return customIcon ? <>{customIcon}</> : null;
   }
 
   const IconComponent = icon;
-  return <IconComponent className="h-4 w-4" weight="regular" />;
+  return (
+    <IconComponent className="h-4 w-4" weight="regular" aria-hidden="true" />
+  );
 }
 
 export function CommandBar<
@@ -240,11 +244,11 @@ export function CommandBar<
 
   return (
     <Command
-      className="rounded-sm border border-border [&_[cmdk-group-heading]]:px-base [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-low [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-half [&_[cmdk-input-wrapper]_svg]:h-4 [&_[cmdk-input-wrapper]_svg]:w-4 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-base [&_[cmdk-item]]:py-half"
+      className="agentos-command-bar rounded-sm border border-border [&_[cmdk-group-heading]]:px-base [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-low [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-half [&_[cmdk-input-wrapper]_svg]:h-4 [&_[cmdk-input-wrapper]_svg]:w-4 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-base [&_[cmdk-item]]:py-half"
       shouldFilter={false}
       loop
     >
-      <div className="flex items-center border-b border-border">
+      <div className="agentos-command-bar__input-row flex items-center border-b border-border">
         <CommandInput
           placeholder={page.title || t('commandBar.defaultPlaceholder')}
           value={search}
@@ -256,7 +260,11 @@ export function CommandBar<
         {canGoBack && !search && (
           <CommandGroup>
             <CommandItem value="__back__" onSelect={onGoBack}>
-              <CaretLeftIcon className="h-4 w-4" weight="bold" />
+              <CaretLeftIcon
+                className="h-4 w-4"
+                weight="bold"
+                aria-hidden="true"
+              />
               <span>{t('commandBar.back')}</span>
             </CommandItem>
           </CommandGroup>
@@ -272,7 +280,11 @@ export function CommandBar<
                     value={item.pageId}
                     onSelect={() => onSelect(item)}
                   >
-                    <IconComponent className="h-4 w-4" weight="regular" />
+                    <IconComponent
+                      className="h-4 w-4"
+                      weight="regular"
+                      aria-hidden="true"
+                    />
                     <span>{item.label}</span>
                   </CommandItem>
                 );
@@ -285,7 +297,11 @@ export function CommandBar<
                     value={`${item.repo.id} ${item.repo.display_name}`}
                     onSelect={() => onSelect(item)}
                   >
-                    <FolderIcon className="h-4 w-4" weight="regular" />
+                    <FolderIcon
+                      className="h-4 w-4"
+                      weight="regular"
+                      aria-hidden="true"
+                    />
                     <span>{item.repo.display_name}</span>
                   </CommandItem>
                 );
@@ -298,7 +314,11 @@ export function CommandBar<
                     value={item.branch.name}
                     onSelect={() => onSelect(item)}
                   >
-                    <GitBranchIcon className="h-4 w-4" weight="regular" />
+                    <GitBranchIcon
+                      className="h-4 w-4"
+                      weight="regular"
+                      aria-hidden="true"
+                    />
                     <span>{item.branch.name}</span>
                     {item.branch.isCurrent && (
                       <span className="ml-auto text-xs capitalize text-low">
@@ -338,6 +358,7 @@ export function CommandBar<
                       <IconComponent
                         className={`h-4 w-4 ${config?.colorClass}`}
                         weight="bold"
+                        aria-hidden="true"
                       />
                     )}
                     <span>{item.priority.name}</span>
@@ -355,6 +376,7 @@ export function CommandBar<
                     <PlusIcon
                       className="h-4 w-4 shrink-0 text-brand"
                       weight="bold"
+                      aria-hidden="true"
                     />
                     <span>{t('kanban.createNewIssue')}</span>
                   </CommandItem>
@@ -377,6 +399,7 @@ export function CommandBar<
                       <PriorityIconComponent
                         className={`h-4 w-4 shrink-0 ${config?.colorClass}`}
                         weight="bold"
+                        aria-hidden="true"
                       />
                     )}
                     <span className="font-mono text-low shrink-0">

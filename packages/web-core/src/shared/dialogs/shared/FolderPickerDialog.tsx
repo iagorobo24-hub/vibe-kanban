@@ -32,13 +32,11 @@ export interface FolderPickerDialogProps {
 }
 
 const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
-  ({
-    value = '',
-    title = 'Select Folder',
-    description = 'Choose a folder for your project',
-  }) => {
+  ({ value = '', title, description }) => {
     const modal = useModal();
     const { t } = useTranslation('common');
+    const resolvedTitle = title ?? t('folderPicker.title');
+    const resolvedDescription = description ?? t('folderPicker.description');
     const [currentPath, setCurrentPath] = useState<string>('');
     const [entries, setEntries] = useState<DirectoryEntry[]>([]);
     const [loading, setLoading] = useState(false);
@@ -146,8 +144,8 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
         <Dialog open={modal.visible} onOpenChange={handleOpenChange}>
           <DialogContent className="max-w-[600px] w-full h-[700px] flex flex-col overflow-hidden">
             <DialogHeader>
-              <DialogTitle>{title}</DialogTitle>
-              <DialogDescription>{description}</DialogDescription>
+              <DialogTitle>{resolvedTitle}</DialogTitle>
+              <DialogDescription>{resolvedDescription}</DialogDescription>
             </DialogHeader>
 
             <div className="flex-1 flex flex-col space-y-4 overflow-hidden">
@@ -165,7 +163,7 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                   <Input
                     value={manualPath}
                     onChange={handleManualPathChange}
-                    placeholder="/path/to/your/project"
+                    placeholder={t('folderPicker.pathPlaceholder')}
                     className="flex-1 min-w-0"
                   />
                   <Button
@@ -189,7 +187,7 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                   <Input
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Filter folders and files..."
+                    placeholder={t('folderPicker.searchPlaceholder')}
                     className="pl-10"
                   />
                 </div>
@@ -202,6 +200,8 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                   variant="outline"
                   size="sm"
                   className="flex-shrink-0"
+                  aria-label={t('folderPicker.home')}
+                  title={t('folderPicker.home')}
                 >
                   <Home className="h-4 w-4" />
                 </Button>
@@ -211,11 +211,13 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                   size="sm"
                   disabled={!currentPath || currentPath === '/'}
                   className="flex-shrink-0"
+                  aria-label={t('folderPicker.parent')}
+                  title={t('folderPicker.parent')}
                 >
                   <ChevronUp className="h-4 w-4" />
                 </Button>
                 <div className="text-sm text-muted-foreground flex-1 truncate min-w-0">
-                  {currentPath || 'Home'}
+                  {currentPath || t('folderPicker.home')}
                 </div>
                 <Button
                   onClick={handleSelectCurrent}
@@ -232,7 +234,7 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
               <div className="flex-1 border rounded-md overflow-auto">
                 {loading ? (
                   <div className="p-4 text-center text-muted-foreground">
-                    Loading...
+                    {t('folderPicker.loading')}
                   </div>
                 ) : error ? (
                   <Alert variant="destructive" className="m-4">
@@ -242,32 +244,48 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                 ) : filteredEntries.length === 0 ? (
                   <div className="p-4 text-center text-muted-foreground">
                     {searchTerm.trim()
-                      ? 'No matches found'
-                      : 'No folders found'}
+                      ? t('folderPicker.noMatches')
+                      : t('folderPicker.noFolders')}
                   </div>
                 ) : (
                   <div className="p-2">
                     {filteredEntries.map((entry, index) => (
-                      <div
+                      <button
+                        type="button"
                         key={index}
-                        className={`flex items-center space-x-2 p-2 rounded cursor-pointer hover:bg-accent ${
+                        className={`flex items-center space-x-2 p-2 rounded text-left border-0 bg-transparent w-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand hover:bg-accent ${
                           !entry.is_directory
                             ? 'opacity-50 cursor-not-allowed'
-                            : ''
+                            : 'cursor-pointer'
                         }`}
-                        onClick={() =>
-                          entry.is_directory && handleFolderClick(entry)
+                        onClick={() => {
+                          if (entry.is_directory) handleFolderClick(entry);
+                        }}
+                        disabled={!entry.is_directory}
+                        aria-label={
+                          entry.is_directory
+                            ? t('folderPicker.openFolder', { name: entry.name })
+                            : entry.name
                         }
                         title={entry.name} // Show full name on hover
                       >
                         {entry.is_directory ? (
                           entry.is_git_repo ? (
-                            <FolderOpen className="h-4 w-4 text-success flex-shrink-0" />
+                            <FolderOpen
+                              className="h-4 w-4 text-success flex-shrink-0"
+                              aria-hidden="true"
+                            />
                           ) : (
-                            <Folder className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                            <Folder
+                              className="h-4 w-4 text-blue-600 flex-shrink-0"
+                              aria-hidden="true"
+                            />
                           )
                         ) : (
-                          <File className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                          <File
+                            className="h-4 w-4 text-gray-400 flex-shrink-0"
+                            aria-hidden="true"
+                          />
                         )}
                         <span className="text-sm flex-1 truncate min-w-0">
                           {entry.name}
@@ -277,7 +295,7 @@ const FolderPickerDialogImpl = create<FolderPickerDialogProps>(
                             {t('folderPicker.gitRepo')}
                           </span>
                         )}
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}

@@ -103,8 +103,11 @@ export function RepoCard({
         if (opt.value === 'merge' && (hasPrOpen || isTargetRemote))
           return false;
         return true;
-      }),
-    [hasPrOpen, hasPrLinked, isTargetRemote]
+      }).map((option) => ({
+        ...option,
+        label: t(`git.repoActions.${option.value}`),
+      })),
+    [hasPrOpen, hasPrLinked, isTargetRemote, t]
   );
 
   // If current selection is unavailable, fall back to the first available option.
@@ -120,7 +123,7 @@ export function RepoCard({
   }, [availableActionOptions, selectedAction]);
 
   return (
-    <div className="bg-primary rounded-sm my-base p-base space-y-base">
+    <div className="agentos-repo-card bg-primary rounded-sm my-base p-base space-y-base">
       <div className="font-medium">{name}</div>
       {/* Branch row */}
       <div className="flex items-center gap-base">
@@ -155,23 +158,37 @@ export function RepoCard({
         {/* Commits ahead/behind indicators */}
         {commitsAhead > 0 && (
           <span className="inline-flex items-center gap-0.5 text-xs text-success shrink-0">
-            <ArrowUpIcon className="size-icon-xs" weight="bold" />
+            <ArrowUpIcon
+              className="size-icon-xs"
+              weight="bold"
+              aria-hidden="true"
+            />
             <span className="font-medium">{commitsAhead}</span>
           </span>
         )}
         {commitsBehind > 0 && (
           <span className="inline-flex items-center gap-0.5 text-xs text-error shrink-0">
-            <ArrowDownIcon className="size-icon-xs" weight="bold" />
+            <ArrowDownIcon
+              className="size-icon-xs"
+              weight="bold"
+              aria-hidden="true"
+            />
             <span className="font-medium">{commitsBehind}</span>
           </span>
         )}
 
         <button
+          type="button"
           onClick={onMoreClick}
-          className="flex items-center justify-center p-1.5 rounded hover:bg-tertiary text-low hover:text-base transition-colors shrink-0"
+          className="flex shrink-0 items-center justify-center rounded p-1.5 text-low transition-colors hover:bg-tertiary hover:text-base focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           title={tCommon('workspaces.more')}
+          aria-label={tCommon('workspaces.more')}
         >
-          <DotsThreeIcon className="size-icon-base" weight="bold" />
+          <DotsThreeIcon
+            className="size-icon-base"
+            weight="bold"
+            aria-hidden="true"
+          />
         </button>
       </div>
 
@@ -181,31 +198,57 @@ export function RepoCard({
           {prStatus === 'merged' ? (
             prUrl ? (
               <button
+                type="button"
                 onClick={() => window.open(prUrl, '_blank')}
-                className="inline-flex items-center gap-half px-base py-half rounded-sm bg-panel text-success hover:bg-tertiary text-sm font-medium transition-colors"
+                className="inline-flex items-center gap-half rounded-sm bg-panel px-base py-half text-sm font-medium text-success transition-colors hover:bg-tertiary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
-                <CheckCircleIcon className="size-icon-xs" weight="fill" />
+                <CheckCircleIcon
+                  className="size-icon-xs"
+                  weight="fill"
+                  aria-hidden="true"
+                />
                 {t('git.pr.merged', { prNumber })}
-                <ArrowSquareOutIcon className="size-icon-xs" weight="bold" />
+                <ArrowSquareOutIcon
+                  className="size-icon-xs"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
             ) : (
               <span className="inline-flex items-center gap-half px-base py-half rounded-sm bg-panel text-success text-sm font-medium">
-                <CheckCircleIcon className="size-icon-xs" weight="fill" />
+                <CheckCircleIcon
+                  className="size-icon-xs"
+                  weight="fill"
+                  aria-hidden="true"
+                />
                 {t('git.pr.merged', { prNumber })}
               </span>
             )
           ) : prUrl ? (
             <button
+              type="button"
               onClick={() => window.open(prUrl, '_blank')}
-              className="inline-flex items-center gap-half px-base py-half rounded-sm bg-panel text-normal hover:bg-tertiary text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-half rounded-sm bg-panel px-base py-half text-sm font-medium text-normal transition-colors hover:bg-tertiary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             >
-              <GitPullRequestIcon className="size-icon-xs" weight="fill" />
+              <GitPullRequestIcon
+                className="size-icon-xs"
+                weight="fill"
+                aria-hidden="true"
+              />
               {t('git.pr.open', { number: prNumber })}
-              <ArrowSquareOutIcon className="size-icon-xs" weight="bold" />
+              <ArrowSquareOutIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
           ) : (
             <span className="inline-flex items-center gap-half px-base py-half rounded-sm bg-panel text-normal text-sm font-medium">
-              <GitPullRequestIcon className="size-icon-xs" weight="fill" />
+              <GitPullRequestIcon
+                className="size-icon-xs"
+                weight="fill"
+                aria-hidden="true"
+              />
               {t('git.pr.open', { number: prNumber })}
             </span>
           )}
@@ -215,9 +258,10 @@ export function RepoCard({
             isPushSuccess ||
             isPushError) && (
             <button
+              type="button"
               onClick={onPushClick}
               disabled={isPushPending || isPushSuccess || isPushError}
-              className={`inline-flex items-center gap-half px-base py-half rounded-sm text-sm font-medium transition-colors disabled:cursor-not-allowed ${
+              className={`inline-flex items-center gap-half rounded-sm px-base py-half text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed ${
                 isPushSuccess
                   ? 'bg-success/20 text-success'
                   : isPushError
@@ -226,13 +270,28 @@ export function RepoCard({
               }`}
             >
               {isPushPending ? (
-                <SpinnerGapIcon className="size-icon-xs animate-spin" />
+                <SpinnerGapIcon
+                  className="size-icon-xs animate-spin"
+                  aria-hidden="true"
+                />
               ) : isPushSuccess ? (
-                <CheckCircleIcon className="size-icon-xs" weight="fill" />
+                <CheckCircleIcon
+                  className="size-icon-xs"
+                  weight="fill"
+                  aria-hidden="true"
+                />
               ) : isPushError ? (
-                <WarningCircleIcon className="size-icon-xs" weight="fill" />
+                <WarningCircleIcon
+                  className="size-icon-xs"
+                  weight="fill"
+                  aria-hidden="true"
+                />
               ) : (
-                <ArrowUpIcon className="size-icon-xs" weight="bold" />
+                <ArrowUpIcon
+                  className="size-icon-xs"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               )}
               {isPushPending
                 ? t('git.states.pushing')

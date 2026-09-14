@@ -5,6 +5,7 @@ import type { PairRelayHostRequest, RelayPairedHost } from 'shared/types';
 import type { RelayHost } from 'shared/remote-types';
 import { relayApi } from '@/shared/lib/api';
 import { listRelayHosts } from '@/shared/lib/remoteApi';
+import { useRemoteAuthAvailability } from '@/shared/hooks/useRemoteAuthAvailability';
 
 export type RemoteCloudHostStatus = AppBarHostStatus;
 
@@ -72,11 +73,18 @@ async function fetchRemoteCloudHostsState(): Promise<RemoteCloudHostsState> {
 }
 
 export function useRemoteCloudHostsState() {
-  return useQuery({
+  const { isRemoteAuthAvailable } = useRemoteAuthAvailability();
+  const query = useQuery({
     queryKey: REMOTE_CLOUD_HOSTS_STATE_QUERY_KEY,
     queryFn: fetchRemoteCloudHostsState,
+    enabled: isRemoteAuthAvailable,
     staleTime: 0,
   });
+
+  return {
+    ...query,
+    data: isRemoteAuthAvailable ? query.data : undefined,
+  };
 }
 
 export function usePairRemoteCloudHostMutation() {

@@ -57,6 +57,15 @@
           "label": "Langue",
           "placeholder": "Sélectionner une langue",
           "helper": "Choisissez votre langue préférée. Par défaut du navigateur suit la langue de votre système."
+        },
+        "mobileFontScale": {
+          "label": "Taille du texte sur mobile",
+          "description": "Ajustez la taille du texte sur mobile pour améliorer la lisibilité.",
+          "options": {
+            "default": "Par défaut (100 %)",
+            "small": "Petit (95 %)",
+            "smaller": "Plus petit (90 %)"
+          }
         }
       },
       "taskExecution": {

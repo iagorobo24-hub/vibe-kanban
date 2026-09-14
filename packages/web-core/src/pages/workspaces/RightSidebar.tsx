@@ -91,7 +91,7 @@ export const RightSidebar = memo(function RightSidebar({
   const sections: SectionDef[] = useMemo(() => {
     const result: SectionDef[] = [
       {
-        title: 'Git',
+        title: t('common:sections.git'),
         persistKey: PERSIST_KEYS.gitPanelRepositories,
         visible: true,
         expanded: gitExpanded,
@@ -104,12 +104,18 @@ export const RightSidebar = memo(function RightSidebar({
         actions: [],
       },
       {
-        title: 'Terminal',
+        title: t('common:sections.terminal'),
         persistKey: PERSIST_KEYS.terminalSection,
         visible: isTerminalVisible && !isTerminalExpanded,
         expanded: terminalExpanded,
         content: <TerminalPanelContainer />,
-        actions: [{ icon: ArrowsOutSimpleIcon, onClick: expandTerminal }],
+        actions: [
+          {
+            icon: ArrowsOutSimpleIcon,
+            onClick: expandTerminal,
+            label: t('common:sections.expandTerminal'),
+          },
+        ],
       },
       {
         title: t('common:sections.notes'),
@@ -125,7 +131,7 @@ export const RightSidebar = memo(function RightSidebar({
       case RIGHT_MAIN_PANEL_MODES.CHANGES:
         if (selectedWorkspace) {
           result.unshift({
-            title: 'Changes',
+            title: t('common:sections.changes'),
             persistKey: PERSIST_KEYS.changesSection,
             visible: hasUpperContent,
             expanded: upperExpanded,
@@ -143,7 +149,7 @@ export const RightSidebar = memo(function RightSidebar({
         break;
       case RIGHT_MAIN_PANEL_MODES.LOGS:
         result.unshift({
-          title: 'Logs',
+          title: t('common:sections.logs'),
           persistKey: PERSIST_KEYS.rightPanelprocesses,
           visible: hasUpperContent,
           expanded: upperExpanded,
@@ -154,7 +160,7 @@ export const RightSidebar = memo(function RightSidebar({
       case RIGHT_MAIN_PANEL_MODES.PREVIEW:
         if (selectedWorkspace) {
           result.unshift({
-            title: 'Preview',
+            title: t('common:sections.preview'),
             persistKey: PERSIST_KEYS.rightPanelPreview,
             visible: hasUpperContent,
             expanded: upperExpanded,
@@ -193,20 +199,21 @@ export const RightSidebar = memo(function RightSidebar({
   ]);
 
   return (
-    <div className="h-full border-l bg-secondary overflow-y-auto">
+    <div className="agentos-right-sidebar h-full border-l bg-secondary overflow-y-auto">
       <div className="divide-y border-b">
         {sections
           .filter((section) => section.visible)
           .map((section) => (
             <div
               key={section.persistKey}
-              className="max-h-[max(50vh,400px)] flex flex-col overflow-hidden"
+              className="agentos-right-sidebar__section max-h-[max(50vh,400px)] flex flex-col overflow-hidden"
             >
               <CollapsibleSectionHeader
                 title={section.title}
                 persistKey={section.persistKey}
                 defaultExpanded={section.expanded}
                 actions={section.actions}
+                className="agentos-right-sidebar__section-header"
               >
                 <div className="flex flex-1 border-t min-h-[200px] w-full overflow-auto">
                   {section.content}

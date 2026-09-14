@@ -44,24 +44,55 @@ export function PreviewControls({
           <button
             type="button"
             onClick={onViewFullLogs}
-            className="flex items-center gap-half text-xs text-brand hover:text-brand-hover"
+            className="flex items-center gap-half rounded-sm text-xs text-brand hover:text-brand-hover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
             <span>{t('preview.logs.viewFull')}</span>
-            <ArrowSquareOutIcon className="size-icon-xs" />
+            <ArrowSquareOutIcon className="size-icon-xs" aria-hidden="true" />
           </button>
         </div>
 
         {processTabs.length > 1 && (
-          <div className="flex border-b border-border mx-base">
+          <div
+            className="flex border-b border-border mx-base"
+            role="tablist"
+            aria-label={t('preview.logs.label')}
+          >
             {processTabs.map((process) => (
               <button
                 key={process.id}
+                type="button"
+                id={`preview-process-tab-${process.id}`}
+                role="tab"
+                aria-selected={activeProcessId === process.id}
+                tabIndex={activeProcessId === process.id ? 0 : -1}
                 className={cn(
-                  'px-base py-half text-xs border-b-2 transition-colors',
+                  'min-h-8 rounded-t-sm border-b-2 px-base py-half text-xs transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand focus-visible:ring-inset',
                   activeProcessId === process.id
                     ? 'border-brand text-normal'
                     : 'border-transparent text-low hover:text-normal'
                 )}
+                onKeyDown={(event) => {
+                  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+                    return;
+                  }
+
+                  event.preventDefault();
+                  const currentIndex = processTabs.findIndex(
+                    (item) => item.id === process.id
+                  );
+                  const direction = event.key === 'ArrowRight' ? 1 : -1;
+                  const nextIndex =
+                    (currentIndex + direction + processTabs.length) %
+                    processTabs.length;
+                  const nextProcess = processTabs[nextIndex];
+                  if (!nextProcess) return;
+                  onTabChange(nextProcess.id);
+                  requestAnimationFrame(() => {
+                    document
+                      .getElementById(`preview-process-tab-${nextProcess.id}`)
+                      ?.focus();
+                  });
+                }}
                 onClick={() => onTabChange(process.id)}
               >
                 {process.label}
@@ -73,7 +104,10 @@ export function PreviewControls({
         <div className="flex-1 min-h-0 overflow-hidden">
           {isLoading && processTabs.length === 0 ? (
             <div className="h-full flex items-center justify-center text-low">
-              <SpinnerIcon className="size-icon-sm animate-spin" />
+              <SpinnerIcon
+                className="size-icon-sm animate-spin"
+                aria-hidden="true"
+              />
             </div>
           ) : processTabs.length > 0 ? (
             logsContent

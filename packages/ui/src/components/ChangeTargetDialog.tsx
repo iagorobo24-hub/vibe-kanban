@@ -88,7 +88,11 @@ const ChangeTargetDialogImpl = NiceModal.create<ChangeTargetDialogProps>(
               <label htmlFor="base-branch" className="text-sm font-medium">
                 {t('rebase.dialog.targetLabel')}
               </label>
-              <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+              <Select
+                value={selectedBranch}
+                onValueChange={setSelectedBranch}
+                disabled={isSubmitting}
+              >
                 <SelectTrigger id="base-branch">
                   <SelectValue
                     placeholder={t('branches.changeTarget.dialog.placeholder')}
@@ -106,11 +110,16 @@ const ChangeTargetDialogImpl = NiceModal.create<ChangeTargetDialogProps>(
                 </SelectContent>
               </Select>
             </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
+            {error && (
+              <p className="text-sm text-destructive" role="alert">
+                {error}
+              </p>
+            )}
           </div>
 
           <DialogFooter>
             <Button
+              type="button"
               variant="outline"
               onClick={handleCancel}
               disabled={isSubmitting}
@@ -118,6 +127,7 @@ const ChangeTargetDialogImpl = NiceModal.create<ChangeTargetDialogProps>(
               {t('common:buttons.cancel')}
             </Button>
             <Button
+              type="submit"
               onClick={handleConfirm}
               disabled={isSubmitting || !selectedBranch}
             >

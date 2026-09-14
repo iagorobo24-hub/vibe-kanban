@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useTranslation } from '@/i18n/useTranslation';
 import {
   createFileRoute,
   useNavigate,
   useParams,
-} from "@tanstack/react-router";
-import { requireAuthenticated } from "@remote/shared/lib/route-auth";
-import { WorkspacesLanding } from "@/pages/workspaces/WorkspacesLanding";
-import { RemoteWorkspacesPageShell } from "@remote/pages/RemoteWorkspacesPageShell";
-import { useIsMobile } from "@/shared/hooks/useIsMobile";
-import { useWorkspaceContext } from "@/shared/hooks/useWorkspaceContext";
-import { cn } from "@/shared/lib/utils";
-import { CommandBarDialog } from "@/shared/dialogs/command-bar/CommandBarDialog";
+} from '@tanstack/react-router';
+import { requireAuthenticated } from '@remote/shared/lib/route-auth';
+import { WorkspacesLanding } from '@/pages/workspaces/WorkspacesLanding';
+import { RemoteWorkspacesPageShell } from '@remote/pages/RemoteWorkspacesPageShell';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useWorkspaceContext } from '@/shared/hooks/useWorkspaceContext';
+import { cn } from '@/shared/lib/utils';
+import { CommandBarDialog } from '@/shared/dialogs/command-bar/CommandBarDialog';
 import {
   PlusIcon,
   GitBranchIcon,
@@ -24,10 +25,10 @@ import {
   DotsThreeIcon,
   ArchiveIcon,
   ArrowLeftIcon,
-} from "@phosphor-icons/react";
-import { RunningDots } from "@vibe/ui/components/RunningDots";
+} from '@phosphor-icons/react';
+import { RunningDots } from '@vibe/ui/components/RunningDots';
 
-export const Route = createFileRoute("/hosts/$hostId/workspaces")({
+export const Route = createFileRoute('/hosts/$hostId/workspaces')({
   beforeLoad: async ({ location }) => {
     await requireAuthenticated(location);
   },
@@ -45,7 +46,8 @@ function WorkspacesRouteComponent() {
 
 function MobileWorkspacesList() {
   const navigate = useNavigate();
-  const { hostId } = useParams({ from: "/hosts/$hostId/workspaces" });
+  const { t } = useTranslation('common');
+  const { hostId } = useParams({ from: '/hosts/$hostId/workspaces' });
   const { activeWorkspaces, archivedWorkspaces, selectWorkspace } =
     useWorkspaceContext();
   const [showArchive, setShowArchive] = useState(false);
@@ -54,13 +56,13 @@ function MobileWorkspacesList() {
   const handleSelectWorkspace = (id: string) => {
     selectWorkspace(id);
     navigate({
-      to: "/hosts/$hostId/workspaces/$workspaceId",
+      to: '/hosts/$hostId/workspaces/$workspaceId',
       params: { hostId, workspaceId: id },
     });
   };
 
   const handleCreateWorkspace = () => {
-    navigate({ to: "/hosts/$hostId/workspaces/create", params: { hostId } });
+    navigate({ to: '/hosts/$hostId/workspaces/create', params: { hostId } });
   };
 
   return (
@@ -68,18 +70,18 @@ function MobileWorkspacesList() {
       {/* Header */}
       <div className="flex items-center justify-between px-base py-base border-b border-border">
         <h1 className="text-lg font-semibold text-high">
-          {showArchive ? "Archived" : "Workspaces"}
+          {showArchive ? t('workspaces.archived') : t('workspaces.title')}
         </h1>
         <button
           onClick={handleCreateWorkspace}
           className={cn(
-            "flex items-center gap-half rounded-md px-plusfifty py-half",
-            "bg-brand text-on-brand text-sm font-medium",
-            "active:opacity-80 transition-opacity",
+            'flex items-center gap-half rounded-md px-plusfifty py-half',
+            'bg-brand text-on-brand text-sm font-medium',
+            'active:opacity-80 transition-opacity'
           )}
         >
           <PlusIcon className="size-icon-sm" />
-          New
+          {t('workspaces.newWorkspace')}
         </button>
       </div>
 
@@ -88,14 +90,16 @@ function MobileWorkspacesList() {
         {workspaces.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full px-double text-center">
             <p className="text-low text-sm">
-              {showArchive ? "No archived workspaces" : "No workspaces yet"}
+              {showArchive
+                ? t('workspaces.noArchived')
+                : t('workspaces.noWorkspaces')}
             </p>
             {!showArchive && (
               <button
                 onClick={handleCreateWorkspace}
                 className="mt-base text-brand text-sm font-medium active:opacity-80"
               >
-                Create your first workspace
+                {t('workspaces.createFirst')}
               </button>
             )}
           </div>
@@ -103,8 +107,8 @@ function MobileWorkspacesList() {
           <div className="flex flex-col">
             {workspaces.map((workspace) => {
               const isFailed =
-                workspace.latestProcessStatus === "failed" ||
-                workspace.latestProcessStatus === "killed";
+                workspace.latestProcessStatus === 'failed' ||
+                workspace.latestProcessStatus === 'killed';
               const hasChanges =
                 workspace.filesChanged !== undefined &&
                 workspace.filesChanged > 0;
@@ -113,15 +117,15 @@ function MobileWorkspacesList() {
                 <div
                   key={workspace.id}
                   className={cn(
-                    "group relative flex items-center gap-half px-base py-plusfifty",
-                    "border-b border-border",
+                    'group relative flex items-center gap-half px-base py-plusfifty',
+                    'border-b border-border'
                   )}
                 >
                   <button
                     onClick={() => handleSelectWorkspace(workspace.id)}
                     className={cn(
-                      "flex flex-1 flex-col gap-half min-w-0",
-                      "text-left active:bg-secondary transition-colors",
+                      'flex flex-1 flex-col gap-half min-w-0',
+                      'text-left active:bg-secondary transition-colors'
                     )}
                   >
                     <span className="text-sm font-medium text-high truncate">
@@ -176,13 +180,13 @@ function MobileWorkspacesList() {
                           )}
 
                         {/* PR status icon */}
-                        {workspace.prStatus === "open" && (
+                        {workspace.prStatus === 'open' && (
                           <GitPullRequestIcon
                             className="size-icon-xs text-success shrink-0"
                             weight="fill"
                           />
                         )}
-                        {workspace.prStatus === "merged" && (
+                        {workspace.prStatus === 'merged' && (
                           <GitPullRequestIcon
                             className="size-icon-xs text-merged shrink-0"
                             weight="fill"
@@ -203,7 +207,7 @@ function MobileWorkspacesList() {
                         workspace.latestProcessCompletedAt && (
                           <span className="shrink-0">
                             {formatRelativeElapsed(
-                              workspace.latestProcessCompletedAt,
+                              workspace.latestProcessCompletedAt
                             )}
                           </span>
                         )}
@@ -232,12 +236,12 @@ function MobileWorkspacesList() {
                     onClick={(e) => {
                       e.stopPropagation();
                       CommandBarDialog.show({
-                        page: "workspaceActions",
+                        page: 'workspaceActions',
                         workspaceId: workspace.id,
                       });
                     }}
                     className="shrink-0 p-1.5 rounded-sm text-low hover:text-normal hover:bg-tertiary active:bg-tertiary"
-                    aria-label="Workspace actions"
+                    aria-label={t('accessibility.workspaceActions')}
                   >
                     <DotsThreeIcon className="size-5" weight="bold" />
                   </button>
@@ -257,12 +261,12 @@ function MobileWorkspacesList() {
           {showArchive ? (
             <>
               <ArrowLeftIcon className="size-icon-xs" />
-              <span>Back to Active</span>
+              <span>{t('workspaces.backToActive')}</span>
             </>
           ) : (
             <>
               <ArchiveIcon className="size-icon-xs" />
-              <span>View Archive</span>
+              <span>{t('workspaces.viewArchive')}</span>
               {archivedWorkspaces.length > 0 && (
                 <span className="ml-auto text-xs bg-tertiary px-1.5 py-0.5 rounded">
                   {archivedWorkspaces.length}
@@ -285,7 +289,7 @@ const formatRelativeElapsed = (dateString: string): string => {
   const diffHours = Math.floor(diffMins / 60);
   const diffDays = Math.floor(diffHours / 24);
 
-  if (diffSecs < 60) return "just now";
+  if (diffSecs < 60) return 'just now';
   if (diffMins < 60) return `${diffMins}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
   return `${diffDays}d ago`;

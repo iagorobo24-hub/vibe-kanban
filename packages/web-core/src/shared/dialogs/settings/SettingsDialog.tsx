@@ -26,6 +26,8 @@ import {
 } from './settings/SettingsHostContext';
 import { SettingsMachineUserSystemProvider } from './settings/SettingsMachineUserSystemProvider';
 import { ConfirmDialog } from '@vibe/ui/components/ConfirmDialog';
+import { useDialogFocusTrap } from '@vibe/ui/lib/useDialogFocusTrap';
+import { useDialogScrollLock } from '@vibe/ui/lib/useDialogScrollLock';
 
 export interface SettingsDialogProps {
   initialSection?: SettingsSectionType;
@@ -92,7 +94,7 @@ function SettingsDialogNavigation({
         disabled={isDisabled}
         aria-disabled={isDisabled}
         className={cn(
-          'flex items-center gap-3 text-left px-3 py-2 rounded-sm text-sm transition-colors',
+          'flex min-h-10 items-center gap-3 rounded-sm px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
           isDisabled
             ? 'text-low opacity-50 cursor-not-allowed'
             : isActive
@@ -100,7 +102,11 @@ function SettingsDialogNavigation({
               : 'text-normal hover:bg-primary/10'
         )}
       >
-        <Icon className="size-icon-sm shrink-0" weight="bold" />
+        <Icon
+          className="size-icon-sm shrink-0"
+          weight="bold"
+          aria-hidden="true"
+        />
         <span className="truncate">
           {t(`settings.layout.nav.${section.id}`)}
         </span>
@@ -186,6 +192,10 @@ function SettingsDialogContent({
     initialSection === resolvedInitialSection
   );
   const isConfirmingRef = useRef(false);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  useDialogFocusTrap(dialogRef, true);
+  useDialogScrollLock(true);
 
   const handleCloseWithConfirmation = useCallback(async () => {
     if (isConfirmingRef.current) return;
@@ -234,6 +244,12 @@ function SettingsDialogContent({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        const eventDialog =
+          e.target instanceof Element
+            ? e.target.closest<HTMLElement>('[role="dialog"]')
+            : null;
+        if (eventDialog && eventDialog !== dialogRef.current) return;
+
         handleCloseWithConfirmation();
       }
     };
@@ -246,8 +262,9 @@ function SettingsDialogContent({
       {/* Overlay */}
       <div
         data-tauri-drag-region
-        className="fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
+        className="agentos-dialog-overlay fixed inset-0 z-[9998] bg-black/50 animate-in fade-in-0 duration-200"
         onClick={handleCloseWithConfirmation}
+        aria-hidden="true"
       />
       {/* Dialog wrapper - handles positioning */}
       <div
@@ -261,8 +278,9 @@ function SettingsDialogContent({
       >
         {/* Dialog content - handles animation */}
         <div
+          ref={dialogRef}
           className={cn(
-            'h-full w-full flex overflow-hidden',
+            'agentos-settings-dialog h-full w-full flex overflow-hidden',
             'bg-panel/95 backdrop-blur-sm shadow-lg',
             'animate-in fade-in-0 slide-in-from-bottom-4 duration-200',
             // Mobile: full screen, no rounded corners
@@ -270,11 +288,18 @@ function SettingsDialogContent({
             // Desktop: fixed size with rounded corners
             'md:w-[900px] md:h-[700px] md:rounded-sm md:border md:border-border/50'
           )}
+          style={{
+            paddingTop: 'env(safe-area-inset-top)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="agentos-settings-title"
         >
           {/* Sidebar - hidden on mobile when showing content */}
           <div
             className={cn(
-              'bg-secondary/80 border-r border-border flex flex-col',
+              'agentos-settings-dialog__nav bg-secondary/80 border-r border-border flex flex-col',
               // Mobile: full width, hidden when showing content
               'w-full',
               mobileShowContent && 'hidden',
@@ -284,15 +309,24 @@ function SettingsDialogContent({
           >
             {/* Header */}
             <div className="p-4 border-b border-border flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-high">
+              <h2
+                id="agentos-settings-title"
+                className="text-lg font-semibold text-high"
+              >
                 {t('settings.layout.nav.title')}
               </h2>
-              {/* Close button - mobile only */}
+              {/* Close button */}
               <button
+                type="button"
                 onClick={handleCloseWithConfirmation}
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal md:hidden"
+                aria-label={t('settings.layout.close')}
+                className="agentos-icon-button flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
-                <XIcon className="size-icon-sm" weight="bold" />
+                <XIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
             </div>
             <SettingsDialogNavigation
@@ -303,7 +337,7 @@ function SettingsDialogContent({
           {/* Content - hidden on mobile when showing nav */}
           <div
             className={cn(
-              'flex-1 flex flex-col relative overflow-hidden',
+              'agentos-settings-dialog__body flex-1 flex flex-col relative overflow-hidden',
               // Mobile: full width, hidden when showing nav
               !mobileShowContent && 'hidden',
               // Desktop: always visible
@@ -313,19 +347,31 @@ function SettingsDialogContent({
             {/* Mobile header with back button */}
             <div className="flex items-center gap-2 p-3 border-b border-border md:hidden">
               <button
+                type="button"
                 onClick={handleMobileBack}
-                className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                aria-label={t('settings.layout.mobileBack')}
+                className="flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
-                <CaretLeftIcon className="size-icon-sm" weight="bold" />
+                <CaretLeftIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
               <span className="text-sm font-medium text-high">
                 {t(`settings.layout.nav.${activeSection}`)}
               </span>
               <button
+                type="button"
                 onClick={handleCloseWithConfirmation}
-                className="ml-auto p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
+                aria-label={t('settings.layout.close')}
+                className="ml-auto flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
-                <XIcon className="size-icon-sm" weight="bold" />
+                <XIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
             </div>
             {/* Section content */}

@@ -84,18 +84,9 @@ export function SubIssueRow({
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          role={onClick ? 'button' : undefined}
-          tabIndex={onClick ? 0 : undefined}
-          onClick={onClick}
-          onKeyDown={(e) => {
-            if (onClick && (e.key === 'Enter' || e.key === ' ')) {
-              e.preventDefault();
-              onClick();
-            }
-          }}
           className={cn(
-            'flex items-center gap-half px-base py-half rounded-sm transition-colors',
-            onClick && 'cursor-pointer hover:bg-secondary',
+            'agentos-sub-issue-row flex items-center gap-half px-base py-half rounded-sm transition-colors',
+            onClick && 'hover:bg-secondary',
             snapshot.isDragging && 'bg-secondary shadow-lg cursor-grabbing',
             className
           )}
@@ -103,48 +94,71 @@ export function SubIssueRow({
           {/* Drag handle */}
           <div
             {...provided.dragHandleProps}
-            className="cursor-grab shrink-0"
+            className="agentos-sub-issue-row__handle cursor-grab shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             onClick={(e) => e.stopPropagation()}
+            aria-label={`${t('kanban.dragToRearrange')}: ${simpleId}`}
+            title={`${t('kanban.dragToRearrange')}: ${simpleId}`}
           >
             <DotsSixVerticalIcon
               className="size-icon-xs text-low"
               weight="bold"
+              aria-hidden="true"
             />
           </div>
 
           {/* Left side: Priority, ID, Status, Title */}
-          <div className="flex items-center gap-half flex-1 min-w-0">
+          <div className="agentos-sub-issue-row__main flex items-center gap-half flex-1 min-w-0">
             {onPriorityClick ? (
               <button
                 type="button"
                 onClick={onPriorityClick}
-                className="flex items-center cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+                className="agentos-sub-issue-row__priority flex items-center cursor-pointer rounded-sm p-half transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                aria-label={t('kanban.priority')}
               >
                 <PriorityIcon priority={priority} />
                 {!priority && (
                   <CircleDashedIcon
                     className="size-icon-xs text-low"
                     weight="bold"
+                    aria-hidden="true"
                   />
                 )}
               </button>
             ) : (
               <PriorityIcon priority={priority} />
             )}
-            <span className="font-ibm-plex-mono text-sm text-normal shrink-0">
-              {simpleId}
-            </span>
-            <StatusDot color={statusColor} />
-            <span className="text-base text-high truncate">{title}</span>
+            {onClick ? (
+              <button
+                type="button"
+                className="flex min-w-0 flex-1 items-center gap-half border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                onClick={onClick}
+                aria-label={`${simpleId}: ${title}`}
+              >
+                <span className="font-ibm-plex-mono text-sm text-normal shrink-0">
+                  {simpleId}
+                </span>
+                <StatusDot color={statusColor} />
+                <span className="text-base text-high truncate">{title}</span>
+              </button>
+            ) : (
+              <div className="flex min-w-0 flex-1 items-center gap-half">
+                <span className="font-ibm-plex-mono text-sm text-normal shrink-0">
+                  {simpleId}
+                </span>
+                <StatusDot color={statusColor} />
+                <span className="text-base text-high truncate">{title}</span>
+              </div>
+            )}
           </div>
 
           {/* Right side: Assignee, Age */}
-          <div className="flex items-center gap-half shrink-0">
+          <div className="agentos-sub-issue-row__meta flex items-center gap-half shrink-0">
             {onAssigneeClick ? (
               <button
                 type="button"
                 onClick={onAssigneeClick}
-                className="cursor-pointer hover:bg-secondary rounded-sm transition-colors"
+                className="cursor-pointer rounded-sm p-half transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                aria-label={t('kanban.assignee')}
               >
                 <KanbanAssignee assignees={assignees} />
               </button>
@@ -160,11 +174,15 @@ export function SubIssueRow({
                   <button
                     type="button"
                     onClick={(e) => e.stopPropagation()}
-                    className="p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
-                    aria-label="Sub-issue actions"
-                    title="Sub-issue actions"
+                    className="rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                    aria-label={t('accessibility.subIssueActions')}
+                    title={t('accessibility.subIssueActions')}
                   >
-                    <DotsThreeIcon className="size-icon-xs" weight="bold" />
+                    <DotsThreeIcon
+                      className="size-icon-xs"
+                      weight="bold"
+                      aria-hidden="true"
+                    />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

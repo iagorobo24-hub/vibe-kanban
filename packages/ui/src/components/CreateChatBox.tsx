@@ -208,7 +208,7 @@ export function CreateChatBox<TExecutor extends string = string>({
             onClick={onEditRepos}
             title={repoSummaryTitle}
             disabled={isDisabled}
-            className="max-w-[320px] truncate text-sm text-normal hover:text-high disabled:cursor-not-allowed disabled:opacity-50"
+            className="agentos-chatbox__repo-button max-w-[320px] truncate text-sm text-normal hover:text-high disabled:cursor-not-allowed disabled:opacity-50"
           >
             {repoSummaryLabel}
           </button>
@@ -226,9 +226,15 @@ export function CreateChatBox<TExecutor extends string = string>({
                   onClick={linkedIssue.onRemove}
                   disabled={isDisabled}
                   className="inline-flex items-center text-low hover:text-error transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-                  aria-label={`Remove link to ${linkedIssue.simpleId}`}
+                  aria-label={t('common:accessibility.removeLinkedIssue', {
+                    id: linkedIssue.simpleId,
+                  })}
                 >
-                  <XIcon className="size-icon-xs" weight="bold" />
+                  <XIcon
+                    className="size-icon-xs"
+                    weight="bold"
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
             </>
@@ -240,6 +246,7 @@ export function CreateChatBox<TExecutor extends string = string>({
           onClick={onSend}
           disabled={!canSend}
           actionIcon={isSending ? 'spinner' : undefined}
+          className="agentos-chatbox__submit"
           value={
             isSending
               ? t('tasks:conversation.workspace.creating')

@@ -145,7 +145,7 @@ export function RetryEditorInline({
     <div className="space-y-2">
       <div className="relative">
         <WYSIWYGEditor
-          placeholder="Edit and resend your message..."
+          placeholder={t('retryEditor.placeholder')}
           value={message}
           onChange={setMessage}
           disabled={isSending}
@@ -180,13 +180,13 @@ export function RetryEditorInline({
             variant="outline"
             onClick={handleAttachClick}
             disabled={isSending}
-            title="Attach file"
-            aria-label="Attach file"
+            title={t('accessibility.attachFile')}
+            aria-label={t('accessibility.attachFile')}
           >
             <Paperclip className="h-3 w-3" />
           </Button>
           <Button variant="outline" onClick={onCancel} disabled={isSending}>
-            <X className="h-3 w-3 mr-1" />{' '}
+            <X className="h-3 w-3 mr-1" aria-hidden="true" />{' '}
             {t('buttons.cancel', { ns: 'common' })}
           </Button>
           <Button onClick={onSend} disabled={!canSend || isSending}>

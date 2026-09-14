@@ -1,7 +1,8 @@
-import * as React from 'react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
-import { cn } from '../lib/cn';
+import * as React from "react";
+import { useTranslation } from "react-i18next";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
+import { cn } from "../lib/cn";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -24,10 +25,10 @@ const DialogOverlay = React.forwardRef<
     ref={ref}
     data-tauri-drag-region
     className={cn(
-      'fixed inset-0 z-[9998] bg-black/50',
-      'data-[state=open]:animate-in data-[state=closed]:animate-out',
-      'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-      className
+      "agentos-dialog-overlay fixed inset-0 z-[9998] bg-black/50",
+      "data-[state=open]:animate-in data-[state=closed]:animate-out",
+      "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className,
     )}
     {...props}
   />
@@ -40,29 +41,34 @@ const DialogContent = React.forwardRef<
     hideCloseButton?: boolean;
   }
 >(({ className, children, hideCloseButton = false, ...props }, ref) => {
+  const { t } = useTranslation("common");
+
   return (
     <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          'fixed left-[50%] top-[50%] z-[9999] translate-x-[-50%] translate-y-[-50%]',
-          'w-full max-w-lg bg-panel border border-border rounded-sm shadow-lg',
-          'data-[state=open]:animate-in data-[state=closed]:animate-out',
-          'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-          'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-          'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',
-          'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
-          'duration-200',
-          className
+          "fixed left-[50%] top-[50%] z-[9999] translate-x-[-50%] translate-y-[-50%]",
+          "agentos-dialog-content w-full max-w-lg bg-panel border border-border rounded-sm shadow-lg",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out",
+          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+          "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+          "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
+          "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
+          "duration-200",
+          className,
         )}
         {...props}
       >
         {children}
         {!hideCloseButton && (
-          <DialogPrimitive.Close className="absolute right-base top-base rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:pointer-events-none">
-            <X className="h-4 w-4 text-normal" />
-            <span className="sr-only">Close</span>
+          <DialogPrimitive.Close
+            className="agentos-dialog-close absolute right-base top-base rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:pointer-events-none"
+            aria-label={t("accessibility.closeDialog")}
+          >
+            <X className="h-4 w-4 text-normal" aria-hidden="true" />
+            <span className="sr-only">{t("buttons.close")}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>
@@ -77,13 +83,13 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col space-y-1.5 text-center sm:text-left',
-      className
+      "agentos-dialog-header flex flex-col space-y-1.5 text-center sm:text-left",
+      className,
     )}
     {...props}
   />
 );
-DialogHeader.displayName = 'DialogHeader';
+DialogHeader.displayName = "DialogHeader";
 
 const DialogFooter = ({
   className,
@@ -91,13 +97,13 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2',
-      className
+      "agentos-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2",
+      className,
     )}
     {...props}
   />
 );
-DialogFooter.displayName = 'DialogFooter';
+DialogFooter.displayName = "DialogFooter";
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -106,8 +112,8 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      'text-lg font-semibold leading-none tracking-tight text-high',
-      className
+      "agentos-dialog-title text-lg font-semibold leading-none tracking-tight text-high",
+      className,
     )}
     {...props}
   />
@@ -120,7 +126,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-normal', className)}
+    className={cn("agentos-dialog-description text-sm text-normal", className)}
     {...props}
   />
 ));

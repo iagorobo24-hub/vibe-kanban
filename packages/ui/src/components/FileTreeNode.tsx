@@ -60,6 +60,7 @@ export const FileTreeNode = memo(function FileTreeNode({
   const isRenamed = node.changeKind === 'renamed';
   const isCopied = node.changeKind === 'copied';
   const fileIcon = isFolder ? null : renderFileIcon?.(node.name);
+  const isInteractive = isFolder ? !!onToggle : !!onSelect;
 
   // Extract filename from path for renamed/copied display
   const getFileName = (path: string) => path.split('/').pop() || path;
@@ -73,16 +74,24 @@ export const FileTreeNode = memo(function FileTreeNode({
   };
 
   return (
-    <div
+    <button
+      type="button"
       data-tree-path={node.path}
       className={cn(
-        'flex items-center h-[26px] cursor-pointer text-low hover:bg-panel rounded',
+        'flex items-center w-full h-[26px] cursor-pointer text-low text-left border-0 bg-transparent hover:bg-panel rounded',
         'relative select-none',
-        isSelected && 'bg-panel text-normal ring-1 ring-border/70'
+        isSelected && 'bg-panel text-normal ring-1 ring-border/70',
+        'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
+        !isInteractive && 'cursor-default opacity-60'
       )}
       onClick={handleClick}
+      disabled={!isInteractive}
+      aria-label={
+        node.path === node.name ? node.name : `${node.name} (${node.path})`
+      }
+      aria-expanded={isFolder ? isExpanded : undefined}
     >
-      <div
+      <span
         className="flex items-center gap-half flex-1 pr-base whitespace-nowrap"
         style={{ paddingLeft: `${depth * 12 + 6}px` }}
       >
@@ -90,16 +99,28 @@ export const FileTreeNode = memo(function FileTreeNode({
         <span className="w-3 flex items-center justify-center shrink-0">
           {isFolder &&
             (isExpanded ? (
-              <CaretDownIcon className="size-icon-xs" weight="fill" />
+              <CaretDownIcon
+                className="size-icon-xs"
+                weight="fill"
+                aria-hidden="true"
+              />
             ) : (
-              <CaretRightIcon className="size-icon-xs" weight="fill" />
+              <CaretRightIcon
+                className="size-icon-xs"
+                weight="fill"
+                aria-hidden="true"
+              />
             ))}
         </span>
 
         {/* Icon */}
         <span className="shrink-0">
           {isFolder ? (
-            <FolderSimpleIcon className="size-icon-sm" weight="fill" />
+            <FolderSimpleIcon
+              className="size-icon-sm"
+              weight="fill"
+              aria-hidden="true"
+            />
           ) : null}
           {fileIcon}
         </span>
@@ -145,11 +166,15 @@ export const FileTreeNode = memo(function FileTreeNode({
           commentCount != null &&
           commentCount > 0 && (
             <span className="inline-flex items-center gap-0.5 text-xs text-low shrink-0 ml-half">
-              <GithubLogoIcon className="size-icon-xs" weight="fill" />
+              <GithubLogoIcon
+                className="size-icon-xs"
+                weight="fill"
+                aria-hidden="true"
+              />
               {commentCount}
             </span>
           )}
-      </div>
-    </div>
+      </span>
+    </button>
   );
 });

@@ -1,23 +1,31 @@
-import type { ReactNode } from 'react';
-import { useCallback, useMemo, useRef } from 'react';
+import type { ReactNode } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   PlusIcon,
   ArrowLeftIcon,
   ArchiveIcon,
   StackIcon,
   SpinnerIcon,
-} from '@phosphor-icons/react';
-import { useTranslation } from 'react-i18next';
-import { cn } from '../lib/cn';
-import { InputField } from './InputField';
-import { WorkspaceSummary } from './WorkspaceSummary';
-import type { AppBarHostStatus } from './AppBar';
+  WarningCircleIcon,
+} from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
+import { cn } from "../lib/cn";
+import { InputField } from "./InputField";
+import { WorkspaceSummary } from "./WorkspaceSummary";
+import type { AppBarHostStatus } from "./AppBar";
 import {
   CollapsibleSectionHeader,
   type SectionAction,
-} from './CollapsibleSectionHeader';
+} from "./CollapsibleSectionHeader";
 
-export type WorkspaceLayoutMode = 'flat' | 'accordion';
+export type WorkspaceLayoutMode = "flat" | "accordion";
+
+export type WorkspacesSidebarListState =
+  | "loading"
+  | "empty"
+  | "workspaces"
+  | "error"
+  | "workspaces-with-error";
 
 export interface WorkspacesSidebarWorkspace {
   id: string;
@@ -31,8 +39,8 @@ export interface WorkspacesSidebarWorkspace {
   hasRunningDevServer?: boolean;
   hasUnseenActivity?: boolean;
   latestProcessCompletedAt?: string;
-  latestProcessStatus?: 'running' | 'completed' | 'failed' | 'killed';
-  prStatus?: 'open' | 'merged' | 'closed' | 'unknown';
+  latestProcessStatus?: "running" | "completed" | "failed" | "killed";
+  prStatus?: "open" | "merged" | "closed" | "unknown";
 }
 
 export interface WorkspacesSidebarPersistKeys {
@@ -42,9 +50,9 @@ export interface WorkspacesSidebarPersistKeys {
 }
 
 const DEFAULT_PERSIST_KEYS: WorkspacesSidebarPersistKeys = {
-  raisedHand: 'workspaces-sidebar-raised-hand',
-  notRunning: 'workspaces-sidebar-not-running',
-  running: 'workspaces-sidebar-running',
+  raisedHand: "workspaces-sidebar-raised-hand",
+  notRunning: "workspaces-sidebar-not-running",
+  running: "workspaces-sidebar-running",
 };
 
 export interface WorkspacesSidebarProps {
@@ -52,6 +60,8 @@ export interface WorkspacesSidebarProps {
   totalWorkspacesCount: number;
   archivedWorkspaces?: WorkspacesSidebarWorkspace[];
   isLoading?: boolean;
+  workspaceListState?: WorkspacesSidebarListState;
+  onRetryWorkspaceList?: () => void;
   selectedWorkspaceId: string | null;
   onSelectWorkspace: (id: string) => void;
   onAddWorkspace?: () => void;
@@ -103,17 +113,19 @@ export function WorkspacesSidebarReopenTag({
   ariaLabel,
   className,
 }: WorkspacesSidebarReopenTagProps) {
+  const { t } = useTranslation("common");
+
   return (
     <button
       type="button"
       onMouseEnter={onHoverStart}
       onMouseLeave={onHoverEnd}
-      aria-label={ariaLabel ?? 'Preview workspaces sidebar'}
-      title={ariaLabel ?? 'Preview workspaces sidebar'}
+      aria-label={ariaLabel ?? t("workspaces.previewSidebar")}
+      title={ariaLabel ?? t("workspaces.previewSidebar")}
       className={cn(
-        'group inline-flex h-24 w-4 items-center justify-center rounded-md border border-border bg-secondary/95 shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 cursor-e-resize',
-        active ? 'bg-panel text-normal' : 'text-low hover:text-normal',
-        className
+        "group inline-flex h-24 w-4 items-center justify-center rounded-md border border-border bg-secondary/95 shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 cursor-e-resize",
+        active ? "bg-panel text-normal" : "text-low hover:text-normal",
+        className,
       )}
     >
       <span className="grid grid-cols-2 gap-[2px]">
@@ -166,11 +178,53 @@ function WorkspaceList({
   );
 }
 
+function WorkspaceStreamNotice({
+  stale,
+  onRetry,
+}: {
+  stale: boolean;
+  onRetry?: () => void;
+}) {
+  const { t } = useTranslation("common");
+
+  return (
+    <div
+      className="mx-base mb-base flex items-start gap-half rounded-md border border-error/30 bg-error/5 px-base py-half text-sm"
+      role={stale ? "status" : "alert"}
+    >
+      <WarningCircleIcon
+        className="mt-0.5 size-icon-sm shrink-0 text-error"
+        aria-hidden="true"
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-high">
+          {t(
+            stale
+              ? "common:workspaces.streamMayBeStale"
+              : "common:workspaces.streamUnavailable"
+          )}
+        </p>
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-half text-xs font-medium text-brand hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+          >
+            {t("common:workspaces.retry")}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function WorkspacesSidebar({
   workspaces,
   totalWorkspacesCount,
   archivedWorkspaces = [],
   isLoading = false,
+  workspaceListState = isLoading ? "loading" : "workspaces",
+  onRetryWorkspaceList,
   selectedWorkspaceId,
   onSelectWorkspace,
   onAddWorkspace,
@@ -181,7 +235,7 @@ export function WorkspacesSidebar({
   onSelectCreate,
   showArchive = false,
   onShowArchiveChange,
-  layoutMode = 'flat',
+  layoutMode = "flat",
   onToggleLayoutMode,
   onLoadMore,
   hasMoreWorkspaces = false,
@@ -191,13 +245,13 @@ export function WorkspacesSidebar({
   activeRemoteHost = null,
   onOpenRemoteHostSettings,
 }: WorkspacesSidebarProps) {
-  const { t } = useTranslation(['tasks', 'common']);
+  const { t } = useTranslation(["tasks", "common"]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const handleOpenWorkspaceActions = useCallback(
     (workspaceId: string) => {
       onOpenWorkspaceActions?.(workspaceId);
     },
-    [onOpenWorkspaceActions]
+    [onOpenWorkspaceActions],
   );
 
   // Handle scroll to load more
@@ -224,10 +278,10 @@ export function WorkspacesSidebar({
       return {
         raisedHandWorkspaces: workspaces.filter((ws) => needsAttention(ws)),
         idleWorkspaces: workspaces.filter(
-          (ws) => !ws.isRunning && !needsAttention(ws)
+          (ws) => !ws.isRunning && !needsAttention(ws),
         ),
         runningWorkspaces: workspaces.filter(
-          (ws) => ws.isRunning && !needsAttention(ws)
+          (ws) => ws.isRunning && !needsAttention(ws),
         ),
       };
     }, [workspaces]);
@@ -236,23 +290,25 @@ export function WorkspacesSidebar({
     {
       icon: StackIcon,
       onClick: () => onToggleLayoutMode?.(),
-      isActive: layoutMode === 'accordion',
+      isActive: layoutMode === "accordion",
+      label: t("common:workspaces.toggleLayout"),
     },
     {
       icon: PlusIcon,
       onClick: () => onAddWorkspace?.(),
+      label: t("common:workspaces.addWorkspace"),
     },
   ];
 
   return (
-    <div className="w-full h-full bg-secondary flex flex-col">
+    <div className="agentos-workspaces-sidebar w-full h-full bg-secondary flex flex-col">
       {/* Header + Search */}
-      <div className="flex flex-col gap-base">
+      <div className="agentos-workspaces-sidebar__header flex flex-col gap-base">
         <CollapsibleSectionHeader
-          title={t('common:workspaces.title')}
+          title={t("common:workspaces.title")}
           collapsible={false}
           actions={headerActions}
-          className="border-b"
+          className="agentos-workspaces-sidebar__title-bar border-b"
         />
         {!isLoading && (
           <div className="px-base flex items-stretch gap-half">
@@ -261,7 +317,7 @@ export function WorkspacesSidebar({
                 variant="search"
                 value={searchQuery}
                 onChange={onSearchChange}
-                placeholder={t('common:workspaces.searchPlaceholder')}
+                placeholder={t("common:workspaces.searchPlaceholder")}
               />
             </div>
             {searchControls}
@@ -273,8 +329,8 @@ export function WorkspacesSidebar({
             <div className="rounded-sm border border-border bg-panel/60 px-base py-half flex items-center justify-between gap-base">
               <div className="min-w-0">
                 <p className="text-xs text-low uppercase tracking-wide">
-                  {t('common:workspaces.remoteHostLabel', {
-                    defaultValue: 'Remote host',
+                  {t("common:workspaces.remoteHostLabel", {
+                    defaultValue: "Remote host",
                   })}
                 </p>
                 <p className="text-sm text-high truncate">
@@ -284,12 +340,12 @@ export function WorkspacesSidebar({
               <div className="flex items-center gap-half shrink-0">
                 <span
                   className={cn(
-                    'inline-flex h-2.5 w-2.5 rounded-full',
-                    activeRemoteHost.status === 'online'
-                      ? 'bg-success'
-                      : activeRemoteHost.status === 'offline'
-                        ? 'bg-low'
-                        : 'bg-warning'
+                    "inline-flex h-2.5 w-2.5 rounded-full",
+                    activeRemoteHost.status === "online"
+                      ? "bg-success"
+                      : activeRemoteHost.status === "offline"
+                        ? "bg-low"
+                        : "bg-warning",
                   )}
                   aria-hidden="true"
                 />
@@ -299,8 +355,8 @@ export function WorkspacesSidebar({
                     onClick={onOpenRemoteHostSettings}
                     className="text-xs text-brand hover:underline"
                   >
-                    {t('common:workspaces.remoteHostManage', {
-                      defaultValue: 'Manage',
+                    {t("common:workspaces.remoteHostManage", {
+                      defaultValue: "Manage",
                     })}
                   </button>
                 )}
@@ -314,23 +370,38 @@ export function WorkspacesSidebar({
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto py-base"
+        className="agentos-workspaces-sidebar__list flex-1 overflow-y-auto py-base"
       >
-        {isLoading ? (
+        {workspaceListState === "loading" ? (
           <div className="flex h-full min-h-[220px] items-center justify-center px-base">
             <div className="flex items-center justify-center text-low">
               <SpinnerIcon className="size-6 animate-spin" weight="bold" />
             </div>
           </div>
-        ) : showArchive ? (
+        ) : workspaceListState === "error" ? (
+          <div className="flex min-h-[220px] flex-col justify-center px-base">
+            <WorkspaceStreamNotice
+              stale={false}
+              onRetry={onRetryWorkspaceList}
+            />
+          </div>
+        ) : (
+          <>
+            {workspaceListState === "workspaces-with-error" && (
+              <WorkspaceStreamNotice
+                stale
+                onRetry={onRetryWorkspaceList}
+              />
+            )}
+            {showArchive ? (
           /* Archived workspaces view */
           <div className="flex flex-col gap-base">
             <span className="text-sm font-medium text-low px-base">
-              {t('common:workspaces.archived')}
+              {t("common:workspaces.archived")}
             </span>
             {archivedWorkspaces.length === 0 ? (
               <span className="text-sm text-low opacity-60 px-base">
-                {t('common:workspaces.noArchived')}
+                {t("common:workspaces.noArchived")}
               </span>
             ) : (
               archivedWorkspaces.map((workspace) => (
@@ -357,12 +428,12 @@ export function WorkspacesSidebar({
               ))
             )}
           </div>
-        ) : layoutMode === 'accordion' ? (
+            ) : layoutMode === "accordion" ? (
           /* Accordion layout view */
           <div className="flex flex-col gap-base">
             {/* Needs Attention section */}
             <CollapsibleSectionHeader
-              title={t('common:workspaces.needsAttention')}
+              title={t("common:workspaces.needsAttention")}
               persistKey={persistKeys.raisedHand}
               defaultExpanded={true}
             >
@@ -377,7 +448,7 @@ export function WorkspacesSidebar({
                 )}
                 {raisedHandWorkspaces.length === 0 && !draftTitle ? (
                   <span className="text-sm text-low opacity-60 pl-base">
-                    {t('common:workspaces.noWorkspaces')}
+                    {t("common:workspaces.noWorkspaces")}
                   </span>
                 ) : (
                   <WorkspaceList
@@ -392,14 +463,14 @@ export function WorkspacesSidebar({
 
             {/* Running section */}
             <CollapsibleSectionHeader
-              title={t('common:workspaces.running')}
+              title={t("common:workspaces.running")}
               persistKey={persistKeys.running}
               defaultExpanded={true}
             >
               <div className="flex flex-col gap-base py-half">
                 {runningWorkspaces.length === 0 ? (
                   <span className="text-sm text-low opacity-60 pl-base">
-                    {t('common:workspaces.noWorkspaces')}
+                    {t("common:workspaces.noWorkspaces")}
                   </span>
                 ) : (
                   <WorkspaceList
@@ -414,14 +485,14 @@ export function WorkspacesSidebar({
 
             {/* Idle section */}
             <CollapsibleSectionHeader
-              title={t('common:workspaces.idle')}
+              title={t("common:workspaces.idle")}
               persistKey={persistKeys.notRunning}
               defaultExpanded={true}
             >
               <div className="flex flex-col gap-base py-half">
                 {idleWorkspaces.length === 0 ? (
                   <span className="text-sm text-low opacity-60 pl-base">
-                    {t('common:workspaces.noWorkspaces')}
+                    {t("common:workspaces.noWorkspaces")}
                   </span>
                 ) : (
                   <WorkspaceList
@@ -434,12 +505,12 @@ export function WorkspacesSidebar({
               </div>
             </CollapsibleSectionHeader>
           </div>
-        ) : (
+            ) : (
           /* Active workspaces flat view */
           <div className="flex flex-col gap-base">
             <div className="flex items-center justify-between px-base">
               <span className="text-sm font-medium text-low">
-                {t('common:workspaces.active')}
+                {t("common:workspaces.active")}
               </span>
               <span className="text-xs text-low">{totalWorkspacesCount}</span>
             </div>
@@ -473,11 +544,13 @@ export function WorkspacesSidebar({
               />
             ))}
           </div>
+            )}
+          </>
         )}
       </div>
 
       {/* Fixed footer toggle - only show if there are archived workspaces */}
-      <div className="border-t border-primary p-base">
+      <div className="agentos-workspaces-sidebar__footer border-t border-primary p-base">
         <button
           onClick={() => onShowArchiveChange?.(!showArchive)}
           className="w-full flex items-center gap-base text-sm text-low hover:text-normal transition-colors duration-100"
@@ -485,12 +558,12 @@ export function WorkspacesSidebar({
           {showArchive ? (
             <>
               <ArrowLeftIcon className="size-icon-xs" />
-              <span>{t('common:workspaces.backToActive')}</span>
+              <span>{t("common:workspaces.backToActive")}</span>
             </>
           ) : (
             <>
               <ArchiveIcon className="size-icon-xs" />
-              <span>{t('common:workspaces.viewArchive')}</span>
+              <span>{t("common:workspaces.viewArchive")}</span>
               <span className="ml-auto text-xs bg-tertiary px-1.5 py-0.5 rounded">
                 {archivedWorkspaces.length}
               </span>

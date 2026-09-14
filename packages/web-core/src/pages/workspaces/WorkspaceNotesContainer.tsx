@@ -13,7 +13,7 @@ export function WorkspaceNotesContainer() {
 
   if (!workspaceId) {
     return (
-      <div className="p-base text-low text-sm flex-1">
+      <div className="agentos-workspace-notes p-base text-low text-sm flex-1">
         {t('notes.selectWorkspace')}
       </div>
     );
@@ -21,14 +21,14 @@ export function WorkspaceNotesContainer() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center flex-1 p-base">
+      <div className="agentos-workspace-notes flex items-center justify-center flex-1 p-base">
         <SpinnerIcon className="animate-spin h-5 w-5 text-low" />
       </div>
     );
   }
 
   return (
-    <div className="p-base flex flex-col flex-1 min-h-0 overflow-y-auto">
+    <div className="agentos-workspace-notes p-base flex flex-col flex-1 min-h-0 overflow-y-auto">
       <WYSIWYGEditor
         placeholder={t('notes.placeholder')}
         value={content}

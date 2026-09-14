@@ -14,13 +14,6 @@ export interface IssuePropertyStatus {
   color: string;
 }
 
-const priorityLabels: Record<PriorityLevel, string> = {
-  urgent: 'Urgent',
-  high: 'High',
-  medium: 'Medium',
-  low: 'Low',
-};
-
 export interface IssuePropertyRowProps {
   statusId: string;
   priority: PriorityLevel | null;
@@ -56,9 +49,17 @@ export function IssuePropertyRow({
   className,
 }: IssuePropertyRowProps) {
   const { t } = useTranslation('common');
+  const priorityLabel = priority
+    ? t(`kanban.priorityLevels.${priority}`)
+    : t('kanban.noPriority');
 
   return (
-    <div className={cn('flex items-center gap-half flex-wrap', className)}>
+    <div
+      className={cn(
+        'agentos-issue-property-row flex items-center gap-half flex-wrap',
+        className
+      )}
+    >
       <PrimaryButton
         variant="tertiary"
         onClick={onStatusClick}
@@ -67,7 +68,8 @@ export function IssuePropertyRow({
         <StatusDot
           color={statuses.find((s) => s.id === statusId)?.color ?? '0 0% 50%'}
         />
-        {statuses.find((s) => s.id === statusId)?.name ?? 'Select status'}
+        {statuses.find((s) => s.id === statusId)?.name ??
+          t('kanban.selectStatus')}
       </PrimaryButton>
 
       <PrimaryButton
@@ -76,7 +78,7 @@ export function IssuePropertyRow({
         disabled={disabled}
       >
         <PriorityIcon priority={priority} />
-        {priority ? priorityLabels[priority] : 'No priority'}
+        {priorityLabel}
       </PrimaryButton>
 
       <PrimaryButton
@@ -96,7 +98,7 @@ export function IssuePropertyRow({
 
       {creatorUser &&
         (creatorUser.first_name?.trim() || creatorUser.username?.trim()) && (
-          <div className="flex items-center gap-half px-base py-half bg-panel rounded-sm text-sm whitespace-nowrap">
+          <div className="agentos-issue-property-row__creator flex items-center gap-half px-base py-half bg-panel rounded-sm text-sm whitespace-nowrap">
             <span className="text-low">
               {t('kanban.createdBy', 'Created by')}
             </span>
@@ -130,8 +132,8 @@ export function IssuePropertyRow({
               icon={XIcon}
               onClick={onRemoveParentIssue}
               disabled={disabled}
-              aria-label="Remove parent issue"
-              title="Remove parent issue"
+              aria-label={t('accessibility.removeParentIssue')}
+              title={t('accessibility.removeParentIssue')}
             />
           )}
         </div>
@@ -142,8 +144,8 @@ export function IssuePropertyRow({
           icon={PlusIcon}
           onClick={onAddClick}
           disabled={disabled}
-          aria-label="Add"
-          title="Add"
+          aria-label={t('buttons.add')}
+          title={t('buttons.add')}
         />
       )}
     </div>

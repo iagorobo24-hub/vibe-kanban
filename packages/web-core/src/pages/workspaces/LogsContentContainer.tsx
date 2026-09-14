@@ -35,7 +35,7 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
   const { t } = useTranslation('common');
   // Get logs for process content (only when type is 'process')
   const processId = content?.type === 'process' ? content.processId : '';
-  const { logs, error } = useLogStream(processId);
+  const { logs, error, retry, isLoading } = useLogStream(processId);
 
   // Get the current logs based on content type
   const currentLogs = useMemo(() => {
@@ -66,7 +66,7 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
   // Empty state
   if (!content) {
     return (
-      <div className="w-full h-full bg-secondary flex items-center justify-center text-low">
+      <div className="agentos-logs-panel w-full h-full bg-secondary flex items-center justify-center text-low">
         <p className="text-sm">{t('logs.selectProcessToView')}</p>
       </div>
     );
@@ -79,7 +79,12 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
       .map((line) => ({ type: 'STDOUT' as const, content: line }));
 
     return (
-      <div className={cn('h-full bg-secondary flex flex-col', className)}>
+      <div
+        className={cn(
+          'agentos-logs-panel h-full bg-secondary flex flex-col',
+          className
+        )}
+      >
         <div className="px-4 py-2 border-b border-border text-sm font-medium text-normal shrink-0">
           {content.toolName}
         </div>
@@ -104,7 +109,12 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
   // Terminal content - render terminal with collapse button
   if (content.type === 'terminal') {
     return (
-      <div className={cn('h-full bg-secondary flex flex-col', className)}>
+      <div
+        className={cn(
+          'agentos-logs-panel h-full bg-secondary flex flex-col',
+          className
+        )}
+      >
         <div className="px-4 py-1 flex items-center justify-between shrink-0 h-8">
           <span className="text-sm font-medium text-normal">
             {t('processes.terminal')}
@@ -112,10 +122,15 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
           <button
             type="button"
             onClick={collapseTerminal}
-            className="text-low hover:text-normal transition-colors"
+            className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-tertiary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             title={t('actions.collapse')}
+            aria-label={t('actions.collapse')}
           >
-            <ArrowsInSimpleIcon className="size-icon-sm" weight="bold" />
+            <ArrowsInSimpleIcon
+              className="size-icon-sm"
+              weight="bold"
+              aria-hidden="true"
+            />
           </button>
         </div>
         <div className="flex-1 flex min-h-0 border-t border-border">
@@ -129,7 +144,7 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
 
   // Process logs - render with VirtualizedProcessLogs
   return (
-    <div className={cn('h-full bg-secondary', className)}>
+    <div className={cn('agentos-logs-panel h-full bg-secondary', className)}>
       <VirtualizedProcessLogs
         key={processId}
         logs={logs}
@@ -137,6 +152,8 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
         searchQuery={searchQuery}
         matchIndices={matchIndices}
         currentMatchIndex={currentMatchIndex}
+        onRetry={retry}
+        isLoading={isLoading}
       />
     </div>
   );

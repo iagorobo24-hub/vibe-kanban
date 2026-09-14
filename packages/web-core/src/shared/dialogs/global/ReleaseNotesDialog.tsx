@@ -11,6 +11,7 @@ import { create, useModal } from '@ebay/nice-modal-react';
 import { defineModal, type NoProps } from '@/shared/lib/modals';
 import { useReleases } from '@/shared/hooks/useReleases';
 import { SimpleMarkdown } from '@/shared/components/SimpleMarkdown';
+import { useTranslation } from 'react-i18next';
 
 const GITHUB_RELEASES_URL = 'https://github.com/BloopAI/vibe-kanban/releases';
 
@@ -32,6 +33,7 @@ function extractVersion(tagName: string): string {
 
 const ReleaseNotesDialogImpl = create<NoProps>(() => {
   const modal = useModal();
+  const { t } = useTranslation('common');
   const { data: releases, isLoading, isError } = useReleases();
 
   const handleOpenInBrowser = () => {
@@ -47,24 +49,35 @@ const ReleaseNotesDialogImpl = create<NoProps>(() => {
       <DialogContent className="flex flex-col w-full h-full max-w-2xl max-h-[calc(100dvh-4rem)] p-0">
         <DialogHeader className="px-6 pt-5 pb-4 border-b flex-shrink-0">
           <DialogTitle className="text-lg font-semibold text-high">
-            What&apos;s New
+            {t('releaseNotes.title')}
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-thin">
           {isLoading && (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-5 w-5 animate-spin text-low" />
+              <Loader2
+                className="h-5 w-5 animate-spin text-low"
+                aria-hidden="true"
+              />
             </div>
           )}
 
           {isError && (
             <div className="flex flex-col items-center justify-center py-12 text-center space-y-3">
-              <AlertCircle className="h-8 w-8 text-low" />
-              <p className="text-sm text-low">Unable to load release notes.</p>
-              <Button variant="outline" size="sm" onClick={handleOpenInBrowser}>
-                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                View on GitHub
+              <AlertCircle className="h-8 w-8 text-low" aria-hidden="true" />
+              <p className="text-sm text-low">{t('releaseNotes.loadError')}</p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleOpenInBrowser}
+              >
+                <ExternalLink
+                  className="h-3.5 w-3.5 mr-1.5"
+                  aria-hidden="true"
+                />
+                {t('releaseNotes.viewOnGitHub')}
               </Button>
             </div>
           )}
@@ -90,9 +103,14 @@ const ReleaseNotesDialogImpl = create<NoProps>(() => {
         </div>
 
         <DialogFooter className="px-6 py-3 border-t flex-shrink-0">
-          <Button variant="outline" size="sm" onClick={handleOpenInBrowser}>
-            <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-            Open on GitHub
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleOpenInBrowser}
+          >
+            <ExternalLink className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
+            {t('releaseNotes.openOnGitHub')}
           </Button>
         </DialogFooter>
       </DialogContent>

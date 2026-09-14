@@ -92,12 +92,19 @@ const resources = {
   },
 };
 
+const syncDocumentLanguage = (language: string) => {
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = language;
+  }
+};
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
     fallbackLng: {
+      'es-ES': ['es'],
       'zh-TW': ['zh-Hant'],
       'zh-HK': ['zh-Hant'],
       'zh-MO': ['zh-Hant'],
@@ -124,6 +131,9 @@ i18n
       caches: [], // Disable localStorage cache - we'll handle this via config
     },
   });
+
+i18n.on('languageChanged', syncDocumentLanguage);
+syncDocumentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
 // Debug logging in development
 if (import.meta.env.DEV) {

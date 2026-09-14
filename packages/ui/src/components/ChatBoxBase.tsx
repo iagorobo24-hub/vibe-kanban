@@ -1,14 +1,14 @@
-import { type ReactNode } from 'react';
-import { ImageIcon } from '@phosphor-icons/react';
-import { useTranslation } from 'react-i18next';
-import { cn } from '../lib/cn';
-import { Toolbar } from './Toolbar';
+import { type ReactNode } from "react";
+import { ImageIcon } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
+import { cn } from "../lib/cn";
+import { Toolbar } from "./Toolbar";
 
 export enum VisualVariant {
-  NORMAL = 'NORMAL',
-  FEEDBACK = 'FEEDBACK',
-  EDIT = 'EDIT',
-  PLAN = 'PLAN',
+  NORMAL = "NORMAL",
+  FEEDBACK = "FEEDBACK",
+  EDIT = "EDIT",
+  PLAN = "PLAN",
 }
 
 export interface DropzoneProps {
@@ -69,7 +69,7 @@ export function ChatBoxBase({
   isRunning,
   dropzone,
 }: ChatBoxBaseProps) {
-  const { t } = useTranslation(['common', 'tasks']);
+  const { t } = useTranslation(["common", "tasks"]);
 
   const isDragActive = dropzone?.isDragActive ?? false;
 
@@ -77,12 +77,12 @@ export function ChatBoxBase({
     <div
       {...(dropzone?.getRootProps() ?? {})}
       className={cn(
-        'relative flex w-chat max-w-full flex-col rounded-sm border border-border bg-secondary',
+        "agentos-chatbox relative flex w-chat max-w-full flex-col rounded-sm border border-border bg-secondary",
         (visualVariant === VisualVariant.FEEDBACK ||
           visualVariant === VisualVariant.EDIT ||
           visualVariant === VisualVariant.PLAN) &&
-          'border-brand bg-brand/10',
-        isRunning && 'chat-box-running'
+          "border-brand bg-brand/10",
+        isRunning && "chat-box-running",
       )}
     >
       {dropzone && <input {...dropzone.getInputProps()} />}
@@ -94,17 +94,17 @@ export function ChatBoxBase({
               <ImageIcon className="h-5 w-5 text-brand" />
             </div>
             <p className="text-sm font-medium text-high">
-              {t('tasks:dropzone.dropImagesHere')}
+              {t("tasks:dropzone.dropImagesHere")}
             </p>
             <p className="text-xs text-low mt-0.5">
-              {t('tasks:dropzone.supportedFormats')}
+              {t("tasks:dropzone.supportedFormats")}
             </p>
           </div>
         </div>
       )}
       {/* Error alert */}
       {error && (
-        <div className="bg-error/10 border-b px-double py-base">
+        <div className="agentos-chatbox__error bg-error/10 border-b px-double py-base">
           <p className="text-error text-sm">{error}</p>
         </div>
       )}
@@ -114,7 +114,7 @@ export function ChatBoxBase({
 
       {/* Header - Stats and selector */}
       {visualVariant === VisualVariant.NORMAL && (
-        <div className="flex items-center gap-base border-b px-base py-base">
+        <div className="agentos-chatbox__header flex items-center gap-base border-b px-base py-base">
           <div className="flex flex-1 items-center gap-base text-sm min-w-0 overflow-hidden">
             {headerLeft}
           </div>
@@ -123,11 +123,11 @@ export function ChatBoxBase({
       )}
 
       {/* Editor area */}
-      <div className="flex flex-col gap-plusfifty px-base py-base rounded-md">
+      <div className="agentos-chatbox__editor flex flex-col gap-plusfifty px-base py-base rounded-md">
         {editor}
 
         {/* Footer - Controls */}
-        <div className="flex items-end justify-between gap-base">
+        <div className="agentos-chatbox__footer flex items-end justify-between gap-base">
           <Toolbar className="flex-1 min-w-0 flex-wrap !gap-half">
             {modelSelector}
             {footerLeft}

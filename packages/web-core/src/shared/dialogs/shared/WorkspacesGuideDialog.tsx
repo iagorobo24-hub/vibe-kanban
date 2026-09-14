@@ -61,6 +61,9 @@ const WorkspacesGuideDialogImpl = create<NoProps>(() => {
     <GuideDialogShell
       topics={topics}
       closeLabel={t('buttons.close')}
+      topicsLabel={t('guide.topics')}
+      topicsAriaLabel={t('guide.topicsAriaLabel')}
+      backLabel={t('guide.back')}
       onClose={handleClose}
     />,
     document.body

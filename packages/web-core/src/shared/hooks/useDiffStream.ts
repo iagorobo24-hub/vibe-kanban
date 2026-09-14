@@ -23,6 +23,7 @@ interface UseDiffStreamResult {
   diffs: Diff[];
   error: string | null;
   isInitialized: boolean;
+  retry: () => void;
 }
 
 export const useDiffStream = (
@@ -51,12 +52,13 @@ export const useDiffStream = (
     []
   );
 
-  const { data, error, isInitialized } = useJsonPatchWsStream<DiffStreamEvent>(
-    endpoint,
-    enabled && !!workspaceId,
-    initialData
-    // No need for injectInitialEntry or deduplicatePatches for diffs
-  );
+  const { data, error, isInitialized, retry } =
+    useJsonPatchWsStream<DiffStreamEvent>(
+      endpoint,
+      enabled && !!workspaceId,
+      initialData
+      // No need for injectInitialEntry or deduplicatePatches for diffs
+    );
 
   const diffs = useMemo(() => {
     return Object.values(data?.entries ?? {})
@@ -68,5 +70,5 @@ export const useDiffStream = (
       .map((entry) => entry.content);
   }, [data?.entries]);
 
-  return { diffs, error, isInitialized };
+  return { diffs, error, isInitialized, retry };
 };

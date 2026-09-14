@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Group, Layout, Panel, Separator } from 'react-resizable-panels';
 import { OrgProvider } from '@/shared/providers/remote/OrgProvider';
@@ -19,12 +19,18 @@ import { useUserOrganizations } from '@/shared/hooks/useUserOrganizations';
 import { useOrganizationProjects } from '@/shared/hooks/useOrganizationProjects';
 import { useOrganizationStore } from '@/shared/stores/useOrganizationStore';
 import { useAuth } from '@/shared/hooks/auth/useAuth';
+import { useUserSystem } from '@/shared/hooks/useUserSystem';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 import { useCurrentKanbanRouteState } from '@/shared/hooks/useCurrentKanbanRouteState';
 import {
   buildKanbanIssueComposerKey,
   closeKanbanIssueComposer,
 } from '@/shared/stores/useKanbanIssueComposerStore';
+import { getRemoteAuthDegradedMessage } from '@/shared/lib/auth/remoteAuthDegraded';
+import { RotateCw, WifiOff } from 'lucide-react';
+import { Alert } from '@vibe/ui/components/Alert';
+import { Button } from '@vibe/ui/components/Button';
+import { deriveProjectDataState } from './projectDataState';
 /**
  * Component that registers project mutations with ActionsContext.
  * Must be rendered inside both ActionsProvider and ProjectProvider.
@@ -94,7 +100,7 @@ function ProjectMutationsRegistration({ children }: { children: ReactNode }) {
 
 function ProjectKanbanBoard() {
   return (
-    <div className="flex h-full min-h-0 w-full flex-col">
+    <div className="agentos-project-board flex h-full min-h-0 w-full flex-col">
       <div className="min-h-0 flex-1">
         <KanbanContainer />
       </div>
@@ -103,6 +109,7 @@ function ProjectKanbanBoard() {
 }
 
 function ProjectKanbanLayout({ projectName }: { projectName: string }) {
+  const { t } = useTranslation('common');
   const { issueId, isPanelOpen } = useCurrentKanbanRouteState();
   const isMobile = useIsMobile();
   const { getIssue } = useProjectContext();
@@ -117,11 +124,11 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
 
   if (isMobile) {
     return isRightPanelOpen ? (
-      <div className="h-full w-full overflow-hidden bg-secondary">
+      <div className="agentos-project-surface h-full w-full overflow-hidden bg-secondary">
         <ProjectRightSidebarContainer />
       </div>
     ) : (
-      <div className="h-full w-full overflow-hidden bg-primary">
+      <div className="agentos-project-surface h-full w-full overflow-hidden bg-primary">
         <ProjectKanbanBoard />
       </div>
     );
@@ -151,7 +158,7 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
       <Panel
         id="kanban-left"
         minSize="20%"
-        className="min-w-0 h-full overflow-hidden bg-primary"
+        className="agentos-project-surface min-w-0 h-full overflow-hidden bg-primary"
       >
         <ProjectKanbanBoard />
       </Panel>
@@ -159,7 +166,8 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
       {isRightPanelOpen && (
         <Separator
           id="kanban-separator"
-          className="w-1 bg-panel outline-none hover:bg-brand/50 transition-colors cursor-col-resize"
+          aria-label={t('accessibility.resizePanels')}
+          className="w-1 bg-panel transition-colors hover:bg-brand/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset cursor-col-resize"
         />
       )}
 
@@ -168,7 +176,7 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
           id="kanban-right"
           minSize="400px"
           maxSize="800px"
-          className="min-w-0 h-full overflow-hidden bg-secondary"
+          className="agentos-project-surface min-w-0 h-full overflow-hidden bg-secondary"
         >
           <ProjectRightSidebarContainer />
         </Panel>
@@ -182,11 +190,16 @@ function ProjectKanbanLayout({ projectName }: { projectName: string }) {
  */
 function ProjectKanbanInner({ projectId }: { projectId: string }) {
   const { t } = useTranslation('common');
-  const { projects, isLoading } = useOrgContext();
+  const { projects, isLoading, error, retry } = useOrgContext();
 
   const project = projects.find((p) => p.id === projectId);
+  const state = deriveProjectDataState({
+    isLoading,
+    hasError: Boolean(error),
+    hasProject: Boolean(project),
+  });
 
-  if (isLoading) {
+  if (state === 'loading') {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <p className="text-low">{t('states.loading')}</p>
@@ -194,7 +207,11 @@ function ProjectKanbanInner({ projectId }: { projectId: string }) {
     );
   }
 
-  if (!project) {
+  if (state === 'unavailable') {
+    return <ProjectDataUnavailablePrompt onRetry={retry} />;
+  }
+
+  if (state === 'missing' || !project) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <p className="text-low">{t('kanban.noProjectFound')}</p>
@@ -208,6 +225,72 @@ function ProjectKanbanInner({ projectId }: { projectId: string }) {
         <ProjectKanbanLayout projectName={project.name} />
       </ProjectMutationsRegistration>
     </ProjectProvider>
+  );
+}
+
+function ProjectDataUnavailablePrompt({ onRetry }: { onRetry: () => void }) {
+  const { t } = useTranslation('common');
+
+  return (
+    <div className="flex h-full w-full items-center justify-center p-base">
+      <Alert
+        variant="default"
+        className="flex max-w-xl items-start gap-3"
+        role="alert"
+      >
+        <WifiOff className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+        <div className="space-y-2">
+          <h2 className="font-medium">
+            {t('kanban.projectDataUnavailable.title')}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {t('kanban.projectDataUnavailable.description')}
+          </p>
+          <Button variant="outline" onClick={onRetry}>
+            <RotateCw className="mr-2 h-4 w-4" aria-hidden="true" />
+            {t('kanban.projectDataUnavailable.retry')}
+          </Button>
+        </div>
+      </Alert>
+    </div>
+  );
+}
+
+function RemoteAuthUnavailablePrompt({ reason }: { reason: string }) {
+  const { t } = useTranslation('common');
+  const handleRetry = useCallback(() => {
+    window.location.reload();
+  }, []);
+
+  return (
+    <div className="agentos-remote-auth-state flex h-full w-full items-center justify-center p-base">
+      <Alert
+        variant="default"
+        className="agentos-remote-auth-state__alert flex max-w-xl items-start gap-3"
+      >
+        <WifiOff className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
+        <div className="space-y-2">
+          <h2 className="font-medium">
+            {t('kanban.remoteAuthUnavailable.title')}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {t('kanban.remoteAuthUnavailable.description')}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {getRemoteAuthDegradedMessage(reason, t)}
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRetry}
+            className="gap-2"
+          >
+            <WifiOff className="h-4 w-4" />
+            {t('kanban.remoteAuthUnavailable.action')}
+          </Button>
+        </div>
+      </Alert>
+    </div>
   );
 }
 
@@ -259,6 +342,7 @@ export function ProjectKanban() {
   const appNavigation = useAppNavigation();
   const { t } = useTranslation('common');
   const { isSignedIn, isLoaded: authLoaded } = useAuth();
+  const { remoteAuthDegraded } = useUserSystem();
   const issueComposerKey = useMemo(() => {
     if (!projectId) {
       return null;
@@ -292,8 +376,8 @@ export function ProjectKanban() {
     projectId ?? undefined
   );
 
-  // Show loading while auth state is being determined
-  if (!authLoaded || isLoading) {
+  // Show loading only while the local auth state is being determined.
+  if (!authLoaded) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <p className="text-low">{t('states.loading')}</p>
@@ -311,6 +395,20 @@ export function ProjectKanban() {
           description={t('kanban.loginRequired.description')}
           actionLabel={t('kanban.loginRequired.action')}
         />
+      </div>
+    );
+  }
+
+  // Remote auth is a known degraded capability, not an inaccessible project.
+  // Render a recoverable state instead of leaving the page in an endless load.
+  if (remoteAuthDegraded) {
+    return <RemoteAuthUnavailablePrompt reason={remoteAuthDegraded} />;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <p className="text-low">{t('states.loading')}</p>
       </div>
     );
   }

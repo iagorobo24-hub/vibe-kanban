@@ -1,4 +1,5 @@
 import type { Issue } from 'shared/remote-types';
+import i18n from '@/i18n';
 import type { SelectionPage } from '../SelectionDialog';
 
 export type SubIssueSelectionResult =
@@ -9,14 +10,17 @@ export function buildSubIssueSelectionPages(
   issues: Issue[],
   mode: 'addChild' | 'setParent'
 ): Record<string, SelectionPage<SubIssueSelectionResult>> {
-  const title = mode === 'setParent' ? 'Make Sub-issue of' : 'Add Sub-issue';
+  const title =
+    mode === 'setParent'
+      ? i18n.t('commandBar.selectionTitles.makeSubIssueOf')
+      : i18n.t('commandBar.selectionTitles.addSubIssue');
   return {
     selectSubIssue: {
       id: 'selectSubIssue',
       title,
       buildGroups: () => [
         {
-          label: 'Issues',
+          label: i18n.t('commandBar.selectionGroups.issues'),
           items: [
             ...(mode === 'addChild'
               ? [{ type: 'createSubIssue' as const }]

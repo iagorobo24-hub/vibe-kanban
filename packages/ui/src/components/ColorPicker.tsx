@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '../lib/cn';
 
 export const PRESET_COLORS = [
@@ -33,6 +34,7 @@ export const InlineColorPicker = forwardRef<
     { value, onChange, colors = PRESET_COLORS, onKeyDown, disabled, className },
     ref
   ) => {
+    const { t } = useTranslation('common');
     const currentIndex = colors.indexOf(value);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -59,7 +61,7 @@ export const InlineColorPicker = forwardRef<
       <div
         ref={ref}
         role="radiogroup"
-        aria-label="Select a color"
+        aria-label={t('accessibility.selectColor')}
         tabIndex={disabled ? -1 : 0}
         onKeyDown={handleKeyDown}
         className={cn('flex flex-wrap gap-half outline-none', className)}
@@ -73,7 +75,7 @@ export const InlineColorPicker = forwardRef<
             disabled={disabled}
             onClick={() => onChange(color)}
             className={cn(
-              'w-6 h-6 rounded-full transition-all',
+              'w-6 h-6 rounded-full transition-transform',
               color === value
                 ? 'ring-2 ring-brand ring-offset-1'
                 : 'hover:scale-110',

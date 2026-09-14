@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   DiffView,
   DiffModeEnum,
@@ -70,6 +71,7 @@ function EditDiffRenderer({
   statusAppearance = 'default',
   forceExpanded = false,
 }: Props) {
+  const { t } = useTranslation('common');
   const { config } = useUserSystem();
   const [expanded, setExpanded] = useExpandable(expansionKey, defaultExpanded);
   const effectiveExpanded = forceExpanded || expanded;
@@ -100,10 +102,18 @@ function EditDiffRenderer({
   return (
     <div>
       <div className={headerClass}>
-        <SquarePen className="h-3 w-3" />
-        <p
+        <SquarePen className="h-3 w-3" aria-hidden="true" />
+        <button
+          type="button"
           onClick={() => setExpanded()}
-          className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer"
+          className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer text-left border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          aria-expanded={effectiveExpanded}
+          aria-label={t(
+            effectiveExpanded
+              ? 'accessibility.collapseDiff'
+              : 'accessibility.expandDiff',
+            { filePath: path }
+          )}
         >
           {path}{' '}
           <span style={{ color: 'hsl(var(--console-success))' }}>
@@ -112,7 +122,7 @@ function EditDiffRenderer({
           <span style={{ color: 'hsl(var(--console-error))' }}>
             -{deletions}
           </span>
-        </p>
+        </button>
       </div>
 
       {effectiveExpanded && (

@@ -44,6 +44,11 @@ import type { RepoWithTargetBranch } from 'shared/types';
 import { ChatEmptyState } from '@vibe/ui/components/ChatEmptyState';
 import { ChatScriptPlaceholder } from '@vibe/ui/components/ChatScriptPlaceholder';
 import { ScriptFixerDialog } from '@/shared/dialogs/scripts/ScriptFixerDialog';
+import {
+  createAgentOSToolStreamFixture,
+  isAgentOSToolStreamFixtureEnabled,
+} from '../model/agentosToolStreamFixture';
+import { useAgentOSQaApprovalResponse } from '@/shared/lib/agentOSQaFixtures';
 
 interface ConversationListProps {
   attempt: WorkspaceWithSession;
@@ -161,6 +166,12 @@ export const ConversationList = forwardRef<
   const [hasSetupScriptRun, setHasSetupScriptRun] = useState(false);
   const [hasCleanupScriptRun, setHasCleanupScriptRun] = useState(false);
   const [hasRunningProcess, setHasRunningProcess] = useState(false);
+  const toolStreamFixtureEnabled = isAgentOSToolStreamFixtureEnabled();
+  const approvalFixtureResponse = useAgentOSQaApprovalResponse();
+  const toolStreamFixtureSource = useMemo(
+    () => (toolStreamFixtureEnabled ? createAgentOSToolStreamFixture() : null),
+    [toolStreamFixtureEnabled, approvalFixtureResponse]
+  );
   const lastSettledTailStartIndexRef = useRef<number | null>(null);
   const { setEntries, reset } = useEntriesActions();
   const setTokenUsageInfo = useSetTokenUsageInfo();
@@ -366,22 +377,31 @@ export const ConversationList = forwardRef<
     }
   };
 
-  const onTimelineUpdated = (
-    source: ConversationTimelineSource,
-    addType: AddEntryType,
-    newLoading: boolean
-  ) => {
-    pendingUpdateRef.current = {
-      source,
-      addType,
-      loading: newLoading,
-      isInitialLoad: addType === 'initial',
-    };
+  const onTimelineUpdated = useCallback(
+    (
+      source: ConversationTimelineSource,
+      addType: AddEntryType,
+      newLoading: boolean
+    ) => {
+      pendingUpdateRef.current = {
+        source: toolStreamFixtureSource ?? source,
+        addType,
+        loading: newLoading,
+        isInitialLoad: addType === 'initial',
+      };
 
-    if (rafIdRef.current === null) {
-      rafIdRef.current = requestAnimationFrame(flushPendingUpdate);
-    }
-  };
+      if (rafIdRef.current === null) {
+        rafIdRef.current = requestAnimationFrame(flushPendingUpdate);
+      }
+    },
+    [toolStreamFixtureSource]
+  );
+
+  useEffect(() => {
+    if (!toolStreamFixtureSource) return;
+
+    onTimelineUpdated(toolStreamFixtureSource, 'initial', false);
+  }, [onTimelineUpdated, toolStreamFixtureSource]);
 
   const { isFirstTurn, isLoadingHistory } = useConversationHistory({
     attempt,

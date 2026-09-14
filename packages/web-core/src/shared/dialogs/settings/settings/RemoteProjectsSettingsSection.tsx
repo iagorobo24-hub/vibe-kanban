@@ -108,13 +108,15 @@ interface StatusRowCloneProps {
 }
 
 function StatusRowClone({ status, provided }: StatusRowCloneProps) {
+  const { t } = useTranslation('common');
+
   return createPortal(
     <div
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       className={cn(
-        'flex items-center gap-base px-base py-half rounded-sm shadow-lg',
+        'flex items-center gap-base px-base py-half rounded-sm shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset',
         status.isNew ? 'bg-panel' : 'bg-secondary',
         status.hidden && 'opacity-50'
       )}
@@ -122,9 +124,14 @@ function StatusRowClone({ status, provided }: StatusRowCloneProps) {
         ...provided.draggableProps.style,
         zIndex: 10001,
       }}
+      aria-label={t('kanban.reorderStatus', { name: status.name })}
     >
       <div className="flex items-center justify-center size-icon-sm cursor-grabbing">
-        <DotsSixVerticalIcon className="size-icon-xs text-low" weight="bold" />
+        <DotsSixVerticalIcon
+          className="size-icon-xs text-low"
+          weight="bold"
+          aria-hidden="true"
+        />
       </div>
       <div
         className="size-dot rounded-full shrink-0"
@@ -222,11 +229,13 @@ function StatusRow({
           <div className="flex items-center gap-base">
             <div
               {...provided.dragHandleProps}
-              className="flex items-center justify-center size-icon-sm cursor-grab"
+              className="flex items-center justify-center size-icon-sm cursor-grab rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+              aria-label={t('kanban.reorderStatus', { name: status.name })}
             >
               <DotsSixVerticalIcon
                 className="size-icon-xs text-low"
                 weight="bold"
+                aria-hidden="true"
               />
             </div>
 
@@ -240,7 +249,8 @@ function StatusRow({
                 <button
                   type="button"
                   className="flex items-center justify-center size-icon-sm"
-                  title={t('kanban.changeColor', 'Change color')}
+                  title={t('kanban.changeColor')}
+                  aria-label={t('kanban.changeColor')}
                 >
                   <div
                     className="size-dot rounded-full shrink-0"
@@ -272,15 +282,17 @@ function StatusRow({
                 onKeyDown={handleNameKeyDown}
                 onBlur={handleNameBlur}
                 autoFocus
-                className="bg-transparent text-sm text-high outline-none border-b border-brand w-24"
+                className="bg-transparent text-sm text-high outline-none border-b border-brand w-24 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               />
             ) : (
-              <span
-                className="text-sm text-high cursor-pointer"
+              <button
+                type="button"
+                className="text-sm text-high cursor-pointer text-left border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                 onClick={() => onStartEditing(status.id)}
+                aria-label={t('kanban.editName')}
               >
                 {status.name}
-              </span>
+              </button>
             )}
           </div>
 
@@ -289,9 +301,14 @@ function StatusRow({
               type="button"
               onClick={() => onStartEditing(status.id)}
               className="flex items-center justify-center size-icon-sm text-low hover:text-normal"
-              title={t('kanban.editName', 'Edit name')}
+              title={t('kanban.editName')}
+              aria-label={t('kanban.editName')}
             >
-              <PencilSimpleLineIcon className="size-icon-xs" weight="bold" />
+              <PencilSimpleLineIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
             <button
               type="button"
@@ -304,12 +321,21 @@ function StatusRow({
               )}
               title={
                 canDelete
-                  ? t('kanban.deleteStatus', 'Delete status')
-                  : t('kanban.cannotDeleteWithIssues', 'Move issues first')
+                  ? t('kanban.deleteStatus')
+                  : t('kanban.cannotDeleteWithIssues')
+              }
+              aria-label={
+                canDelete
+                  ? t('kanban.deleteStatus')
+                  : t('kanban.cannotDeleteWithIssues')
               }
               disabled={!canDelete}
             >
-              <XIcon className="size-icon-xs" weight="bold" />
+              <XIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             </button>
             <Switch
               checked={!status.hidden}
@@ -317,13 +343,17 @@ function StatusRow({
               disabled={isLastVisible && !status.hidden}
               title={
                 isLastVisible
-                  ? t(
-                      'kanban.lastVisibleStatus',
-                      'At least one status must be visible'
-                    )
+                  ? t('kanban.lastVisibleStatus')
                   : status.hidden
-                    ? t('kanban.showStatus', 'Show status')
-                    : t('kanban.hideStatus', 'Hide status')
+                    ? t('kanban.showStatus')
+                    : t('kanban.hideStatus')
+              }
+              aria-label={
+                isLastVisible
+                  ? t('kanban.lastVisibleStatus')
+                  : status.hidden
+                    ? t('kanban.showStatus')
+                    : t('kanban.hideStatus')
               }
             />
           </div>
@@ -726,7 +756,7 @@ export function RemoteProjectsSettingsSection({
       ...prev,
       {
         id: newId,
-        name: t('kanban.newStatus', 'New Status'),
+        name: t('kanban.newStatus'),
         color: getRandomPresetColor(),
         hidden: false,
         sort_order: maxSortOrder + 1000,
@@ -833,7 +863,7 @@ export function RemoteProjectsSettingsSection({
   const handleOrgSelect = (orgId: string) => {
     if (isDirty) {
       const confirmed = window.confirm(
-        t('settings.common.discardChangesConfirm', 'Discard unsaved changes?')
+        t('settings.common.discardChangesConfirm')
       );
       if (!confirmed) return;
     }
@@ -851,7 +881,7 @@ export function RemoteProjectsSettingsSection({
   const handleProjectSelect = (projectId: string) => {
     if (isDirty) {
       const confirmed = window.confirm(
-        t('settings.common.discardChangesConfirm', 'Discard unsaved changes?')
+        t('settings.common.discardChangesConfirm')
       );
       if (!confirmed) return;
     }
@@ -922,9 +952,7 @@ export function RemoteProjectsSettingsSection({
 
     const trimmedName = formState.name.trim();
     if (!trimmedName) {
-      setError(
-        t('settings.remoteProjects.nameRequired', 'Project name is required')
-      );
+      setError(t('settings.remoteProjects.nameRequired'));
       return;
     }
 
@@ -948,15 +976,13 @@ export function RemoteProjectsSettingsSection({
         setHasStatusChanges(false);
       }
 
-      setSuccess(
-        t('settings.remoteProjects.saveSuccess', 'Project updated successfully')
-      );
+      setSuccess(t('settings.remoteProjects.saveSuccess'));
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : t('settings.remoteProjects.saveError', 'Failed to update project')
+          : t('settings.remoteProjects.saveError')
       );
     } finally {
       setIsSaving(false);
@@ -994,7 +1020,7 @@ export function RemoteProjectsSettingsSection({
           weight="bold"
         />
         <span className="text-normal">
-          {t('settings.remoteProjects.loading', 'Loading remote projects...')}
+          {t('settings.remoteProjects.loading')}
         </span>
       </div>
     );
@@ -1006,21 +1032,15 @@ export function RemoteProjectsSettingsSection({
       <div className="space-y-4">
         <div>
           <h3 className="text-base font-medium text-high">
-            {t(
-              'settings.remoteProjects.loginRequired.title',
-              'Sign in required'
-            )}
+            {t('settings.remoteProjects.loginRequired.title')}
           </h3>
           <p className="text-sm text-low mt-1">
-            {t(
-              'settings.remoteProjects.loginRequired.description',
-              'Sign in to manage your remote projects.'
-            )}
+            {t('settings.remoteProjects.loginRequired.description')}
           </p>
         </div>
         <PrimaryButton
           variant="secondary"
-          value={t('settings.remoteProjects.loginRequired.action', 'Sign in')}
+          value={t('settings.remoteProjects.loginRequired.action')}
           onClick={() => void OAuthDialog.show({})}
         >
           <SignInIcon className="size-icon-xs mr-1" weight="bold" />
@@ -1036,10 +1056,7 @@ export function RemoteProjectsSettingsSection({
         <div className="bg-error/10 border border-error/50 rounded-sm p-4 text-error">
           {orgsError instanceof Error
             ? orgsError.message
-            : t(
-                'settings.remoteProjects.loadError',
-                'Failed to load organizations'
-              )}
+            : t('settings.remoteProjects.loadError')}
         </div>
       </div>
     );
@@ -1061,20 +1078,14 @@ export function RemoteProjectsSettingsSection({
       )}
 
       <SettingsCard
-        title={t('settings.remoteProjects.title', 'Remote Projects')}
-        description={t(
-          'settings.remoteProjects.description',
-          'Manage cloud-synced projects across organizations.'
-        )}
+        title={t('settings.remoteProjects.title')}
+        description={t('settings.remoteProjects.description')}
       >
         {/* Two-column picker */}
         <TwoColumnPicker>
           {/* Organizations column */}
           <TwoColumnPickerColumn
-            label={t(
-              'settings.remoteProjects.columns.organizations',
-              'Organizations'
-            )}
+            label={t('settings.remoteProjects.columns.organizations')}
             isFirst
           >
             {organizations.map((org) => (
@@ -1085,7 +1096,7 @@ export function RemoteProjectsSettingsSection({
                 trailing={
                   org.is_personal && (
                     <TwoColumnPickerBadge>
-                      {t('common:personal', 'Personal')}
+                      {t('common:personal')}
                     </TwoColumnPickerBadge>
                   )
                 }
@@ -1097,17 +1108,14 @@ export function RemoteProjectsSettingsSection({
 
           {/* Projects column */}
           <TwoColumnPickerColumn
-            label={t('settings.remoteProjects.columns.projects', 'Projects')}
+            label={t('settings.remoteProjects.columns.projects')}
             headerAction={
               selectedOrgId && (
                 <button
                   className="p-half rounded-sm hover:bg-secondary text-low hover:text-normal"
                   onClick={handleCreateProject}
                   disabled={isSaving}
-                  title={t(
-                    'settings.remoteProjects.actions.addProject',
-                    'Add Project'
-                  )}
+                  title={t('settings.remoteProjects.actions.addProject')}
                 >
                   <PlusIcon className="size-icon-2xs" weight="bold" />
                 </button>
@@ -1142,17 +1150,11 @@ export function RemoteProjectsSettingsSection({
               ))
             ) : selectedOrgId ? (
               <TwoColumnPickerEmpty>
-                {t(
-                  'settings.remoteProjects.noProjects',
-                  'No projects yet. Create one to get started.'
-                )}
+                {t('settings.remoteProjects.noProjects')}
               </TwoColumnPickerEmpty>
             ) : (
               <TwoColumnPickerEmpty>
-                {t(
-                  'settings.remoteProjects.selectOrg',
-                  'Select an organization'
-                )}
+                {t('settings.remoteProjects.selectOrg')}
               </TwoColumnPickerEmpty>
             )}
           </TwoColumnPickerColumn>
@@ -1161,30 +1163,19 @@ export function RemoteProjectsSettingsSection({
         {/* Edit form (when project selected) */}
         {selectedProjectId && formState && (
           <div className="bg-secondary/50 border border-border rounded-sm p-4 space-y-4">
-            <SettingsField
-              label={t(
-                'settings.remoteProjects.form.name.label',
-                'Project Name'
-              )}
-            >
+            <SettingsField label={t('settings.remoteProjects.form.name.label')}>
               <SettingsInput
                 value={formState.name}
                 onChange={(name) =>
                   setFormState((s) => (s ? { ...s, name } : null))
                 }
-                placeholder={t(
-                  'settings.remoteProjects.form.name.placeholder',
-                  'Enter project name'
-                )}
+                placeholder={t('settings.remoteProjects.form.name.placeholder')}
                 disabled={isSaving}
               />
             </SettingsField>
 
             <SettingsField
-              label={t(
-                'settings.remoteProjects.form.color.label',
-                'Project Color'
-              )}
+              label={t('settings.remoteProjects.form.color.label')}
             >
               <InlineColorPicker
                 value={formState.color}
@@ -1300,7 +1291,7 @@ export function RemoteProjectsSettingsSection({
                                     <div className="flex items-center gap-1 shrink-0">
                                       {branch.is_current && (
                                         <span className="text-[10px] text-low bg-secondary border border-border rounded-sm px-1">
-                                          current
+                                          {t('common:branchSelector.badges.current')}
                                         </span>
                                       )}
                                       {branch.name === dr.target_branch && (
@@ -1322,7 +1313,11 @@ export function RemoteProjectsSettingsSection({
                         onClick={() => handleRemoveDefaultRepo(dr.repo_id)}
                         className="flex items-center justify-center size-icon-sm text-low hover:text-normal"
                       >
-                        <XIcon className="size-icon-xs" weight="bold" />
+                        <XIcon
+                          className="size-icon-xs"
+                          weight="bold"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   );
@@ -1377,26 +1372,20 @@ export function RemoteProjectsSettingsSection({
             <div>
               <div>
                 <p className="text-sm font-medium text-normal">
-                  {t(
-                    'settings.remoteProjects.form.statuses.label',
-                    'Project Statuses'
-                  )}
+                  {t('settings.remoteProjects.form.statuses.label')}
                 </p>
                 <p className="text-sm text-low mt-1">
-                  {t(
-                    'settings.remoteProjects.form.statuses.description',
-                    'Manage kanban columns for this project.'
-                  )}
+                  {t('settings.remoteProjects.form.statuses.description')}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center justify-between text-normal">
               <span className="text-sm font-semibold">
-                {t('kanban.visibleColumns', 'Visible Columns')}
+                {t('kanban.visibleColumns')}
               </span>
               <span className="text-xs text-low">
-                {t('kanban.dragToRearrange', 'Drag to re-arrange')}
+                {t('kanban.dragToRearrange')}
               </span>
             </div>
 
@@ -1449,7 +1438,7 @@ export function RemoteProjectsSettingsSection({
                         <PlusIcon className="size-icon-xs" weight="bold" />
                       </div>
                       <span className="text-xs font-light">
-                        {t('kanban.addColumn', 'Add column')}
+                        {t('kanban.addColumn')}
                       </span>
                     </button>
                   </div>
@@ -1478,19 +1467,24 @@ function ProjectActionsDropdown({
   project: Project;
   onDelete: (project: Project) => void;
 }) {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['settings', 'common']);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            'p-half rounded-sm hover:bg-panel text-low hover:text-normal',
-            'opacity-0 group-hover:opacity-100 transition-opacity'
+            'rounded-sm p-half text-low hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
+            'opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100'
           )}
           onClick={(e) => e.stopPropagation()}
+          aria-label={t('settings:settings.remoteProjects.actions.menu')}
         >
-          <DotsThreeIcon className="size-icon-xs" weight="bold" />
+          <DotsThreeIcon
+            className="size-icon-xs"
+            weight="bold"
+            aria-hidden="true"
+          />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -1503,7 +1497,7 @@ function ProjectActionsDropdown({
         >
           <div className="flex items-center gap-half w-full">
             <TrashIcon className="size-icon-xs mr-base" />
-            {t('common:buttons.delete', 'Delete')}
+            {t('common:buttons.delete')}
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

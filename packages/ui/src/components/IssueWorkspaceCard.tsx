@@ -64,45 +64,39 @@ export interface IssueWorkspaceCreateCardProps {
 
 interface IssueWorkspaceCardContainerProps {
   onClick?: () => void;
+  accessibleName?: string;
   className?: string;
   children: React.ReactNode;
 }
 
 function IssueWorkspaceCardContainer({
   onClick,
+  accessibleName,
   className,
   children,
 }: IssueWorkspaceCardContainerProps) {
   return (
     <div
       className={cn(
-        'flex flex-col gap-half p-base bg-panel rounded-sm transition-all duration-150',
+        'agentos-issue-workspace-card relative flex flex-col gap-half p-base bg-panel rounded-sm transition-colors duration-150',
         onClick && 'cursor-pointer hover:bg-secondary/70',
         className
       )}
-      onClick={
-        onClick
-          ? (e) => {
-              e.stopPropagation();
-              onClick();
-            }
-          : undefined
-      }
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={
-        onClick
-          ? (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                e.stopPropagation();
-                onClick();
-              }
-            }
-          : undefined
-      }
     >
-      {children}
+      {onClick && (
+        <button
+          type="button"
+          className="absolute inset-0 z-0 rounded-sm border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          onClick={(event) => {
+            event.stopPropagation();
+            onClick();
+          }}
+          aria-label={accessibleName}
+        />
+      )}
+      <div className={cn('relative z-10', onClick && 'pointer-events-none')}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -135,10 +129,16 @@ export function IssueWorkspaceCard({
     (hasUnseenActivity && !isRunning);
 
   return (
-    <IssueWorkspaceCardContainer onClick={onClick} className={className}>
+    <IssueWorkspaceCardContainer
+      onClick={onClick}
+      accessibleName={
+        workspace.name ? `Open workspace ${workspace.name}` : 'Open workspace'
+      }
+      className={className}
+    >
       {/* Row 1: Status badge + Name (left), Owner avatar + menu (right) */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-half min-w-0">
+      <div className="agentos-issue-workspace-card__header flex items-center justify-between">
+        <div className="agentos-issue-workspace-card__title flex items-center gap-half min-w-0">
           {showStatusBadge && (
             <span
               className={cn(
@@ -158,7 +158,7 @@ export function IssueWorkspaceCard({
           )}
         </div>
 
-        <div className="flex items-center gap-half">
+        <div className="agentos-issue-workspace-card__actions pointer-events-auto flex items-center gap-half">
           {showOwner && workspace.owner && (
             <UserAvatar
               user={workspace.owner}
@@ -170,12 +170,13 @@ export function IssueWorkspaceCard({
               <DropdownMenuTrigger asChild>
                 <button
                   onClick={(e) => e.stopPropagation()}
-                  className="p-0.5 rounded hover:bg-secondary transition-colors"
+                  className="agentos-issue-workspace-card__menu rounded p-0.5 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                   aria-label={t('workspaces.more')}
                 >
                   <DotsThreeIcon
                     className="size-icon-xs text-low"
                     weight="bold"
+                    aria-hidden="true"
                   />
                 </button>
               </DropdownMenuTrigger>
@@ -210,8 +211,8 @@ export function IssueWorkspaceCard({
       </div>
 
       {/* Row 2: Live status + stats (left), PR buttons (right) */}
-      <div className="flex items-center justify-between gap-half min-w-0">
-        <div className="flex items-center flex-wrap sm:flex-nowrap gap-half text-sm text-low min-w-0 flex-1 overflow-hidden">
+      <div className="agentos-issue-workspace-card__meta flex items-center justify-between gap-half min-w-0">
+        <div className="agentos-issue-workspace-card__status flex items-center flex-wrap sm:flex-nowrap gap-half text-sm text-low min-w-0 flex-1 overflow-hidden">
           <div className="flex items-center gap-half shrink-0">
             {hasRunningDevServer && (
               <PlayIcon
@@ -278,7 +279,7 @@ export function IssueWorkspaceCard({
           )}
         </div>
 
-        <div className="hidden sm:flex items-center gap-half shrink-0">
+        <div className="agentos-issue-workspace-card__prs pointer-events-auto hidden sm:flex items-center gap-half shrink-0">
           {workspace.prs.length > 0 ? (
             workspace.prs.map((pr) => (
               <a
@@ -320,7 +321,10 @@ export function IssueWorkspaceCreateCard({
 
   return (
     <IssueWorkspaceCardContainer
-      className={cn('border border-dashed border-border', className)}
+      className={cn(
+        'agentos-issue-workspace-card--create border border-dashed border-border',
+        className
+      )}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-half min-w-0">
@@ -339,6 +343,7 @@ export function IssueWorkspaceCreateCard({
           onClick={onClick}
           disabled={!onClick}
           className={cn(
+            'agentos-issue-workspace-card__create-action',
             'shrink-0 rounded-sm px-base py-half text-cta h-cta flex items-center bg-brand-secondary text-on-brand hover:bg-brand-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
             shouldAnimateCreateButton && 'create-issue-attention'
           )}

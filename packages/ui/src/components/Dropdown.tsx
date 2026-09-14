@@ -33,7 +33,7 @@ interface DropdownMenuTriggerButtonProps
 }
 
 export const dropdownMenuTriggerButtonClassName =
-  'flex items-center gap-half bg-secondary border border-border rounded-sm px-base py-half ' +
+  'agentos-dropdown-trigger flex items-center gap-half bg-secondary border border-border rounded-sm px-base py-half ' +
   'focus:outline-none focus-visible:ring-1 focus-visible:ring-brand ' +
   'disabled:opacity-50 disabled:cursor-not-allowed min-w-0';
 

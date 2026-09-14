@@ -38,8 +38,9 @@ export function IssueRelationshipsSection({
       persistKey="kanban-issue-relationships"
       defaultExpanded={true}
       headerExtra={headerExtra}
+      className="agentos-issue-relationships-section"
     >
-      <div className="p-base flex flex-col gap-half border-t">
+      <div className="agentos-issue-section p-base flex flex-col gap-half border-t">
         {isLoading ? (
           <p className="text-low py-half">{t('states.loading')}</p>
         ) : relationships.length === 0 ? (
@@ -50,7 +51,7 @@ export function IssueRelationshipsSection({
           relationships.map((rel) => (
             <div
               key={rel.relationshipId}
-              className="flex items-center justify-between group"
+              className="agentos-issue-relationship-row flex items-center justify-between group"
             >
               <RelationshipBadge
                 displayType={rel.displayType}
@@ -67,10 +68,14 @@ export function IssueRelationshipsSection({
                     e.stopPropagation();
                     onRemoveRelationship(rel.relationshipId);
                   }}
-                  className="p-half rounded-sm text-low hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100"
-                  aria-label="Remove relationship"
+                  className="agentos-issue-relationship-row__remove rounded-sm p-half text-low opacity-0 transition-colors hover:bg-error/10 hover:text-error focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100"
+                  aria-label={t('accessibility.removeRelationship')}
                 >
-                  <XIcon className="size-icon-2xs" weight="bold" />
+                  <XIcon
+                    className="size-icon-2xs"
+                    weight="bold"
+                    aria-hidden="true"
+                  />
                 </button>
               )}
             </div>

@@ -30,6 +30,7 @@ export const PriorityIcon = ({ priority, className }: PriorityIconProps) => {
     <IconComponent
       className={cn('size-icon-xs', colorClass, className)}
       weight="bold"
+      aria-hidden="true"
     />
   );
 };

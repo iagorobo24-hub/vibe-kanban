@@ -39,6 +39,13 @@ const RenameWorkspaceDialogImpl = NiceModal.create<RenameWorkspaceDialogProps>(
     const handleConfirm = async () => {
       const trimmedName = name.trim();
 
+      if (!trimmedName) {
+        setError(
+          t('workspaces.rename.validation.required', 'Enter a workspace name.')
+        );
+        return;
+      }
+
       if (trimmedName === currentName) {
         modal.resolve({ action: 'canceled' } as RenameWorkspaceDialogResult);
         modal.hide();
@@ -105,13 +112,24 @@ const RenameWorkspaceDialogImpl = NiceModal.create<RenameWorkspaceDialogProps>(
                 placeholder={t('workspaces.rename.placeholder')}
                 disabled={isSubmitting}
                 autoFocus
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? 'workspace-name-error' : undefined}
               />
-              {error && <p className="text-sm text-destructive">{error}</p>}
+              {error && (
+                <p
+                  id="workspace-name-error"
+                  className="text-sm text-destructive"
+                  role="alert"
+                >
+                  {error}
+                </p>
+              )}
             </div>
           </div>
 
           <DialogFooter>
             <Button
+              type="button"
               variant="outline"
               onClick={handleCancel}
               disabled={isSubmitting}
@@ -119,6 +137,7 @@ const RenameWorkspaceDialogImpl = NiceModal.create<RenameWorkspaceDialogProps>(
               {t('buttons.cancel')}
             </Button>
             <Button
+              type="submit"
               onClick={() => void handleConfirm()}
               disabled={isSubmitting}
             >

@@ -1,6 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { approvalsApi } from '@/shared/lib/api';
-import type { QuestionAnswer } from 'shared/types';
+import type { ApprovalStatus, QuestionAnswer } from 'shared/types';
+import {
+  AGENTOS_APPROVAL_FIXTURE_ID,
+  isAgentOSQaFixtureEnabled,
+  resolveAgentOSQaApproval,
+} from '@/shared/lib/agentOSQaFixtures';
 
 interface ApproveParams {
   approvalId: string;
@@ -16,37 +21,65 @@ interface AnswerParams extends ApproveParams {
 }
 
 export function useApprovalMutation() {
+  const approvalFixtureEnabled = isAgentOSQaFixtureEnabled('approval');
   const approveMutation = useMutation({
-    mutationFn: ({ approvalId, executionProcessId }: ApproveParams) =>
-      approvalsApi.respond(approvalId, {
+    mutationFn: ({ approvalId, executionProcessId }: ApproveParams) => {
+      const status: ApprovalStatus = { status: 'approved' };
+      if (
+        approvalFixtureEnabled &&
+        approvalId === AGENTOS_APPROVAL_FIXTURE_ID
+      ) {
+        resolveAgentOSQaApproval(status);
+        return Promise.resolve(status);
+      }
+      return approvalsApi.respond(approvalId, {
         execution_process_id: executionProcessId,
-        status: { status: 'approved' },
-      }),
+        status,
+      });
+    },
     onError: (err) => {
       console.error('Failed to approve:', err);
     },
   });
 
   const denyMutation = useMutation({
-    mutationFn: ({ approvalId, executionProcessId, reason }: DenyParams) =>
-      approvalsApi.respond(approvalId, {
+    mutationFn: ({ approvalId, executionProcessId, reason }: DenyParams) => {
+      const status: ApprovalStatus = {
+        status: 'denied',
+        reason: reason || 'User denied this request.',
+      };
+      if (
+        approvalFixtureEnabled &&
+        approvalId === AGENTOS_APPROVAL_FIXTURE_ID
+      ) {
+        resolveAgentOSQaApproval(status);
+        return Promise.resolve(status);
+      }
+      return approvalsApi.respond(approvalId, {
         execution_process_id: executionProcessId,
-        status: {
-          status: 'denied',
-          reason: reason || 'User denied this request.',
-        },
-      }),
+        status,
+      });
+    },
     onError: (err) => {
       console.error('Failed to deny:', err);
     },
   });
 
   const answerMutation = useMutation({
-    mutationFn: ({ approvalId, executionProcessId, answers }: AnswerParams) =>
-      approvalsApi.respond(approvalId, {
+    mutationFn: ({ approvalId, executionProcessId, answers }: AnswerParams) => {
+      if (
+        approvalFixtureEnabled &&
+        approvalId === AGENTOS_APPROVAL_FIXTURE_ID
+      ) {
+        const status: ApprovalStatus = { status: 'approved' };
+        resolveAgentOSQaApproval(status);
+        return Promise.resolve(status);
+      }
+      return approvalsApi.respond(approvalId, {
         execution_process_id: executionProcessId,
         status: { status: 'answered', answers },
-      }),
+      });
+    },
     onError: (err) => {
       console.error('Failed to answer:', err);
     },

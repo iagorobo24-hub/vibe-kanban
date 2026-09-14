@@ -171,12 +171,12 @@ export function VSCodeWorkspacePage() {
 
   return (
     <AppWithStyleOverride setTheme={setTheme}>
-      <div className="h-screen flex flex-col bg-primary">
+      <div className="agentos-theme agentos-vscode-page h-screen flex flex-col bg-primary">
         <WebviewContextMenu />
 
         <main
           ref={mainContainerRef}
-          className="relative flex flex-1 flex-col h-full min-h-0"
+          className="agentos-workspaces-main relative flex flex-1 flex-col h-full min-h-0"
         >
           <ApprovalFeedbackProvider>
             <EntriesProvider
@@ -223,13 +223,14 @@ export function VSCodeWorkspacePage() {
                       <button
                         type="button"
                         onClick={() => handleScrollToBottom('auto')}
-                        className="absolute bottom-2 right-4 z-10 pointer-events-auto flex items-center justify-center size-8 rounded-full bg-secondary/80 backdrop-blur-sm border border-secondary text-low hover:text-normal hover:bg-secondary shadow-md transition-all"
-                        aria-label="Scroll to bottom"
-                        title="Scroll to bottom"
+                        className="absolute bottom-2 right-4 z-10 pointer-events-auto flex items-center justify-center size-8 rounded-full bg-secondary/80 backdrop-blur-sm border border-secondary text-low hover:text-normal hover:bg-secondary shadow-md transition-colors"
+                        aria-label={t('workspaceInspector.scrollToBottom')}
+                        title={t('workspaceInspector.scrollToBottom')}
                       >
                         <ArrowDownIcon
                           className="size-icon-base"
                           weight="bold"
+                          aria-hidden="true"
                         />
                       </button>
                     </div>

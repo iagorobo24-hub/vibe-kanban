@@ -44,7 +44,7 @@ function ToolbarIconButton({
   return (
     <button
       className={cn(
-        'flex items-center justify-center text-low hover:text-normal',
+        'agentos-toolbar-icon-button flex items-center justify-center text-low hover:text-normal',
         disabled && 'opacity-40 cursor-not-allowed hover:text-low',
         className
       )}

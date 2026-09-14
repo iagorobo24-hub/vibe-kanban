@@ -63,7 +63,7 @@ const DeleteRemoteProjectDialogImpl = create<DeleteRemoteProjectDialogProps>(
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {t('deleteProjectDialog.title', 'Delete Project?')}
+              {t('deleteProjectDialog.title')}
             </DialogTitle>
             <DialogDescription>
               {t(
@@ -86,7 +86,7 @@ const DeleteRemoteProjectDialogImpl = create<DeleteRemoteProjectDialogProps>(
               onClick={handleCancel}
               disabled={isDeleting}
             >
-              {t('common:buttons.cancel', 'Cancel')}
+              {t('common:buttons.cancel')}
             </Button>
             <Button
               variant="destructive"
@@ -94,7 +94,7 @@ const DeleteRemoteProjectDialogImpl = create<DeleteRemoteProjectDialogProps>(
               disabled={isDeleting}
             >
               {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t('common:buttons.delete', 'Delete')}
+              {t('common:buttons.delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -8,6 +8,8 @@ import {
   DialogTitle,
 } from '@vibe/ui/components/KeyboardDialog';
 import { Button } from '@vibe/ui/components/Button';
+import { Switch } from '@vibe/ui/components/Switch';
+import { cn } from '@vibe/ui/lib/cn';
 import { AlertTriangle, GitCommit, Loader2 } from 'lucide-react';
 import { create, useModal } from '@ebay/nice-modal-react';
 import { defineModal } from '@/shared/lib/modals';
@@ -39,6 +41,40 @@ export type RestoreLogsDialogResult = {
   performGitReset?: boolean;
   forceWhenDirty?: boolean;
 };
+
+function RestoreLogsToggle({
+  label,
+  checked,
+  onCheckedChange,
+  disabled = false,
+  destructive = false,
+}: {
+  label: string;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+  disabled?: boolean;
+  destructive?: boolean;
+}) {
+  return (
+    <div className="mt-2 w-full flex items-center select-none gap-2">
+      <span
+        className={cn(
+          'text-xs flex-1 min-w-0 break-words',
+          destructive ? 'font-medium text-destructive' : 'text-muted-foreground'
+        )}
+      >
+        {label}
+      </span>
+      <Switch
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        disabled={disabled}
+        aria-label={label}
+        className={destructive ? 'data-[state=checked]:bg-destructive' : ''}
+      />
+    </div>
+  );
+}
 
 const RestoreLogsDialogImpl = create<RestoreLogsDialogProps>(
   ({
@@ -304,36 +340,13 @@ const RestoreLogsDialogImpl = create<RestoreLogsDialogProps>(
                             )}
                           .
                         </p>
-                        <div
-                          className="mt-2 w-full flex items-center cursor-pointer select-none"
-                          role="switch"
-                          aria-checked={acknowledgeUncommitted}
-                          onClick={() => setAcknowledgeUncommitted((v) => !v)}
-                        >
-                          <div className="text-xs text-muted-foreground flex-1 min-w-0 break-words">
-                            {t(
-                              'restoreLogsDialog.uncommittedChanges.acknowledgeLabel'
-                            )}
-                          </div>
-                          <div className="ml-auto relative inline-flex h-5 w-9 items-center rounded-full">
-                            <span
-                              className={
-                                (acknowledgeUncommitted
-                                  ? 'bg-amber-500'
-                                  : 'bg-panel') +
-                                ' absolute inset-0 rounded-full transition-colors'
-                              }
-                            />
-                            <span
-                              className={
-                                (acknowledgeUncommitted
-                                  ? 'translate-x-5'
-                                  : 'translate-x-1') +
-                                ' pointer-events-none relative inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform'
-                              }
-                            />
-                          </div>
-                        </div>
+                        <RestoreLogsToggle
+                          label={t(
+                            'restoreLogsDialog.uncommittedChanges.acknowledgeLabel'
+                          )}
+                          checked={acknowledgeUncommitted}
+                          onCheckedChange={setAcknowledgeUncommitted}
+                        />
                       </div>
                     </div>
                   )}
@@ -362,36 +375,15 @@ const RestoreLogsDialogImpl = create<RestoreLogsDialogProps>(
                           {t('restoreLogsDialog.resetWorktree.title')}
                           {repoCount > 1 && ` (${repoCount} repos)`}
                         </p>
-                        <div
-                          className="mt-2 w-full flex items-center cursor-pointer select-none"
-                          role="switch"
-                          aria-checked={worktreeResetOn}
-                          onClick={() => setWorktreeResetOn((v) => !v)}
-                        >
-                          <div className="text-xs text-muted-foreground flex-1 min-w-0 break-words">
-                            {worktreeResetOn
+                        <RestoreLogsToggle
+                          label={
+                            worktreeResetOn
                               ? t('restoreLogsDialog.resetWorktree.enabled')
-                              : t('restoreLogsDialog.resetWorktree.disabled')}
-                          </div>
-                          <div className="ml-auto relative inline-flex h-5 w-9 items-center rounded-full">
-                            <span
-                              className={
-                                (worktreeResetOn
-                                  ? 'bg-emerald-500'
-                                  : 'bg-panel') +
-                                ' absolute inset-0 rounded-full transition-colors'
-                              }
-                            />
-                            <span
-                              className={
-                                (worktreeResetOn
-                                  ? 'translate-x-5'
-                                  : 'translate-x-1') +
-                                ' pointer-events-none relative inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform'
-                              }
-                            />
-                          </div>
-                        </div>
+                              : t('restoreLogsDialog.resetWorktree.disabled')
+                          }
+                          checked={worktreeResetOn}
+                          onCheckedChange={setWorktreeResetOn}
+                        />
                         {worktreeResetOn && (
                           <>
                             <p className="mt-2 text-xs text-muted-foreground">
@@ -459,76 +451,33 @@ const RestoreLogsDialogImpl = create<RestoreLogsDialogProps>(
                           {t('restoreLogsDialog.resetWorktree.title')}
                           {repoCount > 1 && ` (${repoCount} repos)`}
                         </p>
-                        <div
-                          className={`mt-2 w-full flex items-center select-none cursor-pointer`}
-                          role="switch"
-                          onClick={() => {
-                            setWorktreeResetOn((on) => {
-                              if (forceReset) return !on; // free toggle when forced
-                              // Without force, only allow explicitly disabling reset
-                              return false;
-                            });
-                          }}
-                        >
-                          <div className="text-xs text-muted-foreground flex-1 min-w-0 break-words">
-                            {forceReset
+                        <RestoreLogsToggle
+                          label={
+                            forceReset
                               ? worktreeResetOn
                                 ? t('restoreLogsDialog.resetWorktree.enabled')
                                 : t('restoreLogsDialog.resetWorktree.disabled')
                               : t(
                                   'restoreLogsDialog.resetWorktree.disabledUncommitted'
-                                )}
-                          </div>
-                          <div className="ml-auto relative inline-flex h-5 w-9 items-center rounded-full">
-                            <span
-                              className={
-                                (worktreeResetOn && forceReset
-                                  ? 'bg-emerald-500'
-                                  : 'bg-panel') +
-                                ' absolute inset-0 rounded-full transition-colors'
-                              }
-                            />
-                            <span
-                              className={
-                                (worktreeResetOn && forceReset
-                                  ? 'translate-x-5'
-                                  : 'translate-x-1') +
-                                ' pointer-events-none relative inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform'
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div
-                          className="mt-2 w-full flex items-center cursor-pointer select-none"
-                          role="switch"
-                          onClick={() => {
-                            setForceReset((v) => {
-                              const next = !v;
-                              if (next) setWorktreeResetOn(true);
-                              return next;
-                            });
+                                )
+                          }
+                          checked={worktreeResetOn && forceReset}
+                          disabled={!forceReset}
+                          onCheckedChange={(checked) =>
+                            setWorktreeResetOn(checked)
+                          }
+                        />
+                        <RestoreLogsToggle
+                          label={t(
+                            'restoreLogsDialog.resetWorktree.forceReset'
+                          )}
+                          checked={forceReset}
+                          destructive
+                          onCheckedChange={(checked) => {
+                            setForceReset(checked);
+                            if (checked) setWorktreeResetOn(true);
                           }}
-                        >
-                          <div className="text-xs font-medium text-destructive flex-1 min-w-0 break-words">
-                            {t('restoreLogsDialog.resetWorktree.forceReset')}
-                          </div>
-                          <div className="ml-auto relative inline-flex h-5 w-9 items-center rounded-full">
-                            <span
-                              className={
-                                (forceReset ? 'bg-destructive' : 'bg-panel') +
-                                ' absolute inset-0 rounded-full transition-colors'
-                              }
-                            />
-                            <span
-                              className={
-                                (forceReset
-                                  ? 'translate-x-5'
-                                  : 'translate-x-1') +
-                                ' pointer-events-none relative inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform'
-                              }
-                            />
-                          </div>
-                        </div>
+                        />
                         <p className="mt-2 text-xs text-muted-foreground">
                           {forceReset
                             ? t(

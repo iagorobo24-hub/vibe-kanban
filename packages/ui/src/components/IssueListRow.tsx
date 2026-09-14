@@ -13,6 +13,7 @@ import {
   type RelationshipDisplayType,
 } from './RelationshipBadge';
 import { Checkbox } from './Checkbox';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Formats a date as a relative time string (e.g., "1d", "2h", "3m")
@@ -88,6 +89,7 @@ export function IssueListRow({
   onCheckboxChange,
   className,
 }: IssueListRowProps) {
+  const { t } = useTranslation('common');
   const showCheckbox = isMultiSelectActive || isChecked;
   const visibleTags = tags.slice(0, MAX_VISIBLE_TAGS);
 
@@ -97,15 +99,6 @@ export function IssueListRow({
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          role="button"
-          tabIndex={0}
-          onClick={onClick}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onClick(e as unknown as MouseEvent);
-            }
-          }}
           className={cn(
             'group/row flex items-center justify-between gap-double px-double py-half',
             'transition-colors',
@@ -122,14 +115,17 @@ export function IssueListRow({
               <div
                 {...provided.dragHandleProps}
                 className={cn(
-                  'cursor-grab',
-                  showCheckbox ? 'hidden' : 'flex group-hover/row:hidden'
+                  'cursor-grab rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand',
+                  showCheckbox ? 'hidden' : 'flex'
                 )}
                 onClick={(e) => e.stopPropagation()}
+                aria-label={`${t('kanban.dragToRearrange')}: ${issue.simple_id}`}
+                title={`${t('kanban.dragToRearrange')}: ${issue.simple_id}`}
               >
                 <DotsSixVerticalIcon
                   className="size-icon-xs text-low"
                   weight="bold"
+                  aria-hidden="true"
                 />
               </div>
               {/* Checkbox — shown on hover or when multi-select active */}
@@ -148,12 +144,21 @@ export function IssueListRow({
                 />
               </div>
             </div>
-            <PriorityIcon priority={issue.priority} />
-            <span className="font-ibm-plex-mono text-sm text-normal shrink-0">
-              {issue.simple_id}
-            </span>
-            <StatusDot color={statusColor} />
-            <span className="text-base text-high truncate">{issue.title}</span>
+            <button
+              type="button"
+              className="flex min-w-0 flex-1 items-center gap-double border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+              onClick={onClick}
+              aria-label={`${issue.simple_id}: ${issue.title}`}
+            >
+              <PriorityIcon priority={issue.priority} />
+              <span className="font-ibm-plex-mono text-sm text-normal shrink-0">
+                {issue.simple_id}
+              </span>
+              <StatusDot color={statusColor} />
+              <span className="text-base text-high truncate">
+                {issue.title}
+              </span>
+            </button>
           </div>
 
           {/* Right side: Tags, Assignee, Age */}

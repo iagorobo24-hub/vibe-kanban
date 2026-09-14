@@ -17,6 +17,7 @@ export const ExecutionProcessesProvider: React.FC<{
     isLoading,
     isConnected,
     error,
+    retry,
   } = useExecutionProcesses(sessionId, { showSoftDeleted: true });
 
   const visible = useMemo(() => {
@@ -52,6 +53,7 @@ export const ExecutionProcessesProvider: React.FC<{
       isLoading,
       isConnected,
       error,
+      retry,
     }),
     [
       executionProcesses,
@@ -63,6 +65,7 @@ export const ExecutionProcessesProvider: React.FC<{
       isLoading,
       isConnected,
       error,
+      retry,
     ]
   );
 

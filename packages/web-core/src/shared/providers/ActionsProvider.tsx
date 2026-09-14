@@ -5,6 +5,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import type { Workspace } from 'shared/types';
@@ -24,6 +25,7 @@ import {
   ActionTargetType,
   resolveLabel,
   getActionLabel,
+  getActionTranslationKey,
 } from '@/shared/types/actions';
 import { useWorkspaceContext } from '@/shared/hooks/useWorkspaceContext';
 import { UserContext } from '@/shared/hooks/useUserContext';
@@ -40,6 +42,7 @@ interface ActionsProviderProps {
 }
 
 export function ActionsProvider({ children }: ActionsProviderProps) {
+  const { t } = useTranslation('common');
   const appRuntime = useAppRuntime();
   const appNavigation = useAppNavigation();
   const { projectId } = useParams({ strict: false });
@@ -329,11 +332,23 @@ export function ActionsProvider({ children }: ActionsProviderProps) {
       ctx?: ActionVisibilityContext
     ) => {
       if (ctx) {
-        return getActionLabel(action, ctx, workspace);
+        const label = getActionLabel(action, ctx, workspace);
+        const translationKey = getActionTranslationKey(action, ctx, workspace);
+        return translationKey
+          ? t(translationKey, { defaultValue: label })
+          : label;
       }
-      return resolveLabel(action, workspace);
+      const label = resolveLabel(action, workspace);
+      const translationKey = getActionTranslationKey(
+        action,
+        undefined,
+        workspace
+      );
+      return translationKey
+        ? t(translationKey, { defaultValue: label })
+        : label;
     },
-    []
+    [t]
   );
 
   const value = useMemo(

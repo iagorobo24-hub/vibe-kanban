@@ -4,6 +4,7 @@ import { useJsonPatchWsStream } from '@/shared/hooks/useJsonPatchWsStream';
 import { workspaceSummaryKeys } from '@/shared/hooks/workspaceSummaryKeys';
 import { makeLocalApiRequest } from '@/shared/lib/localApiTransport';
 import { useHostId } from '@/shared/providers/HostIdProvider';
+import { isAgentOSQaFixtureEnabled } from '@/shared/lib/agentOSQaFixtures';
 import type {
   WorkspaceWithStatus,
   WorkspaceSummary,
@@ -44,6 +45,7 @@ export interface UseWorkspacesResult {
   isLoading: boolean;
   isConnected: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 // State shape from the WebSocket stream
@@ -129,6 +131,9 @@ async function fetchWorkspaceSummariesByArchived(
 
 export function useWorkspaces(): UseWorkspacesResult {
   const hostId = useHostId();
+  // Development-only fixture for reproducing a degraded workspace stream.
+  // It never opens a socket or runs in a production build.
+  const streamErrorFixture = isAgentOSQaFixtureEnabled('stream-error');
 
   // Two separate WebSocket connections: one for active, one for archived
   // No limit param - we fetch all and slice on frontend so backfill works when archiving
@@ -146,16 +151,22 @@ export function useWorkspaces(): UseWorkspacesResult {
     isConnected: activeIsConnected,
     isInitialized: activeIsInitialized,
     error: activeError,
-  } = useJsonPatchWsStream<WorkspacesState>(activeEndpoint, true, initialData);
+    retry: retryActive,
+  } = useJsonPatchWsStream<WorkspacesState>(
+    activeEndpoint,
+    !streamErrorFixture,
+    initialData
+  );
 
   const {
     data: archivedData,
     isConnected: archivedIsConnected,
     isInitialized: archivedIsInitialized,
     error: archivedError,
+    retry: retryArchived,
   } = useJsonPatchWsStream<WorkspacesState>(
     archivedEndpoint,
-    true,
+    !streamErrorFixture,
     initialData
   );
 
@@ -165,7 +176,7 @@ export function useWorkspaces(): UseWorkspacesResult {
     useQuery({
       queryKey: workspaceSummaryKeys.byArchived(false, hostId),
       queryFn: () => fetchWorkspaceSummariesByArchived(false, hostId),
-      enabled: activeIsInitialized,
+      enabled: activeIsInitialized && !streamErrorFixture,
       staleTime: 1000,
       refetchInterval: 15000,
       refetchOnWindowFocus: false,
@@ -178,7 +189,7 @@ export function useWorkspaces(): UseWorkspacesResult {
     useQuery({
       queryKey: workspaceSummaryKeys.byArchived(true, hostId),
       queryFn: () => fetchWorkspaceSummariesByArchived(true, hostId),
-      enabled: archivedIsInitialized,
+      enabled: archivedIsInitialized && !streamErrorFixture,
       staleTime: 1000,
       refetchInterval: 15000,
       refetchOnWindowFocus: false,
@@ -226,6 +237,23 @@ export function useWorkspaces(): UseWorkspacesResult {
 
   // Combined error (show first error if any)
   const error = activeError || archivedError;
+  const retry = useCallback(() => {
+    retryActive();
+    retryArchived();
+  }, [retryActive, retryArchived]);
+
+  if (streamErrorFixture) {
+    return {
+      workspaces: [],
+      archivedWorkspaces: [],
+      isLoading: false,
+      // Keep the transport flag true so the fixture exercises the UI's
+      // error precedence: a stream error must still render as degraded.
+      isConnected: true,
+      error: 'QA fixture: workspace stream unavailable',
+      retry,
+    };
+  }
 
   return {
     workspaces,
@@ -233,5 +261,6 @@ export function useWorkspaces(): UseWorkspacesResult {
     isLoading,
     isConnected,
     error,
+    retry,
   };
 }

@@ -56,15 +56,15 @@ type PendingAction = 'choose' | 'browse' | 'create' | 'branch' | null;
 
 const inlineControlButtonClassName =
   'inline-flex items-center gap-half rounded-sm px-half py-half text-sm text-normal ' +
-  'hover:text-high disabled:cursor-not-allowed disabled:opacity-50';
+  'hover:text-high focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50';
 
 const recentInlineControlButtonClassName =
   'inline-flex items-center gap-half rounded-sm px-half py-half text-sm ' +
-  'disabled:cursor-not-allowed disabled:opacity-50';
+  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50';
 
 const repoRowButtonClassName =
   'inline-flex items-center gap-half text-sm text-low hover:text-high ' +
-  'disabled:cursor-not-allowed disabled:opacity-50';
+  'rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50';
 
 interface CreateModeRepoPickerBarProps {
   onContinueToPrompt: () => void;
@@ -134,7 +134,9 @@ export function CreateModeRepoPickerBar({
   const addRepoWithBranchSelection = useCallback(
     async (repo: Repo) => {
       if (selectedRepoIds.has(repo.id)) {
-        setPickerError('Repository is already selected');
+        setPickerError(
+          t('createMode.repoPicker.errors.repositoryAlreadySelected')
+        );
         return false;
       }
 
@@ -145,7 +147,7 @@ export function CreateModeRepoPickerBar({
       setTargetBranch(repo.id, selectedBranch);
       return true;
     },
-    [addRepo, pickBranchForRepo, selectedRepoIds, setTargetBranch]
+    [addRepo, pickBranchForRepo, selectedRepoIds, setTargetBranch, t]
   );
 
   const handleChooseRepo = useCallback(async () => {
@@ -159,7 +161,7 @@ export function CreateModeRepoPickerBar({
 
         if (availableRepos.length === 0) {
           setPickerError(
-            'No recently used repositories found, please browse repositories instead'
+            t('createMode.repoPicker.errors.noRecentRepositories')
           );
           return;
         }
@@ -180,9 +182,9 @@ export function CreateModeRepoPickerBar({
 
         await addRepoWithBranchSelection(selectedRepo);
       },
-      'Failed to load repositories or branches'
+      t('createMode.repoPicker.errors.loadRepositories')
     );
-  }, [addRepoWithBranchSelection, runPickerAction, selectedRepoIds]);
+  }, [addRepoWithBranchSelection, runPickerAction, selectedRepoIds, t]);
 
   const handleBrowseRepo = useCallback(async () => {
     await runPickerAction(
@@ -198,7 +200,7 @@ export function CreateModeRepoPickerBar({
         queryClient.invalidateQueries({ queryKey: ['repos'] });
         await addRepoWithBranchSelection(repo);
       },
-      'Failed to register repository'
+      t('createMode.repoPicker.errors.registerRepository')
     );
   }, [addRepoWithBranchSelection, runPickerAction, t]);
 
@@ -223,7 +225,7 @@ export function CreateModeRepoPickerBar({
           },
         });
       },
-      'Failed to create repository'
+      t('createMode.repoPicker.errors.createRepository')
     );
   }, [addRepoWithBranchSelection, runPickerAction, t]);
 
@@ -237,20 +239,22 @@ export function CreateModeRepoPickerBar({
           if (!selectedBranch) return;
           setTargetBranch(repo.id, selectedBranch);
         },
-        'Failed to load branches'
+        t('createMode.repoPicker.errors.loadBranches')
       );
     },
-    [pickBranchForRepo, runPickerAction, setTargetBranch]
+    [pickBranchForRepo, runPickerAction, setTargetBranch, t]
   );
 
   return (
-    <div className="w-chat max-w-full">
+    <div className="agentos-create-workspace__repo-picker w-chat max-w-full">
       <div className="px-plusfifty py-base">
         {repos.length > 0 && (
           <div>
-            <div className="rounded-sm border border-border/60">
+            <div className="agentos-create-workspace__repo-list rounded-sm border border-border/60">
               {repos.map((repo, index) => {
-                const branch = targetBranches[repo.id] ?? 'Select branch';
+                const branch =
+                  targetBranches[repo.id] ??
+                  t('createMode.repoSummary.selectBranch');
                 const repoDisplayName = getRepoDisplayName(repo);
                 const isChangingBranch =
                   pendingAction === 'branch' && branchRepoId === repo.id;
@@ -259,7 +263,7 @@ export function CreateModeRepoPickerBar({
                   <div
                     key={repo.id}
                     className={cn(
-                      'flex min-w-0 items-center gap-half px-base py-half',
+                      'agentos-create-workspace__repo-row flex min-w-0 items-center gap-half px-base py-half',
                       index > 0 && 'border-t border-border/60'
                     )}
                   >
@@ -272,12 +276,19 @@ export function CreateModeRepoPickerBar({
                       onClick={() => handleChangeBranch(repo)}
                       disabled={isBusy}
                       className={repoRowButtonClassName}
-                      title="Change branch"
+                      title={t('createMode.repoPicker.changeBranch')}
                     >
                       {isChangingBranch ? (
-                        <SpinnerIcon className="size-icon-xs animate-spin" />
+                        <SpinnerIcon
+                          className="size-icon-xs animate-spin"
+                          aria-hidden="true"
+                        />
                       ) : (
-                        <GitBranchIcon className="size-icon-xs" weight="bold" />
+                        <GitBranchIcon
+                          className="size-icon-xs"
+                          weight="bold"
+                          aria-hidden="true"
+                        />
                       )}
                       <span className="max-w-[200px] truncate">{branch}</span>
                     </button>
@@ -286,11 +297,19 @@ export function CreateModeRepoPickerBar({
                       type="button"
                       onClick={() => removeRepo(repo.id)}
                       disabled={isBusy}
-                      aria-label={`Remove ${repoDisplayName}`}
-                      title={`Remove ${repoDisplayName}`}
+                      aria-label={t('createMode.repoPicker.removeRepository', {
+                        repository: repoDisplayName,
+                      })}
+                      title={t('createMode.repoPicker.removeRepository', {
+                        repository: repoDisplayName,
+                      })}
                       className={cn(repoRowButtonClassName, 'hover:text-error')}
                     >
-                      <XIcon className="size-icon-xs" weight="bold" />
+                      <XIcon
+                        className="size-icon-xs"
+                        weight="bold"
+                        aria-hidden="true"
+                      />
                     </button>
                   </div>
                 );
@@ -299,7 +318,7 @@ export function CreateModeRepoPickerBar({
           </div>
         )}
 
-        <div className="mt-base flex flex-wrap items-center gap-half">
+        <div className="agentos-create-workspace__repo-actions mt-base flex flex-wrap items-center gap-half">
           <button
             type="button"
             onClick={handleChooseRepo}
@@ -312,11 +331,15 @@ export function CreateModeRepoPickerBar({
             )}
           >
             {pendingAction === 'choose' ? (
-              <SpinnerIcon className="size-icon-xs animate-spin" />
+              <SpinnerIcon
+                className="size-icon-xs animate-spin"
+                aria-hidden="true"
+              />
             ) : (
               <ClockCounterClockwiseIcon
                 className="size-icon-xs"
                 weight="bold"
+                aria-hidden="true"
               />
             )}
             <span>{t('createMode.repoPicker.actions.recent')}</span>
@@ -328,9 +351,16 @@ export function CreateModeRepoPickerBar({
             className={inlineControlButtonClassName}
           >
             {pendingAction === 'browse' ? (
-              <SpinnerIcon className="size-icon-xs animate-spin" />
+              <SpinnerIcon
+                className="size-icon-xs animate-spin"
+                aria-hidden="true"
+              />
             ) : (
-              <MagnifyingGlassIcon className="size-icon-xs" weight="bold" />
+              <MagnifyingGlassIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             )}
             <span>{t('createMode.repoPicker.actions.browse')}</span>
           </button>
@@ -341,9 +371,16 @@ export function CreateModeRepoPickerBar({
             className={inlineControlButtonClassName}
           >
             {pendingAction === 'create' ? (
-              <SpinnerIcon className="size-icon-xs animate-spin" />
+              <SpinnerIcon
+                className="size-icon-xs animate-spin"
+                aria-hidden="true"
+              />
             ) : (
-              <PlusIcon className="size-icon-xs" weight="bold" />
+              <PlusIcon
+                className="size-icon-xs"
+                weight="bold"
+                aria-hidden="true"
+              />
             )}
             <span>{t('createMode.repoPicker.actions.create')}</span>
           </button>
@@ -351,15 +388,16 @@ export function CreateModeRepoPickerBar({
           <div className="ml-auto">
             <PrimaryButton
               variant="default"
-              value="Continue"
+              value={t('createMode.repoPicker.continue')}
               onClick={onContinueToPrompt}
               disabled={isBusy || repos.length === 0}
+              className="agentos-create-workspace__continue"
             />
           </div>
         </div>
       </div>
       {showSetupHint && (
-        <div className="mx-plusfifty mt-half flex items-start gap-half rounded-sm border border-brand/20 bg-brand/5 px-base py-base">
+        <div className="agentos-create-workspace__setup-hint mx-plusfifty mt-half flex items-start gap-half rounded-sm border border-brand/20 bg-brand/5 px-base py-base">
           <div className="flex-1">
             <p className="text-sm font-medium text-normal">
               {t('createMode.repoPicker.setupHintTitle')}
@@ -369,7 +407,7 @@ export function CreateModeRepoPickerBar({
             </p>
             <button
               type="button"
-              className="mt-quarter cursor-pointer text-sm font-medium text-brand underline hover:text-brand/80"
+              className="mt-quarter cursor-pointer rounded-sm text-sm font-medium text-brand underline hover:text-brand/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               onClick={() => {
                 const unconfiguredRepo = repos.find(
                   (repo) => !repo.setup_script
@@ -386,15 +424,15 @@ export function CreateModeRepoPickerBar({
           <button
             type="button"
             onClick={() => setSetupHintDismissed(true)}
-            className="shrink-0 text-low hover:text-normal"
+            className="shrink-0 rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             aria-label={t('createMode.repoPicker.setupHintDismiss')}
           >
-            <XIcon className="size-icon-2xs" weight="bold" />
+            <XIcon className="size-icon-2xs" weight="bold" aria-hidden="true" />
           </button>
         </div>
       )}
       {pickerError && (
-        <div className="mt-half rounded-sm border border-error/30 bg-error/10 px-base py-half">
+        <div className="agentos-create-workspace__picker-error mt-half rounded-sm border border-error/30 bg-error/10 px-base py-half">
           <p className="text-xs text-error">{pickerError}</p>
         </div>
       )}

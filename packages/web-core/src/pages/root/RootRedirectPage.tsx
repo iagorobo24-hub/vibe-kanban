@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUserSystem } from '@/shared/hooks/useUserSystem';
 import { getFirstProjectDestination } from '@/shared/lib/firstProjectDestination';
 import { useOrganizationStore } from '@/shared/stores/useOrganizationStore';
@@ -6,7 +7,8 @@ import { useUiPreferencesStore } from '@/shared/stores/useUiPreferencesStore';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
 
 export function RootRedirectPage() {
-  const { config, loading, loginStatus } = useUserSystem();
+  const { t } = useTranslation('common');
+  const { config, loading, loginStatus, remoteAuthDegraded } = useUserSystem();
   const setSelectedOrgId = useOrganizationStore((s) => s.setSelectedOrgId);
   const appNavigation = useAppNavigation();
 
@@ -24,6 +26,15 @@ export function RootRedirectPage() {
 
       if (loginStatus?.status !== 'loggedin') {
         appNavigation.goToWorkspacesCreate({ replace: true });
+        return;
+      }
+
+      // AgentOS is local-first: a degraded remote plane must never block the
+      // root redirect while waiting for organizations/projects that cannot be
+      // reached. The dashboard remains the operational entry point and lets
+      // the user continue with local workspaces.
+      if (remoteAuthDegraded) {
+        appNavigation.goToWorkspaces({ replace: true });
         return;
       }
 
@@ -52,11 +63,18 @@ export function RootRedirectPage() {
     return () => {
       isActive = false;
     };
-  }, [appNavigation, config, loading, loginStatus?.status, setSelectedOrgId]);
+  }, [
+    appNavigation,
+    config,
+    loading,
+    loginStatus?.status,
+    remoteAuthDegraded,
+    setSelectedOrgId,
+  ]);
 
   return (
     <div className="h-screen bg-primary flex items-center justify-center">
-      <p className="text-low">Loading...</p>
+      <p className="text-low">{t('states.loading')}</p>
     </div>
   );
 }

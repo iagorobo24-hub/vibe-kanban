@@ -90,9 +90,11 @@ const ScriptFixerDialogImpl = create<ScriptFixerDialogProps>(
     }, [executionProcesses, scriptType]);
 
     // Stream logs for the latest process
-    const { logs: rawLogs, error: logsError } = useLogStream(
-      latestProcess?.id ?? ''
-    );
+    const {
+      logs: rawLogs,
+      error: logsError,
+      retry: retryLogs,
+    } = useLogStream(latestProcess?.id ?? '');
     const logs: LogEntry[] = rawLogs.filter(
       (l): l is LogEntry => l.type === 'STDOUT' || l.type === 'STDERR'
     );
@@ -385,6 +387,7 @@ const ScriptFixerDialogImpl = create<ScriptFixerDialogProps>(
                     searchQuery=""
                     matchIndices={[]}
                     currentMatchIndex={-1}
+                    onRetry={retryLogs}
                   />
                 ) : (
                   <div className="h-full flex items-center justify-center text-muted-foreground text-sm">

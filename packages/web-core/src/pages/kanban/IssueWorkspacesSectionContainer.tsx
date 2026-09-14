@@ -292,10 +292,12 @@ export function IssueWorkspacesSectionContainer({
       {
         icon: PlusIcon,
         onClick: handleAddWorkspace,
+        label: 'Add workspace',
       },
       {
         icon: LinkIcon,
         onClick: handleLinkWorkspace,
+        label: 'Link workspace',
       },
     ],
     [handleAddWorkspace, handleLinkWorkspace]

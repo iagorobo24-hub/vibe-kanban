@@ -32,7 +32,12 @@ import {
   bulkUpdateIssues,
   type BulkUpdateIssueItem,
 } from '@/shared/lib/remoteApi';
-import { PlusIcon, DotsThreeIcon } from '@phosphor-icons/react';
+import {
+  ArrowClockwiseIcon,
+  DotsThreeIcon,
+  PlusIcon,
+  WarningCircleIcon,
+} from '@phosphor-icons/react';
 import { Actions } from '@/shared/actions';
 import {
   buildKanbanIssueComposerKey,
@@ -73,6 +78,8 @@ import type { IssuePriority } from 'shared/remote-types';
 import { useIssueMultiSelect } from '@/shared/hooks/useIssueMultiSelect';
 import { useIssueSelectionStore } from '@/shared/stores/useIssueSelectionStore';
 import { BulkActionBarContainer } from './BulkActionBarContainer';
+import { PrimaryButton } from '@vibe/ui/components/PrimaryButton';
+import { deriveKanbanStreamState } from './kanbanStreamState';
 
 const areStringSetsEqual = (left: string[], right: string[]): boolean => {
   if (left.length !== right.length) {
@@ -148,12 +155,16 @@ export function KanbanContainer() {
     insertTag,
     pullRequests,
     isLoading: projectLoading,
+    error: projectError,
+    retry: retryProject,
   } = useProjectContext();
 
   const {
     projects,
     membersWithProfilesById,
     isLoading: orgLoading,
+    error: orgError,
+    retry: retryOrg,
   } = useOrgContext();
   const { activeWorkspaces } = useWorkspaceContext();
   const { userId } = useAuth();
@@ -888,21 +899,34 @@ export function KanbanContainer() {
   );
 
   const isLoading = projectLoading || orgLoading;
+  const streamState = deriveKanbanStreamState({
+    isLoading,
+    hasError: Boolean(projectError || orgError),
+  });
+  const retryStreams = useCallback(() => {
+    retryProject();
+    retryOrg();
+  }, [retryOrg, retryProject]);
 
   if (isLoading) {
     return <LoadingState />;
   }
 
   return (
-    <div className="flex flex-col h-full space-y-base">
+    <div className="agentos-project-board__content flex flex-col h-full space-y-base">
       <div
         className={cn(
-          'px-double pt-double space-y-base',
+          'agentos-project-board__header px-double pt-double space-y-base',
           isMobile && 'px-base pt-base'
         )}
       >
         <div className="flex items-center gap-half">
-          <h2 className={cn('text-2xl font-medium', isMobile && 'text-lg')}>
+          <h2
+            className={cn(
+              'agentos-project-board__title text-2xl font-medium',
+              isMobile && 'text-lg'
+            )}
+          >
             {projectName}
           </h2>
 
@@ -910,20 +934,25 @@ export function KanbanContainer() {
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
-                aria-label="Project menu"
+                className="agentos-project-board__menu-button rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                aria-label={t('accessibility.projectMenu')}
+                data-agentos-control="project-menu"
               >
-                <DotsThreeIcon className="size-icon-sm" weight="bold" />
+                <DotsThreeIcon
+                  className="size-icon-sm"
+                  weight="bold"
+                  aria-hidden="true"
+                />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={openProjectsGuide}>
-                {t('kanban.openProjectsGuide', 'Projects guide')}
+                {t('kanban.openProjectsGuide')}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => executeAction(Actions.ProjectSettings)}
               >
-                {t('kanban.editProjectSettings', 'Edit project settings')}
+                {t('kanban.editProjectSettings')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -931,7 +960,7 @@ export function KanbanContainer() {
 
         <div
           className={cn(
-            'flex items-start gap-base',
+            'agentos-project-board__controls flex items-start gap-base',
             isMobile ? 'flex-col' : 'flex-wrap'
           )}
         >
@@ -974,13 +1003,40 @@ export function KanbanContainer() {
         </div>
       </div>
 
+      {streamState === 'unavailable' && (
+        <div
+          className={cn(
+            'mx-double flex items-center justify-between gap-base rounded-sm border border-warning/30 bg-warning/10 px-base py-half text-sm text-warning',
+            isMobile && 'mx-base flex-col items-start'
+          )}
+          role="alert"
+        >
+          <div className="flex min-w-0 items-center gap-half">
+            <WarningCircleIcon
+              className="size-icon-sm shrink-0"
+              weight="fill"
+              aria-hidden="true"
+            />
+            <span>{t('kanban.boardDataUnavailable.description')}</span>
+          </div>
+          <PrimaryButton
+            variant="tertiary"
+            actionIcon={ArrowClockwiseIcon}
+            onClick={retryStreams}
+            className="shrink-0"
+          >
+            {t('kanban.boardDataUnavailable.retry')}
+          </PrimaryButton>
+        </div>
+      )}
+
       {kanbanViewMode === 'kanban' ? (
         visibleStatuses.length === 0 ? (
           <div className="flex-1 flex items-center justify-center">
             <p className="text-low">{t('kanban.noVisibleStatuses')}</p>
           </div>
         ) : (
-          <div className="flex-1 overflow-x-auto px-double">
+          <div className="agentos-kanban-scroll flex-1 overflow-x-auto px-double">
             <KanbanProvider onDragEnd={handleDragEnd}>
               {visibleStatuses.map((status) => {
                 const issueIds = items[status.id] ?? [];
@@ -988,21 +1044,26 @@ export function KanbanContainer() {
                 return (
                   <KanbanBoard key={status.id}>
                     <KanbanHeader>
-                      <div className="border-t sticky border-b top-0 z-20 flex shrink-0 items-center justify-between gap-2 p-base bg-secondary">
+                      <div className="agentos-kanban-column__header border-t sticky border-b top-0 z-20 flex shrink-0 items-center justify-between gap-2 p-base bg-secondary">
                         <div className="flex items-center gap-2">
                           <div
                             className="h-2 w-2 rounded-full shrink-0"
                             style={{ backgroundColor: `hsl(${status.color})` }}
+                            aria-hidden="true"
                           />
                           <p className="m-0 text-sm">{status.name}</p>
                         </div>
                         <button
                           type="button"
                           onClick={() => handleAddTask(status.id)}
-                          className="p-half rounded-sm text-low hover:text-normal hover:bg-secondary transition-colors"
-                          aria-label="Add task"
+                          className="agentos-kanban-column__add rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                          aria-label={t('accessibility.addTask')}
                         >
-                          <PlusIcon className="size-icon-xs" weight="bold" />
+                          <PlusIcon
+                            className="size-icon-xs"
+                            weight="bold"
+                            aria-hidden="true"
+                          />
                         </button>
                       </div>
                     </KanbanHeader>
@@ -1035,6 +1096,7 @@ export function KanbanContainer() {
                             index={index}
                             className="group"
                             onClick={(e) => handleCardClick(issue.id, e)}
+                            onActivate={() => handleCardClick(issue.id)}
                             isOpen={selectedKanbanIssueId === issue.id}
                             isMobile={isMobile}
                             isSelected={selectedIssueIds.has(issue.id)}
@@ -1043,6 +1105,11 @@ export function KanbanContainer() {
                             <KanbanCardContent
                               displayId={issue.simple_id}
                               title={issue.title}
+                              onTitleClick={
+                                isMobile
+                                  ? (event) => handleCardClick(issue.id, event)
+                                  : undefined
+                              }
                               description={issue.description}
                               priority={issue.priority}
                               tags={getTagObjectsForIssue(issue.id)}
@@ -1126,7 +1193,7 @@ export function KanbanContainer() {
           </div>
         )
       ) : (
-        <div className="flex-1 overflow-y-auto px-double">
+        <div className="agentos-issue-list-scroll flex-1 overflow-y-auto px-double">
           <KanbanProvider onDragEnd={handleDragEnd} className="!block !w-full">
             <IssueListView
               statuses={listViewStatuses}

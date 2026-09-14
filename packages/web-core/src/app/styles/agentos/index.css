@@ -1,0 +1,2365 @@
+:root {
+  --agentos-bg: #1d1c1a;
+  --agentos-panel: #242321;
+  --agentos-panel-raised: #2b2926;
+  --agentos-border: #3a3732;
+  --agentos-border-strong: #514a43;
+  --agentos-text: #f3eee6;
+  --agentos-text-muted: #b7afa4;
+  --agentos-text-subtle: #81796f;
+  --agentos-accent: #e08b61;
+  --agentos-accent-strong: #ef9a6d;
+  --agentos-success: #91c49b;
+  --agentos-warning: #e4b36c;
+  --agentos-danger: #dd8d82;
+  --agentos-info: #9bb9d9;
+  --agentos-radius-sm: 6px;
+  --agentos-radius-md: 10px;
+  --agentos-shadow: 0 18px 60px rgb(0 0 0 / 22%);
+}
+
+.agentos-theme {
+  color-scheme: dark;
+  color: var(--agentos-text);
+  background: var(--agentos-bg);
+  -webkit-tap-highlight-color: rgb(224 139 97 / 18%);
+}
+
+.agentos-theme.agentos-shell {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-cloud-shutdown-banner {
+  background-color: rgb(228 179 108 / 15%);
+  border-color: rgb(228 179 108 / 28%);
+  color: var(--agentos-warning);
+}
+
+.agentos-theme .agentos-cloud-shutdown-banner:hover {
+  background-color: rgb(228 179 108 / 22%);
+}
+
+.agentos-theme .agentos-app-bar {
+  background-color: #211f1d;
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-app-bar__brand {
+  color: var(--agentos-text-subtle);
+  margin-bottom: 0.25rem;
+}
+
+.agentos-theme .agentos-app-bar__brand-mark {
+  background: linear-gradient(
+    145deg,
+    var(--agentos-accent-strong),
+    var(--agentos-accent)
+  );
+  box-shadow: 0 5px 14px rgb(224 139 97 / 18%);
+  color: #241c18;
+}
+
+.agentos-theme .agentos-app-bar__brand-name {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-brand-wordmark {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-brand-wordmark__mark {
+  flex: 0 0 auto;
+  background: linear-gradient(
+    145deg,
+    var(--agentos-accent-strong),
+    var(--agentos-accent)
+  );
+  box-shadow: 0 5px 14px rgb(224 139 97 / 18%);
+  color: #241c18;
+}
+
+.agentos-theme .agentos-brand-wordmark__name {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-app-bar__label {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-app-bar__item {
+  background-color: #292724;
+  border: 1px solid transparent;
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-app-bar__item:hover:not(:disabled) {
+  background-color: #35312d;
+  border-color: #514a43;
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-app-bar__item--active {
+  background-color: rgb(224 139 97 / 16%);
+  border-color: rgb(224 139 97 / 34%);
+  color: var(--agentos-accent);
+}
+
+.agentos-theme .agentos-app-bar__item--active:hover:not(:disabled) {
+  background-color: rgb(224 139 97 / 22%);
+}
+
+.agentos-theme .agentos-app-bar__item--unpaired {
+  color: var(--agentos-warning);
+}
+
+.agentos-theme .agentos-app-bar__item--offline {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-navbar {
+  background-color: #211f1d;
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-navbar__icon-button {
+  min-height: 32px;
+  min-width: 32px;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-navbar__icon-button:hover:not(:disabled),
+.agentos-theme .agentos-navbar__icon-button--active {
+  background-color: var(--agentos-panel-raised);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-mobile-drawer {
+  background-color: var(--agentos-panel);
+  border-right: 1px solid var(--agentos-border);
+  color: var(--agentos-text);
+  overscroll-behavior: contain;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.agentos-theme .agentos-mobile-drawer__backdrop {
+  background-color: rgb(10 9 8 / 68%);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.agentos-theme .agentos-mobile-drawer__header,
+.agentos-theme .agentos-mobile-drawer__footer {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-mobile-drawer__close {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+  width: 32px;
+}
+
+.agentos-theme .agentos-mobile-drawer__close:hover {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border-strong);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-mobile-drawer__item {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  min-height: 40px;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-mobile-drawer__item:hover {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-mobile-drawer__item--active {
+  background-color: rgb(224 139 97 / 12%);
+  border-color: rgb(224 139 97 / 26%);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-mobile-drawer__item--active:hover {
+  background-color: rgb(224 139 97 / 18%);
+  border-color: rgb(224 139 97 / 38%);
+}
+
+.agentos-theme .agentos-mobile-drawer__divider {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-mobile-drawer__label {
+  color: var(--agentos-text-subtle);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.agentos-theme .agentos-mobile-drawer__empty {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-project-surface,
+.agentos-theme .agentos-project-board {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-project-board__content {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-project-board__header {
+  background: linear-gradient(180deg, rgb(36 35 33 / 72%), rgb(29 28 26 / 0%));
+}
+
+.agentos-theme .agentos-project-board__title {
+  color: var(--agentos-text);
+  letter-spacing: -0.02em;
+}
+
+.agentos-theme .agentos-project-board__controls :where(input) {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-project-board__controls :where(input):focus {
+  border-color: var(--agentos-accent);
+}
+
+.agentos-theme .agentos-project-board__menu-button,
+.agentos-theme .agentos-kanban-column__add,
+.agentos-theme .agentos-kanban-filters__filter {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.1rem;
+  min-width: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-project-board__menu-button:hover,
+.agentos-theme .agentos-kanban-column__add:hover,
+.agentos-theme .agentos-kanban-filters__filter:hover {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-kanban-filters {
+  align-items: center;
+}
+
+.agentos-theme .agentos-kanban-filters__view-toggle {
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+  overflow: hidden;
+}
+
+.agentos-theme .agentos-kanban-filters__search input {
+  border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-theme .agentos-kanban-filters__clear {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-kanban-filters__create {
+  min-height: 2.25rem;
+}
+
+.agentos-theme .agentos-kanban-scroll,
+.agentos-theme .agentos-issue-list-scroll {
+  scrollbar-color: #514a43 transparent;
+}
+
+.agentos-theme .agentos-kanban-provider {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-kanban-column {
+  background-color: rgb(36 35 33 / 42%);
+  border-color: var(--agentos-border);
+  min-width: 230px;
+}
+
+.agentos-theme .agentos-kanban-column__header {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-kanban-column__header p {
+  color: var(--agentos-text);
+  font-weight: 600;
+}
+
+.agentos-theme .agentos-kanban-card {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+  margin: 0.5rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-kanban-card:hover {
+  background-color: var(--agentos-panel-raised);
+  border-color: #514a43;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 16%);
+  transform: translateY(-1px);
+}
+
+.agentos-theme .agentos-kanban-card:focus-visible {
+  outline: 2px solid var(--agentos-accent);
+  outline-offset: -2px;
+}
+
+.agentos-theme .agentos-kanban-card__content :where(.text-normal) {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-kanban-card__content :where(.text-low) {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-kanban-card__meta {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-kanban-card__title {
+  color: var(--agentos-text);
+  font-weight: 500;
+}
+
+.agentos-theme .agentos-kanban-card__description {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-kanban-card__properties,
+.agentos-theme .agentos-kanban-card__badges {
+  min-height: 1.65rem;
+}
+
+.agentos-theme .agentos-kanban-card__more {
+  border: 1px solid transparent;
+  min-height: 2rem;
+  min-width: 2rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-kanban-card__more:hover {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-project-inspector {
+  background-color: var(--agentos-panel);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-panel {
+  background-color: var(--agentos-panel);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-panel__header {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-panel__body {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-issue-panel__body > :where(div, section) {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-section {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-property-row > :where(div, button) {
+  border-color: var(--agentos-border);
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-issue-property-row__creator {
+  border: 1px solid var(--agentos-border);
+  background: var(--agentos-panel-raised);
+}
+
+.agentos-theme .agentos-issue-panel__action {
+  border: 1px solid transparent;
+  min-height: 2.1rem;
+  min-width: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-issue-panel__action:hover {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-panel__properties,
+.agentos-theme .agentos-issue-panel__tags {
+  background: rgb(43 41 38 / 28%);
+}
+
+.agentos-theme .agentos-issue-panel__title textarea,
+.agentos-theme .agentos-issue-panel__description textarea,
+.agentos-theme .agentos-issue-panel__description [contenteditable='true'] {
+  border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-theme .agentos-issue-workspace-card {
+  background-color: var(--agentos-panel);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-theme .agentos-issue-workspace-card:hover {
+  background-color: var(--agentos-panel-raised);
+  border-color: #514a43;
+}
+
+.agentos-theme .agentos-collapsible-section__header {
+  min-height: 2.65rem;
+  border-bottom: 1px solid transparent;
+  color: var(--agentos-text-muted);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-collapsible-section__header:hover,
+.agentos-theme .agentos-collapsible-section__header:focus-visible {
+  background-color: rgb(43 41 38 / 62%);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-collapsible-section__title {
+  letter-spacing: -0.01em;
+}
+
+.agentos-theme .agentos-collapsible-section__actions {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-collapsible-section__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  min-width: 2rem;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-collapsible-section__action:hover,
+.agentos-theme .agentos-collapsible-section__action:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-collapsible-section__toggle {
+  flex: 0 0 auto;
+}
+
+.agentos-theme .agentos-issue-comments-section__body,
+.agentos-theme .agentos-issue-sub-issues-section__body,
+.agentos-theme .agentos-issue-workspaces-section__body,
+.agentos-theme .agentos-issue-relationships-section .agentos-issue-section {
+  background: rgb(29 28 26 / 26%);
+}
+
+.agentos-theme .agentos-issue-comment {
+  padding-block: 0.2rem 0.85rem;
+  border-bottom: 1px solid rgb(58 55 50 / 72%);
+}
+
+.agentos-theme .agentos-issue-comment:last-child {
+  border-bottom: 0;
+}
+
+.agentos-theme .agentos-issue-comment__header {
+  min-height: 1.8rem;
+}
+
+.agentos-theme .agentos-issue-comment__menu,
+.agentos-theme .agentos-issue-comment__reply,
+.agentos-theme .agentos-issue-comments-section__submit {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-issue-comment__menu:hover,
+.agentos-theme .agentos-issue-comment__menu:focus-visible,
+.agentos-theme .agentos-issue-comment__reply:hover,
+.agentos-theme .agentos-issue-comment__reply:focus-visible,
+.agentos-theme .agentos-issue-comments-section__submit:hover:not(:disabled),
+.agentos-theme .agentos-issue-comments-section__submit:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-comment__message {
+  color: var(--agentos-text-muted);
+  line-height: 1.55;
+}
+
+.agentos-theme .agentos-issue-comment__reactions {
+  min-height: 1.75rem;
+}
+
+.agentos-theme .agentos-issue-comment__reaction {
+  min-height: 1.8rem;
+  border-color: var(--agentos-border);
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-issue-comment__editing {
+  border-color: var(--agentos-border);
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-issue-relationship-row {
+  min-height: 2.15rem;
+  padding-inline: 0.35rem;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.agentos-theme .agentos-issue-relationship-row:hover,
+.agentos-theme .agentos-issue-relationship-row:focus-within {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-issue-relationship-row__remove {
+  opacity: 0.35;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme
+  .agentos-issue-relationship-row:hover
+  .agentos-issue-relationship-row__remove,
+.agentos-theme
+  .agentos-issue-relationship-row:focus-within
+  .agentos-issue-relationship-row__remove,
+.agentos-theme .agentos-issue-relationship-row__remove:focus-visible {
+  opacity: 1;
+}
+
+.agentos-theme .agentos-sub-issue-row {
+  min-height: 2.35rem;
+  border: 1px solid transparent;
+}
+
+.agentos-theme .agentos-sub-issue-row:hover,
+.agentos-theme .agentos-sub-issue-row:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-sub-issue-row__handle,
+.agentos-theme .agentos-sub-issue-row__meta {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-sub-issue-row__main {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-issue-workspace-card__header,
+.agentos-theme .agentos-issue-workspace-card__meta {
+  min-width: 0;
+}
+
+.agentos-theme .agentos-issue-workspace-card__title {
+  min-width: 0;
+}
+
+.agentos-theme .agentos-issue-workspace-card__menu,
+.agentos-theme .agentos-issue-workspace-card__create-action {
+  border: 1px solid transparent;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-issue-workspace-card__menu:hover,
+.agentos-theme .agentos-issue-workspace-card__menu:focus-visible,
+.agentos-theme
+  .agentos-issue-workspace-card__create-action:hover:not(:disabled),
+.agentos-theme .agentos-issue-workspace-card__create-action:focus-visible {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-workspaces-layout {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-workspaces-sidebar {
+  background-color: var(--agentos-panel);
+  border-right: 1px solid var(--agentos-border);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-workspaces-sidebar__header,
+.agentos-theme .agentos-workspaces-sidebar__footer {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-workspaces-sidebar__header {
+  gap: 0.75rem;
+  padding-block: 0.35rem 0.75rem;
+}
+
+.agentos-theme .agentos-workspaces-sidebar__title-bar {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme
+  .agentos-workspaces-sidebar__title-bar
+  :where(button, [role='button']) {
+  color: var(--agentos-text-muted);
+  min-height: 2.25rem;
+}
+
+.agentos-theme
+  .agentos-workspaces-sidebar__title-bar
+  :where(button, [role='button']):hover {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-workspaces-sidebar__header input {
+  background-color: var(--agentos-bg);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-workspaces-sidebar__header input:focus {
+  border-color: var(--agentos-accent);
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 12%);
+}
+
+.agentos-theme .agentos-workspace-summary {
+  margin-inline: 0.45rem;
+  border: 1px solid transparent;
+}
+
+.agentos-theme .agentos-workspace-summary > div:first-child {
+  display: none;
+}
+
+.agentos-theme .agentos-workspace-summary--active {
+  background-color: rgb(224 139 97 / 10%);
+  border-color: rgb(224 139 97 / 25%);
+}
+
+.agentos-theme .agentos-workspace-summary__button {
+  border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-theme .agentos-workspace-summary__button:hover {
+  background-color: var(--agentos-panel-raised);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-workspaces-main {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-workspaces-main__conversation {
+  background-color: var(--agentos-bg);
+}
+
+.agentos-theme .agentos-workspaces-main__chatbox {
+  background: linear-gradient(
+    180deg,
+    rgb(29 28 26 / 0%),
+    rgb(29 28 26 / 96%) 32%
+  );
+  padding: 0.75rem 1rem 1rem;
+}
+
+.agentos-theme .agentos-vscode-page {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-workspace-notes {
+  background-color: var(--agentos-panel);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme
+  .agentos-workspace-notes
+  :where(textarea, [contenteditable='true']) {
+  background-color: var(--agentos-bg);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-create-workspace {
+  background:
+    radial-gradient(circle at 50% 18%, rgb(224 139 97 / 6%), transparent 34%),
+    var(--agentos-bg);
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.agentos-theme .agentos-create-workspace__content {
+  padding-block: clamp(2rem, 8vh, 5.5rem) 3rem;
+}
+
+.agentos-theme .agentos-create-workspace__stack {
+  width: min(56rem, 100%);
+}
+
+.agentos-theme .agentos-create-workspace__hero {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0 auto 1.25rem;
+  max-width: 52rem;
+  text-align: center;
+}
+
+.agentos-theme .agentos-create-workspace__eyebrow {
+  color: var(--agentos-accent);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.agentos-theme .agentos-create-workspace__title {
+  color: var(--agentos-text);
+  font-size: clamp(2.15rem, 4.5vw, 3.75rem);
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.agentos-theme .agentos-create-workspace h2 {
+  color: var(--agentos-text);
+  letter-spacing: -0.025em;
+}
+
+.agentos-theme .agentos-create-workspace__context {
+  color: var(--agentos-text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 38rem;
+}
+
+.agentos-theme .agentos-create-workspace__step,
+.agentos-theme .agentos-create-workspace__composer,
+.agentos-theme .agentos-create-workspace__repo-picker {
+  min-width: 0;
+  width: 100%;
+}
+
+.agentos-theme .agentos-create-workspace__repo-picker {
+  background: var(--agentos-panel);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: var(--agentos-shadow);
+  padding: 0.35rem;
+}
+
+.agentos-theme .agentos-create-workspace__repo-picker > div:first-child {
+  padding: 0.85rem;
+}
+
+.agentos-theme .agentos-create-workspace__repo-list {
+  border-color: var(--agentos-border);
+  overflow: hidden;
+}
+
+.agentos-theme .agentos-create-workspace__repo-row {
+  min-height: 2.75rem;
+}
+
+.agentos-theme
+  .agentos-create-workspace__repo-row
+  + .agentos-create-workspace__repo-row {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-create-workspace__repo-actions {
+  margin-top: 1rem;
+}
+
+.agentos-theme
+  .agentos-create-workspace__repo-actions
+  > button:not(.agentos-create-workspace__continue) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.1rem;
+  padding: 0.4rem 0.6rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme
+  .agentos-create-workspace__repo-actions
+  > button:not(.agentos-create-workspace__continue):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-create-workspace__continue {
+  background: var(--agentos-accent);
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: #241b17;
+  min-height: 2.25rem;
+  padding-inline: 1rem;
+}
+
+.agentos-theme .agentos-create-workspace__continue:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+}
+
+.agentos-theme .agentos-create-workspace__setup-hint {
+  background: rgb(228 179 108 / 7%);
+  border-color: rgb(228 179 108 / 28%);
+  margin-inline: 0;
+}
+
+.agentos-theme .agentos-create-workspace__picker-error {
+  background: rgb(221 141 130 / 8%);
+  border-color: rgb(221 141 130 / 28%);
+}
+
+.agentos-theme .agentos-workspaces-feedback {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-chatbox-dock {
+  background: linear-gradient(
+    180deg,
+    rgb(29 28 26 / 0%),
+    var(--agentos-bg) 28%
+  );
+  padding: 1.25rem 1rem 1rem;
+}
+
+.agentos-theme .agentos-chatbox {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 14px 34px rgb(0 0 0 / 18%);
+}
+
+.agentos-theme .agentos-chatbox__header {
+  background: rgb(43 41 38 / 58%);
+  min-height: 3.1rem;
+  padding: 0.6rem 0.85rem;
+}
+
+.agentos-theme .agentos-chatbox__editor {
+  gap: 1.1rem;
+  padding: 0.95rem 1rem 0.8rem;
+}
+
+.agentos-theme .agentos-chatbox__footer {
+  border-top: 1px solid rgb(58 55 50 / 72%);
+  padding-top: 0.75rem;
+}
+
+.agentos-theme .agentos-chatbox__footer :where(button) {
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.05rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-chatbox__footer :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-chatbox__footer .agentos-primary-button.bg-brand {
+  background: var(--agentos-accent);
+  color: #241b17;
+}
+
+.agentos-theme
+  .agentos-chatbox__footer
+  .agentos-primary-button.bg-brand:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+  color: #241b17;
+}
+
+.agentos-theme .agentos-chatbox__footer .agentos-primary-button:disabled {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-create-workspace .agentos-chatbox {
+  width: min(56rem, 100%);
+}
+
+.agentos-theme .agentos-create-workspace .agentos-chatbox__header {
+  background: rgb(43 41 38 / 58%);
+  min-height: 3.25rem;
+  padding: 0.65rem 0.85rem;
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__header
+  :where(button) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  min-height: 2rem;
+  padding: 0.4rem 0.6rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__header
+  :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-create-workspace .agentos-chatbox__editor {
+  gap: 1.25rem;
+  padding: 1.1rem 1.1rem 0.9rem;
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__editor
+  .wysiwyg
+  [contenteditable='true'] {
+  min-height: 8rem;
+  padding: 0.15rem;
+}
+
+.agentos-theme .agentos-create-workspace .agentos-chatbox__footer {
+  border-top: 1px solid rgb(58 55 50 / 72%);
+  padding-top: 0.85rem;
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__footer
+  :where(button) {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  min-height: 2.1rem;
+  padding: 0.4rem 0.6rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__footer
+  :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__footer
+  .agentos-chatbox__repo-button {
+  max-width: min(20rem, 45vw);
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__footer
+  .agentos-chatbox__submit {
+  background: var(--agentos-accent);
+  border-color: transparent;
+  color: #241b17;
+  font-weight: 600;
+  min-height: 2.35rem;
+  padding-inline: 1rem;
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__footer
+  .agentos-chatbox__submit:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+  color: #241b17;
+}
+
+.agentos-theme
+  .agentos-create-workspace
+  .agentos-chatbox__footer
+  .agentos-chatbox__submit:disabled {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-chatbox__header,
+.agentos-theme .agentos-chatbox__error {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-chatbox__editor {
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme
+  .agentos-chatbox__editor
+  :where(textarea, [contenteditable='true']) {
+  background-color: transparent;
+  color: var(--agentos-text);
+}
+
+.agentos-theme
+  .agentos-chatbox__editor
+  :where(textarea, [contenteditable='true'])::placeholder {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-right-sidebar,
+.agentos-theme .agentos-file-tree,
+.agentos-theme .agentos-changes-panel,
+.agentos-theme .agentos-logs-panel,
+.agentos-theme .agentos-process-list,
+.agentos-theme .agentos-git-panel {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-right-sidebar__section {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-right-sidebar__section-header > div:first-child {
+  background: rgb(43 41 38 / 58%);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme
+  .agentos-right-sidebar__section-header
+  > div:first-child
+  :where(button, [role='button']):hover {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-right-sidebar__section > * {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-file-tree input,
+.agentos-theme .agentos-preview-browser input {
+  background-color: var(--agentos-bg);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-file-tree input:focus,
+.agentos-theme .agentos-preview-browser input:focus {
+  border-color: var(--agentos-accent);
+}
+
+.agentos-theme .agentos-logs-panel pre,
+.agentos-theme .agentos-process-list pre,
+.agentos-theme .agentos-git-panel code {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-repo-card {
+  background: var(--agentos-panel-raised);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 12%);
+  margin-block: 0.75rem;
+  padding: 0.9rem;
+}
+
+.agentos-theme .agentos-repo-card :where(button):hover:not(:disabled) {
+  background-color: var(--agentos-panel);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-git-panel__working-branch {
+  background: var(--agentos-bg);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  margin-block: 0.75rem;
+  padding: 0.9rem;
+}
+
+.agentos-theme .agentos-git-panel__working-branch input {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-context-bar__surface {
+  background: rgb(36 35 33 / 94%);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 28%);
+}
+
+.agentos-theme .agentos-context-bar__surface > :first-child {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-context-bar__surface :where(button) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2rem;
+  min-width: 2rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme
+  .agentos-context-bar__surface
+  :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-dropdown-trigger {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-muted);
+  min-height: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-dropdown-trigger:hover:not(:disabled) {
+  background: #35312d;
+  border-color: #514a43;
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-toolbar-icon-button {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.1rem;
+  min-width: 2.1rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-theme .agentos-toolbar-icon-button:hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-primary-button {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-primary-button.bg-brand:not(:disabled) {
+  background: var(--agentos-accent);
+  color: #241b17;
+}
+
+.agentos-theme .agentos-primary-button.bg-brand:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+  color: #241b17;
+  transform: translateY(-1px);
+}
+
+.agentos-theme .agentos-primary-button.bg-panel {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-preview-browser {
+  background-color: #171614;
+}
+
+.agentos-theme .agentos-preview-browser > div:first-child > div {
+  border-color: var(--agentos-border);
+  background-color: rgb(36 35 33 / 92%);
+  box-shadow: 0 12px 30px rgb(0 0 0 / 18%);
+}
+
+.agentos-theme
+  :where(
+    .agentos-workspaces-sidebar__list,
+    .agentos-right-sidebar,
+    .agentos-file-tree,
+    .agentos-changes-panel,
+    .agentos-logs-panel,
+    .agentos-process-list
+  ) {
+  scrollbar-color: #514a43 transparent;
+}
+
+.agentos-theme .agentos-page-shell {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text);
+}
+
+.agentos-theme.agentos-page-shell {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-page-card {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-theme .agentos-remote-page {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(224 139 97 / 7%), transparent 34rem),
+    var(--agentos-bg);
+}
+
+.agentos-theme .agentos-remote-page__content {
+  min-height: 100%;
+}
+
+.agentos-theme .agentos-remote-card {
+  background-color: rgb(36 35 33 / 94%);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-theme .agentos-remote-list-item {
+  border-color: var(--agentos-border);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-remote-list-item:hover:not(:disabled),
+.agentos-theme .agentos-remote-list-item:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border-strong);
+}
+
+.agentos-theme .agentos-remote-list-item:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.agentos-theme .agentos-remote-status-card--error {
+  border-color: rgb(221 141 130 / 36%);
+}
+
+.agentos-theme .agentos-remote-status-page {
+  background:
+    radial-gradient(circle at 50% 12%, rgb(224 139 97 / 6%), transparent 28rem),
+    var(--agentos-bg);
+}
+
+.agentos-theme .agentos-remote-home {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-notifications-page {
+  background-color: var(--agentos-bg);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-notifications-page > :first-child {
+  border-color: var(--agentos-border);
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-notifications-page__list > div {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-notifications-page__open {
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-notifications-page__open:hover,
+.agentos-theme .agentos-notifications-page__open:focus-visible {
+  background-color: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-notifications-page__header {
+  background: rgb(43 41 38 / 58%);
+}
+
+.agentos-theme .agentos-notifications-page__mark-all {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2.25rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-notifications-page__mark-all:hover {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-notifications-page__row {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-notifications-page__row:hover,
+.agentos-theme .agentos-notifications-page__row:focus-visible {
+  background: var(--agentos-panel-raised);
+}
+
+.agentos-theme .agentos-notifications-page__message {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-notifications-page__time {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme .agentos-notifications-page__mark {
+  border: 1px solid transparent;
+  min-height: 2.1rem;
+}
+
+.agentos-theme .agentos-export-page__card {
+  border-radius: var(--agentos-radius-md);
+}
+
+.agentos-theme .agentos-export-page__header {
+  border-bottom: 1px solid var(--agentos-border);
+  padding-bottom: 1.25rem;
+}
+
+.agentos-theme .agentos-onboarding-landing {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-onboarding-landing__card {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-theme .agentos-onboarding-landing__warning {
+  background: rgb(224 139 97 / 10%);
+  border-color: rgb(224 139 97 / 32%);
+}
+
+.agentos-theme .agentos-onboarding-option {
+  min-height: 3rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-onboarding-option:hover,
+.agentos-theme .agentos-onboarding-option:focus-visible {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border-strong);
+}
+
+.agentos-theme .agentos-onboarding-option:active {
+  transform: translateY(1px);
+}
+
+.agentos-theme .agentos-onboarding-landing__footer {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-onboarding-signin {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(224 139 97 / 8%), transparent 34rem),
+    var(--agentos-bg);
+}
+
+.agentos-theme .agentos-onboarding-signin__card {
+  background: rgb(36 35 33 / 92%);
+  border-color: var(--agentos-border);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-theme .agentos-onboarding-signin__header {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-onboarding-signin__error {
+  border-color: rgb(221 141 130 / 34%);
+  background: rgb(221 141 130 / 8%);
+}
+
+.agentos-theme .agentos-onboarding-signin__actions {
+  padding-block: 0.25rem;
+}
+
+.agentos-theme .agentos-onboarding-signin__more-options {
+  min-height: 2rem;
+  padding-inline: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-onboarding-signin__more-options:hover,
+.agentos-theme .agentos-onboarding-signin__more-options:focus-visible {
+  background-color: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-onboarding-signin__comparison {
+  border-color: var(--agentos-border);
+  background: rgb(29 28 26 / 58%);
+}
+
+.agentos-theme .agentos-onboarding-signin__comparison table {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-onboarding-signin__comparison thead {
+  background: var(--agentos-panel-raised);
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme .agentos-command-dialog {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-command-bar {
+  border-color: var(--agentos-border);
+  background: var(--agentos-panel);
+}
+
+.agentos-theme .agentos-command-input,
+.agentos-theme .agentos-command-bar__input-row {
+  border-color: var(--agentos-border);
+}
+
+.agentos-theme .agentos-command-list {
+  scrollbar-color: #514a43 transparent;
+}
+
+.agentos-theme .agentos-command-group {
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-command-item {
+  min-height: 2.4rem;
+  border: 1px solid transparent;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-theme .agentos-command-item:hover,
+.agentos-theme .agentos-command-item[data-selected='true'] {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-command-empty {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme [role='dialog'] {
+  background-color: var(--agentos-panel);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 40%);
+  color: var(--agentos-text);
+}
+
+.agentos-theme [role='dialog'] :where(input, textarea, select) {
+  background-color: var(--agentos-bg);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme [role='dialog'] :where(input, textarea, select):focus {
+  border-color: var(--agentos-accent);
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 12%);
+}
+
+.agentos-theme [role='dialog'] :where(button) {
+  border-radius: var(--agentos-radius-sm);
+}
+
+.agentos-dialog-overlay {
+  background-color: rgb(10 9 8 / 74%);
+  backdrop-filter: blur(4px);
+}
+
+.agentos-dialog-content {
+  max-height: calc(100dvh - 2rem);
+  overscroll-behavior: contain;
+  overflow-y: auto;
+}
+
+.agentos-dialog-viewport {
+  overscroll-behavior: contain;
+}
+
+.agentos-dialog-content :where(input, textarea, select) {
+  background-color: var(--agentos-bg);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-dialog-content :where(input, textarea, select):focus {
+  border-color: var(--agentos-accent);
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 12%);
+}
+
+.agentos-dialog-close {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-dialog-close:hover {
+  color: var(--agentos-text);
+  opacity: 1;
+}
+
+.agentos-guide-dialog,
+.agentos-settings-dialog {
+  background: rgb(36 35 33 / 96%);
+  border-color: var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 40%);
+  color: var(--agentos-text);
+  overscroll-behavior: contain;
+}
+
+.agentos-guide-dialog__nav,
+.agentos-settings-dialog__nav {
+  background: rgb(43 41 38 / 72%);
+  border-color: var(--agentos-border);
+}
+
+.agentos-guide-dialog__nav :where(button),
+.agentos-settings-dialog__nav :where(button) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-guide-dialog__nav :where(button):hover,
+.agentos-guide-dialog__nav :where(button):focus-visible,
+.agentos-settings-dialog__nav :where(button):hover,
+.agentos-settings-dialog__nav :where(button):focus-visible {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-guide-dialog__body,
+.agentos-settings-dialog__body {
+  background: var(--agentos-panel);
+}
+
+.agentos-approval-entry__actions {
+  background: rgb(29 28 26 / 76%);
+  color: var(--agentos-text-muted);
+  padding: 0.7rem 0.85rem;
+}
+
+.agentos-approval-entry__prompt {
+  min-height: 2.35rem;
+}
+
+.agentos-approval-entry__meta {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-approval-entry__title {
+  color: var(--agentos-text);
+}
+
+.agentos-approval-entry__status {
+  color: var(--agentos-accent);
+}
+
+.agentos-approval-entry__detail {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-approval-entry__detail code {
+  color: var(--agentos-text-muted);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+}
+
+.agentos-approval-entry__countdown {
+  position: relative;
+  height: 1.5rem;
+  margin: 0.25rem 0.25rem 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+  background: var(--agentos-bg);
+}
+
+.agentos-approval-entry__countdown-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: rgb(224 139 97 / 18%);
+  transition: transform 160ms linear;
+}
+
+.agentos-approval-entry__countdown-label {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: var(--agentos-text-muted);
+  font-size: 0.7rem;
+}
+
+.agentos-approval-entry__question {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-approval-entry__actions :where(button) {
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  min-height: 2rem;
+  min-width: 2rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.agentos-approval-entry__actions :where(button):hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-approval-entry__error {
+  border-top: 1px solid rgb(221 141 130 / 30%);
+  color: var(--agentos-danger);
+  padding: 0.5rem 1rem 0;
+}
+
+.agentos-approval-entry__deny-form {
+  border-top: 1px solid rgb(228 179 108 / 24%);
+}
+
+.agentos-approval-entry {
+  border: 1px solid rgb(228 179 108 / 36%);
+  border-radius: var(--agentos-radius-md);
+  background-color: rgb(228 179 108 / 6%);
+  overflow: hidden;
+}
+
+.agentos-approval-entry__actions {
+  border-top: 1px solid rgb(228 179 108 / 24%);
+}
+
+@media (max-width: 640px) {
+  .agentos-dialog-content {
+    width: calc(100% - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .agentos-theme .agentos-kanban-column {
+    min-width: 260px;
+  }
+
+  .agentos-theme .agentos-kanban-card {
+    margin-inline: 0.35rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing {
+    align-items: stretch;
+    padding: 0.75rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__card {
+    max-height: none;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__header,
+  .agentos-theme .agentos-onboarding-landing__content,
+  .agentos-theme .agentos-onboarding-landing__footer {
+    padding-inline: 1rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .agentos-theme .agentos-onboarding-landing__footer button {
+    justify-content: center;
+  }
+
+  .agentos-theme .agentos-notifications-page__header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-inline: 1rem;
+  }
+
+  .agentos-theme .agentos-notifications-page__row {
+    padding-inline: 1rem;
+  }
+}
+
+.agentos-theme :where(button, a, input, textarea, select) {
+  touch-action: manipulation;
+}
+
+.agentos-theme :where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--agentos-accent);
+  outline-offset: 2px;
+}
+
+.agentos-button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 38px;
+  padding: 0.625rem 0.875rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.agentos-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.agentos-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.agentos-button--primary {
+  background: var(--agentos-accent);
+  color: #241b17;
+}
+
+.agentos-button--primary:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+}
+
+.agentos-button--secondary {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-button--secondary:hover:not(:disabled),
+.agentos-button--ghost:hover:not(:disabled) {
+  background: #35312d;
+  border-color: #514a43;
+}
+
+.agentos-button--ghost {
+  background: transparent;
+  color: var(--agentos-text-muted);
+}
+
+.agentos-button--danger {
+  background: rgb(221 141 130 / 12%);
+  border-color: rgb(221 141 130 / 35%);
+  color: var(--agentos-danger);
+}
+
+.agentos-button--danger:hover:not(:disabled) {
+  background: rgb(221 141 130 / 20%);
+}
+
+.agentos-button--sm {
+  min-height: 32px;
+  padding: 0.45rem 0.7rem;
+}
+
+.agentos-button--lg {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+}
+
+/*
+ * The shared Button primitive is still used by legacy surfaces and dialogs.
+ * Keep its non-AgentOS fallback intact, but make every instance inside the
+ * AgentOS scope use the same quiet, border-light language as AgentOSButton.
+ * The data attribute avoids coupling this CSS to Tailwind's generated class
+ * names and keeps variant intent explicit for future agents.
+ */
+.agentos-theme .agentos-button-primitive {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 38px;
+  padding: 0.625rem 0.875rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-button-primitive:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.agentos-theme .agentos-button-primitive:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.agentos-theme .agentos-button-primitive:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='default'] {
+  background: var(--agentos-accent);
+  border-color: transparent;
+  color: #241b17;
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='default']:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='destructive'] {
+  background: rgb(221 141 130 / 12%);
+  border-color: rgb(221 141 130 / 35%);
+  color: var(--agentos-danger);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='destructive']:hover:not(:disabled) {
+  background: rgb(221 141 130 / 20%);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='outline'],
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='secondary'] {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='outline']:hover:not(:disabled),
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='secondary']:hover:not(:disabled) {
+  background: #35312d;
+  border-color: var(--agentos-border-strong);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='ghost'],
+.agentos-theme .agentos-button-primitive[data-agentos-variant='icon'] {
+  background: transparent;
+  border-color: transparent;
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='ghost']:hover:not(:disabled),
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='icon']:hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-button-primitive[data-agentos-variant='link'] {
+  background: transparent;
+  border-color: transparent;
+  color: var(--agentos-accent-strong);
+  min-height: auto;
+  padding: 0;
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='link']:hover:not(:disabled) {
+  color: var(--agentos-text);
+  transform: none;
+}
+
+.agentos-theme .agentos-button-primitive[data-agentos-size='icon'] {
+  min-height: 2.5rem;
+  padding: 0;
+  width: 2.5rem;
+}
+
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive) {
+  background: var(--agentos-bg);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive)::placeholder {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive):focus {
+  background: var(--agentos-panel);
+  border-color: var(--agentos-accent);
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 12%);
+}
+
+.agentos-theme
+  :where(.agentos-input-primitive, .agentos-textarea-primitive):disabled {
+  background: var(--agentos-panel);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.agentos-theme [data-agentos-primitive='checkbox'] {
+  background: var(--agentos-bg);
+  border: 1px solid var(--agentos-border-strong);
+  border-radius: 4px;
+  color: #241b17;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.agentos-theme
+  [data-agentos-primitive='checkbox'][aria-checked='true'] {
+  background: var(--agentos-accent);
+  border-color: var(--agentos-accent);
+}
+
+.agentos-theme
+  [data-agentos-primitive='checkbox']:hover:not(:disabled) {
+  border-color: var(--agentos-accent);
+}
+
+.agentos-theme
+  [data-agentos-primitive='checkbox']:focus-visible,
+.agentos-theme [data-agentos-primitive='switch']:focus-visible {
+  box-shadow: 0 0 0 3px rgb(224 139 97 / 18%);
+}
+
+.agentos-theme [data-agentos-primitive='switch'] {
+  background: var(--agentos-border-strong);
+  border-color: transparent;
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.agentos-theme
+  [data-agentos-primitive='switch'][data-state='checked'] {
+  background: var(--agentos-accent);
+}
+
+.agentos-theme [data-agentos-primitive='switch'] > span {
+  background: var(--agentos-text-muted);
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme
+  [data-agentos-primitive='switch'][data-state='checked']
+  > span {
+  background: #241b17;
+}
+
+.agentos-oauth-button {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-oauth-button:hover:not(:disabled) {
+  background: #35312d;
+  border-color: var(--agentos-border-strong);
+  color: var(--agentos-text);
+}
+
+.agentos-icon-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  color: var(--agentos-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  min-width: 36px;
+  padding: 0.5rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.agentos-icon-button:hover:not(:disabled),
+.agentos-icon-button[aria-pressed='true'] {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.agentos-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.agentos-field__label {
+  color: var(--agentos-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.agentos-field__required {
+  color: var(--agentos-accent);
+  margin-left: 0.25rem;
+}
+
+.agentos-field__hint,
+.agentos-field__error {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+}
+
+.agentos-field__hint {
+  color: var(--agentos-text-subtle);
+}
+
+.agentos-field__error {
+  color: var(--agentos-danger);
+}
+
+.agentos-panel {
+  background: var(--agentos-panel);
+  border: 1px solid var(--agentos-border);
+  border-radius: var(--agentos-radius-md);
+}
+
+.agentos-panel--raised {
+  background: var(--agentos-panel-raised);
+  box-shadow: var(--agentos-shadow);
+}
+
+.agentos-panel--quiet {
+  background: transparent;
+  border-color: rgb(58 55 50 / 70%);
+}
+
+.agentos-status {
+  align-items: flex-start;
+  display: inline-flex;
+  gap: 0.55rem;
+}
+
+.agentos-status__dot {
+  background: currentColor;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  height: 8px;
+  margin-top: 0.3rem;
+  width: 8px;
+}
+
+.agentos-status__label {
+  color: var(--agentos-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.agentos-status__detail {
+  color: var(--agentos-text-subtle);
+  display: block;
+  font-size: 0.6875rem;
+  margin-top: 0.15rem;
+}
+
+.agentos-status--neutral {
+  color: var(--agentos-text-muted);
+}
+
+.agentos-status--running,
+.agentos-status--success {
+  color: var(--agentos-success);
+}
+
+.agentos-status--attention {
+  color: var(--agentos-warning);
+}
+
+.agentos-status--failed,
+.agentos-status--danger {
+  color: var(--agentos-danger);
+}
+
+.agentos-status--info {
+  color: var(--agentos-info);
+}
+
+.agentos-section-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.agentos-section-header__eyebrow {
+  color: var(--agentos-text-subtle);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.agentos-section-header__title {
+  color: var(--agentos-text);
+  font-size: 1rem;
+  font-weight: 650;
+  margin: 0.25rem 0 0;
+  text-wrap: balance;
+}
+
+.agentos-section-header__description {
+  color: var(--agentos-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin: 0.35rem 0 0;
+  max-width: 58ch;
+}
+
+.agentos-empty-state,
+.agentos-feedback-state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  min-height: 180px;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.agentos-empty-state__title,
+.agentos-feedback-state__title {
+  color: var(--agentos-text);
+  font-size: 0.875rem;
+  font-weight: 650;
+  margin: 0;
+}
+
+.agentos-empty-state__description,
+.agentos-feedback-state__description {
+  color: var(--agentos-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 48ch;
+}
+
+.agentos-metric {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.agentos-metric__label {
+  color: var(--agentos-text-muted);
+  font-size: 0.6875rem;
+}
+
+.agentos-metric__value {
+  color: var(--agentos-text);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.agentos-metric__detail {
+  color: var(--agentos-text-subtle);
+  font-size: 0.625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agentos-button,
+  .agentos-icon-button {
+    transition: none;
+  }
+
+  .agentos-button:hover:not(:disabled),
+  .agentos-button:active:not(:disabled) {
+    transform: none;
+  }
+}

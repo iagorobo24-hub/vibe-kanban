@@ -36,14 +36,6 @@ import {
   type PropertyDropdownOption,
 } from '@vibe/ui/components/PropertyDropdown';
 
-const SORT_OPTIONS: PropertyDropdownOption<KanbanSortField>[] = [
-  { value: 'sort_order', label: 'Manual' },
-  { value: 'priority', label: 'Priority' },
-  { value: 'created_at', label: 'Created' },
-  { value: 'updated_at', label: 'Updated' },
-  { value: 'title', label: 'Title' },
-];
-
 interface KanbanFiltersDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -88,6 +80,17 @@ export function KanbanFiltersDialog({
 }: KanbanFiltersDialogProps) {
   const { t } = useTranslation('common');
 
+  const sortOptions = useMemo<PropertyDropdownOption<KanbanSortField>[]>(
+    () => [
+      { value: 'sort_order', label: t('kanban.sortManual') },
+      { value: 'priority', label: t('kanban.sortPriority') },
+      { value: 'created_at', label: t('kanban.sortCreated') },
+      { value: 'updated_at', label: t('kanban.sortUpdated') },
+      { value: 'title', label: t('kanban.sortTitle') },
+    ],
+    [t]
+  );
+
   const currentUser = useMemo(
     () => users.find((user) => user.user_id === currentUserId) ?? null,
     [users, currentUserId]
@@ -97,17 +100,17 @@ export function KanbanFiltersDialog({
     () => [
       {
         value: KANBAN_ASSIGNEE_FILTER_VALUES.UNASSIGNED,
-        label: t('kanban.unassigned', 'Unassigned'),
+        label: t('kanban.unassigned'),
         renderOption: () => (
           <div className="flex items-center gap-base">
             <UsersIcon className="size-icon-xs text-low" weight="bold" />
-            {t('kanban.unassigned', 'Unassigned')}
+            {t('kanban.unassigned')}
           </div>
         ),
       },
       {
         value: KANBAN_ASSIGNEE_FILTER_VALUES.SELF,
-        label: t('kanban.self', 'Me'),
+        label: t('kanban.self'),
         renderOption: () => (
           <div className="flex items-center gap-base">
             {currentUser ? (
@@ -115,7 +118,7 @@ export function KanbanFiltersDialog({
             ) : (
               <UsersIcon className="size-icon-xs text-low" weight="bold" />
             )}
-            {t('kanban.self', 'Me')}
+            {t('kanban.self')}
           </div>
         ),
       },
@@ -206,12 +209,9 @@ export function KanbanFiltersDialog({
       <DialogContent className="max-w-[720px] p-0">
         <div className="border-b border-border px-double pb-base pt-double">
           <DialogHeader className="space-y-half">
-            <DialogTitle>{t('kanban.filters', 'Filters')}</DialogTitle>
+            <DialogTitle>{t('kanban.filters')}</DialogTitle>
             <DialogDescription>
-              {t(
-                'kanban.filtersDescription',
-                'Adjust filters and sorting for this board view.'
-              )}
+              {t('kanban.filtersDescription')}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -228,11 +228,12 @@ export function KanbanFiltersDialog({
               onClick={handleOpenAssigneeDialog}
               className={cn(
                 'flex items-center gap-half rounded-sm bg-panel px-base py-half',
-                'text-sm text-normal transition-colors hover:bg-secondary'
+                'text-sm text-normal transition-colors hover:bg-secondary',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
               )}
             >
               <UsersIcon className="size-icon-xs" weight="bold" />
-              <span>{t('kanban.assignee', 'Assignee')}</span>
+              <span>{t('kanban.assignee')}</span>
               {filters.assigneeIds.length > 0 &&
                 renderAssigneeBadge(filters.assigneeIds)}
             </button>
@@ -243,21 +244,21 @@ export function KanbanFiltersDialog({
                 options={tagOptions}
                 onChange={onTagsChange}
                 icon={TagIcon}
-                label={t('kanban.tags', 'Tags')}
-                menuLabel={t('kanban.filterByTag', 'Filter by tag')}
+                label={t('kanban.tags')}
+                menuLabel={t('kanban.filterByTag')}
               />
             )}
 
             <PropertyDropdown
               value={filters.sortField}
-              options={SORT_OPTIONS}
+              options={sortOptions}
               onChange={(field) => onSortChange(field, filters.sortDirection)}
               icon={
                 filters.sortDirection === 'asc'
                   ? SortAscendingIcon
                   : SortDescendingIcon
               }
-              label={t('kanban.sortBy', 'Sort')}
+              label={t('kanban.sortBy')}
             />
 
             <button
@@ -265,12 +266,18 @@ export function KanbanFiltersDialog({
               onClick={toggleSortDirection}
               className={cn(
                 'flex items-center justify-center rounded-sm p-half',
-                'text-normal transition-colors hover:bg-secondary'
+                'text-normal transition-colors hover:bg-secondary',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand'
               )}
+              aria-label={
+                filters.sortDirection === 'asc'
+                  ? t('kanban.sortAscending')
+                  : t('kanban.sortDescending')
+              }
               title={
                 filters.sortDirection === 'asc'
-                  ? t('kanban.sortAscending', 'Ascending')
-                  : t('kanban.sortDescending', 'Descending')
+                  ? t('kanban.sortAscending')
+                  : t('kanban.sortDescending')
               }
             >
               {filters.sortDirection === 'asc' ? (
@@ -282,31 +289,34 @@ export function KanbanFiltersDialog({
 
             <div className="flex items-center gap-half rounded-sm bg-panel px-base py-half">
               <span className="whitespace-nowrap text-sm text-normal">
-                {t('kanban.subIssuesFilterLabel', 'Sub-issues')}
+                {t('kanban.subIssuesFilterLabel')}
               </span>
               <Switch
                 checked={showSubIssues}
                 onCheckedChange={onShowSubIssuesChange}
+                aria-label={t('kanban.subIssuesFilterLabel')}
               />
             </div>
 
             <div className="flex items-center gap-half rounded-sm bg-panel px-base py-half">
               <span className="whitespace-nowrap text-sm text-normal">
-                {t('kanban.workspacesFilterLabel', 'Workspaces')}
+                {t('kanban.workspacesFilterLabel')}
               </span>
               <Switch
                 checked={showWorkspaces}
                 onCheckedChange={onShowWorkspacesChange}
+                aria-label={t('kanban.workspacesFilterLabel')}
               />
             </div>
 
             <div className="flex items-center gap-half rounded-sm bg-panel px-base py-half">
               <span className="whitespace-nowrap text-sm text-normal">
-                {t('kanban.hideBlockedFilterLabel', 'Hide blocked')}
+                {t('kanban.hideBlockedFilterLabel')}
               </span>
               <Switch
                 checked={hideBlocked}
                 onCheckedChange={onHideBlockedChange}
+                aria-label={t('kanban.hideBlockedFilterLabel')}
               />
             </div>
           </div>

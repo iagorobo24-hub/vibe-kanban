@@ -5,6 +5,7 @@ import {
   WarningIcon,
   DownloadSimpleIcon,
 } from '@phosphor-icons/react';
+import { useTranslation } from 'react-i18next';
 
 export interface ExportRequest {
   organization_id: string;
@@ -27,10 +28,11 @@ export function ExportDownload({
   onExportMore,
   exportFn,
 }: ExportDownloadProps) {
+  const { t } = useTranslation('common');
   const [isExporting, setIsExporting] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [filename, setFilename] = useState('vibe-kanban-export.zip');
+  const [filename, setFilename] = useState('agentos-export.zip');
   const hasStartedRef = useRef(false);
 
   const startExport = useCallback(async () => {
@@ -46,10 +48,12 @@ export function ExportDownload({
       });
 
       if (!response.ok) {
-        throw new Error(`Export failed (${response.status})`);
+        throw new Error(
+          t('export.errors.requestFailed', { status: response.status })
+        );
       }
 
-      let downloadFilename = 'vibe-kanban-export.zip';
+      let downloadFilename = 'agentos-export.zip';
       const disposition = response.headers.get('content-disposition');
       if (disposition) {
         const match = disposition.match(/filename="?([^"]+)"?/);
@@ -70,7 +74,7 @@ export function ExportDownload({
       a.click();
       document.body.removeChild(a);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Export failed');
+      setError(err instanceof Error ? err.message : t('export.errors.generic'));
     } finally {
       setIsExporting(false);
     }
@@ -110,34 +114,43 @@ export function ExportDownload({
           <SpinnerIcon
             className="size-icon-lg text-brand animate-spin"
             weight="bold"
+            aria-hidden="true"
           />
           <div className="text-center space-y-half">
             <p className="text-sm font-medium text-high">
-              Generating your export...
+              {t('export.generating')}
             </p>
             <p className="text-xs text-low">
-              This may take a moment
-              {includeAttachments ? ', especially with attachments' : ''}.
+              {t('export.wait', {
+                attachments: includeAttachments
+                  ? t('export.withAttachments')
+                  : '',
+              })}
             </p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="space-y-base">
+        <div className="space-y-base" role="alert">
           <div className="flex items-center gap-base text-danger">
-            <WarningIcon className="size-icon-sm" weight="fill" />
-            <p className="text-sm font-medium">Export failed</p>
+            <WarningIcon
+              className="size-icon-sm"
+              weight="fill"
+              aria-hidden="true"
+            />
+            <p className="text-sm font-medium">{t('export.errors.failed')}</p>
           </div>
           <p className="text-sm text-normal">{error}</p>
           <button
+            type="button"
             onClick={() => {
               hasStartedRef.current = false;
               void startExport();
             }}
-            className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal hover:bg-primary transition-colors"
+            className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal transition-colors hover:bg-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           >
-            Retry
+            {t('export.retry')}
           </button>
         </div>
       )}
@@ -150,28 +163,31 @@ export function ExportDownload({
               weight="fill"
             />
             <div className="text-center space-y-half">
-              <p className="text-sm font-medium text-high">Export complete!</p>
+              <p className="text-sm font-medium text-high">
+                {t('export.complete')}
+              </p>
               <p className="text-xs text-low">
-                Your download should start automatically. If not, click the
-                button below.
+                {t('export.automaticDownload')}
               </p>
             </div>
           </div>
 
           <div className="space-y-base">
             <button
+              type="button"
               onClick={handleManualDownload}
-              className="w-full flex items-center justify-center gap-half rounded-sm bg-brand px-base py-half text-sm font-medium text-white hover:bg-brand/90 transition-colors"
+              className="flex w-full items-center justify-center gap-half rounded-sm bg-brand px-base py-half text-sm font-medium text-white transition-colors hover:bg-brand/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
             >
-              <DownloadSimpleIcon className="size-icon-sm" />
-              Download {filename}
+              <DownloadSimpleIcon className="size-icon-sm" aria-hidden="true" />
+              {t('export.download', { filename })}
             </button>
 
             <button
+              type="button"
               onClick={onExportMore}
-              className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal hover:bg-primary transition-colors"
+              className="w-full rounded-sm border border-border bg-secondary px-base py-half text-sm font-medium text-normal transition-colors hover:bg-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             >
-              Export more projects
+              {t('export.more')}
             </button>
           </div>
         </div>
