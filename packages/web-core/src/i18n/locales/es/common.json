@@ -718,6 +718,10 @@
       "description": "No se ha podido cargar el proyecto desde el stream remoto. Los datos no están confirmados, así que el tablero queda en pausa.",
       "retry": "Reintentar datos del proyecto"
     },
+    "boardDataUnavailable": {
+      "description": "Algunos datos del tablero pueden estar desactualizados mientras se recupera el stream remoto.",
+      "retry": "Reintentar datos del tablero"
+    },
     "remoteAuthUnavailable": {
       "title": "La conexión remota necesita atención",
       "description": "El plano local sigue disponible, pero no se puede acceder ahora a los proyectos remotos. Actualiza la conexión para reintentarlo.",

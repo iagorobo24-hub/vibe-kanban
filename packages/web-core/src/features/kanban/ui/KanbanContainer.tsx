@@ -32,7 +32,12 @@ import {
   bulkUpdateIssues,
   type BulkUpdateIssueItem,
 } from '@/shared/lib/remoteApi';
-import { PlusIcon, DotsThreeIcon } from '@phosphor-icons/react';
+import {
+  ArrowClockwiseIcon,
+  DotsThreeIcon,
+  PlusIcon,
+  WarningCircleIcon,
+} from '@phosphor-icons/react';
 import { Actions } from '@/shared/actions';
 import {
   buildKanbanIssueComposerKey,
@@ -73,6 +78,8 @@ import type { IssuePriority } from 'shared/remote-types';
 import { useIssueMultiSelect } from '@/shared/hooks/useIssueMultiSelect';
 import { useIssueSelectionStore } from '@/shared/stores/useIssueSelectionStore';
 import { BulkActionBarContainer } from './BulkActionBarContainer';
+import { PrimaryButton } from '@vibe/ui/components/PrimaryButton';
+import { deriveKanbanStreamState } from './kanbanStreamState';
 
 const areStringSetsEqual = (left: string[], right: string[]): boolean => {
   if (left.length !== right.length) {
@@ -148,12 +155,16 @@ export function KanbanContainer() {
     insertTag,
     pullRequests,
     isLoading: projectLoading,
+    error: projectError,
+    retry: retryProject,
   } = useProjectContext();
 
   const {
     projects,
     membersWithProfilesById,
     isLoading: orgLoading,
+    error: orgError,
+    retry: retryOrg,
   } = useOrgContext();
   const { activeWorkspaces } = useWorkspaceContext();
   const { userId } = useAuth();
@@ -888,6 +899,14 @@ export function KanbanContainer() {
   );
 
   const isLoading = projectLoading || orgLoading;
+  const streamState = deriveKanbanStreamState({
+    isLoading,
+    hasError: Boolean(projectError || orgError),
+  });
+  const retryStreams = useCallback(() => {
+    retryProject();
+    retryOrg();
+  }, [retryOrg, retryProject]);
 
   if (isLoading) {
     return <LoadingState />;
@@ -983,6 +1002,33 @@ export function KanbanContainer() {
           />
         </div>
       </div>
+
+      {streamState === 'unavailable' && (
+        <div
+          className={cn(
+            'mx-double flex items-center justify-between gap-base rounded-sm border border-warning/30 bg-warning/10 px-base py-half text-sm text-warning',
+            isMobile && 'mx-base flex-col items-start'
+          )}
+          role="alert"
+        >
+          <div className="flex min-w-0 items-center gap-half">
+            <WarningCircleIcon
+              className="size-icon-sm shrink-0"
+              weight="fill"
+              aria-hidden="true"
+            />
+            <span>{t('kanban.boardDataUnavailable.description')}</span>
+          </div>
+          <PrimaryButton
+            variant="tertiary"
+            actionIcon={ArrowClockwiseIcon}
+            onClick={retryStreams}
+            className="shrink-0"
+          >
+            {t('kanban.boardDataUnavailable.retry')}
+          </PrimaryButton>
+        </div>
+      )}
 
       {kanbanViewMode === 'kanban' ? (
         visibleStatuses.length === 0 ? (
