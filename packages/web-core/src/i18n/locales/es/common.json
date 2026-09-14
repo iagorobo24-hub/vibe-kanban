@@ -353,6 +353,7 @@
     "settings": "Ajustes",
     "commandBar": "Barra de comandos",
     "mobileTabs": {
+      "label": "Vistas móviles del workspace",
       "workspaces": "Espacios de trabajo",
       "chat": "Chat",
       "changes": "Cambios",

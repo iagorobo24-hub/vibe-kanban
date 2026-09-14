@@ -425,6 +425,7 @@
     "settings": "Settings",
     "commandBar": "Command bar",
     "mobileTabs": {
+      "label": "Mobile workspace views",
       "workspaces": "Workspaces",
       "chat": "Chat",
       "changes": "Diff",

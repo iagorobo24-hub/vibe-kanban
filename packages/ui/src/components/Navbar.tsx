@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import type { Icon } from "@phosphor-icons/react";
 import {
@@ -112,6 +112,14 @@ export const MOBILE_TABS: { id: MobileTabId; icon: Icon; label: string }[] = [
   { id: "git", icon: GitForkIcon, label: "Git" },
 ];
 
+export function getMobileTabElementId(tab: MobileTabId): string {
+  return `agentos-mobile-tab-${tab}`;
+}
+
+export function getMobileTabPanelId(tab: MobileTabId): string {
+  return `agentos-mobile-panel-${tab}`;
+}
+
 export interface NavbarBreadcrumbItem {
   label: string;
   onClick?: () => void;
@@ -221,6 +229,34 @@ export function Navbar({
       label: t(`navbar.mobileTabs.${tab.id}`),
     }));
 
+  const handleMobileTabKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    if (localizedMobileTabs.length < 2) return;
+
+    let nextIndex: number | null = null;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      nextIndex = (index + 1) % localizedMobileTabs.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      nextIndex =
+        (index - 1 + localizedMobileTabs.length) % localizedMobileTabs.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = localizedMobileTabs.length - 1;
+    }
+
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    const nextTab = localizedMobileTabs[nextIndex];
+    onMobileTabChange?.(nextTab.id);
+    requestAnimationFrame(() => {
+      document.getElementById(getMobileTabElementId(nextTab.id))?.focus();
+    });
+  };
+
   const renderItem = (item: NavbarSectionItem, key: string) => {
     // Render divider
     if (isDivider(item)) {
@@ -320,35 +356,48 @@ export function Navbar({
                   </>
                 )
               )}
-              {showMobileTabs !== false &&
-                localizedMobileTabs.map((tab) => {
-                  const TabIcon = tab.icon;
-                  const isActive = mobileActiveTab === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      aria-label={tab.label}
-                      aria-pressed={isActive}
-                      className={cn(
-                        "flex items-center gap-1 rounded-sm px-1.5 py-1 text-xs whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
-                        isActive
-                          ? "text-normal border-b-2 border-brand"
-                          : "text-low hover:text-normal",
-                      )}
-                      onClick={() => onMobileTabChange?.(tab.id)}
-                    >
-                      <TabIcon
-                        className="size-icon-sm"
-                        weight={isActive ? "fill" : "regular"}
-                        aria-hidden="true"
-                      />
-                      <span className="hidden min-[480px]:inline">
-                        {tab.label}
-                      </span>
-                    </button>
-                  );
-                })}
+              {showMobileTabs !== false && (
+                <div
+                  className="flex items-center gap-0.5"
+                  role="tablist"
+                  aria-label={t("navbar.mobileTabs.label")}
+                >
+                  {localizedMobileTabs.map((tab, index) => {
+                    const TabIcon = tab.icon;
+                    const isActive = mobileActiveTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        id={getMobileTabElementId(tab.id)}
+                        type="button"
+                        role="tab"
+                        aria-label={tab.label}
+                        aria-selected={isActive}
+                        tabIndex={isActive ? 0 : -1}
+                        className={cn(
+                          "flex items-center gap-1 rounded-sm px-1.5 py-1 text-xs whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
+                          isActive
+                            ? "text-normal border-b-2 border-brand"
+                            : "text-low hover:text-normal",
+                        )}
+                        onClick={() => onMobileTabChange?.(tab.id)}
+                        onKeyDown={(event) =>
+                          handleMobileTabKeyDown(event, index)
+                        }
+                      >
+                        <TabIcon
+                          className="size-icon-sm"
+                          weight={isActive ? "fill" : "regular"}
+                          aria-hidden="true"
+                        />
+                        <span className="hidden min-[480px]:inline">
+                          {tab.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               {onNavigateToBoard && (
                 <button
                   type="button"
