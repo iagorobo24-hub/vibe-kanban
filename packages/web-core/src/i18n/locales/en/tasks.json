@@ -101,6 +101,8 @@
   },
   "processes": {
     "noLogsAvailable": "No logs available",
+    "connectionFailed": "The live log connection failed.",
+    "retryLogs": "Retry log stream",
     "selectAttempt": "Select an attempt to view execution processes.",
     "errorLoadingUpdates": "Failed to load live updates for processes.",
     "reconnecting": "Reconnecting…",

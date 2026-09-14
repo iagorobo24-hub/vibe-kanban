@@ -8,8 +8,12 @@ import {
   VirtuosoMessageListMethods,
   VirtuosoMessageListProps,
 } from '@virtuoso.dev/message-list';
-import { WarningCircleIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+  ArrowClockwiseIcon,
+  WarningCircleIcon,
+} from '@phosphor-icons/react/dist/ssr';
 import RawLogText from '@/shared/components/RawLogText';
+import { deriveLogStreamViewState } from './logStreamState';
 import {
   INITIAL_TOP_ITEM,
   InitialDataScrollModifier,
@@ -28,6 +32,7 @@ export interface VirtualizedProcessLogsProps {
   searchQuery: string;
   matchIndices: number[];
   currentMatchIndex: number;
+  onRetry?: () => void;
 }
 
 type LogEntryWithKey = LogEntry & { key: string; originalIndex: number };
@@ -69,8 +74,12 @@ export function VirtualizedProcessLogs({
   searchQuery,
   matchIndices,
   currentMatchIndex,
+  onRetry,
 }: VirtualizedProcessLogsProps) {
   const { t } = useTranslation('tasks');
+  const viewState = deriveLogStreamViewState(logs.length, !!error);
+  const displayError =
+    error === 'Connection failed' ? t('processes.connectionFailed') : error;
   const [channelData, setChannelData] =
     useState<DataWithScrollModifier<LogEntryWithKey> | null>(null);
   const messageListRef = useRef<VirtuosoMessageListMethods<
@@ -128,7 +137,7 @@ export function VirtualizedProcessLogs({
     }
   }, [currentMatchIndex, matchIndices]);
 
-  if (logs.length === 0 && !error) {
+  if (viewState === 'empty') {
     return (
       <div className="h-full flex items-center justify-center">
         <p className="text-center text-muted-foreground text-sm">
@@ -138,13 +147,30 @@ export function VirtualizedProcessLogs({
     );
   }
 
-  if (error && logs.length === 0) {
+  if (viewState === 'error') {
     return (
-      <div className="h-full flex items-center justify-center">
-        <p className="text-center text-destructive text-sm">
-          <WarningCircleIcon className="size-icon-base inline mr-2" />
-          {error}
-        </p>
+      <div className="h-full flex flex-col items-center justify-center gap-base px-base">
+        <div className="flex items-center gap-half text-center text-destructive text-sm">
+          <WarningCircleIcon
+            className="size-icon-base shrink-0"
+            aria-hidden="true"
+          />
+          <span>{displayError}</span>
+        </div>
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="inline-flex items-center gap-half rounded-sm border border-border bg-primary px-base py-half text-sm font-medium text-normal transition-colors hover:bg-tertiary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+          >
+            <ArrowClockwiseIcon
+              className="size-icon-sm"
+              weight="bold"
+              aria-hidden="true"
+            />
+            {t('processes.retryLogs')}
+          </button>
+        )}
       </div>
     );
   }
@@ -156,23 +182,54 @@ export function VirtualizedProcessLogs({
   };
 
   return (
-    <div className="virtuoso-license-wrapper h-full overflow-hidden">
-      <VirtuosoMessageListLicense
-        licenseKey={import.meta.env.VITE_PUBLIC_REACT_VIRTUOSO_LICENSE_KEY}
-      >
-        <VirtuosoMessageList<LogEntryWithKey, SearchContext>
-          ref={messageListRef}
-          className="h-full"
-          data={channelData}
-          context={context}
-          initialLocation={INITIAL_TOP_ITEM}
-          onScroll={(location) => {
-            isAtBottomRef.current = location.isAtBottom;
-          }}
-          computeItemKey={computeItemKey}
-          ItemContent={ItemContent}
-        />
-      </VirtuosoMessageListLicense>
+    <div className="virtuoso-license-wrapper flex h-full min-h-0 flex-col overflow-hidden">
+      {viewState === 'logs-with-error' && (
+        <div
+          className="flex shrink-0 items-center justify-between gap-base border-b border-warning/50 bg-warning/10 px-base py-half text-sm text-warning"
+          role="alert"
+        >
+          <div className="flex min-w-0 items-center gap-half">
+            <WarningCircleIcon
+              className="size-icon-sm shrink-0"
+              weight="fill"
+              aria-hidden="true"
+            />
+            <span className="truncate">{displayError}</span>
+          </div>
+          {onRetry && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="inline-flex shrink-0 items-center gap-half rounded-sm px-half py-quarter font-medium text-warning transition-colors hover:bg-warning/15 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+            >
+              <ArrowClockwiseIcon
+                className="size-icon-sm"
+                weight="bold"
+                aria-hidden="true"
+              />
+              {t('processes.retryLogs')}
+            </button>
+          )}
+        </div>
+      )}
+      <div className="min-h-0 flex-1">
+        <VirtuosoMessageListLicense
+          licenseKey={import.meta.env.VITE_PUBLIC_REACT_VIRTUOSO_LICENSE_KEY}
+        >
+          <VirtuosoMessageList<LogEntryWithKey, SearchContext>
+            ref={messageListRef}
+            className="h-full"
+            data={channelData}
+            context={context}
+            initialLocation={INITIAL_TOP_ITEM}
+            onScroll={(location) => {
+              isAtBottomRef.current = location.isAtBottom;
+            }}
+            computeItemKey={computeItemKey}
+            ItemContent={ItemContent}
+          />
+        </VirtuosoMessageListLicense>
+      </div>
     </div>
   );
 }

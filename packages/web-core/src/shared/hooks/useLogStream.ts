@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import type { PatchType } from 'shared/types';
 import { openLocalApiWebSocket } from '@/shared/lib/localApiTransport';
 
@@ -7,6 +7,7 @@ type LogEntry = Extract<PatchType, { type: 'STDOUT' } | { type: 'STDERR' }>;
 interface UseLogStreamResult {
   logs: LogEntry[];
   error: string | null;
+  retry: () => void;
 }
 
 export const useLogStream = (processId: string): UseLogStreamResult => {
@@ -20,6 +21,11 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
   const finishedRef = useRef<boolean>(false);
   // Track current processId to prevent stale WebSocket messages from contaminating logs
   const currentProcessIdRef = useRef<string>(processId);
+  const [retryNonce, setRetryNonce] = useState(0);
+
+  const retry = useCallback(() => {
+    setRetryNonce((value) => value + 1);
+  }, []);
 
   useEffect(() => {
     if (!processId) {
@@ -186,7 +192,7 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
         retryTimerRef.current = null;
       }
     };
-  }, [processId]);
+  }, [processId, retryNonce]);
 
-  return { logs, error };
+  return { logs, error, retry };
 };

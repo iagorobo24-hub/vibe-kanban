@@ -286,6 +286,8 @@
   },
   "processes": {
     "noLogsAvailable": "No hay registros disponibles",
+    "connectionFailed": "La conexión en directo de los registros ha fallado.",
+    "retryLogs": "Reintentar registros",
     "agent": "Agente:",
     "backToList": "Volver a la lista",
     "completed": "Completado: {{date}}",
