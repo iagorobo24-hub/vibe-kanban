@@ -473,8 +473,16 @@ const DiffFileItem = memo(function DiffFileItem({
           onClick={handleToggle}
           className="flex size-7 items-center justify-center rounded-sm text-low transition-colors hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           aria-expanded={expanded}
-          aria-label={expanded ? 'Collapse file diff' : 'Expand file diff'}
-          title={expanded ? 'Collapse file diff' : 'Expand file diff'}
+          aria-label={
+            expanded
+              ? t('accessibility.collapseDiff', { filePath })
+              : t('accessibility.expandDiff', { filePath })
+          }
+          title={
+            expanded
+              ? t('accessibility.collapseDiff', { filePath })
+              : t('accessibility.expandDiff', { filePath })
+          }
         >
           <CaretDownIcon
             className={`size-icon-xs transition-transform${!expanded ? ' -rotate-90' : ''}`}

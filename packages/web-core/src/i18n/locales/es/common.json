@@ -179,6 +179,9 @@
   },
   "ok": "OK",
   "error": "Error",
+  "git": {
+    "pushFailed": "No se pudieron enviar los cambios"
+  },
   "signIn": "Iniciar sesión",
   "signOut": "Cerrar sesión",
   "oauth": {
@@ -279,6 +282,7 @@
   "fileTree": {
     "searchPlaceholder": "Buscar archivos...",
     "noResults": "No hay archivos coincidentes",
+    "noChangedFiles": "No hay archivos modificados",
     "title": "Archivos",
     "showGitHubComments": "Mostrar comentarios de GitHub",
     "hideGitHubComments": "Ocultar comentarios de GitHub",
