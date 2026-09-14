@@ -17,20 +17,26 @@ interface ExportPageProps {
   exportFn: (request: ExportRequest) => Promise<Response>;
   organizations: ExportOrganization[];
   orgsLoading: boolean;
+  orgsError: boolean;
   projects: ExportProject[];
   projectsLoading: boolean;
+  projectsError: boolean;
   selectedOrgId: string | null;
   onOrgChange: (orgId: string) => void;
+  onRetryData: () => void;
 }
 
 export function ExportPage({
   exportFn,
   organizations,
   orgsLoading,
+  orgsError,
   projects,
   projectsLoading,
+  projectsError,
   selectedOrgId,
   onOrgChange,
+  onRetryData,
 }: ExportPageProps) {
   const { t } = useTranslation('common');
 
@@ -48,10 +54,13 @@ export function ExportPage({
             exportFn={exportFn}
             organizations={organizations}
             orgsLoading={orgsLoading}
+            orgsError={orgsError}
             projects={projects}
             projectsLoading={projectsLoading}
+            projectsError={projectsError}
             selectedOrgId={selectedOrgId}
             onOrgChange={onOrgChange}
+            onRetryData={onRetryData}
           />
         </div>
       </div>
@@ -62,7 +71,12 @@ export function ExportPage({
 export function ExportPageContainer() {
   const { t } = useTranslation('common');
   const { isLoaded, isSignedIn } = useAuth();
-  const { data: orgsData, isLoading: orgsLoading } = useUserOrganizations();
+  const {
+    data: orgsData,
+    isLoading: orgsLoading,
+    error: orgsError,
+    refetch: refetchOrganizations,
+  } = useUserOrganizations();
   const organizations = useMemo<ExportOrganization[]>(
     () =>
       (orgsData?.organizations ?? []).map((organization) => ({
@@ -87,8 +101,12 @@ export function ExportPageContainer() {
     }
   }, [organizations, selectedOrgId]);
 
-  const { data: projectData = [], isLoading: projectsLoading } =
-    useOrganizationProjects(selectedOrgId);
+  const {
+    data: projectData = [],
+    isLoading: projectsLoading,
+    error: projectsError,
+    retry: retryProjects,
+  } = useOrganizationProjects(selectedOrgId);
   const projects = useMemo<ExportProject[]>(
     () =>
       projectData.map((project) => ({
@@ -105,6 +123,11 @@ export function ExportPageContainer() {
       body: JSON.stringify(request),
     });
   }, []);
+
+  const onRetryData = useCallback(() => {
+    void refetchOrganizations();
+    retryProjects();
+  }, [refetchOrganizations, retryProjects]);
 
   if (!isLoaded) {
     return (
@@ -134,10 +157,13 @@ export function ExportPageContainer() {
       exportFn={exportFn}
       organizations={organizations}
       orgsLoading={orgsLoading}
+      orgsError={Boolean(orgsError)}
       projects={projects}
       projectsLoading={projectsLoading}
+      projectsError={Boolean(projectsError)}
       selectedOrgId={selectedOrgId}
       onOrgChange={setSelectedOrgId}
+      onRetryData={onRetryData}
     />
   );
 }

@@ -10,10 +10,13 @@ interface ExportLayoutProps {
   exportFn: (request: ExportRequest) => Promise<Response>;
   organizations: ExportOrganization[];
   orgsLoading: boolean;
+  orgsError: boolean;
   projects: ExportProject[];
   projectsLoading: boolean;
+  projectsError: boolean;
   selectedOrgId: string | null;
   onOrgChange: (orgId: string) => void;
+  onRetryData: () => void;
 }
 
 interface ExportData {
@@ -26,10 +29,13 @@ export function ExportLayout({
   exportFn,
   organizations,
   orgsLoading,
+  orgsError,
   projects,
   projectsLoading,
+  projectsError,
   selectedOrgId,
   onOrgChange,
+  onRetryData,
 }: ExportLayoutProps) {
   const [exportData, setExportData] = useState<ExportData | null>(null);
 
@@ -61,10 +67,13 @@ export function ExportLayout({
     <ExportChooseProjects
       organizations={organizations}
       orgsLoading={orgsLoading}
+      orgsError={orgsError}
       projects={projects}
       projectsLoading={projectsLoading}
+      projectsError={projectsError}
       selectedOrgId={selectedOrgId}
       onOrgChange={onOrgChange}
+      onRetryData={onRetryData}
       onContinue={handleChooseProjectsContinue}
     />
   );

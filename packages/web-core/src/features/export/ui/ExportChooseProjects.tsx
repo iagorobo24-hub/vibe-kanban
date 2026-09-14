@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
-import { CheckCircleIcon, CircleIcon, ImageIcon } from '@phosphor-icons/react';
+import {
+  ArrowClockwiseIcon,
+  CheckCircleIcon,
+  CircleIcon,
+  ImageIcon,
+  WarningCircleIcon,
+} from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
+import { deriveExportDataState } from './exportDataState';
 
 export interface ExportOrganization {
   id: string;
@@ -15,10 +22,13 @@ export interface ExportProject {
 interface ExportChooseProjectsProps {
   organizations: ExportOrganization[];
   orgsLoading: boolean;
+  orgsError: boolean;
   projects: ExportProject[];
   projectsLoading: boolean;
+  projectsError: boolean;
   selectedOrgId: string | null;
   onOrgChange: (orgId: string) => void;
+  onRetryData: () => void;
   onContinue: (
     orgId: string,
     projectIds: string[],
@@ -29,10 +39,13 @@ interface ExportChooseProjectsProps {
 export function ExportChooseProjects({
   organizations,
   orgsLoading,
+  orgsError,
   projects,
   projectsLoading,
+  projectsError,
   selectedOrgId,
   onOrgChange,
+  onRetryData,
   onContinue,
 }: ExportChooseProjectsProps) {
   const { t } = useTranslation('common');
@@ -79,12 +92,53 @@ export function ExportChooseProjects({
   };
 
   const isLoading = orgsLoading || projectsLoading;
+  const organizationState = deriveExportDataState({
+    isLoading: orgsLoading,
+    hasError: orgsError,
+    itemCount: organizations.length,
+  });
+  const projectState = deriveExportDataState({
+    isLoading: projectsLoading,
+    hasError: projectsError,
+    itemCount: projects.length,
+  });
+  const dataUnavailable =
+    organizationState === 'unavailable' || projectState === 'unavailable';
+  const dataStale = organizationState === 'stale' || projectState === 'stale';
 
   return (
     <div className="p-double space-y-double">
       <div className="space-y-base">
         <h2 className="text-lg font-semibold text-high">{t('export.title')}</h2>
       </div>
+
+      {(dataUnavailable || dataStale) && !isLoading && (
+        <div
+          className="flex items-start gap-half rounded-sm border border-warning/30 bg-warning/10 px-base py-half text-sm text-warning"
+          role={dataStale ? 'status' : 'alert'}
+        >
+          <WarningCircleIcon
+            className="mt-0.5 size-icon-sm shrink-0"
+            weight="fill"
+            aria-hidden="true"
+          />
+          <div className="min-w-0 flex-1">
+            <p>
+              {t(
+                dataStale ? 'export.dataMayBeStale' : 'export.dataUnavailable'
+              )}
+            </p>
+            <button
+              type="button"
+              onClick={onRetryData}
+              className="mt-half inline-flex items-center gap-half font-medium text-warning underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            >
+              <ArrowClockwiseIcon size={14} aria-hidden="true" />
+              {t('export.retryData')}
+            </button>
+          </div>
+        </div>
+      )}
 
       {organizations.length > 1 && (
         <div className="space-y-half">
