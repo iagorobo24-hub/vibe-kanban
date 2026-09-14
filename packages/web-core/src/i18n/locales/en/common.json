@@ -27,7 +27,7 @@
     "selectOption": "Select an option..."
   },
   "states": {
-    "loading": "Loading..."
+    "loading": "Loading…"
   },
   "ok": "OK",
   "error": "Error",
@@ -278,6 +278,11 @@
     "defaultPlaceholder": "Type a command or search...",
     "selectBranch": "Select Branch",
     "selectBranchFor": "Select Branch for {{repoName}}"
+  },
+  "guide": {
+    "topics": "Topics",
+    "topicsAriaLabel": "Guide topics",
+    "back": "Back"
   },
   "workspacesGuide": {
     "welcome": {

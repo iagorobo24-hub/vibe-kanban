@@ -296,6 +296,23 @@
     "agents": {
       "title": "Configuraciones de Agentes de Código",
       "description": "Personaliza el comportamiento de los agentes con diferentes configuraciones.",
+      "createDialog": {
+        "title": "Crear configuración",
+        "description": "Añade una configuración nueva para el ejecutor {{executorType}}.",
+        "nameLabel": "Nombre de la configuración",
+        "namePlaceholder": "p. ej., PRODUCCIÓN, DESARROLLO",
+        "cloneLabel": "Clonar desde (opcional)",
+        "clonePlaceholder": "Empezar en blanco o clonar una configuración existente",
+        "startBlank": "Empezar en blanco",
+        "cloneFrom": "Clonar desde {{configuration}}",
+        "createButton": "Crear configuración",
+        "errors": {
+          "nameRequired": "El nombre de la configuración no puede estar vacío",
+          "tooLong": "El nombre de la configuración debe tener 40 caracteres o menos",
+          "invalidCharacters": "El nombre de la configuración solo puede contener letras, números, guiones bajos y guiones",
+          "duplicate": "Ya existe una configuración con este nombre"
+        }
+      },
       "loading": "Cargando configuraciones de agentes...",
       "selectAgent": "Seleccionar agente",
       "save": {

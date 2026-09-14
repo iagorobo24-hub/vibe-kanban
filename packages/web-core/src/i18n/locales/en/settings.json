@@ -304,6 +304,23 @@
     "agents": {
       "title": "Coding Agent Configurations",
       "description": "Customize the behavior of coding agents with different configurations.",
+      "createDialog": {
+        "title": "Create new configuration",
+        "description": "Add a new configuration for the {{executorType}} executor.",
+        "nameLabel": "Configuration name",
+        "namePlaceholder": "e.g., PRODUCTION, DEVELOPMENT",
+        "cloneLabel": "Clone from (optional)",
+        "clonePlaceholder": "Start blank or clone an existing configuration",
+        "startBlank": "Start blank",
+        "cloneFrom": "Clone from {{configuration}}",
+        "createButton": "Create configuration",
+        "errors": {
+          "nameRequired": "Configuration name cannot be empty",
+          "tooLong": "Configuration name must be 40 characters or less",
+          "invalidCharacters": "Configuration name can only contain letters, numbers, underscores, and hyphens",
+          "duplicate": "A configuration with this name already exists"
+        }
+      },
       "loading": "Loading agent configurations...",
       "selectAgent": "Select agent",
       "save": {

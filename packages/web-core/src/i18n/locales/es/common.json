@@ -68,7 +68,7 @@
     "browserDefault": "Predeterminado del navegador"
   },
   "states": {
-    "loading": "Cargando..."
+    "loading": "Cargando…"
   },
   "orgSwitcher": {
     "organizations": "Organizaciones",
@@ -212,6 +212,11 @@
     "defaultPlaceholder": "Escribe un comando o busca...",
     "selectBranch": "Select Branch",
     "selectBranchFor": "Select Branch for {{repoName}}"
+  },
+  "guide": {
+    "topics": "Temas",
+    "topicsAriaLabel": "Temas de la guía",
+    "back": "Atrás"
   },
   "workspacesGuide": {
     "welcome": {
