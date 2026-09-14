@@ -112,6 +112,7 @@ function WorkspaceRow({
       onClick={() => onOpen(workspace.id)}
     >
       <span
+        aria-hidden="true"
         className={`agentos-status-dot agentos-status-dot--${stateCopy.tone}`}
       />
       <span className="agentos-workspace-row__body">
@@ -220,6 +221,7 @@ export function AgentOSOverview() {
           </div>
           <div className="agentos-plane-status" aria-live="polite">
             <span
+              aria-hidden="true"
               className={`agentos-status-dot agentos-status-dot--${planeStatus.tone}`}
             />
             <span>{planeStatus.label}</span>
@@ -254,6 +256,7 @@ export function AgentOSOverview() {
               <div
                 className="agentos-context"
                 aria-label={t('agentosOverview.objective.contextAriaLabel')}
+                role="group"
               >
                 <span className="agentos-context__label">
                   {t('agentosOverview.objective.contextLabel')}
@@ -324,6 +327,7 @@ export function AgentOSOverview() {
             </span>
             <strong className="agentos-metric-card__status">
               <span
+                aria-hidden="true"
                 className={`agentos-status-dot agentos-status-dot--${planeStatus.tone}`}
               />
               {isLoading
