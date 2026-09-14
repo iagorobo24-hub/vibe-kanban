@@ -176,7 +176,7 @@ export function AgentOSOverview() {
   );
   const planeStatus = isLoading
     ? { label: t('agentosOverview.status.connecting'), tone: 'connecting' }
-    : isConnected
+    : isConnected && !error
       ? { label: t('agentosOverview.status.online'), tone: 'online' }
       : { label: t('agentosOverview.status.offline'), tone: 'offline' };
   const streamUnavailable = !isLoading && (!isConnected || Boolean(error));
@@ -370,7 +370,7 @@ export function AgentOSOverview() {
               />
               {isLoading
                 ? t('agentosOverview.status.connecting')
-                : isConnected
+                : isConnected && !error
                   ? t('agentosOverview.status.onlineShort')
                   : t('agentosOverview.status.offlineShort')}
             </strong>
