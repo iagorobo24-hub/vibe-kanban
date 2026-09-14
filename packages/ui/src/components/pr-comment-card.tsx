@@ -135,7 +135,7 @@ function FullCard({
           type="button"
           className="absolute inset-0 z-0 rounded-md border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           onClick={onClick}
-          aria-label={`Open PR comment by @${author}`}
+          aria-label={t('prComments.card.openComment', { author })}
         />
       )}
       <div className={cn('relative z-10', onClick && 'pointer-events-none')}>
@@ -163,7 +163,7 @@ function FullCard({
                   window.open(url, '_blank', 'noopener,noreferrer');
                 }}
                 className="hover:text-foreground transition-colors"
-                aria-label="Open in browser"
+                aria-label={t('prComments.card.openInBrowser')}
               >
                 <ExternalLink className="w-3 h-3" aria-hidden="true" />
               </button>

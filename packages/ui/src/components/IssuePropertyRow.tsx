@@ -1,12 +1,12 @@
-import { cn } from "../lib/cn";
-import { PlusIcon, UsersIcon, XIcon } from "@phosphor-icons/react";
-import { useTranslation } from "react-i18next";
-import { PrimaryButton } from "./PrimaryButton";
-import { IconButton } from "./IconButton";
-import { StatusDot } from "./StatusDot";
-import { PriorityIcon, type PriorityLevel } from "./PriorityIcon";
-import { UserAvatar, type UserAvatarUser } from "./UserAvatar";
-import { KanbanAssignee, type KanbanAssigneeUser } from "./KanbanAssignee";
+import { cn } from '../lib/cn';
+import { PlusIcon, UsersIcon, XIcon } from '@phosphor-icons/react';
+import { useTranslation } from 'react-i18next';
+import { PrimaryButton } from './PrimaryButton';
+import { IconButton } from './IconButton';
+import { StatusDot } from './StatusDot';
+import { PriorityIcon, type PriorityLevel } from './PriorityIcon';
+import { UserAvatar, type UserAvatarUser } from './UserAvatar';
+import { KanbanAssignee, type KanbanAssigneeUser } from './KanbanAssignee';
 
 export interface IssuePropertyStatus {
   id: string;
@@ -15,10 +15,10 @@ export interface IssuePropertyStatus {
 }
 
 const priorityLabels: Record<PriorityLevel, string> = {
-  urgent: "Urgent",
-  high: "High",
-  medium: "Medium",
-  low: "Low",
+  urgent: 'Urgent',
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low',
 };
 
 export interface IssuePropertyRowProps {
@@ -55,13 +55,13 @@ export function IssuePropertyRow({
   disabled,
   className,
 }: IssuePropertyRowProps) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
 
   return (
     <div
       className={cn(
-        "agentos-issue-property-row flex items-center gap-half flex-wrap",
-        className,
+        'agentos-issue-property-row flex items-center gap-half flex-wrap',
+        className
       )}
     >
       <PrimaryButton
@@ -70,9 +70,9 @@ export function IssuePropertyRow({
         disabled={disabled}
       >
         <StatusDot
-          color={statuses.find((s) => s.id === statusId)?.color ?? "0 0% 50%"}
+          color={statuses.find((s) => s.id === statusId)?.color ?? '0 0% 50%'}
         />
-        {statuses.find((s) => s.id === statusId)?.name ?? "Select status"}
+        {statuses.find((s) => s.id === statusId)?.name ?? 'Select status'}
       </PrimaryButton>
 
       <PrimaryButton
@@ -81,7 +81,7 @@ export function IssuePropertyRow({
         disabled={disabled}
       >
         <PriorityIcon priority={priority} />
-        {priority ? priorityLabels[priority] : "No priority"}
+        {priority ? priorityLabels[priority] : 'No priority'}
       </PrimaryButton>
 
       <PrimaryButton
@@ -94,7 +94,7 @@ export function IssuePropertyRow({
         ) : (
           <>
             <UsersIcon className="size-icon-xs" weight="bold" />
-            {t("kanban.assignee", "Assignee")}
+            {t('kanban.assignee', 'Assignee')}
           </>
         )}
       </PrimaryButton>
@@ -103,7 +103,7 @@ export function IssuePropertyRow({
         (creatorUser.first_name?.trim() || creatorUser.username?.trim()) && (
           <div className="agentos-issue-property-row__creator flex items-center gap-half px-base py-half bg-panel rounded-sm text-sm whitespace-nowrap">
             <span className="text-low">
-              {t("kanban.createdBy", "Created by")}
+              {t('kanban.createdBy', 'Created by')}
             </span>
             <UserAvatar
               user={creatorUser}
@@ -124,7 +124,7 @@ export function IssuePropertyRow({
             className="whitespace-nowrap text-sm"
           >
             <span className="text-low">
-              {t("kanban.parentIssue", "Parent")}:
+              {t('kanban.parentIssue', 'Parent')}:
             </span>
             <span className="font-ibm-plex-mono text-normal">
               {parentIssue.simpleId}
@@ -135,8 +135,8 @@ export function IssuePropertyRow({
               icon={XIcon}
               onClick={onRemoveParentIssue}
               disabled={disabled}
-              aria-label="Remove parent issue"
-              title="Remove parent issue"
+              aria-label={t('accessibility.removeParentIssue')}
+              title={t('accessibility.removeParentIssue')}
             />
           )}
         </div>
@@ -147,8 +147,8 @@ export function IssuePropertyRow({
           icon={PlusIcon}
           onClick={onAddClick}
           disabled={disabled}
-          aria-label="Add"
-          title="Add"
+          aria-label={t('buttons.add')}
+          title={t('buttons.add')}
         />
       )}
     </div>

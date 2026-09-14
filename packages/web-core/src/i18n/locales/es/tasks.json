@@ -308,7 +308,9 @@
     },
     "card": {
       "review": "Revisión",
-      "tooltip": "Clic para ver, doble clic para editar"
+      "tooltip": "Clic para ver, doble clic para editar",
+      "openComment": "Abrir comentario del PR de @{{author}}",
+      "openInBrowser": "Abrir en el navegador"
     }
   },
   "taskFormDialog": {

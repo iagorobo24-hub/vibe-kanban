@@ -59,7 +59,15 @@
     "closeNavigation": "Cerrar menú de navegación",
     "account": "Cuenta",
     "userAvatar": "Avatar del usuario",
-    "agentosNavigation": "Navegación de AgentOS"
+    "agentosNavigation": "Navegación de AgentOS",
+    "selectColor": "Seleccionar un color",
+    "removeRelationship": "Eliminar relación",
+    "removeParentIssue": "Eliminar issue padre",
+    "addTag": "Añadir etiqueta",
+    "removeTag": "Eliminar etiqueta {{name}}",
+    "linkPullRequest": "Vincular pull request",
+    "closeDialog": "Cerrar diálogo",
+    "subIssueActions": "Acciones de la sub-issue"
   },
   "relativeTime": {
     "justNow": "ahora mismo",

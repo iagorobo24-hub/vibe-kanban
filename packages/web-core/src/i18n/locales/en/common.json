@@ -40,7 +40,15 @@
     "closeNavigation": "Close navigation menu",
     "account": "Account",
     "userAvatar": "User avatar",
-    "agentosNavigation": "AgentOS navigation"
+    "agentosNavigation": "AgentOS navigation",
+    "selectColor": "Select a color",
+    "removeRelationship": "Remove relationship",
+    "removeParentIssue": "Remove parent issue",
+    "addTag": "Add tag",
+    "removeTag": "Remove tag {{name}}",
+    "linkPullRequest": "Link pull request",
+    "closeDialog": "Close dialog",
+    "subIssueActions": "Sub-issue actions"
   },
   "relativeTime": {
     "justNow": "just now",

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PlusIcon, HashIcon, GitPullRequest } from '@phosphor-icons/react';
 import { cn } from '../lib/cn';
 import { PRESET_COLORS } from './ColorPicker';
@@ -65,6 +66,7 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
   disabled,
   className,
 }: IssueTagsRowProps<TTag>) {
+  const { t } = useTranslation('common');
   const selectedTags = availableTags.filter((tag) =>
     selectedTagIds.includes(tag.id)
   );
@@ -86,7 +88,7 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
       type="button"
       className="flex size-6 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:opacity-50"
       disabled={disabled}
-      aria-label="Add tag"
+      aria-label={t('accessibility.addTag')}
     >
       <PlusIcon className="size-icon-xs" weight="bold" aria-hidden="true" />
     </button>
@@ -101,7 +103,7 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
           type="button"
           onClick={() => handleTagToggle(tag.id)}
           disabled={disabled}
-          aria-label={`Remove tag ${tag.name}`}
+          aria-label={t('accessibility.removeTag', { name: tag.name })}
           className={cn(
             'inline-flex items-center justify-center',
             'h-6 gap-half px-base',
@@ -141,7 +143,7 @@ export function IssueTagsRow<TTag extends IssueTagBase>({
           onClick={onLinkPr}
           disabled={disabled}
           className="flex size-6 items-center justify-center rounded-sm text-low transition-colors hover:bg-panel hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:opacity-50"
-          aria-label="Link pull request"
+          aria-label={t('accessibility.linkPullRequest')}
         >
           <GitPullRequest
             className="size-icon-xs"

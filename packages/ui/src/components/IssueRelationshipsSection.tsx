@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useTranslation } from "react-i18next";
-import { XIcon } from "@phosphor-icons/react";
-import { CollapsibleSectionHeader } from "./CollapsibleSectionHeader";
+import { useTranslation } from 'react-i18next';
+import { XIcon } from '@phosphor-icons/react';
+import { CollapsibleSectionHeader } from './CollapsibleSectionHeader';
 import {
   RelationshipBadge,
   type RelationshipDisplayType,
-} from "./RelationshipBadge";
+} from './RelationshipBadge';
 
 export interface IssueRelationshipsSectionRelationship {
   relationshipId: string;
@@ -30,11 +30,11 @@ export function IssueRelationshipsSection({
   isLoading,
   headerExtra,
 }: IssueRelationshipsSectionProps) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
 
   return (
     <CollapsibleSectionHeader
-      title={t("kanban.relationships", "Relationships")}
+      title={t('kanban.relationships', 'Relationships')}
       persistKey="kanban-issue-relationships"
       defaultExpanded={true}
       headerExtra={headerExtra}
@@ -42,10 +42,10 @@ export function IssueRelationshipsSection({
     >
       <div className="agentos-issue-section p-base flex flex-col gap-half border-t">
         {isLoading ? (
-          <p className="text-low py-half">{t("states.loading")}</p>
+          <p className="text-low py-half">{t('states.loading')}</p>
         ) : relationships.length === 0 ? (
           <p className="text-low py-half">
-            {t("kanban.noRelationships", "No relationships")}
+            {t('kanban.noRelationships', 'No relationships')}
           </p>
         ) : (
           relationships.map((rel) => (
@@ -69,9 +69,13 @@ export function IssueRelationshipsSection({
                     onRemoveRelationship(rel.relationshipId);
                   }}
                   className="agentos-issue-relationship-row__remove rounded-sm p-half text-low opacity-0 transition-colors hover:bg-error/10 hover:text-error focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand group-hover:opacity-100"
-                  aria-label="Remove relationship"
+                  aria-label={t('accessibility.removeRelationship')}
                 >
-                  <XIcon className="size-icon-2xs" weight="bold" aria-hidden="true" />
+                  <XIcon
+                    className="size-icon-2xs"
+                    weight="bold"
+                    aria-hidden="true"
+                  />
                 </button>
               )}
             </div>

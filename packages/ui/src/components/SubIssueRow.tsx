@@ -175,8 +175,8 @@ export function SubIssueRow({
                     type="button"
                     onClick={(e) => e.stopPropagation()}
                     className="rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
-                    aria-label="Sub-issue actions"
-                    title="Sub-issue actions"
+                    aria-label={t('accessibility.subIssueActions')}
+                    title={t('accessibility.subIssueActions')}
                   >
                     <DotsThreeIcon
                       className="size-icon-xs"
