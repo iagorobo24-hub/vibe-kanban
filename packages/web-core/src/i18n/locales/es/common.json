@@ -393,6 +393,39 @@
     "defaultConfirm": "Confirmar",
     "defaultCancel": "Cancelar"
   },
+  "actionDialogs": {
+    "pullRequestLinked": {
+      "title": "Pull request vinculada",
+      "message": "Pull request #{{number}} vinculada",
+      "messageWithUrl": "Pull request #{{number}} vinculada — {{url}}"
+    },
+    "pullRequestNotFound": {
+      "title": "No se ha encontrado ninguna pull request",
+      "message": "No hay ninguna pull request abierta que coincida con esta rama. Comprueba que exista una pull request para esta rama en el remoto."
+    },
+    "cannotMerge": {
+      "title": "No se puede fusionar",
+      "message": "Este repositorio tiene una pull request abierta. Cierra o fusiona la pull request antes de fusionar directamente."
+    },
+    "rebaseRequired": {
+      "title": "Es necesario rebasar",
+      "message_one": "Tu rama está retrasada {{count}} commit respecto a la rama objetivo. ¿Quieres rebasarla primero?",
+      "message_other": "Tu rama está retrasada {{count}} commits respecto a la rama objetivo. ¿Quieres rebasarla primero?"
+    },
+    "mergeBranch": {
+      "title": "Fusionar rama",
+      "message": "¿Seguro que quieres fusionar esta rama con la rama objetivo?"
+    },
+    "deleteIssue": {
+      "title_one": "Eliminar incidencia",
+      "title_other": "Eliminar {{count}} incidencias",
+      "message_one": "¿Seguro que quieres eliminar esta incidencia? Esta acción no se puede deshacer.",
+      "message_other": "¿Seguro que quieres eliminar estas {{count}} incidencias? Esta acción no se puede deshacer."
+    },
+    "errors": {
+      "attachPullRequest": "No se ha podido vincular la pull request"
+    }
+  },
   "dialogs": {
     "selectGitRepository": "Seleccionar repositorio Git",
     "chooseExistingRepo": "Elige un repositorio existente de tu sistema de archivos"
@@ -437,6 +470,7 @@
       "duplicateWorkspace": "Duplicar",
       "renameWorkspace": "Renombrar",
       "deleteWorkspace": "Eliminar",
+      "deleteIssue": "Eliminar incidencia",
       "startReview": "Iniciar revisión",
       "spinOffWorkspace": "Crear espacio derivado",
       "openInIde": "Abrir en IDE",

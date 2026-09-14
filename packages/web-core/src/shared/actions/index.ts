@@ -75,6 +75,7 @@ import { SettingsDialog } from '@/shared/dialogs/settings/SettingsDialog';
 import { CreateWorkspaceFromPrDialog } from '@/shared/dialogs/command-bar/CreateWorkspaceFromPrDialog';
 import { buildWorkspaceCreateInitialState } from '@/shared/lib/workspaceCreateState';
 import { setCreateModeSeedState } from '@/features/create-mode/model/createModeSeedStore';
+import i18n from '@/i18n';
 
 // Mirrored sidebar icon for right sidebar toggle
 const RightSidebarIcon: Icon = forwardRef<SVGSVGElement, IconProps>(
@@ -976,23 +977,31 @@ export const Actions = {
         });
 
         await ConfirmDialog.show({
-          title: 'Pull Request Linked',
-          message: `Linked PR #${result.data.pr_number}${result.data.pr_url ? ` — ${result.data.pr_url}` : ''}`,
-          confirmText: 'OK',
+          title: i18n.t('actionDialogs.pullRequestLinked.title'),
+          message: result.data.pr_url
+            ? i18n.t('actionDialogs.pullRequestLinked.messageWithUrl', {
+                number: result.data.pr_number,
+                url: result.data.pr_url,
+              })
+            : i18n.t('actionDialogs.pullRequestLinked.message', {
+                number: result.data.pr_number,
+              }),
+          confirmText: i18n.t('ok'),
           showCancelButton: false,
           variant: 'success',
         });
       } else if (result.success && !result.data.pr_attached) {
         await ConfirmDialog.show({
-          title: 'No Pull Request Found',
-          message:
-            'No open pull request was found matching this branch. Make sure a PR exists for this branch on the remote.',
-          confirmText: 'OK',
+          title: i18n.t('actionDialogs.pullRequestNotFound.title'),
+          message: i18n.t('actionDialogs.pullRequestNotFound.message'),
+          confirmText: i18n.t('ok'),
           showCancelButton: false,
           variant: 'info',
         });
       } else if (!result.success) {
-        throw new Error(result.message || 'Failed to attach PR');
+        throw new Error(
+          result.message || i18n.t('actionDialogs.errors.attachPullRequest')
+        );
       }
     },
   },
@@ -1016,10 +1025,9 @@ export const Actions = {
       );
       if (hasOpenPR) {
         await ConfirmDialog.show({
-          title: 'Cannot Merge',
-          message:
-            'This repository has an open pull request. Please close or merge the PR before merging directly.',
-          confirmText: 'OK',
+          title: i18n.t('actionDialogs.cannotMerge.title'),
+          message: i18n.t('actionDialogs.cannotMerge.message'),
+          confirmText: i18n.t('ok'),
           showCancelButton: false,
         });
         return;
@@ -1059,10 +1067,12 @@ export const Actions = {
       if (commitsBehind > 0) {
         // Prompt user to rebase first
         const confirmRebase = await ConfirmDialog.show({
-          title: 'Rebase Required',
-          message: `Your branch is ${commitsBehind} commit${commitsBehind === 1 ? '' : 's'} behind the target branch. Would you like to rebase first?`,
-          confirmText: 'Rebase',
-          cancelText: 'Cancel',
+          title: i18n.t('actionDialogs.rebaseRequired.title'),
+          message: i18n.t('actionDialogs.rebaseRequired.message', {
+            count: commitsBehind,
+          }),
+          confirmText: i18n.t('commandBar.actions.rebase'),
+          cancelText: i18n.t('confirm.defaultCancel'),
         });
 
         if (confirmRebase === 'confirmed') {
@@ -1076,11 +1086,10 @@ export const Actions = {
       }
 
       const confirmResult = await ConfirmDialog.show({
-        title: 'Merge Branch',
-        message:
-          'Are you sure you want to merge this branch into the target branch?',
-        confirmText: 'Merge',
-        cancelText: 'Cancel',
+        title: i18n.t('actionDialogs.mergeBranch.title'),
+        message: i18n.t('actionDialogs.mergeBranch.message'),
+        confirmText: i18n.t('commandBar.actions.merge'),
+        cancelText: i18n.t('confirm.defaultCancel'),
       });
 
       if (confirmResult === 'confirmed') {
@@ -1505,13 +1514,10 @@ export const Actions = {
     execute: async (ctx, _projectId, issueIds) => {
       const count = issueIds.length;
       const result = await ConfirmDialog.show({
-        title: count === 1 ? 'Delete Issue' : `Delete ${count} Issues`,
-        message:
-          count === 1
-            ? 'Are you sure you want to delete this issue? This action cannot be undone.'
-            : `Are you sure you want to delete these ${count} issues? This action cannot be undone.`,
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
+        title: i18n.t('actionDialogs.deleteIssue.title', { count }),
+        message: i18n.t('actionDialogs.deleteIssue.message', { count }),
+        confirmText: i18n.t('commandBar.actions.deleteIssue'),
+        cancelText: i18n.t('confirm.defaultCancel'),
         variant: 'destructive',
       });
       if (result === 'confirmed' && ctx.projectMutations?.removeIssue) {

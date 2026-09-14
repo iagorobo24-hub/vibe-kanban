@@ -460,6 +460,39 @@
     "defaultConfirm": "Confirm",
     "defaultCancel": "Cancel"
   },
+  "actionDialogs": {
+    "pullRequestLinked": {
+      "title": "Pull request linked",
+      "message": "Pull request #{{number}} linked",
+      "messageWithUrl": "Pull request #{{number}} linked — {{url}}"
+    },
+    "pullRequestNotFound": {
+      "title": "No pull request found",
+      "message": "No open pull request matches this branch. Make sure a pull request exists for this branch on the remote."
+    },
+    "cannotMerge": {
+      "title": "Cannot merge",
+      "message": "This repository has an open pull request. Close or merge the pull request before merging directly."
+    },
+    "rebaseRequired": {
+      "title": "Rebase required",
+      "message_one": "Your branch is {{count}} commit behind the target branch. Would you like to rebase first?",
+      "message_other": "Your branch is {{count}} commits behind the target branch. Would you like to rebase first?"
+    },
+    "mergeBranch": {
+      "title": "Merge branch",
+      "message": "Are you sure you want to merge this branch into the target branch?"
+    },
+    "deleteIssue": {
+      "title_one": "Delete issue",
+      "title_other": "Delete {{count}} issues",
+      "message_one": "Are you sure you want to delete this issue? This action cannot be undone.",
+      "message_other": "Are you sure you want to delete these {{count}} issues? This action cannot be undone."
+    },
+    "errors": {
+      "attachPullRequest": "Failed to attach pull request"
+    }
+  },
   "dialogs": {
     "selectGitRepository": "Select Git Repository",
     "chooseExistingRepo": "Choose an existing repository from your file system"
@@ -504,6 +537,7 @@
       "duplicateWorkspace": "Duplicate",
       "renameWorkspace": "Rename",
       "deleteWorkspace": "Delete",
+      "deleteIssue": "Delete issue",
       "startReview": "Start Review",
       "spinOffWorkspace": "Spin off workspace",
       "openInIde": "Open in IDE",
