@@ -19,6 +19,7 @@ interface UseExecutionProcessesResult {
   isLoading: boolean;
   isConnected: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -50,7 +51,7 @@ export const useExecutionProcesses = (
     []
   );
 
-  const { data, isConnected, isInitialized, error } =
+  const { data, isConnected, isInitialized, error, retry } =
     useJsonPatchWsStream<ExecutionProcessState>(
       endpoint,
       !!sessionId && !approvalFixtureEnabled,
@@ -110,5 +111,6 @@ export const useExecutionProcesses = (
     isLoading,
     isConnected: approvalFixtureEnabled || isConnected,
     error,
+    retry,
   };
 };

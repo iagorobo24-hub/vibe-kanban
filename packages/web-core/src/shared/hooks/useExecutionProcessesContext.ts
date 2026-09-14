@@ -14,6 +14,7 @@ export type ExecutionProcessesContextType = {
   isLoading: boolean;
   isConnected: boolean;
   error: string | null;
+  retry: () => void;
 };
 
 export const ExecutionProcessesContext =
