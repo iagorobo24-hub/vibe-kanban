@@ -1106,6 +1106,7 @@
       "completedToday": "Completed today",
       "completedDetail": "last successful process",
       "unavailable": "—",
+      "unavailableAriaLabel": "Data unavailable",
       "unavailableDetail": "data unavailable",
       "controlPlane": "Control plane",
       "streams": "local streams"

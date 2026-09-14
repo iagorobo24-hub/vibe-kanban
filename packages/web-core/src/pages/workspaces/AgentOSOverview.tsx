@@ -303,7 +303,7 @@ export function AgentOSOverview() {
             <strong
               aria-label={
                 metricsUnavailable
-                  ? t('agentosOverview.metrics.unavailable')
+                  ? t('agentosOverview.metrics.unavailableAriaLabel')
                   : undefined
               }
             >
@@ -324,7 +324,7 @@ export function AgentOSOverview() {
             <strong
               aria-label={
                 metricsUnavailable
-                  ? t('agentosOverview.metrics.unavailable')
+                  ? t('agentosOverview.metrics.unavailableAriaLabel')
                   : undefined
               }
             >
@@ -345,7 +345,7 @@ export function AgentOSOverview() {
             <strong
               aria-label={
                 metricsUnavailable
-                  ? t('agentosOverview.metrics.unavailable')
+                  ? t('agentosOverview.metrics.unavailableAriaLabel')
                   : undefined
               }
             >
