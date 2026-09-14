@@ -1927,6 +1927,125 @@
   padding: 0.75rem 1rem;
 }
 
+/*
+ * The shared Button primitive is still used by legacy surfaces and dialogs.
+ * Keep its non-AgentOS fallback intact, but make every instance inside the
+ * AgentOS scope use the same quiet, border-light language as AgentOSButton.
+ * The data attribute avoids coupling this CSS to Tailwind's generated class
+ * names and keeps variant intent explicit for future agents.
+ */
+.agentos-theme .agentos-button-primitive {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--agentos-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 38px;
+  padding: 0.625rem 0.875rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.agentos-theme .agentos-button-primitive:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.agentos-theme .agentos-button-primitive:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.agentos-theme .agentos-button-primitive:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='default'] {
+  background: var(--agentos-accent);
+  border-color: transparent;
+  color: #241b17;
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='default']:hover:not(:disabled) {
+  background: var(--agentos-accent-strong);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='destructive'] {
+  background: rgb(221 141 130 / 12%);
+  border-color: rgb(221 141 130 / 35%);
+  color: var(--agentos-danger);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='destructive']:hover:not(:disabled) {
+  background: rgb(221 141 130 / 20%);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='outline'],
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='secondary'] {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='outline']:hover:not(:disabled),
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='secondary']:hover:not(:disabled) {
+  background: #35312d;
+  border-color: var(--agentos-border-strong);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='ghost'],
+.agentos-theme .agentos-button-primitive[data-agentos-variant='icon'] {
+  background: transparent;
+  border-color: transparent;
+  color: var(--agentos-text-muted);
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='ghost']:hover:not(:disabled),
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='icon']:hover:not(:disabled) {
+  background: var(--agentos-panel-raised);
+  border-color: var(--agentos-border);
+  color: var(--agentos-text);
+}
+
+.agentos-theme .agentos-button-primitive[data-agentos-variant='link'] {
+  background: transparent;
+  border-color: transparent;
+  color: var(--agentos-accent-strong);
+  min-height: auto;
+  padding: 0;
+}
+
+.agentos-theme
+  .agentos-button-primitive[data-agentos-variant='link']:hover:not(:disabled) {
+  color: var(--agentos-text);
+  transform: none;
+}
+
+.agentos-theme .agentos-button-primitive[data-agentos-size='icon'] {
+  min-height: 2.5rem;
+  padding: 0;
+  width: 2.5rem;
+}
+
 .agentos-oauth-button {
   background: var(--agentos-panel-raised);
   border-color: var(--agentos-border);
