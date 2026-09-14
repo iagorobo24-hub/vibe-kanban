@@ -845,6 +845,53 @@
   "retryEditor": {
     "placeholder": "Edit and resend your message..."
   },
+  "editorSelection": {
+    "title": "Choose editor",
+    "description": "The default editor failed to open. Please select an alternative editor to open the task worktree.",
+    "label": "Editor",
+    "open": "Open editor"
+  },
+  "remoteHome": {
+    "organizations": "Organizations",
+    "loadingOrganizationsAndProjects": "Loading organizations and projects...",
+    "signInAgain": "Sign in again",
+    "organizationCount_one": "{{count}} organization",
+    "organizationCount_other": "{{count}} organizations",
+    "projectCount_one": "{{count}} project",
+    "projectCount_other": "{{count}} projects",
+    "noOrganizations": "No organizations found",
+    "noOrganizationsDescription": "Create or join an organization to start working on projects.",
+    "noProjects": "No projects yet",
+    "hosts": {
+      "title": "Your hosts",
+      "empty": "No hosts linked yet",
+      "link": "Link a host"
+    },
+    "projects": {
+      "linkHostToOpen": "Link a host to open project",
+      "open": "Open project"
+    },
+    "errors": {
+      "title": "Failed to load",
+      "organizations": "Failed to load organizations"
+    }
+  },
+  "remoteWorkspaceUnavailable": {
+    "title": "Workspaces",
+    "connectingTo": "Connecting to",
+    "selectedHost": "selected host",
+    "ellipsis": "...",
+    "connectFailed": "Could not connect to {{host}}.",
+    "hostUnreachable": "This host is offline or no longer reachable from this browser.",
+    "selectOnlineHost": "Select an online host in the app bar to load local workspaces through relay.",
+    "openRelaySettings": "Open relay settings",
+    "retryHint": "After the host is online again, select it from the app bar and retry.",
+    "lastError": "Last connection error: {{error}}",
+    "steps": {
+      "openAgentOS": "On that machine, open AgentOS and confirm the host is online.",
+      "openRelaySettings": "If it still fails, open relay settings and pair this host again."
+    }
+  },
   "crashScreen": {
     "title": "Something went wrong",
     "description": "The application encountered an unexpected error.",

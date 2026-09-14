@@ -780,6 +780,53 @@
   "retryEditor": {
     "placeholder": "Edita y vuelve a enviar tu mensaje..."
   },
+  "editorSelection": {
+    "title": "Elegir editor",
+    "description": "No se ha podido abrir el editor predeterminado. Selecciona otro editor para abrir el worktree de la tarea.",
+    "label": "Editor",
+    "open": "Abrir editor"
+  },
+  "remoteHome": {
+    "organizations": "Organizaciones",
+    "loadingOrganizationsAndProjects": "Cargando organizaciones y proyectos...",
+    "signInAgain": "Iniciar sesión de nuevo",
+    "organizationCount_one": "{{count}} organización",
+    "organizationCount_other": "{{count}} organizaciones",
+    "projectCount_one": "{{count}} proyecto",
+    "projectCount_other": "{{count}} proyectos",
+    "noOrganizations": "No se han encontrado organizaciones",
+    "noOrganizationsDescription": "Crea una organización o únete a una para empezar a trabajar en proyectos.",
+    "noProjects": "Aún no hay proyectos",
+    "hosts": {
+      "title": "Tus hosts",
+      "empty": "Aún no hay hosts vinculados",
+      "link": "Vincular un host"
+    },
+    "projects": {
+      "linkHostToOpen": "Vincula un host para abrir el proyecto",
+      "open": "Abrir proyecto"
+    },
+    "errors": {
+      "title": "No se ha podido cargar",
+      "organizations": "No se han podido cargar las organizaciones"
+    }
+  },
+  "remoteWorkspaceUnavailable": {
+    "title": "Workspaces",
+    "connectingTo": "Conectando con",
+    "selectedHost": "el host seleccionado",
+    "ellipsis": "...",
+    "connectFailed": "No se ha podido conectar con {{host}}.",
+    "hostUnreachable": "Este host está desconectado o ya no es accesible desde este navegador.",
+    "selectOnlineHost": "Selecciona un host conectado en la barra de aplicación para cargar los workspaces locales mediante relay.",
+    "openRelaySettings": "Abrir configuración del relay",
+    "retryHint": "Cuando el host vuelva a estar conectado, selecciónalo en la barra de aplicación y reintenta.",
+    "lastError": "Último error de conexión: {{error}}",
+    "steps": {
+      "openAgentOS": "En esa máquina, abre AgentOS y confirma que el host está conectado.",
+      "openRelaySettings": "Si sigue fallando, abre la configuración del relay y vuelve a vincular este host."
+    }
+  },
   "crashScreen": {
     "title": "Algo salió mal",
     "description": "La aplicación encontró un error inesperado.",

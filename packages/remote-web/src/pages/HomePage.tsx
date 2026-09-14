@@ -19,6 +19,7 @@ import {
   resolveRelayNavigationHostId,
   useRelayAppBarHosts,
 } from "@remote/shared/hooks/useRelayAppBarHosts";
+import { useTranslation } from "@/i18n/useTranslation";
 
 type OrganizationWithProjects = {
   organization: OrganizationWithRole;
@@ -36,6 +37,7 @@ function getHostInitials(name: string): string {
 }
 
 export default function HomePage() {
+  const { t } = useTranslation("common");
   const navigate = useNavigate();
   const search = useSearch({ from: "/" });
   const setSelectedOrgId = useOrganizationStore((s) => s.setSelectedOrgId);
@@ -141,15 +143,17 @@ export default function HomePage() {
     (orgsError
       ? orgsError instanceof Error
         ? orgsError.message
-        : "Failed to load organizations"
+        : t("remoteHome.errors.organizations")
       : null);
 
   if (loading) {
     return (
       <CenteredCard>
-        <h1 className="text-lg font-semibold text-high">Organizations</h1>
+        <h1 className="text-lg font-semibold text-high">
+          {t("remoteHome.organizations")}
+        </h1>
         <p className="mt-base text-sm text-normal">
-          Loading organizations and projects...
+          {t("remoteHome.loadingOrganizationsAndProjects")}
         </p>
       </CenteredCard>
     );
@@ -158,7 +162,9 @@ export default function HomePage() {
   if (displayError) {
     return (
       <CenteredCard>
-        <h1 className="text-lg font-semibold text-high">Failed to load</h1>
+        <h1 className="text-lg font-semibold text-high">
+          {t("remoteHome.errors.title")}
+        </h1>
         <p className="mt-base text-sm text-normal">{displayError}</p>
         <button
           type="button"
@@ -167,7 +173,7 @@ export default function HomePage() {
             void handleSignInAgain();
           }}
         >
-          Sign in again
+          {t("remoteHome.signInAgain")}
         </button>
       </CenteredCard>
     );
@@ -184,10 +190,14 @@ export default function HomePage() {
       <div className="mx-auto w-full max-w-6xl px-base py-base sm:px-double sm:py-double">
         {isMobile && isSignedIn && (
           <section className="mb-double">
-            <h2 className="text-lg font-semibold text-high">Your Hosts</h2>
+            <h2 className="text-lg font-semibold text-high">
+              {t("remoteHome.hosts.title")}
+            </h2>
             {hosts.length === 0 ? (
               <div className="agentos-remote-card mt-base rounded-sm border border-border bg-secondary p-base text-center">
-                <p className="text-sm text-low">No hosts linked yet</p>
+                <p className="text-sm text-low">
+                  {t("remoteHome.hosts.empty")}
+                </p>
                 <button
                   type="button"
                   className="agentos-button agentos-button--secondary agentos-button--sm mt-base"
@@ -195,7 +205,7 @@ export default function HomePage() {
                     openRelaySettings();
                   }}
                 >
-                  Link a host
+                  {t("remoteHome.hosts.link")}
                 </button>
               </div>
             ) : (
@@ -251,7 +261,7 @@ export default function HomePage() {
                     openRelaySettings();
                   }}
                 >
-                  Link a host
+                  {t("remoteHome.hosts.link")}
                 </button>
               </div>
             )}
@@ -259,22 +269,22 @@ export default function HomePage() {
         )}
 
         <header className="space-y-half">
-          <h1 className="text-2xl font-semibold text-high">Organizations</h1>
+          <h1 className="text-2xl font-semibold text-high">
+            {t("remoteHome.organizations")}
+          </h1>
           <p className="text-sm text-low">
-            {organizationCount}{" "}
-            {organizationCount === 1 ? "organization" : "organizations"} •{" "}
-            {totalProjectCount}{" "}
-            {totalProjectCount === 1 ? "project" : "projects"}
+            {t("remoteHome.organizationCount", { count: organizationCount })} •{" "}
+            {t("remoteHome.projectCount", { count: totalProjectCount })}
           </p>
         </header>
 
         {organizationCount === 0 ? (
           <section className="agentos-remote-card mt-double rounded-sm border border-border bg-secondary p-base sm:p-double">
             <h2 className="text-base font-medium text-high">
-              No organizations found
+              {t("remoteHome.noOrganizations")}
             </h2>
             <p className="mt-half text-sm text-low">
-              Create or join an organization to start working on projects.
+              {t("remoteHome.noOrganizationsDescription")}
             </p>
           </section>
         ) : (
@@ -314,6 +324,8 @@ function OrganizationSection({
   hostId: string | null;
   onRequireHost: () => void;
 }) {
+  const { t } = useTranslation("common");
+
   return (
     <section className="agentos-remote-organization space-y-base">
       <header className="flex items-center justify-between gap-base">
@@ -321,13 +333,13 @@ function OrganizationSection({
           {organization.name}
         </h2>
         <p className="shrink-0 text-xs text-low">
-          {projects.length} {projects.length === 1 ? "project" : "projects"}
+          {t("remoteHome.projectCount", { count: projects.length })}
         </p>
       </header>
 
       {projects.length === 0 ? (
         <div className="agentos-remote-card rounded-sm border border-border bg-primary px-base py-base text-sm text-low">
-          No projects yet
+          {t("remoteHome.noProjects")}
         </div>
       ) : (
         <ul className="grid gap-base sm:grid-cols-2">
@@ -360,6 +372,7 @@ function ProjectCard({
   hostId: string | null;
   onRequireHost: () => void;
 }) {
+  const { t } = useTranslation("common");
   const setSelectedOrgId = useOrganizationStore((s) => s.setSelectedOrgId);
 
   if (!hostId) {
@@ -370,7 +383,9 @@ function ProjectCard({
         onClick={onRequireHost}
       >
         <p className="text-sm font-medium text-high">{project.name}</p>
-        <p className="mt-half text-xs text-low">Link a host to open project</p>
+        <p className="mt-half text-xs text-low">
+          {t("remoteHome.projects.linkHostToOpen")}
+        </p>
       </button>
     );
   }
@@ -386,7 +401,7 @@ function ProjectCard({
     >
       <p className="text-sm font-medium text-high">{project.name}</p>
       <p className="mt-half text-xs text-low group-hover:text-normal">
-        Open project
+        {t("remoteHome.projects.open")}
       </p>
     </Link>
   );
