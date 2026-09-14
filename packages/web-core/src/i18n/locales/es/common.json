@@ -845,6 +845,8 @@
     "hideDetails": "Ocultar detalles"
   },
   "syncError": {
+    "indicatorLabel_one": "{{count}} error de sincronización",
+    "indicatorLabel_other": "{{count}} errores de sincronización",
     "networkErrors": "Errores de red",
     "streamsAffected": "{{count}} flujo afectado",
     "streamsAffected_other": "{{count}} flujos afectados",

@@ -37,7 +37,7 @@ export function SyncErrorIndicator({
         <button
           type="button"
           className="flex items-center justify-center rounded-sm text-error hover:text-error/80"
-          aria-label={`${errors.length} sync error${errors.length > 1 ? 's' : ''}`}
+          aria-label={t('syncError.indicatorLabel', { count: errors.length })}
         >
           <WarningIcon className="size-icon-base" weight="fill" />
         </button>

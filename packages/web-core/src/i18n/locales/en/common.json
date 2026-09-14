@@ -910,6 +910,8 @@
     "hideDetails": "Hide details"
   },
   "syncError": {
+    "indicatorLabel_one": "{{count}} sync error",
+    "indicatorLabel_other": "{{count}} sync errors",
     "networkErrors": "Network Errors",
     "streamsAffected": "{{count}} stream affected",
     "streamsAffected_other": "{{count}} streams affected",
