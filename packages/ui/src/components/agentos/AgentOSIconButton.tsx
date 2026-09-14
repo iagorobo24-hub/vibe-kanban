@@ -1,8 +1,8 @@
-import * as React from "react";
-import { cn } from "../../lib/cn";
+import * as React from 'react';
+import { cn } from '../../lib/cn';
 
 export interface AgentOSIconButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "aria-label"> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'aria-label'> {
   label: string;
   icon: React.ReactNode;
 }
@@ -10,17 +10,17 @@ export interface AgentOSIconButtonProps
 export const AgentOSIconButton = React.forwardRef<
   HTMLButtonElement,
   AgentOSIconButtonProps
->(({ className, label, icon, type = "button", ...props }, ref) => (
+>(({ className, label, icon, title, type = 'button', ...props }, ref) => (
   <button
     ref={ref}
     type={type}
-    className={cn("agentos-icon-button", className)}
-    aria-label={label}
-    title={props.title ?? label}
+    className={cn('agentos-icon-button', className)}
     {...props}
+    aria-label={label}
+    title={title ?? label}
   >
     {icon}
   </button>
 ));
 
-AgentOSIconButton.displayName = "AgentOSIconButton";
+AgentOSIconButton.displayName = 'AgentOSIconButton';
