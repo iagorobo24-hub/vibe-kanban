@@ -37,7 +37,7 @@ const DeleteConfigurationDialogImpl = create<DeleteConfigurationDialogProps>(
         modal.resolve('deleted' as DeleteConfigurationResult);
         modal.hide();
       } catch {
-        setError('Failed to delete configuration. Please try again.');
+        setError(t('settings:settings.agents.errors.deleteFailed'));
       } finally {
         setIsDeleting(false);
       }
