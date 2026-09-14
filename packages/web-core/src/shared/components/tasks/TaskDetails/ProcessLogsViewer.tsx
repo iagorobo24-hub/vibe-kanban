@@ -12,12 +12,14 @@ interface ProcessLogsViewerContentProps {
   logs: LogEntry[];
   error: string | null;
   onRetry?: () => void;
+  isLoading?: boolean;
 }
 
 export function ProcessLogsViewerContent({
   logs,
   error,
   onRetry,
+  isLoading = false,
 }: ProcessLogsViewerContentProps) {
   return (
     <VirtualizedProcessLogs
@@ -27,6 +29,7 @@ export function ProcessLogsViewerContent({
       matchIndices={[]}
       currentMatchIndex={-1}
       onRetry={onRetry}
+      isLoading={isLoading}
     />
   );
 }
@@ -34,6 +37,13 @@ export function ProcessLogsViewerContent({
 export default function ProcessLogsViewer({
   processId,
 }: ProcessLogsViewerProps) {
-  const { logs, error, retry } = useLogStream(processId);
-  return <ProcessLogsViewerContent logs={logs} error={error} onRetry={retry} />;
+  const { logs, error, retry, isLoading } = useLogStream(processId);
+  return (
+    <ProcessLogsViewerContent
+      logs={logs}
+      error={error}
+      onRetry={retry}
+      isLoading={isLoading}
+    />
+  );
 }

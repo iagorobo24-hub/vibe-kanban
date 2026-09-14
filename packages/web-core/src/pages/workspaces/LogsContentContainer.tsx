@@ -35,7 +35,7 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
   const { t } = useTranslation('common');
   // Get logs for process content (only when type is 'process')
   const processId = content?.type === 'process' ? content.processId : '';
-  const { logs, error, retry } = useLogStream(processId);
+  const { logs, error, retry, isLoading } = useLogStream(processId);
 
   // Get the current logs based on content type
   const currentLogs = useMemo(() => {
@@ -153,6 +153,7 @@ export function LogsContentContainer({ className }: LogsContentContainerProps) {
         matchIndices={matchIndices}
         currentMatchIndex={currentMatchIndex}
         onRetry={retry}
+        isLoading={isLoading}
       />
     </div>
   );

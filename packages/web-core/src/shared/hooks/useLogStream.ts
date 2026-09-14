@@ -8,6 +8,7 @@ interface UseLogStreamResult {
   logs: LogEntry[];
   error: string | null;
   retry: () => void;
+  isLoading: boolean;
 }
 
 export const useLogStream = (processId: string): UseLogStreamResult => {
@@ -17,11 +18,13 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
   const retryCountRef = useRef<number>(0);
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isIntentionallyClosed = useRef<boolean>(false);
+  const lastProcessIdRef = useRef<string | null>(null);
   // Prevent reconnection after the server signals the stream is done
   const finishedRef = useRef<boolean>(false);
   // Track current processId to prevent stale WebSocket messages from contaminating logs
   const currentProcessIdRef = useRef<string>(processId);
   const [retryNonce, setRetryNonce] = useState(0);
+  const [isLoading, setIsLoading] = useState(Boolean(processId));
 
   const retry = useCallback(() => {
     setRetryNonce((value) => value + 1);
@@ -29,6 +32,10 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
 
   useEffect(() => {
     if (!processId) {
+      lastProcessIdRef.current = null;
+      setLogs([]);
+      setError(null);
+      setIsLoading(false);
       return;
     }
 
@@ -37,10 +44,16 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
     // Update the ref to track the current processId
     currentProcessIdRef.current = processId;
 
-    // Clear logs when process changes
-    setLogs([]);
+    const processChanged = lastProcessIdRef.current !== processId;
+    lastProcessIdRef.current = processId;
+
+    // Clear logs only when selecting another process. A manual retry keeps
+    // the last known output visible while the stream reconnects.
+    if (processChanged) setLogs([]);
     setError(null);
+    setIsLoading(true);
     finishedRef.current = false;
+    retryCountRef.current = 0;
 
     const open = () => {
       // Don't reconnect if the stream already signalled finished
@@ -67,7 +80,7 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
           // Track whether this is a reconnect so we can replace (not append)
           // logs on the first incoming message to avoid duplicates from
           // the server replaying history.
-          const isReconnect = retryCountRef.current > 0;
+          const isReconnect = retryNonce > 0 || retryCountRef.current > 0;
           let pendingReplace = isReconnect;
 
           ws.onopen = () => {
@@ -80,6 +93,7 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
               return;
             }
             setError(null);
+            setIsLoading(false);
             retryCountRef.current = 0;
             // Don't clear logs here — on reconnect the server replays
             // history, and clearing eagerly causes a flash if the
@@ -152,12 +166,14 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
             }
             // Only retry if the close was not intentional and not a normal closure
             if (!isIntentionallyClosed.current && event.code !== 1000) {
+              setIsLoading(true);
               const next = retryCountRef.current + 1;
               retryCountRef.current = next;
               if (next <= 6) {
                 const delay = Math.min(1500, 250 * 2 ** (next - 1));
                 retryTimerRef.current = setTimeout(() => open(), delay);
               } else {
+                setIsLoading(false);
                 setError('Connection failed');
               }
             }
@@ -168,10 +184,12 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
           }
           const next = retryCountRef.current + 1;
           retryCountRef.current = next;
+          setIsLoading(true);
           if (next <= 6) {
             const delay = Math.min(1500, 250 * 2 ** (next - 1));
             retryTimerRef.current = setTimeout(() => open(), delay);
           } else {
+            setIsLoading(false);
             setError('Connection failed');
           }
         }
@@ -194,5 +212,5 @@ export const useLogStream = (processId: string): UseLogStreamResult => {
     };
   }, [processId, retryNonce]);
 
-  return { logs, error, retry };
+  return { logs, error, retry, isLoading };
 };

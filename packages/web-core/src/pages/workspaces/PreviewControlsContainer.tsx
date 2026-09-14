@@ -58,6 +58,7 @@ export function PreviewControlsContainer({
     logs,
     error: logsError,
     retry: retryLogs,
+    isLoading: logsLoading,
   } = useLogStream(activeProcess?.id ?? '');
 
   const handleViewFullLogs = useCallback(() => {
@@ -94,6 +95,7 @@ export function PreviewControlsContainer({
           matchIndices={[]}
           currentMatchIndex={-1}
           onRetry={retryLogs}
+          isLoading={logsLoading}
         />
       }
       onViewFullLogs={handleViewFullLogs}

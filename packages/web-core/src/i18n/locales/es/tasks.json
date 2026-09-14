@@ -298,6 +298,7 @@
     "noLogsAvailable": "No hay registros disponibles",
     "connectionFailed": "La conexión en directo de los registros ha fallado.",
     "retryLogs": "Reintentar registros",
+    "loadingLogs": "Conectando con los registros en directo…",
     "agent": "Agente:",
     "backToList": "Volver a la lista",
     "completed": "Completado: {{date}}",

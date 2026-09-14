@@ -48,6 +48,7 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
     logs,
     error: logsError,
     retry: retryLogs,
+    isLoading: logsLoading,
   } = useLogStream(selectedProcess?.id ?? '');
 
   useEffect(() => {
@@ -326,6 +327,7 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
                 logs={logs}
                 error={logsError}
                 onRetry={retryLogs}
+                isLoading={logsLoading}
               />
             ) : loadingProcessId === selectedProcessId ? (
               <div className="text-center text-muted-foreground">

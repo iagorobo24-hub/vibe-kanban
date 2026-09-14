@@ -111,6 +111,7 @@
     "noLogsAvailable": "No logs available",
     "connectionFailed": "The live log connection failed.",
     "retryLogs": "Retry log stream",
+    "loadingLogs": "Connecting to live logs…",
     "selectAttempt": "Select an attempt to view execution processes.",
     "errorLoadingUpdates": "Failed to load live updates for processes.",
     "processesUnavailable": "Live execution processes are unavailable.",

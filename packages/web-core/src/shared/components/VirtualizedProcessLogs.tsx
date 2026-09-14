@@ -33,6 +33,7 @@ export interface VirtualizedProcessLogsProps {
   matchIndices: number[];
   currentMatchIndex: number;
   onRetry?: () => void;
+  isLoading?: boolean;
 }
 
 type LogEntryWithKey = LogEntry & { key: string; originalIndex: number };
@@ -75,9 +76,10 @@ export function VirtualizedProcessLogs({
   matchIndices,
   currentMatchIndex,
   onRetry,
+  isLoading = false,
 }: VirtualizedProcessLogsProps) {
   const { t } = useTranslation('tasks');
-  const viewState = deriveLogStreamViewState(logs.length, !!error);
+  const viewState = deriveLogStreamViewState(logs.length, !!error, isLoading);
   const displayError =
     error === 'Connection failed' ? t('processes.connectionFailed') : error;
   const [channelData, setChannelData] =
@@ -137,6 +139,16 @@ export function VirtualizedProcessLogs({
     }
   }, [currentMatchIndex, matchIndices]);
 
+  if (viewState === 'loading') {
+    return (
+      <div className="h-full flex items-center justify-center" role="status">
+        <p className="text-center text-muted-foreground text-sm">
+          {t('processes.loadingLogs')}
+        </p>
+      </div>
+    );
+  }
+
   if (viewState === 'empty') {
     return (
       <div className="h-full flex items-center justify-center">
@@ -183,7 +195,7 @@ export function VirtualizedProcessLogs({
 
   return (
     <div className="virtuoso-license-wrapper flex h-full min-h-0 flex-col overflow-hidden">
-      {viewState === 'logs-with-error' && (
+      {(viewState === 'logs-with-error' || viewState === 'logs-loading') && (
         <div
           className="flex shrink-0 items-center justify-between gap-base border-b border-warning/50 bg-warning/10 px-base py-half text-sm text-warning"
           role="alert"
@@ -194,7 +206,11 @@ export function VirtualizedProcessLogs({
               weight="fill"
               aria-hidden="true"
             />
-            <span className="truncate">{displayError}</span>
+            <span className="truncate">
+              {viewState === 'logs-loading'
+                ? t('processes.reconnecting')
+                : displayError}
+            </span>
           </div>
           {onRetry && (
             <button
