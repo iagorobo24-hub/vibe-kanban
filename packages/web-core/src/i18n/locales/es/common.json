@@ -511,6 +511,8 @@
     "createDraftWorkspaceImmediately": "Crear workspace borrador inmediatamente",
     "createDraftWorkspaceDescription": "Después de crear la incidencia, abrir el formulario de creación de workspace con los datos de la incidencia",
     "createIssue": "Crear tarea",
+    "openProjectsGuide": "Guía de proyectos",
+    "editProjectSettings": "Ajustes del proyecto",
     "newIssue": "Nuevo issue",
     "previewCodeBlock": "[Bloque de código]",
     "previewImage": "[Imagen]",
@@ -746,9 +748,9 @@
     "pendingApprovals_one": "{{count}} aprobación pendiente.",
     "pendingApprovals_other": "{{count}} aprobaciones pendientes.",
     "noPendingApprovals": "No hay aprobaciones pendientes.",
-    "routing": "Routing",
+    "routing": "Enrutamiento",
     "routingDetail": "La selección automática aún no está activada.",
-    "streamError": "No se pudo actualizar el stream de workspaces. Comprueba el servidor local antes de iniciar una tarea.",
+    "streamError": "No se ha podido actualizar el stream de espacios de trabajo. Comprueba el servidor local antes de iniciar una tarea.",
     "footerLabel": "AgentOS · supervisión local-first",
     "footerEvidence": "Los estados reflejan eventos observados, no inferencias de pantalla."
   },
@@ -831,7 +833,7 @@
     }
   },
   "errors": {
-    "generic": "An unexpected error occurred"
+    "generic": "Se produjo un error inesperado"
   },
   "personal": "Personal",
   "askQuestion": {
