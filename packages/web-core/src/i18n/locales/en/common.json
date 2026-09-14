@@ -330,6 +330,16 @@
     "nextMatch": "Next match",
     "nextMatchShortcut": "Next match (Enter)"
   },
+  "workspaceInspector": {
+    "issue": "Issue",
+    "workspace": "Workspace",
+    "openLinkedIssue": "Open linked issue",
+    "closeCreateWorkspace": "Close create workspace view",
+    "openWorkspace": "Open workspace",
+    "openWorkspaceView": "Open in workspace view",
+    "closeConversation": "Close conversation view",
+    "scrollToBottom": "Scroll to bottom"
+  },
   "processes": {
     "noProcesses": "No processes",
     "terminal": "Terminal"

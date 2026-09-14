@@ -264,6 +264,16 @@
     "nextMatch": "Siguiente coincidencia",
     "nextMatchShortcut": "Siguiente coincidencia (Intro)"
   },
+  "workspaceInspector": {
+    "issue": "Issue",
+    "workspace": "Workspace",
+    "openLinkedIssue": "Abrir issue vinculado",
+    "closeCreateWorkspace": "Cerrar vista de creación de workspace",
+    "openWorkspace": "Abrir workspace",
+    "openWorkspaceView": "Abrir vista del workspace",
+    "closeConversation": "Cerrar vista de conversación",
+    "scrollToBottom": "Desplazarse al final"
+  },
   "processes": {
     "noProcesses": "Sin procesos",
     "terminal": "Terminal"

@@ -90,7 +90,7 @@ function WorkspaceCreatePanel({
   onClose,
   children,
 }: WorkspaceCreatePanelProps) {
-  const { t } = useTranslation('tasks');
+  const { t } = useTranslation(['tasks', 'common']);
   const breadcrumbButtonClass =
     'min-w-0 text-sm text-normal truncate rounded-sm px-1 py-0.5 hover:bg-panel hover:text-high transition-colors';
 
@@ -110,9 +110,9 @@ function WorkspaceCreatePanel({
             type="button"
             onClick={handleOpenIssue}
             className={`${breadcrumbButtonClass} shrink-0`}
-            aria-label="Open linked issue"
+            aria-label={t('common:workspaceInspector.openLinkedIssue')}
           >
-            {linkedIssueSimpleId ?? 'Issue'}
+            {linkedIssueSimpleId ?? t('common:workspaceInspector.issue')}
           </button>
           <span className="text-low text-sm shrink-0" aria-hidden="true">
             /
@@ -126,7 +126,7 @@ function WorkspaceCreatePanel({
             type="button"
             onClick={onClose}
             className="rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
-            aria-label="Close create workspace view"
+            aria-label={t('common:workspaceInspector.closeCreateWorkspace')}
           >
             <XIcon className="size-icon-sm" weight="bold" aria-hidden="true" />
           </button>
@@ -141,6 +141,7 @@ function WorkspaceSessionPanel({
   workspaceId,
   onClose,
 }: WorkspaceSessionPanelProps) {
+  const { t } = useTranslation('common');
   const appNavigation = useAppNavigation();
   const { projectId, getIssue } = useProjectContext();
   const routeState = useCurrentKanbanRouteState();
@@ -247,20 +248,23 @@ function WorkspaceSessionPanel({
                     type="button"
                     onClick={handleOpenIssuePanel}
                     className={`${breadcrumbButtonClass} shrink-0`}
-                    aria-label="Open linked issue"
+                    aria-label={t('workspaceInspector.openLinkedIssue')}
                   >
-                    {issueSimpleId ?? 'Issue'}
+                    {issueSimpleId ?? t('workspaceInspector.issue')}
                   </button>
-                  <span className="text-low text-sm shrink-0" aria-hidden="true">
+                  <span
+                    className="text-low text-sm shrink-0"
+                    aria-hidden="true"
+                  >
                     /
                   </span>
                   <button
                     type="button"
                     onClick={handleOpenWorkspaceView}
                     className={breadcrumbButtonClass}
-                    aria-label="Open workspace"
+                    aria-label={t('workspaceInspector.openWorkspace')}
                   >
-                    {workspaceBranch ?? 'Workspace'}
+                    {workspaceBranch ?? t('workspaceInspector.workspace')}
                   </button>
                 </div>
 
@@ -269,7 +273,7 @@ function WorkspaceSessionPanel({
                     type="button"
                     onClick={handleOpenWorkspaceView}
                     className="rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
-                    aria-label="Open in workspace view"
+                    aria-label={t('workspaceInspector.openWorkspaceView')}
                   >
                     <ArrowsOutIcon
                       className="size-icon-sm"
@@ -281,7 +285,7 @@ function WorkspaceSessionPanel({
                     type="button"
                     onClick={onClose}
                     className="rounded-sm p-half text-low hover:bg-panel hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
-                    aria-label="Close conversation view"
+                    aria-label={t('workspaceInspector.closeConversation')}
                   >
                     <XIcon
                       className="size-icon-sm"
@@ -317,8 +321,8 @@ function WorkspaceSessionPanel({
                       type="button"
                       onClick={() => handleScrollToBottom('auto')}
                       className="absolute bottom-2 right-4 z-10 pointer-events-auto flex size-8 items-center justify-center rounded-full border border-secondary bg-secondary/80 text-low shadow-md backdrop-blur-sm transition-colors hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                      aria-label="Scroll to bottom"
-                      title="Scroll to bottom"
+                      aria-label={t('workspaceInspector.scrollToBottom')}
+                      title={t('workspaceInspector.scrollToBottom')}
                     >
                       <ArrowDownIcon
                         className="size-icon-base"
