@@ -176,6 +176,7 @@ export const Actions = {
   DuplicateWorkspace: {
     id: 'duplicate-workspace',
     label: 'Duplicate',
+    translationKey: 'commandBar.actions.duplicateWorkspace',
     icon: CopyIcon,
     shortcut: 'W D',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -221,6 +222,7 @@ export const Actions = {
   RenameWorkspace: {
     id: 'rename-workspace',
     label: 'Rename',
+    translationKey: 'commandBar.actions.renameWorkspace',
     icon: PencilSimpleIcon,
     shortcut: 'W R',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -283,6 +285,7 @@ export const Actions = {
   DeleteWorkspace: {
     id: 'delete-workspace',
     label: 'Delete',
+    translationKey: 'commandBar.actions.deleteWorkspace',
     icon: TrashIcon,
     shortcut: 'W X',
     variant: 'destructive',
@@ -342,6 +345,7 @@ export const Actions = {
   StartReview: {
     id: 'start-review',
     label: 'Start Review',
+    translationKey: 'commandBar.actions.startReview',
     icon: HighlighterIcon,
     requiresTarget: ActionTargetType.WORKSPACE,
     isVisible: (ctx) => ctx.hasWorkspace,
@@ -356,6 +360,7 @@ export const Actions = {
   SpinOffWorkspace: {
     id: 'spin-off-workspace',
     label: 'Spin off workspace',
+    translationKey: 'commandBar.actions.spinOffWorkspace',
     icon: GitForkIcon,
     requiresTarget: ActionTargetType.WORKSPACE,
     isVisible: (ctx) => ctx.hasWorkspace,
@@ -747,6 +752,7 @@ export const Actions = {
   OpenInIDE: {
     id: 'open-in-ide',
     label: 'Open in IDE',
+    translationKey: 'commandBar.actions.openInIde',
     icon: 'ide-icon' as const,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.hasWorkspace,
@@ -781,6 +787,7 @@ export const Actions = {
   CopyWorkspacePath: {
     id: 'copy-workspace-path',
     label: 'Copy Workspace Path',
+    translationKey: 'commandBar.actions.copyWorkspacePath',
     icon: 'copy-icon' as const,
     shortcut: 'Y P',
     requiresTarget: ActionTargetType.NONE,
@@ -794,6 +801,7 @@ export const Actions = {
   CopyRawLogs: {
     id: 'copy-raw-logs',
     label: 'Copy Raw Logs',
+    translationKey: 'commandBar.actions.copyRawLogs',
     icon: CopyIcon,
     shortcut: 'Y L',
     requiresTarget: ActionTargetType.NONE,
@@ -810,6 +818,7 @@ export const Actions = {
   ToggleDevServer: {
     id: 'toggle-dev-server',
     label: 'Dev Server',
+    translationKey: 'commandBar.actions.devServer',
     icon: PlayIcon,
     shortcut: 'T D',
     requiresTarget: ActionTargetType.NONE,
@@ -862,6 +871,7 @@ export const Actions = {
   GitCreatePR: {
     id: 'git-create-pr',
     label: 'Create Pull Request',
+    translationKey: 'commandBar.actions.createPullRequest',
     icon: GitPullRequestIcon,
     shortcut: 'X P',
     requiresTarget: ActionTargetType.GIT,
@@ -898,6 +908,7 @@ export const Actions = {
   GitLinkPR: {
     id: 'git-link-pr',
     label: 'Link Pull Request',
+    translationKey: 'commandBar.actions.linkPullRequest',
     icon: LinkIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos && !ctx.hasOpenPR,
@@ -937,6 +948,7 @@ export const Actions = {
   GitMerge: {
     id: 'git-merge',
     label: 'Merge',
+    translationKey: 'commandBar.actions.merge',
     icon: GitMergeIcon,
     shortcut: 'X M',
     requiresTarget: ActionTargetType.GIT,
@@ -1029,6 +1041,7 @@ export const Actions = {
   GitRebase: {
     id: 'git-rebase',
     label: 'Rebase',
+    translationKey: 'commandBar.actions.rebase',
     icon: ArrowsClockwiseIcon,
     shortcut: 'X R',
     requiresTarget: ActionTargetType.GIT,
@@ -1045,6 +1058,7 @@ export const Actions = {
   GitChangeTarget: {
     id: 'git-change-target',
     label: 'Change Target Branch',
+    translationKey: 'commandBar.actions.changeTargetBranch',
     icon: CrosshairIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1081,6 +1095,7 @@ export const Actions = {
   GitPush: {
     id: 'git-push',
     label: 'Push',
+    translationKey: 'commandBar.actions.push',
     icon: ArrowUpIcon,
     shortcut: 'X U',
     requiresTarget: ActionTargetType.GIT,
@@ -1107,6 +1122,7 @@ export const Actions = {
   RepoCopyPath: {
     id: 'repo-copy-path',
     label: 'Copy Repo Path',
+    translationKey: 'commandBar.actions.copyRepoPath',
     icon: CopyIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1126,6 +1142,7 @@ export const Actions = {
   RepoOpenInIDE: {
     id: 'repo-open-in-ide',
     label: 'Open Repo in IDE',
+    translationKey: 'commandBar.actions.openRepoInIde',
     icon: DesktopIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1148,6 +1165,7 @@ export const Actions = {
   RepoSettings: {
     id: 'repo-settings',
     label: 'Repository Settings',
+    translationKey: 'commandBar.actions.repositorySettings',
     icon: GearIcon,
     requiresTarget: ActionTargetType.GIT,
     isVisible: (ctx) => ctx.hasWorkspace && ctx.hasGitRepos,
@@ -1165,6 +1183,7 @@ export const Actions = {
   RunSetupScript: {
     id: 'run-setup-script',
     label: 'Run Setup Script',
+    translationKey: 'commandBar.actions.runSetupScript',
     icon: TerminalIcon,
     shortcut: 'R S',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -1187,6 +1206,7 @@ export const Actions = {
   RunCleanupScript: {
     id: 'run-cleanup-script',
     label: 'Run Cleanup Script',
+    translationKey: 'commandBar.actions.runCleanupScript',
     icon: TerminalIcon,
     shortcut: 'R C',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -1209,6 +1229,7 @@ export const Actions = {
   RunArchiveScript: {
     id: 'run-archive-script',
     label: 'Run Archive Script',
+    translationKey: 'commandBar.actions.runArchiveScript',
     icon: TerminalIcon,
     shortcut: 'R A',
     requiresTarget: ActionTargetType.WORKSPACE,
