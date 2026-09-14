@@ -208,7 +208,11 @@ export function PreviewBrowserContainer({
         : latest
     );
   }, [runningDevServers]);
-  const { logs } = useLogStream(primaryDevServer?.id ?? '');
+  const {
+    logs,
+    error: previewLogsError,
+    retry: retryPreviewLogs,
+  } = useLogStream(primaryDevServer?.id ?? '');
   const urlInfo = usePreviewUrl(logs, previewProxyPort ?? undefined);
 
   // Detect failed dev server process (failed status or completed with non-zero exit code)
@@ -958,6 +962,8 @@ export function PreviewBrowserContainer({
         workspaceId && repos.length > 0 ? handleFixDevScript : undefined
       }
       hasFailedDevServer={hasFailedDevServer}
+      previewLogsError={previewLogsError}
+      onRetryPreviewLogs={retryPreviewLogs}
       mobileScale={mobileScale}
       className={className}
       iframeRef={iframeRef}

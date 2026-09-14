@@ -15,6 +15,7 @@ import {
   CheckIcon,
   TerminalIcon,
   GlobeIcon,
+  WarningCircleIcon,
 } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
 import { cn } from "../lib/cn";
@@ -75,6 +76,8 @@ interface PreviewBrowserProps {
   handleEditDevScript: () => void;
   handleFixDevScript?: () => void;
   hasFailedDevServer?: boolean;
+  previewLogsError?: string | null;
+  onRetryPreviewLogs?: () => void;
   mobileScale: number;
   className?: string;
   iframeRef: RefObject<HTMLIFrameElement>;
@@ -121,6 +124,8 @@ export function PreviewBrowser({
   handleEditDevScript,
   handleFixDevScript,
   hasFailedDevServer,
+  previewLogsError,
+  onRetryPreviewLogs,
   mobileScale,
   className,
   iframeRef,
@@ -582,6 +587,39 @@ export function PreviewBrowser({
                   <p className="text-sm text-low mt-base">
                     {t("preview.loading.manualUrlHint")}
                   </p>
+                )}
+                {previewLogsError && (
+                  <div
+                    className="mt-base flex max-w-md flex-wrap items-center justify-center gap-base rounded-sm border border-warning/50 bg-warning/10 px-base py-half text-sm text-warning"
+                    role="alert"
+                  >
+                    <div className="flex min-w-0 items-center gap-half">
+                      <WarningCircleIcon
+                        className="size-icon-sm shrink-0"
+                        weight="fill"
+                        aria-hidden="true"
+                      />
+                      <span>
+                        {previewLogsError === "Connection failed"
+                          ? t("processes.connectionFailed")
+                          : previewLogsError}
+                      </span>
+                    </div>
+                    {onRetryPreviewLogs && (
+                      <button
+                        type="button"
+                        onClick={onRetryPreviewLogs}
+                        className="inline-flex items-center gap-half rounded-sm px-half py-quarter font-medium text-warning transition-colors hover:bg-warning/15 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+                      >
+                        <ArrowClockwiseIcon
+                          className="size-icon-sm"
+                          weight="bold"
+                          aria-hidden="true"
+                        />
+                        {t("processes.retryLogs")}
+                      </button>
+                    )}
+                  </div>
                 )}
               </>
             ) : hasDevScript ? (
