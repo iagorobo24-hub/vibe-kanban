@@ -190,7 +190,7 @@ export function NavbarContainer({
   );
 
   const navbarTitle = isCreateMode
-    ? 'Create Workspace'
+    ? t('createMode.navbarTitle')
     : isOnProjectPage
       ? orgName
       : selectedWorkspace?.branch;

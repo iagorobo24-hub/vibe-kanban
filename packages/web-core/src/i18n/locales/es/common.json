@@ -506,6 +506,21 @@
     }
   },
   "createMode": {
+    "navbarTitle": "Nuevo espacio de trabajo",
+    "eyebrow": "AGENTOS / NUEVA EJECUCIÓN",
+    "context": "Define el objetivo, el repositorio y el agente antes de lanzar cualquier proceso.",
+    "editorPlaceholder": "Describe la tarea...",
+    "repoSummary": {
+      "none": "0 repositorios seleccionados",
+      "selectBranch": "Seleccionar rama",
+      "selected_one": "{{count}} repositorio seleccionado",
+      "selected_other": "{{count}} repositorios seleccionados"
+    },
+    "errors": {
+      "repositoryRequired": "Añade al menos un repositorio para crear un espacio de trabajo",
+      "branchRequired": "Selecciona una rama para cada repositorio antes de crear un espacio de trabajo",
+      "createFailed": "No se ha podido crear el espacio de trabajo"
+    },
     "headings": {
       "repoStep": "¿En qué repositorios te gustaría trabajar?",
       "chatStep": "¿En qué te gustaría trabajar?"
@@ -519,7 +534,18 @@
       "setupHintTitle": "Scripts de Configuración",
       "setupHint": "Consejo: Configura los scripts de instalación para este repositorio en Ajustes → Repositorios",
       "setupHintDismiss": "Cerrar",
-      "setupHintLink": "Configure in Settings"
+      "setupHintLink": "Configurar en Ajustes",
+      "continue": "Continuar",
+      "changeBranch": "Cambiar rama",
+      "removeRepository": "Eliminar {{repository}}",
+      "errors": {
+        "repositoryAlreadySelected": "El repositorio ya está seleccionado",
+        "noRecentRepositories": "No se han encontrado repositorios recientes; explora los repositorios disponibles",
+        "loadRepositories": "No se han podido cargar los repositorios o las ramas",
+        "registerRepository": "No se ha podido registrar el repositorio",
+        "createRepository": "No se ha podido crear el repositorio",
+        "loadBranches": "No se han podido cargar las ramas"
+      }
     }
   },
   "modelSelector": {

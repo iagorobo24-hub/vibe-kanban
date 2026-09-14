@@ -139,26 +139,29 @@ export function CreateChatBoxContainer({
   const repoSummaryLabel = useMemo(() => {
     if (repos.length === 1) {
       const repo = repos[0];
-      if (!repo) return '0 repositories selected';
+      if (!repo) return t('createMode.repoSummary.none');
       const selectedBranch = targetBranches[repo.id];
       const branch = selectedBranch
         ? truncateBranchLabel(selectedBranch)
-        : 'Select branch';
+        : t('createMode.repoSummary.selectBranch');
       return `${getRepoDisplayName(repo)} · ${branch}`;
     }
 
-    return `${repos.length} repositories selected`;
-  }, [repos, targetBranches]);
+    return repos.length === 0
+      ? t('createMode.repoSummary.none')
+      : t('createMode.repoSummary.selected', { count: repos.length });
+  }, [repos, targetBranches, t]);
 
   const repoSummaryTitle = useMemo(
     () =>
       repos
         .map((repo) => {
-          const branch = targetBranches[repo.id] ?? 'Select branch';
+          const branch =
+            targetBranches[repo.id] ?? t('createMode.repoSummary.selectBranch');
           return `${getRepoDisplayName(repo)} (${branch})`;
         })
         .join('\n'),
-    [repos, targetBranches]
+    [repos, targetBranches, t]
   );
 
   const hasSelectedBranchesForAllRepos = repos.every(
@@ -283,13 +286,13 @@ export function CreateChatBoxContainer({
   // Determine error to display
   const displayError =
     hasAttemptedSubmit && repos.length === 0
-      ? 'Add at least one repository to create a workspace'
+      ? t('createMode.errors.repositoryRequired')
       : hasAttemptedSubmit && !hasSelectedBranchesForAllRepos
-        ? 'Select a branch for every repository before creating a workspace'
+        ? t('createMode.errors.branchRequired')
         : createWorkspace.error
           ? createWorkspace.error instanceof Error
             ? createWorkspace.error.message
-            : 'Failed to create workspace'
+            : t('createMode.errors.createFailed')
           : null;
 
   // Wait for initial value to be applied before rendering
@@ -307,7 +310,7 @@ export function CreateChatBoxContainer({
         <div className="agentos-create-workspace__stack flex w-chat max-w-full flex-col gap-base">
           <div className="agentos-create-workspace__hero">
             <span className="agentos-create-workspace__eyebrow">
-              AGENTOS / NUEVA EJECUCIÓN
+              {t('createMode.eyebrow')}
             </span>
             <h2
               id="agentos-create-workspace-title"
@@ -318,8 +321,7 @@ export function CreateChatBoxContainer({
                 : t('createMode.headings.chatStep')}
             </h2>
             <p className="agentos-create-workspace__context">
-              Define el objetivo, el repositorio y el agente antes de lanzar
-              cualquier proceso.
+              {t('createMode.context')}
             </p>
           </div>
 
@@ -350,7 +352,7 @@ export function CreateChatBoxContainer({
                   localAttachments,
                 }) => (
                   <WYSIWYGEditor
-                    placeholder="Describe the task..."
+                    placeholder={t('createMode.editorPlaceholder')}
                     value={value}
                     onChange={onChange}
                     onCmdEnter={onCmdEnter}

@@ -572,6 +572,21 @@
     }
   },
   "createMode": {
+    "navbarTitle": "Create Workspace",
+    "eyebrow": "AGENTOS / NEW EXECUTION",
+    "context": "Define the objective, repository and agent before launching any process.",
+    "editorPlaceholder": "Describe the task...",
+    "repoSummary": {
+      "none": "0 repositories selected",
+      "selectBranch": "Select branch",
+      "selected_one": "{{count}} repository selected",
+      "selected_other": "{{count}} repositories selected"
+    },
+    "errors": {
+      "repositoryRequired": "Add at least one repository to create a workspace",
+      "branchRequired": "Select a branch for every repository before creating a workspace",
+      "createFailed": "Failed to create workspace"
+    },
     "headings": {
       "repoStep": "Which repositories would you like to work on?",
       "chatStep": "What would you like to work on?"
@@ -585,7 +600,18 @@
       "setupHintTitle": "Setup Scripts",
       "setupHint": "Tip: Configure setup scripts for this repository in Settings → Repositories",
       "setupHintDismiss": "Dismiss",
-      "setupHintLink": "Configure in Settings"
+      "setupHintLink": "Configure in Settings",
+      "continue": "Continue",
+      "changeBranch": "Change branch",
+      "removeRepository": "Remove {{repository}}",
+      "errors": {
+        "repositoryAlreadySelected": "Repository is already selected",
+        "noRecentRepositories": "No recently used repositories found, please browse repositories instead",
+        "loadRepositories": "Failed to load repositories or branches",
+        "registerRepository": "Failed to register repository",
+        "createRepository": "Failed to create repository",
+        "loadBranches": "Failed to load branches"
+      }
     }
   },
   "modelSelector": {
