@@ -989,10 +989,22 @@
     "localWorkspaces": "Local workspaces",
     "remote": "Remote",
     "pairRemoteDevice": "Pair a remote device",
+    "organization": "Organization",
     "createProject": "Create project",
     "projects": "Projects",
     "export": "Export",
     "exportData": "Export data",
+    "social": {
+      "github": "Star on GitHub",
+      "discord": "Join our Discord"
+    },
+    "update": "Update",
+    "updateTooltip": "Update to v{{version}}",
+    "hostStatus": {
+      "online": "Online",
+      "offline": "Offline",
+      "unpaired": "Unpaired"
+    },
     "kanban": {
       "tooltip": "Sign in to view projects",
       "title": "Kanban Boards",

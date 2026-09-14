@@ -89,10 +89,8 @@ export interface AppBarHost {
   status: AppBarHostStatus;
 }
 
-function getHostStatusLabel(status: AppBarHostStatus): string {
-  if (status === "online") return "Online";
-  if (status === "offline") return "Offline";
-  return "Unpaired";
+function getHostStatusTranslationKey(status: AppBarHostStatus): string {
+  return `appBar.hostStatus.${status}`;
 }
 
 function getHostStatusIndicatorClass(status: AppBarHostStatus): string {
@@ -370,7 +368,7 @@ export function AppBar({
 
         return (
           <Tooltip
-            content={`${item.host.name} · ${getHostStatusLabel(item.host.status)}`}
+            content={`${item.host.name} · ${t(getHostStatusTranslationKey(item.host.status))}`}
             side="right"
           >
             <div className="relative">
@@ -390,7 +388,7 @@ export function AppBar({
                   host: item.host,
                   isActive: item.isActive,
                 })}
-                aria-label={`${item.host.name} (${getHostStatusLabel(item.host.status)})`}
+                aria-label={`${item.host.name} (${t(getHostStatusTranslationKey(item.host.status))})`}
               >
                 {getProjectInitials(item.host.name)}
               </button>
@@ -565,7 +563,7 @@ export function AppBar({
         {userPopover}
         <AppBarSocialLink
           href="https://github.com/BloopAI/vibe-kanban"
-          label="Star on GitHub"
+          label={t("appBar.social.github")}
           iconPath={githubIconPath}
           badge={
             starCount != null && (
@@ -578,14 +576,17 @@ export function AppBar({
         />
         <AppBarSocialLink
           href="https://discord.gg/AC4nwVtJM3"
-          label="Join our Discord"
+          label={t("appBar.social.discord")}
           iconPath={discordIconPath}
           badge={
             onlineCount != null && (onlineCount > 999 ? "999+" : onlineCount)
           }
         />
         {updateVersion ? (
-          <Tooltip content={`Update to v${updateVersion}`} side="right">
+          <Tooltip
+            content={t("appBar.updateTooltip", { version: updateVersion })}
+            side="right"
+          >
             <button
               type="button"
               onClick={onUpdateClick}
@@ -596,7 +597,7 @@ export function AppBar({
                 "transition-colors cursor-pointer",
               )}
             >
-              Update
+              {t("appBar.update")}
             </button>
           </Tooltip>
         ) : (

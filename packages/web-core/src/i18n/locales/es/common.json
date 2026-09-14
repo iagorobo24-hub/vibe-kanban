@@ -987,10 +987,22 @@
     "localWorkspaces": "Espacios de trabajo locales",
     "remote": "Remoto",
     "pairRemoteDevice": "Vincular un dispositivo remoto",
+    "organization": "Organización",
     "createProject": "Crear proyecto",
     "projects": "Proyectos",
     "export": "Exportación",
     "exportData": "Exportar datos",
+    "social": {
+      "github": "Estrella en GitHub",
+      "discord": "Únete a nuestro Discord"
+    },
+    "update": "Actualizar",
+    "updateTooltip": "Actualizar a v{{version}}",
+    "hostStatus": {
+      "online": "En línea",
+      "offline": "Sin conexión",
+      "unpaired": "Sin vincular"
+    },
     "kanban": {
       "tooltip": "Inicia sesión para ver proyectos",
       "title": "Tableros Kanban",

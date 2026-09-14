@@ -432,7 +432,7 @@ export function SharedAppLayout() {
             <div className="agentos-mobile-drawer__header flex items-center justify-between p-4 border-b border-border">
               <span className="text-sm font-medium text-high truncate">
                 {organizations.find((o) => o.id === selectedOrgId)?.name ??
-                  'Organization'}
+                  t('appBar.organization')}
               </span>
               <button
                 type="button"
@@ -518,10 +518,10 @@ export function SharedAppLayout() {
                     aria-hidden="true"
                   />
                   <p className="mt-3 text-sm font-medium text-high">
-                    Kanban Boards
+                    {t('appBar.kanban.title')}
                   </p>
                   <p className="mt-1 text-xs text-low">
-                    Sign in to organise your coding agents with kanban boards.
+                    {t('appBar.kanban.description')}
                   </p>
                   <div className="mt-4">
                     <button
@@ -532,7 +532,7 @@ export function SharedAppLayout() {
                       }}
                       className="agentos-button agentos-button--primary w-full justify-center"
                     >
-                      Sign in
+                      {t('signIn')}
                     </button>
                   </div>
                 </div>
@@ -551,7 +551,7 @@ export function SharedAppLayout() {
                   className="agentos-mobile-drawer__item flex items-center gap-2 w-full px-3 py-2.5 text-sm cursor-pointer"
                 >
                   <PlusIcon className="h-4 w-4" aria-hidden="true" />
-                  Create Project
+                  {t('appBar.createProject')}
                 </button>
               </div>
             )}
