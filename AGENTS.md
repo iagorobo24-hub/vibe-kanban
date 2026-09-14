@@ -1,5 +1,18 @@
 # Repository Guidelines
 
+## AgentOS context
+
+This repository is the main implementation repository inside the parent
+AgentOS workspace. Before changing code, read the parent project context:
+
+- ../AGENTS.md — project objective, invariants, safety rules and document hierarchy.
+- ../docs/agentos/02-ARQUITECTURA.md — system boundaries and contracts.
+- ../docs/agentos/03-DECISIONES.md — accepted architectural decisions.
+- ../docs/agentos/05-ESTADO-Y-GATES.md — current state and validation gates.
+
+The parent state document is the canonical status source. This file remains the
+repository-specific coding guide.
+
 ## Project Structure & Module Organization
 - `crates/`: Rust workspace crates — `server` (API + bins), `db` (SQLx models/migrations), `executors`, `services`, `utils`, `git` (Git operations), `api-types` (shared API types for local + remote), `review` (PR review tool), `deployment`, `local-deployment`, `remote`.
 - `packages/local-web/`: Local React + TypeScript app entrypoint (Vite, Tailwind). Shell source in `packages/local-web/src`.
