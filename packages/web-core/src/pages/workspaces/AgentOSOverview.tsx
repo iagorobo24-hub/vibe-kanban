@@ -181,6 +181,7 @@ export function AgentOSOverview() {
       : { label: t('agentosOverview.status.offline'), tone: 'offline' };
   const streamUnavailable = !isLoading && (!isConnected || Boolean(error));
   const metricsUnavailable = isLoading || streamUnavailable;
+  const approvalsUnavailable = metricsUnavailable;
   const locale = i18n.resolvedLanguage === 'es' ? 'es-ES' : 'en-US';
 
   const handleOpenWorkspace = useCallback(
@@ -452,21 +453,39 @@ export function AgentOSOverview() {
                 </div>
               </div>
               <div className="agentos-signal">
-                <span className="agentos-signal__icon agentos-signal__icon--amber">
-                  <WarningCircleIcon
-                    aria-hidden="true"
-                    size={16}
-                    weight="fill"
-                  />
+                <span
+                  className={`agentos-signal__icon agentos-signal__icon--${
+                    approvalsUnavailable
+                      ? 'neutral'
+                      : attentionWorkspaces.length > 0
+                        ? 'amber'
+                        : 'green'
+                  }`}
+                >
+                  {approvalsUnavailable || attentionWorkspaces.length > 0 ? (
+                    <WarningCircleIcon
+                      aria-hidden="true"
+                      size={16}
+                      weight="fill"
+                    />
+                  ) : (
+                    <CheckCircleIcon
+                      aria-hidden="true"
+                      size={16}
+                      weight="fill"
+                    />
+                  )}
                 </span>
                 <div>
                   <strong>{t('agentosOverview.humanControl')}</strong>
                   <span>
-                    {attentionWorkspaces.length > 0
-                      ? t('agentosOverview.pendingApprovals', {
-                          count: attentionWorkspaces.length,
-                        })
-                      : t('agentosOverview.noPendingApprovals')}
+                    {approvalsUnavailable
+                      ? t('agentosOverview.metrics.unavailableDetail')
+                      : attentionWorkspaces.length > 0
+                        ? t('agentosOverview.pendingApprovals', {
+                            count: attentionWorkspaces.length,
+                          })
+                        : t('agentosOverview.noPendingApprovals')}
                   </span>
                 </div>
               </div>
