@@ -82,6 +82,8 @@
     "reorderColumn": "Reordenar {{name}}",
     "collapseDiff": "Contraer diff de {{filePath}}",
     "expandDiff": "Expandir diff de {{filePath}}",
+    "collapseFileContent": "Contraer contenido del archivo {{filePath}}",
+    "expandFileContent": "Expandir contenido del archivo {{filePath}}",
     "selectOption": "Seleccionar opción {{index}}",
     "noData": "Sin datos",
     "activateTableRow": "Activar fila de la tabla",
@@ -219,6 +221,7 @@
     "tryAgain": "Intentar de nuevo",
     "failedToInitialize": "No se pudo iniciar el flujo de autenticación",
     "failedToCheckStatus": "No se pudo comprobar el estado de autenticación",
+    "popupClosed": "La ventana de autenticación se cerró antes de completar el inicio de sesión",
     "failedToSignIn": "No se pudo iniciar sesión",
     "failedToLoadMethods": "No se pudieron cargar los métodos de inicio de sesión.",
     "retry": "Reintentar",
@@ -437,6 +440,9 @@
   },
   "empty": {
     "noChanges": "No hay cambios para mostrar"
+  },
+  "fileChanges": {
+    "rename": "Renombrar {{path}} a {{newPath}}"
   },
   "commandBar": {
     "title": "Barra de comandos",

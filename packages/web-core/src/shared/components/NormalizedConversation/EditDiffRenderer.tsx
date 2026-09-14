@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   DiffView,
   DiffModeEnum,
@@ -70,6 +71,7 @@ function EditDiffRenderer({
   statusAppearance = 'default',
   forceExpanded = false,
 }: Props) {
+  const { t } = useTranslation('common');
   const { config } = useUserSystem();
   const [expanded, setExpanded] = useExpandable(expansionKey, defaultExpanded);
   const effectiveExpanded = forceExpanded || expanded;
@@ -106,7 +108,12 @@ function EditDiffRenderer({
           onClick={() => setExpanded()}
           className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer text-left border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           aria-expanded={effectiveExpanded}
-          aria-label={`Toggle diff for ${path}`}
+          aria-label={t(
+            effectiveExpanded
+              ? 'accessibility.collapseDiff'
+              : 'accessibility.expandDiff',
+            { filePath: path }
+          )}
         >
           {path}{' '}
           <span style={{ color: 'hsl(var(--console-success))' }}>

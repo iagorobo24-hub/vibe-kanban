@@ -1,4 +1,5 @@
 import { type FileChange } from 'shared/types';
+import { useTranslation } from 'react-i18next';
 import { useUserSystem } from '@/shared/hooks/useUserSystem';
 import { Trash2, FilePlus2, ArrowRight, FileX, FileClock } from 'lucide-react';
 import { getHighLightLanguageFromPath } from '@/shared/lib/extToLanguage';
@@ -47,6 +48,7 @@ const FileChangeRenderer = ({
   statusAppearance = 'default',
   forceExpanded = false,
 }: Props) => {
+  const { t } = useTranslation('common');
   const { config } = useUserSystem();
   const [expanded, setExpanded] = useExpandable(expansionKey, defaultExpanded);
   const effectiveExpanded = forceExpanded || expanded;
@@ -100,9 +102,7 @@ const FileChangeRenderer = ({
     if (isRename(change)) {
       return {
         titleNode: (
-          <>
-            Rename {path} to {change.new_path}
-          </>
+          <>{t('fileChanges.rename', { path, newPath: change.new_path })}</>
         ),
         icon: <ArrowRight className="h-3 w-3" />,
         expandable: false,
@@ -140,7 +140,12 @@ const FileChangeRenderer = ({
             onClick={() => setExpanded()}
             className="text-sm font-mono overflow-x-auto flex-1 cursor-pointer text-left border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
             aria-expanded={effectiveExpanded}
-            aria-label={`Toggle file content for ${path}`}
+            aria-label={t(
+              effectiveExpanded
+                ? 'accessibility.collapseFileContent'
+                : 'accessibility.expandFileContent',
+              { filePath: path }
+            )}
           >
             {titleNode}
           </button>

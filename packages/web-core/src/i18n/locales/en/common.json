@@ -53,6 +53,8 @@
     "reorderColumn": "Reorder {{name}}",
     "collapseDiff": "Collapse diff for {{filePath}}",
     "expandDiff": "Expand diff for {{filePath}}",
+    "collapseFileContent": "Collapse file content for {{filePath}}",
+    "expandFileContent": "Expand file content for {{filePath}}",
     "selectOption": "Select option {{index}}",
     "noData": "No data",
     "activateTableRow": "Activate table row",
@@ -223,6 +225,7 @@
     "tryAgain": "Try Again",
     "failedToInitialize": "Failed to initialize OAuth flow",
     "failedToCheckStatus": "Failed to check OAuth status",
+    "popupClosed": "The OAuth window was closed before authentication completed",
     "failedToSignIn": "Failed to sign in",
     "failedToLoadMethods": "Failed to load available sign-in methods.",
     "retry": "Retry",
@@ -504,6 +507,9 @@
   },
   "empty": {
     "noChanges": "No changes to display"
+  },
+  "fileChanges": {
+    "rename": "Rename {{path}} to {{newPath}}"
   },
   "commandBar": {
     "title": "Command Bar",

@@ -113,7 +113,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
       if (!statusData.logged_in) {
         setState({
           type: 'error',
-          message: 'OAuth window was closed before completing authentication',
+          message: t('oauth.popupClosed'),
         });
       }
     }
