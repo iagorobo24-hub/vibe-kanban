@@ -20,12 +20,14 @@ const Command = React.forwardRef<
 Command.displayName = CommandPrimitive.displayName;
 
 interface CommandDialogProps extends React.ComponentProps<typeof Dialog> {
+  title?: string;
   onCloseAutoFocus?: (event: Event) => void;
   onOpenAutoFocus?: (event: Event) => void;
 }
 
 function CommandDialog({
   children,
+  title = 'Command Bar',
   onCloseAutoFocus,
   onOpenAutoFocus,
   ...props
@@ -39,7 +41,7 @@ function CommandDialog({
         onOpenAutoFocus={onOpenAutoFocus}
         aria-describedby={undefined}
       >
-        <DialogTitle className="sr-only">Command Bar</DialogTitle>
+        <DialogTitle className="sr-only">{title}</DialogTitle>
         {children}
       </DialogContent>
     </Dialog>

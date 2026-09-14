@@ -162,6 +162,8 @@ export enum ActionTargetType {
 interface ActionBase {
   id: string;
   label: string | ((workspace?: Workspace) => string);
+  /** Optional common-namespace key for UI surfaces that render this action. */
+  translationKey?: string;
   icon: ActionIcon;
   shortcut?: string;
   variant?: 'default' | 'destructive';

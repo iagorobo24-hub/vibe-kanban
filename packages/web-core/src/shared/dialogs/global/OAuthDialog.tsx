@@ -82,7 +82,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
         message:
           error instanceof Error
             ? error.message
-            : 'Failed to initialize OAuth flow',
+            : t('oauth.failedToInitialize'),
       });
     },
   });
@@ -98,10 +98,10 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
       setIsPolling(false);
       setState({
         type: 'error',
-        message: 'Failed to check OAuth status',
+        message: t('oauth.failedToCheckStatus'),
       });
     }
-  }, [isStatusError, isPolling]);
+  }, [isStatusError, isPolling, t]);
 
   // Monitor status changes
   useEffect(() => {
@@ -206,7 +206,8 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
     } catch (error) {
       setState({
         type: 'error',
-        message: error instanceof Error ? error.message : 'Failed to sign in',
+        message:
+          error instanceof Error ? error.message : t('oauth.failedToSignIn'),
       });
     } finally {
       setIsSubmittingLocal(false);
@@ -218,6 +219,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
     modal,
     queryClient,
     reloadSystem,
+    t,
   ]);
 
   // Cleanup polling when dialog closes
@@ -265,7 +267,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
                   <AlertDescription>
                     {authMethodsError instanceof Error
                       ? authMethodsError.message
-                      : 'Failed to load available sign-in methods.'}
+                      : t('oauth.failedToLoadMethods')}
                   </AlertDescription>
                 </Alert>
               )}
@@ -276,7 +278,7 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
                   className="w-full"
                   onClick={() => void refetchAuthMethods()}
                 >
-                  Retry
+                  {t('oauth.retry')}
                 </Button>
               )}
               {!isAuthMethodsError && hasLocalAuth && (
@@ -286,14 +288,14 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
                       className="agentos-field__label"
                       htmlFor="local-auth-email"
                     >
-                      {t('oauth.email', 'Email')}
+                      {t('oauth.email')}
                     </label>
                     <Input
                       id="local-auth-email"
                       type="email"
                       value={localEmail}
                       onChange={(event) => setLocalEmail(event.target.value)}
-                      placeholder={t('oauth.email', 'Email')}
+                      placeholder={t('oauth.email')}
                       autoComplete="username"
                     />
                   </div>
@@ -302,14 +304,14 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
                       className="agentos-field__label"
                       htmlFor="local-auth-password"
                     >
-                      {t('oauth.password', 'Password')}
+                      {t('oauth.password')}
                     </label>
                     <Input
                       id="local-auth-password"
                       type="password"
                       value={localPassword}
                       onChange={(event) => setLocalPassword(event.target.value)}
-                      placeholder={t('oauth.password', 'Password')}
+                      placeholder={t('oauth.password')}
                       autoComplete="current-password"
                     />
                   </div>
@@ -324,8 +326,8 @@ const OAuthDialogImpl = create<OAuthDialogProps>(({ initialProvider }) => {
                   >
                     <span className="w-full text-center">
                       {isSubmittingLocal
-                        ? 'Signing in...'
-                        : 'Sign in with email'}
+                        ? t('oauth.signingIn')
+                        : t('oauth.signInWithEmail')}
                     </span>
                   </button>
                 </>

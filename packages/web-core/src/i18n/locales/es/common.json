@@ -106,7 +106,22 @@
     "welcomeBack": "Bienvenido de nuevo, {{name}}",
     "errorTitle": "Falló la autenticación",
     "errorDescription": "Hubo un problema al autenticar tu cuenta",
-    "tryAgain": "Intentar de nuevo"
+    "tryAgain": "Intentar de nuevo",
+    "failedToInitialize": "No se pudo iniciar el flujo de autenticación",
+    "failedToCheckStatus": "No se pudo comprobar el estado de autenticación",
+    "failedToSignIn": "No se pudo iniciar sesión",
+    "failedToLoadMethods": "No se pudieron cargar los métodos de inicio de sesión.",
+    "retry": "Reintentar",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "signingIn": "Iniciando sesión...",
+    "signInWithEmail": "Iniciar sesión con correo electrónico"
+  },
+  "releaseNotes": {
+    "title": "Novedades",
+    "loadError": "No se pudieron cargar las notas de versión.",
+    "viewOnGitHub": "Ver en GitHub",
+    "openOnGitHub": "Abrir en GitHub"
   },
   "toolbar": {
     "sortBy": "Ordenar por",
@@ -274,11 +289,40 @@
     "noChanges": "No hay cambios para mostrar"
   },
   "commandBar": {
+    "title": "Barra de comandos",
     "noResults": "No se encontraron resultados.",
     "back": "Atrás",
     "defaultPlaceholder": "Escribe un comando o busca...",
-    "selectBranch": "Select Branch",
-    "selectBranchFor": "Select Branch for {{repoName}}"
+    "selectBranch": "Seleccionar rama",
+    "selectBranchFor": "Seleccionar rama para {{repoName}}",
+    "groups": {
+      "actions": "Acciones",
+      "view": "Vista",
+      "general": "General",
+      "workspace": "Espacio de trabajo",
+      "scripts": "Scripts",
+      "display": "Visualización",
+      "panels": "Paneles"
+    },
+    "pages": {
+      "workspaceActions": "Acciones del espacio de trabajo",
+      "diffOptions": "Opciones de diferencias",
+      "viewOptions": "Opciones de vista",
+      "repoActions": "Acciones del repositorio",
+      "issueActions": "Acciones de la incidencia"
+    },
+    "actions": {
+      "newWorkspace": "Nuevo espacio de trabajo",
+      "createWorkspaceFromPr": "Crear espacio de trabajo desde PR",
+      "settings": "Ajustes",
+      "projectSettings": "Ajustes del proyecto",
+      "signIn": "Iniciar sesión",
+      "signOut": "Cerrar sesión",
+      "feedback": "Enviar comentarios",
+      "workspacesGuide": "Guía de espacios de trabajo",
+      "projectsGuide": "Guía de proyectos",
+      "openCommandBar": "Abrir barra de comandos"
+    }
   },
   "guide": {
     "topics": "Temas",

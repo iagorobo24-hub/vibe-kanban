@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import { create, useModal } from '@ebay/nice-modal-react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -49,6 +50,7 @@ function CommandBarContent({
   propIssueIds?: string[];
 }) {
   const modal = useModal();
+  const { t } = useTranslation('common');
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const queryClient = useQueryClient();
   const { executeAction, getLabel } = useActions();
@@ -172,6 +174,7 @@ function CommandBarContent({
   return (
     <CommandDialog
       open={modal.visible}
+      title={t('commandBar.title')}
       onOpenChange={(open) => !open && modal.hide()}
       onCloseAutoFocus={handleCloseAutoFocus}
     >

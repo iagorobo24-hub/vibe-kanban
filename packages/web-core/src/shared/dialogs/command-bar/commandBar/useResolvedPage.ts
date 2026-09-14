@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   StackIcon,
   SlidersIcon,
@@ -37,9 +38,36 @@ const PAGE_ICONS = {
   issueActions: KanbanIcon,
 } as const satisfies Record<StaticPageId, typeof StackIcon>;
 
+const PAGE_TITLE_KEYS: Partial<Record<StaticPageId, string>> = {
+  workspaceActions: 'commandBar.pages.workspaceActions',
+  diffOptions: 'commandBar.pages.diffOptions',
+  viewOptions: 'commandBar.pages.viewOptions',
+  repoActions: 'commandBar.pages.repoActions',
+  issueActions: 'commandBar.pages.issueActions',
+};
+
+const GROUP_LABEL_KEYS: Record<string, string> = {
+  Actions: 'commandBar.groups.actions',
+  View: 'commandBar.groups.view',
+  General: 'commandBar.groups.general',
+  Workspace: 'commandBar.groups.workspace',
+  Scripts: 'commandBar.groups.scripts',
+  Display: 'commandBar.groups.display',
+  Panels: 'commandBar.groups.panels',
+};
+
+function translateCommandBarText(
+  value: string,
+  t: (key: string, options?: { defaultValue?: string }) => string
+) {
+  const key = GROUP_LABEL_KEYS[value];
+  return key ? t(key, { defaultValue: value }) : value;
+}
+
 function expandGroupItems(
   items: CommandBarGroupItem[],
-  ctx: ActionVisibilityContext
+  ctx: ActionVisibilityContext,
+  t: (key: string, options?: { defaultValue?: string }) => string
 ): ResolvedGroupItem[] {
   return items.flatMap((item) => {
     if (item.type === 'childPages') {
@@ -49,7 +77,11 @@ function expandGroupItems(
         {
           type: 'page' as const,
           pageId: item.id,
-          label: page.title ?? item.id,
+          label: page.title
+            ? t(PAGE_TITLE_KEYS[item.id] ?? '', {
+                defaultValue: page.title,
+              })
+            : item.id,
           icon: PAGE_ICONS[item.id as StaticPageId],
         },
       ];
@@ -63,12 +95,15 @@ function expandGroupItems(
 
 function buildPageGroups(
   pageId: StaticPageId,
-  ctx: ActionVisibilityContext
+  ctx: ActionVisibilityContext,
+  t: (key: string, options?: { defaultValue?: string }) => string
 ): ResolvedGroup[] {
   return Pages[pageId].items
     .map((group) => {
-      const items = expandGroupItems(group.items, ctx);
-      return items.length ? { label: group.label, items } : null;
+      const items = expandGroupItems(group.items, ctx, t);
+      return items.length
+        ? { label: translateCommandBarText(group.label, t), items }
+        : null;
     })
     .filter((g): g is ResolvedGroup => g !== null);
 }
@@ -79,16 +114,22 @@ export function useResolvedPage(
   ctx: ActionVisibilityContext,
   workspace: Workspace | undefined
 ): ResolvedCommandBarPage {
+  const { t } = useTranslation('common');
+
   return useMemo(() => {
-    const groups = buildPageGroups(pageId, ctx);
+    const groups = buildPageGroups(pageId, ctx, t);
     if (pageId === 'root' && search.trim()) {
       groups.push(...injectSearchMatches(search, ctx, workspace));
     }
 
     return {
       id: Pages[pageId].id,
-      title: Pages[pageId].title,
+      title: Pages[pageId].title
+        ? t(PAGE_TITLE_KEYS[pageId] ?? '', {
+            defaultValue: Pages[pageId].title,
+          })
+        : undefined,
       groups,
     };
-  }, [pageId, search, ctx, workspace]);
+  }, [pageId, search, ctx, workspace, t]);
 }

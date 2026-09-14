@@ -392,6 +392,7 @@ export const Actions = {
   NewWorkspace: {
     id: 'new-workspace',
     label: 'New Workspace',
+    translationKey: 'commandBar.actions.newWorkspace',
     icon: PlusIcon,
     shortcut: 'G N',
     requiresTarget: ActionTargetType.NONE,
@@ -403,6 +404,7 @@ export const Actions = {
   CreateWorkspaceFromPR: {
     id: 'create-workspace-from-pr',
     label: 'Create Workspace from PR',
+    translationKey: 'commandBar.actions.createWorkspaceFromPr',
     icon: GitPullRequestIcon,
     keywords: ['pull request'],
     requiresTarget: ActionTargetType.NONE,
@@ -415,6 +417,7 @@ export const Actions = {
   Settings: {
     id: 'settings',
     label: 'Settings',
+    translationKey: 'commandBar.actions.settings',
     icon: GearIcon,
     shortcut: 'G S',
     requiresTarget: ActionTargetType.NONE,
@@ -426,6 +429,7 @@ export const Actions = {
   ProjectSettings: {
     id: 'project-settings',
     label: 'Project Settings',
+    translationKey: 'commandBar.actions.projectSettings',
     icon: GearIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'kanban',
@@ -443,6 +447,7 @@ export const Actions = {
   SignIn: {
     id: 'sign-in',
     label: 'Sign In',
+    translationKey: 'commandBar.actions.signIn',
     icon: SignInIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => !ctx.isSignedIn,
@@ -457,6 +462,7 @@ export const Actions = {
   SignOut: {
     id: 'sign-out',
     label: 'Sign Out',
+    translationKey: 'commandBar.actions.signOut',
     icon: SignOutIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.isSignedIn,
@@ -481,6 +487,7 @@ export const Actions = {
   Feedback: {
     id: 'feedback',
     label: 'Give Feedback',
+    translationKey: 'commandBar.actions.feedback',
     icon: MegaphoneIcon,
     requiresTarget: ActionTargetType.NONE,
     execute: () => {
@@ -491,6 +498,7 @@ export const Actions = {
   WorkspacesGuide: {
     id: 'workspaces-guide',
     label: 'Workspaces Guide',
+    translationKey: 'commandBar.actions.workspacesGuide',
     icon: QuestionIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'workspaces',
@@ -502,6 +510,7 @@ export const Actions = {
   ProjectsGuide: {
     id: 'projects-guide',
     label: 'Projects Guide',
+    translationKey: 'commandBar.actions.projectsGuide',
     icon: QuestionIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'kanban',
@@ -513,6 +522,7 @@ export const Actions = {
   OpenCommandBar: {
     id: 'open-command-bar',
     label: 'Open Command Bar',
+    translationKey: 'commandBar.actions.openCommandBar',
     icon: ListIcon,
     shortcut: '{mod} K',
     requiresTarget: ActionTargetType.NONE,

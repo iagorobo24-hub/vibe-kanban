@@ -110,7 +110,22 @@
     "welcomeBack": "Welcome back, {{name}}",
     "errorTitle": "Authentication Failed",
     "errorDescription": "There was a problem authenticating your account",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "failedToInitialize": "Failed to initialize OAuth flow",
+    "failedToCheckStatus": "Failed to check OAuth status",
+    "failedToSignIn": "Failed to sign in",
+    "failedToLoadMethods": "Failed to load available sign-in methods.",
+    "retry": "Retry",
+    "email": "Email",
+    "password": "Password",
+    "signingIn": "Signing in...",
+    "signInWithEmail": "Sign in with email"
+  },
+  "releaseNotes": {
+    "title": "What's New",
+    "loadError": "Unable to load release notes.",
+    "viewOnGitHub": "View on GitHub",
+    "openOnGitHub": "Open on GitHub"
   },
   "onboardingLanding": {
     "loading": "Loading…",
@@ -341,11 +356,40 @@
     "noChanges": "No changes to display"
   },
   "commandBar": {
+    "title": "Command Bar",
     "noResults": "No results found.",
     "back": "Back",
     "defaultPlaceholder": "Type a command or search...",
     "selectBranch": "Select Branch",
-    "selectBranchFor": "Select Branch for {{repoName}}"
+    "selectBranchFor": "Select Branch for {{repoName}}",
+    "groups": {
+      "actions": "Actions",
+      "view": "View",
+      "general": "General",
+      "workspace": "Workspace",
+      "scripts": "Scripts",
+      "display": "Display",
+      "panels": "Panels"
+    },
+    "pages": {
+      "workspaceActions": "Workspace Actions",
+      "diffOptions": "Diff Options",
+      "viewOptions": "View Options",
+      "repoActions": "Repository Actions",
+      "issueActions": "Issue Actions"
+    },
+    "actions": {
+      "newWorkspace": "New Workspace",
+      "createWorkspaceFromPr": "Create Workspace from PR",
+      "settings": "Settings",
+      "projectSettings": "Project Settings",
+      "signIn": "Sign In",
+      "signOut": "Sign Out",
+      "feedback": "Give Feedback",
+      "workspacesGuide": "Workspaces Guide",
+      "projectsGuide": "Projects Guide",
+      "openCommandBar": "Open Command Bar"
+    }
   },
   "guide": {
     "topics": "Topics",
