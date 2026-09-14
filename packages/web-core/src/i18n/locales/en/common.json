@@ -125,7 +125,8 @@
     "selectOption": "Select an option..."
   },
   "states": {
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "loadingDiagram": "Loading diagram…"
   },
   "ok": "OK",
   "error": "Error",
@@ -133,7 +134,12 @@
     "pushFailed": "Failed to push changes"
   },
   "errors": {
-    "generic": "An unexpected error occurred"
+    "generic": "An unexpected error occurred",
+    "diagram": "Mermaid diagram error",
+    "diagramRenderFailed": "Failed to render diagram"
+  },
+  "remote": {
+    "pageNotFound": "Page not found"
   },
   "language": {
     "browserDefault": "Browser Default"

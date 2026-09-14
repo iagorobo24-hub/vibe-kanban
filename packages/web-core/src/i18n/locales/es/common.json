@@ -191,7 +191,8 @@
     "browserDefault": "Predeterminado del navegador"
   },
   "states": {
-    "loading": "Cargando…"
+    "loading": "Cargando…",
+    "loadingDiagram": "Cargando diagrama…"
   },
   "orgSwitcher": {
     "organizations": "Organizaciones",
@@ -1145,7 +1146,12 @@
     }
   },
   "errors": {
-    "generic": "Se produjo un error inesperado"
+    "generic": "Se produjo un error inesperado",
+    "diagram": "Error del diagrama Mermaid",
+    "diagramRenderFailed": "No se pudo renderizar el diagrama"
+  },
+  "remote": {
+    "pageNotFound": "Página no encontrada"
   },
   "personal": "Personal",
   "askQuestion": {
