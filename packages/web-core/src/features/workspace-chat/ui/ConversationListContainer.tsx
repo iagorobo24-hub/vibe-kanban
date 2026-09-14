@@ -377,22 +377,31 @@ export const ConversationList = forwardRef<
     }
   };
 
-  const onTimelineUpdated = (
-    source: ConversationTimelineSource,
-    addType: AddEntryType,
-    newLoading: boolean
-  ) => {
-    pendingUpdateRef.current = {
-      source: toolStreamFixtureSource ?? source,
-      addType,
-      loading: newLoading,
-      isInitialLoad: addType === 'initial',
-    };
+  const onTimelineUpdated = useCallback(
+    (
+      source: ConversationTimelineSource,
+      addType: AddEntryType,
+      newLoading: boolean
+    ) => {
+      pendingUpdateRef.current = {
+        source: toolStreamFixtureSource ?? source,
+        addType,
+        loading: newLoading,
+        isInitialLoad: addType === 'initial',
+      };
 
-    if (rafIdRef.current === null) {
-      rafIdRef.current = requestAnimationFrame(flushPendingUpdate);
-    }
-  };
+      if (rafIdRef.current === null) {
+        rafIdRef.current = requestAnimationFrame(flushPendingUpdate);
+      }
+    },
+    [toolStreamFixtureSource]
+  );
+
+  useEffect(() => {
+    if (!toolStreamFixtureSource) return;
+
+    onTimelineUpdated(toolStreamFixtureSource, 'initial', false);
+  }, [onTimelineUpdated, toolStreamFixtureSource]);
 
   const { isFirstTurn, isLoadingHistory } = useConversationHistory({
     attempt,

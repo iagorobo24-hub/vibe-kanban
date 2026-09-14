@@ -67,16 +67,16 @@ export const useExecutionProcesses = (
   );
 
   // Guard against stale buffered stream data when switching sessions quickly.
-  const fixtureExecutionProcesses =
-    approvalFixtureEnabled && sessionId
-      ? [
-          createAgentOSQaFixtureProcess(
-            approvalFixtureResponse?.status === 'denied'
-              ? 'completed'
-              : 'running'
-          ),
-        ]
-      : [];
+  // Keep the QA fixture independent from the selected session. This makes the
+  // approval surface reachable from a workspace shell even when the real
+  // session stream has no selected session, without changing production data.
+  const fixtureExecutionProcesses = approvalFixtureEnabled
+    ? [
+        createAgentOSQaFixtureProcess(
+          approvalFixtureResponse?.status === 'denied' ? 'completed' : 'running'
+        ),
+      ]
+    : [];
 
   const executionProcesses = approvalFixtureEnabled
     ? fixtureExecutionProcesses
