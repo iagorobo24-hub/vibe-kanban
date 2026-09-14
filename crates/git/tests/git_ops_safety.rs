@@ -58,6 +58,10 @@ fn configure_user(repo: &Repository) {
     let mut cfg = repo.config().unwrap();
     cfg.set_str("user.name", "Test User").unwrap();
     cfg.set_str("user.email", "test@example.com").unwrap();
+    // Git for Windows installs core.autocrlf=true system-wide; without this
+    // override, checkouts convert LF to CRLF and byte-equality assertions
+    // written with "\n" fail only on Windows.
+    cfg.set_str("core.autocrlf", "false").unwrap();
 }
 
 fn push_ref(repo: &Repository, local: &str, remote: &str) {
