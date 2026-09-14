@@ -18,8 +18,8 @@ interface ChatAggregatedToolEntriesProps {
   onHoverChange: (hovered: boolean) => void;
   /** Label to show before the count (e.g., "Read", "Search") */
   label: string;
-  /** Unit label for counting (e.g., "file", "URL") - will be pluralized automatically */
-  unit: string;
+  /** Unit label for counting, or a localized formatter receiving the count. */
+  unit: string | ((count: number) => string);
   icon?: React.ElementType;
   className?: string;
   onViewContent?: (index: number) => void;
@@ -137,7 +137,12 @@ export function ChatAggregatedToolEntries({
           )}
         </span>
         <span className="truncate">
-          {label} · {entries.length} {entries.length === 1 ? unit : `${unit}s`}
+          {label} · {entries.length}{' '}
+          {typeof unit === 'function'
+            ? unit(entries.length)
+            : entries.length === 1
+              ? unit
+              : `${unit}s`}
         </span>
       </button>
 

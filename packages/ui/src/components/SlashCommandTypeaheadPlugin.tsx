@@ -137,8 +137,8 @@ export function SlashCommandTypeaheadPlugin({
         const isEmpty = !isLoading && !isDiscovering && commands.length === 0;
         const showLoadingRow = isLoading || isDiscovering;
         const loadingText = isLoading
-          ? 'Loading commands…'
-          : 'Discovering commands…';
+          ? t('typeahead.loadingCommands')
+          : t('typeahead.discoveringCommands');
 
         return createPortal(
           <TypeaheadMenu

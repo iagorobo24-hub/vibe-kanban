@@ -1136,6 +1136,7 @@ function ErrorMessageEntry({
  * Aggregated group entry for consecutive file_read, search, or web_fetch entries
  */
 function AggregatedGroupEntry({ group }: { group: AggregatedPatchGroup }) {
+  const { t } = useTranslation('common');
   const { viewToolContentInPanel } = useLogsPanelActions();
   const [expanded, toggle] = usePersistedExpanded(
     `tool:${group.patchKey}`,
@@ -1216,23 +1217,54 @@ function AggregatedGroupEntry({ group }: { group: AggregatedPatchGroup }) {
   const getDisplayProps = () => {
     switch (group.aggregationType) {
       case 'file_read':
-        return { label: 'Read', icon: FileTextIcon, unit: 'file' };
+        return {
+          label: t('conversation.toolGroups.read'),
+          icon: FileTextIcon,
+          unit: (count: number) =>
+            t('conversation.toolUnits.file', { count }),
+        };
       case 'search':
-        return { label: 'Search', icon: ListMagnifyingGlassIcon, unit: 'file' };
+        return {
+          label: t('conversation.toolGroups.search'),
+          icon: ListMagnifyingGlassIcon,
+          unit: (count: number) =>
+            t('conversation.toolUnits.file', { count }),
+        };
       case 'web_fetch':
-        return { label: 'Fetched', icon: GlobeIcon, unit: 'URL' };
+        return {
+          label: t('conversation.toolGroups.fetched'),
+          icon: GlobeIcon,
+          unit: (count: number) =>
+            t('conversation.toolUnits.url', { count }),
+        };
       case 'command_run_read':
-        return { label: 'Read', icon: FileTextIcon, unit: 'command' };
+        return {
+          label: t('conversation.toolGroups.read'),
+          icon: FileTextIcon,
+          unit: (count: number) =>
+            t('conversation.toolUnits.command', { count }),
+        };
       case 'command_run_search':
         return {
-          label: 'Search',
+          label: t('conversation.toolGroups.search'),
           icon: ListMagnifyingGlassIcon,
-          unit: 'command',
+          unit: (count: number) =>
+            t('conversation.toolUnits.command', { count }),
         };
       case 'command_run_edit':
-        return { label: 'Edit', icon: PencilSimpleIcon, unit: 'command' };
+        return {
+          label: t('conversation.toolGroups.edit'),
+          icon: PencilSimpleIcon,
+          unit: (count: number) =>
+            t('conversation.toolUnits.command', { count }),
+        };
       case 'command_run_fetch':
-        return { label: 'Fetch', icon: GlobeIcon, unit: 'command' };
+        return {
+          label: t('conversation.toolGroups.fetch'),
+          icon: GlobeIcon,
+          unit: (count: number) =>
+            t('conversation.toolUnits.command', { count }),
+        };
     }
   };
   const { label, icon, unit } = getDisplayProps();
