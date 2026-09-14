@@ -162,25 +162,31 @@ pub fn expand_tilde(path_str: &str) -> std::path::PathBuf {
 mod tests {
     use super::*;
 
+    /// Absolute (per host) forward-slash path under the temp dir. A drive-less
+    /// literal like `/tmp/test-worktree` parses as *relative* on Windows, which
+    /// skips the stripping logic these cases exercise.
+    fn temp_path(name: &str) -> String {
+        let prefix = std::env::temp_dir()
+            .display()
+            .to_string()
+            .replace('\\', "/");
+        format!("{prefix}/{name}")
+    }
+
     #[test]
     fn test_make_path_relative() {
+        let worktree = temp_path("test-worktree");
         // Test with relative path (should remain unchanged)
-        assert_eq!(
-            make_path_relative("src/main.rs", "/tmp/test-worktree"),
-            "src/main.rs"
-        );
+        assert_eq!(make_path_relative("src/main.rs", &worktree), "src/main.rs");
 
         // Test with absolute path (should become relative if possible)
-        let test_worktree = "/tmp/test-worktree";
-        let absolute_path = format!("{test_worktree}/src/main.rs");
-        let result = make_path_relative(&absolute_path, test_worktree);
+        let absolute_path = format!("{worktree}/src/main.rs");
+        let result = make_path_relative(&absolute_path, &worktree);
         assert_eq!(result, "src/main.rs");
 
         // Test with path outside worktree (should return original)
-        assert_eq!(
-            make_path_relative("/other/path/file.js", "/tmp/test-worktree"),
-            "/other/path/file.js"
-        );
+        let outside = format!("{}/file.js", temp_path("other"));
+        assert_eq!(make_path_relative(&outside, &worktree), outside);
     }
 
     /// Pin the prefix byte by byte.
