@@ -17,7 +17,7 @@
       "description": "Ingrese un nuevo nombre para la rama. No se puede renombrar si existe un PR abierto.",
       "branchNameLabel": "Nombre de rama",
       "placeholder": "ej., feature/mi-rama",
-      "renaming": "Renombrando...",
+      "renaming": "Renombrando…",
       "action": "Renombrar rama"
     }
   },
@@ -25,7 +25,7 @@
     "title": "Iniciar revisión",
     "description": "Pide al agente de codificación que revise tus cambios y proporcione comentarios.",
     "additionalInstructions": "Instrucciones adicionales (opcional)",
-    "additionalInstructionsPlaceholder": "Añade instrucciones específicas para la revisión...",
+    "additionalInstructionsPlaceholder": "Añade instrucciones específicas para la revisión…",
     "reviewComments": "Comentarios de revisión ({{count}})",
     "includeGitContext": "Incluir contexto de git",
     "includeGitContextDescription": "Indica al agente cómo ver todos los cambios realizados en esta rama",
@@ -48,14 +48,14 @@
     "deny": "Denegar",
     "submitting": "Enviando…",
     "provideDenialReason": "Indicar motivo del rechazo",
-    "denialPlaceholder": "Explica al agente por qué se rechaza esta solicitud... Escribe @ para insertar etiquetas o buscar archivos.",
+    "denialPlaceholder": "Explica al agente por qué se rechaza esta solicitud… Escribe @ para insertar etiquetas o buscar archivos.",
     "defaultDenialReason": "El usuario ha rechazado esta solicitud de uso de herramienta.",
     "missingExecutionProcessId": "Falta el identificador del proceso de ejecución",
     "responseFailed": "No se pudo enviar la respuesta"
   },
   "actionsMenu": {
     "startReview": "Iniciar revisión",
-    "startingReview": "Iniciando revisión...",
+    "startingReview": "Iniciando revisión…",
     "reviewChangesWithAgent": "Revisar cambios con el agente"
   },
   "attempt": {
@@ -69,10 +69,10 @@
       "description": "Se detectaron conflictos. Elige cómo quieres que el agente los resuelva.",
       "newSession": "Nueva sesión",
       "resolve": "Resolver Conflictos",
-      "resolving": "Iniciando...",
+      "resolving": "Iniciando…",
       "filesWithConflicts_one": "{{count}} archivo tiene conflictos",
       "filesWithConflicts_other": "{{count}} archivos tienen conflictos",
-      "andMore": "...y {{count}} más",
+      "andMore": "…y {{count}} más",
       "sessionName": "Resolver conflictos"
     }
   },
@@ -82,9 +82,9 @@
       "description": "Un rebase hacia {{targetBranch}} está en progreso sin conflictos. Elige cómo proceder.",
       "hint": "Puedes continuar el rebase para completarlo, o cancelar para volver al estado anterior.",
       "continue": "Continuar Rebase",
-      "continuing": "Continuando...",
+      "continuing": "Continuando…",
       "abort": "Cancelar Rebase",
-      "aborting": "Cancelando...",
+      "aborting": "Cancelando…",
       "continueError": "Error al continuar el rebase. Puede haber conflictos sin resolver.",
       "abortError": "Error al cancelar el rebase. Por favor, inténtalo de nuevo."
     }
@@ -97,11 +97,11 @@
     "descriptionLabel": "Descripción (opcional)",
     "descriptionPlaceholder": "Ingresar descripción del PR",
     "baseBranchLabel": "Rama Base",
-    "loadingBranches": "Cargando ramas...",
+    "loadingBranches": "Cargando ramas…",
     "selectBaseBranch": "Seleccionar rama base",
     "draftLabel": "Crear como borrador",
     "autoGenerateLabel": "Pedir al agente de IA que genere una mejor descripción del PR",
-    "creating": "Creando...",
+    "creating": "Creando…",
     "createButton": "Crear PR",
     "errors": {
       "failedToCreate": "Error al crear PR",
@@ -115,7 +115,7 @@
       "dialog": {
         "action": "Cambiar rama",
         "description": "Elige una nueva rama de destino para el intento de tarea.",
-        "inProgress": "Cambiando...",
+        "inProgress": "Cambiando…",
         "placeholder": "Selecciona una rama de destino",
         "title": "Cambiar rama de destino"
       }
@@ -191,7 +191,7 @@
         "createRepository": "Crear Repositorio"
       },
       "states": {
-        "creating": "Creando..."
+        "creating": "Creando…"
       }
     },
     "actions": {
@@ -211,17 +211,17 @@
     "states": {
       "createPr": "Crear PR",
       "forcePush": "Push forzado",
-      "forcePushing": "Push forzado en curso...",
-      "creating": "Creando...",
+      "forcePushing": "Push forzado en curso…",
+      "creating": "Creando…",
       "merge": "Fusionar",
       "merged": "¡Fusionado!",
-      "merging": "Fusionando...",
+      "merging": "Fusionando…",
       "push": "Enviar",
       "pushed": "¡Enviado!",
-      "pushing": "Enviando...",
+      "pushing": "Enviando…",
       "pushFailed": "Falló",
       "rebase": "Rebase",
-      "rebasing": "Rebaseando..."
+      "rebasing": "Rebaseando…"
     },
     "status": {
       "ahead": "adelante",
@@ -232,7 +232,7 @@
       "upToDate": "Al día"
     }
   },
-  "loading": "Cargando tareas...",
+  "loading": "Cargando tareas…",
   "preview": {
     "logs": {
       "label": "Registros",
@@ -256,7 +256,7 @@
       "goForward": "Adelante",
       "showUrl": "Mostrar URL",
       "selectElement": "Seleccionar elemento como contexto",
-      "urlPlaceholder": "Introduce una URL...",
+      "urlPlaceholder": "Introduce una URL…",
       "refresh": "Actualizar vista previa",
       "stopDevServer": "Detener servidor de desarrollo",
       "resetUrl": "Restablecer a URL detectada",
@@ -269,9 +269,9 @@
       "toggleDevTools": "Alternar DevTools"
     },
     "loading": {
-      "startingServer": "Iniciando servidor de desarrollo...",
-      "waitingForServer": "Esperando servidor...",
-      "loadingPreview": "Cargando vista previa...",
+      "startingServer": "Iniciando servidor de desarrollo…",
+      "waitingForServer": "Esperando servidor…",
+      "loadingPreview": "Cargando vista previa…",
       "manualUrlHint": "No se detectó ninguna URL aún. Puedes ingresar una URL manualmente en la barra de herramientas de arriba."
     }
   },
@@ -286,11 +286,11 @@
     "errorLoadingDetails": "No se han podido cargar los detalles del proceso. Inténtalo de nuevo.",
     "errorLoadingUpdates": "No se han podido cargar las actualizaciones en directo de los procesos.",
     "exit": "Salida: {{code}}",
-    "loading": "Cargando procesos de ejecución...",
-    "loadingDetails": "Cargando detalles del proceso...",
+    "loading": "Cargando procesos de ejecución…",
+    "loadingDetails": "Cargando detalles del proceso…",
     "noProcesses": "No se han encontrado procesos de ejecución para este intento.",
     "processId": "ID del proceso: {{id}}",
-    "reconnecting": "Reconectando...",
+    "reconnecting": "Reconectando…",
     "selectAttempt": "Selecciona un intento para ver sus procesos de ejecución.",
     "started": "Iniciado: {{date}}",
     "copyLogs": "Copiar registros",
@@ -299,7 +299,7 @@
   "rebase": {
     "common": {
       "action": "Rebase",
-      "inProgress": "Rebaseando..."
+      "inProgress": "Rebaseando…"
     },
     "dialog": {
       "advanced": "Avanzado",
@@ -351,10 +351,10 @@
     "startLabel": "Iniciar",
     "attachFile": "Adjuntar archivo",
     "dropImagesHere": "Suelta las imágenes aquí",
-    "updating": "Actualizando...",
+    "updating": "Actualizando…",
     "updateTask": "Actualizar Tarea",
-    "starting": "Iniciando...",
-    "creating": "Creando...",
+    "starting": "Iniciando…",
+    "creating": "Creando…",
     "create": "Crear",
     "discardDialog": {
       "title": "¿Descartar cambios sin guardar?",
@@ -444,12 +444,12 @@
       "resetTooltip": "Restablecer a este punto"
     },
     "placeholders": {
-      "feedback": "Da comentarios sobre el plan...",
-      "edit": "Edita tu mensaje...",
-      "approval": "Da comentarios para solicitar cambios...",
-      "differentAnswer": "Escribe una respuesta diferente...",
-      "newConversation": "Inicia una conversación nueva...",
-      "continueTask": "Continúa trabajando en esta tarea..."
+      "feedback": "Da comentarios sobre el plan…",
+      "edit": "Edita tu mensaje…",
+      "approval": "Da comentarios para solicitar cambios…",
+      "differentAnswer": "Escribe una respuesta diferente…",
+      "newConversation": "Inicia una conversación nueva…",
+      "continueTask": "Continúa trabajando en esta tarea…"
     },
     "approval": {
       "conflictWarning": "Los archivos en conflicto necesitan resolución manual",
@@ -462,7 +462,7 @@
       "clickToViewLogs": "Haz clic para ver registros",
       "completedSuccessfully": "Completado exitosamente",
       "exitCode": "Código de salida: {{code}}",
-      "running": "Ejecutando..."
+      "running": "Ejecutando…"
     },
     "scriptPlaceholder": {
       "setupTitle": "Script de Configuración",
@@ -484,7 +484,7 @@
       "renameTitle": "Renombrar sesión",
       "renameDescription": "Ingrese un nuevo nombre para esta sesión.",
       "renamePlaceholder": "Ingrese el nombre de la sesión",
-      "renaming": "Renombrando..."
+      "renaming": "Renombrando…"
     },
     "reviewComments": {
       "count_one": "{{count}} comentario de revisión será incluido",
@@ -492,7 +492,7 @@
     },
     "workspace": {
       "create": "Crear",
-      "creating": "Creando..."
+      "creating": "Creando…"
     },
     "fileEntry": {
       "created": "Creado",
@@ -513,7 +513,7 @@
     "noLogs": "No hay registros de ejecución disponibles",
     "selectRepo": "Repositorio",
     "fixScript": "Corregir Script",
-    "statusRunning": "Ejecutando...",
+    "statusRunning": "Ejecutando…",
     "statusSuccess": "Completado exitosamente",
     "statusFailed": "Falló con código de salida {{exitCode}}",
     "statusKilled": "El proceso fue terminado"
@@ -524,19 +524,19 @@
     "repositoryLabel": "Repositorio",
     "remoteLabel": "Remoto",
     "pullRequestLabel": "Solicitud de Extracción",
-    "loadingRepositories": "Cargando repositorios...",
-    "loadingRemotes": "Cargando remotos...",
+    "loadingRepositories": "Cargando repositorios…",
+    "loadingRemotes": "Cargando remotos…",
     "noRepositoriesFound": "No se encontraron repositorios",
-    "loadingPullRequests": "Cargando solicitudes de extracción...",
+    "loadingPullRequests": "Cargando solicitudes de extracción…",
     "selectRepositoryFirst": "Selecciona un repositorio primero",
     "noPullRequestsFound": "No se encontraron solicitudes de extracción abiertas",
     "runSetupScript": "Ejecutar script de configuración",
-    "creating": "Creando...",
+    "creating": "Creando…",
     "createWorkspace": "Crear Espacio de Trabajo",
     "selectRepository": "Seleccionar un repositorio",
     "selectRemote": "Seleccionar un remoto",
     "selectPullRequest": "Seleccionar una solicitud de extracción",
-    "searchPrsPlaceholder": "Buscar PRs por número o título...",
+    "searchPrsPlaceholder": "Buscar PRs por número o título…",
     "noMatchingPrs": "No hay solicitudes de extracción coincidentes",
     "default": "predeterminado",
     "openPrInBrowser": "Abrir PR en el navegador",
@@ -565,11 +565,11 @@
     "repositoryLabel": "Repositorio",
     "remoteLabel": "Remoto",
     "pullRequestLabel": "Solicitud de extracción",
-    "loadingPrInfo": "Cargando información del PR...",
+    "loadingPrInfo": "Cargando información del PR…",
     "invalidUrl": "No se pudo cargar la información del PR desde esta URL",
     "baseBranch": "Base:",
     "linkPr": "Vincular PR",
-    "linking": "Vinculando...",
+    "linking": "Vinculando…",
     "status": {
       "open": "Abierto",
       "merged": "Fusionado",

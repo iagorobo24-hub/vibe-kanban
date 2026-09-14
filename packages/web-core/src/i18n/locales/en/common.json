@@ -80,12 +80,12 @@
     "sessionLost": "OAuth session lost. Please try again.",
     "loginFailed": "Login failed",
     "tryAgain": "Try again",
-    "completingLogin": "Completing login...",
-    "processingOAuth": "Processing OAuth callback...",
+    "completingLogin": "Completing login…",
+    "processingOAuth": "Processing OAuth callback…",
     "loadInvitationFailed": "Failed to load invitation",
     "oauthInitFailed": "OAuth initialization failed",
     "invalidInvitation": "Invalid or expired invitation",
-    "loadingInvitation": "Loading invitation...",
+    "loadingInvitation": "Loading invitation…",
     "pleaseWait": "Please wait.",
     "youAreInvited": "You are invited",
     "invitedToJoin": "You have been invited to join",
@@ -95,20 +95,20 @@
     "chooseProvider": "Choose a provider to continue:",
     "continueWithGitHub": "Continue with GitHub",
     "continueWithGoogle": "Continue with Google",
-    "openingProvider": "Opening {{provider}}...",
+    "openingProvider": "Opening {{provider}}…",
     "invitationTokenLost": "Invitation token lost. Please try again.",
     "invitationFailed": "Failed to complete invitation",
     "couldNotAcceptInvitation": "Could not accept invitation",
     "invitationAccepted": "Invitation accepted!",
     "invitationConfirmed": "Your invitation is confirmed. You can now close this page.",
     "getStarted": "Get started",
-    "completingInvitation": "Completing invitation...",
+    "completingInvitation": "Completing invitation…",
     "signInToContinue": "Sign in to continue",
     "localLoginFailed": "Local login failed",
     "authMethodsLoadFailed": "Failed to load available sign-in methods.",
     "email": "Email",
     "password": "Password",
-    "signingIn": "Signing in...",
+    "signingIn": "Signing in…",
     "signInWithEmail": "Sign in with email",
     "orContinueWith": "or continue with",
     "needHelp": "Need help getting started?",
@@ -122,7 +122,7 @@
   },
   "form": {
     "notSpecified": "Not specified",
-    "selectOption": "Select an option..."
+    "selectOption": "Select an option…"
   },
   "states": {
     "loading": "Loading…",
@@ -189,10 +189,10 @@
     "pathPlaceholder": "/path/to/your/project",
     "go": "Go",
     "searchLabel": "Search current directory:",
-    "searchPlaceholder": "Filter folders and files...",
+    "searchPlaceholder": "Filter folders and files…",
     "home": "Home directory",
     "parent": "Parent directory",
-    "loading": "Loading...",
+    "loading": "Loading…",
     "noMatches": "No matches found",
     "noFolders": "No folders found",
     "openFolder": "Open folder {{name}}",
@@ -202,7 +202,7 @@
   },
   "branchSelector": {
     "placeholder": "Select a branch",
-    "searchPlaceholder": "Search branches...",
+    "searchPlaceholder": "Search branches…",
     "empty": "No branches found",
     "badges": {
       "current": "current",
@@ -224,7 +224,7 @@
     "continueWithGoogle": "Continue with Google",
     "waitingTitle": "Complete Authentication",
     "waitingDescription": "A popup window has been opened for authentication",
-    "waitingForAuth": "Waiting for authentication...",
+    "waitingForAuth": "Waiting for authentication…",
     "popupInstructions": "If the popup window didn't open, please check your popup blocker settings.",
     "back": "Back",
     "successTitle": "Authentication Successful!",
@@ -240,7 +240,7 @@
     "retry": "Retry",
     "email": "Email",
     "password": "Password",
-    "signingIn": "Signing in...",
+    "signingIn": "Signing in…",
     "signInWithEmail": "Sign in with email"
   },
   "releaseNotes": {
@@ -327,10 +327,10 @@
   },
   "workspaces": {
     "title": "Workspaces",
-    "searchPlaceholder": "Search...",
+    "searchPlaceholder": "Search…",
     "active": "Active",
     "archived": "Archived",
-    "loading": "Loading...",
+    "loading": "Loading…",
     "notFound": "Workspace not found",
     "selectToStart": "Select a workspace to get started",
     "draft": "Draft",
@@ -356,7 +356,7 @@
       "nameLabel": "Name",
       "placeholder": "Enter workspace name",
       "action": "Rename",
-      "renaming": "Renaming..."
+      "renaming": "Renaming…"
     },
     "unlinkFromIssue": "Unlink from issue",
     "deleteWorkspace": "Delete workspace",
@@ -378,7 +378,7 @@
     }
   },
   "fileTree": {
-    "searchPlaceholder": "Search files...",
+    "searchPlaceholder": "Search files…",
     "noResults": "No matching files",
     "noChangedFiles": "No changed files",
     "title": "Files",
@@ -453,7 +453,7 @@
     }
   },
   "notes": {
-    "placeholder": "Add notes about this workspace...",
+    "placeholder": "Add notes about this workspace…",
     "selectWorkspace": "Select a workspace to view notes"
   },
   "actions": {
@@ -466,8 +466,8 @@
   },
   "comments": {
     "addReviewComment": "Add Review Comment",
-    "addPlaceholder": "Add a comment...",
-    "editPlaceholder": "Edit comment...",
+    "addPlaceholder": "Add a comment…",
+    "editPlaceholder": "Edit comment…",
     "copyToReview": "Copy to review"
   },
   "confirm": {
@@ -526,7 +526,7 @@
     "title": "Command Bar",
     "noResults": "No results found.",
     "back": "Back",
-    "defaultPlaceholder": "Type a command or search...",
+    "defaultPlaceholder": "Type a command or search…",
     "selectBranch": "Select Branch",
     "selectBranchFor": "Select Branch for {{repoName}}",
     "selectionTitles": {
@@ -706,14 +706,14 @@
       "quickActions": "Quick Actions",
       "navigation": "Navigation",
       "modifiers": "Modifiers",
-      "goTo": "Go To (G ...)",
-      "workspace": "Workspace (W ...)",
-      "view": "View (V ...)",
-      "issues": "Issues (I ...)",
-      "git": "Git (X ...)",
-      "yank": "Yank (Y ...)",
-      "toggle": "Toggle (T ...)",
-      "run": "Run (R ...)"
+      "goTo": "Go To (G …)",
+      "workspace": "Workspace (W …)",
+      "view": "View (V …)",
+      "issues": "Issues (I …)",
+      "git": "Git (X …)",
+      "yank": "Yank (Y …)",
+      "toggle": "Toggle (T …)",
+      "run": "Run (R …)"
     },
     "actions": {
       "showHelp": "Show this help",
@@ -787,14 +787,14 @@
     "unassigned": "Unassigned",
     "noTagsAvailable": "No tags available",
     "createNewIssue": "Create new issue",
-    "searchTags": "Search tags...",
+    "searchTags": "Search tags…",
     "selectColorFor": "Select color for",
     "createTag": "Create",
     "noPrCreated": "No PR created",
     "noCommentsYet": "No comments yet",
     "createdBy": "Created by",
     "comments": "Comments",
-    "enterCommentPlaceholder": "Enter your comment here...",
+    "enterCommentPlaceholder": "Enter your comment here…",
     "attachFile": "Attach file",
     "attachFileHint": "Attach files (max 20MB each)",
     "dropFilesHere": "Drop files here",
@@ -805,9 +805,9 @@
     "moreActions": "More actions",
     "closePanel": "Close panel",
     "copyLink": "Copy link",
-    "issueTitlePlaceholder": "Issue Title...",
+    "issueTitlePlaceholder": "Issue Title…",
     "deleteDraft": "Delete draft",
-    "issueDescriptionPlaceholder": "Enter task description here...",
+    "issueDescriptionPlaceholder": "Enter task description here…",
     "createDraftWorkspaceImmediately": "Create draft workspace immediately",
     "createDraftWorkspaceDescription": "After creating the issue, open the workspace creation form pre-filled with the issue details",
     "createIssue": "Create Issue",
@@ -844,7 +844,7 @@
     },
     "team": "Team",
     "personal": "Personal",
-    "searchPlaceholder": "Search issues...",
+    "searchPlaceholder": "Search issues…",
     "filters": "Filters",
     "clearFilters": "Clear filters",
     "filtersDescription": "Adjust filters and sorting for this board view.",
@@ -883,13 +883,13 @@
     "subIssuesFilterLabel": "Sub-issues",
     "workspacesFilterLabel": "Workspaces",
     "hideBlockedFilterLabel": "Hide blocked",
-    "selectAssignees": "Select assignees...",
+    "selectAssignees": "Select assignees…",
     "relationships": "Relationships",
     "relationshipOptions": {
-      "blocks": "Blocks...",
-      "blockedBy": "Blocked by...",
-      "relatedTo": "Related to...",
-      "duplicateOf": "Duplicate of..."
+      "blocks": "Blocks…",
+      "blockedBy": "Blocked by…",
+      "relatedTo": "Related to…",
+      "duplicateOf": "Duplicate of…"
     },
     "selectStatus": "Select status",
     "noPriority": "No priority",
@@ -902,7 +902,7 @@
     "noRelationships": "No relationships",
     "openProjectsGuide": "Projects guide",
     "editProjectSettings": "Edit project settings",
-    "linkWorkspace": "Link workspace...",
+    "linkWorkspace": "Link workspace…",
     "createNewWorkspace": "Create new workspace",
     "workspaces": "Workspaces",
     "showingWorkspaces": "Showing {{count}} of {{total}}",
@@ -944,7 +944,7 @@
     "navbarTitle": "Create Workspace",
     "eyebrow": "AGENTOS / NEW EXECUTION",
     "context": "Define the objective, repository and agent before launching any process.",
-    "editorPlaceholder": "Describe the task...",
+    "editorPlaceholder": "Describe the task…",
     "repoSummary": {
       "none": "0 repositories selected",
       "selectBranch": "Select branch",
@@ -993,10 +993,10 @@
     "agent": "Agent",
     "default": "Default",
     "model": "Model",
-    "filterPlaceholder": "Filter by name or ID..."
+    "filterPlaceholder": "Filter by name or ID…"
   },
   "retryEditor": {
-    "placeholder": "Edit and resend your message..."
+    "placeholder": "Edit and resend your message…"
   },
   "editorSelection": {
     "title": "Choose editor",
@@ -1006,7 +1006,7 @@
   },
   "remoteHome": {
     "organizations": "Organizations",
-    "loadingOrganizationsAndProjects": "Loading organizations and projects...",
+    "loadingOrganizationsAndProjects": "Loading organizations and projects…",
     "signInAgain": "Sign in again",
     "organizationCount_one": "{{count}} organization",
     "organizationCount_other": "{{count}} organizations",
@@ -1033,7 +1033,7 @@
     "title": "Workspaces",
     "connectingTo": "Connecting to",
     "selectedHost": "selected host",
-    "ellipsis": "...",
+    "ellipsis": "…",
     "connectFailed": "Could not connect to {{host}}.",
     "hostUnreachable": "This host is offline or no longer reachable from this browser.",
     "selectOnlineHost": "Select an online host in the app bar to load local workspaces through relay.",
@@ -1164,7 +1164,7 @@
     "title": "Agent is asking a question",
     "selectMultiple": "select multiple",
     "confirmSelection": "Confirm selection",
-    "submitting": "Submitting answers...",
+    "submitting": "Submitting answers…",
     "answeredCount": "Answered {{count}} question",
     "answeredCount_other": "Answered {{count}} questions"
   },

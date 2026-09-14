@@ -10,10 +10,10 @@
     "pathPlaceholder": "/ruta/a/tu/proyecto",
     "go": "Ir",
     "searchLabel": "Buscar en el directorio actual:",
-    "searchPlaceholder": "Filtrar carpetas y archivos...",
+    "searchPlaceholder": "Filtrar carpetas y archivos…",
     "home": "Directorio personal",
     "parent": "Directorio superior",
-    "loading": "Cargando...",
+    "loading": "Cargando…",
     "noMatches": "No se encontraron coincidencias",
     "noFolders": "No se encontraron carpetas",
     "openFolder": "Abrir carpeta {{name}}",
@@ -29,7 +29,7 @@
     "currentDisabled": "No se puede seleccionar la rama actual",
     "empty": "No se encontraron ramas",
     "placeholder": "Seleccionar una rama",
-    "searchPlaceholder": "Buscar ramas..."
+    "searchPlaceholder": "Buscar ramas…"
   },
   "buttons": {
     "cancel": "Cancelar",
@@ -151,7 +151,7 @@
   },
   "form": {
     "notSpecified": "No especificado",
-    "selectOption": "Seleccionar una opción..."
+    "selectOption": "Seleccionar una opción…"
   },
   "conversation": {
     "deniedByUser": "{{toolName}} denegado por el usuario",
@@ -215,7 +215,7 @@
     "continueWithGoogle": "Continuar con Google",
     "waitingTitle": "Completar Autenticación",
     "waitingDescription": "Se ha abierto una ventana emergente para la autenticación",
-    "waitingForAuth": "Esperando autenticación...",
+    "waitingForAuth": "Esperando autenticación…",
     "popupInstructions": "Si la ventana emergente no se abrió, por favor revisa la configuración de bloqueo de ventanas emergentes.",
     "back": "Atrás",
     "successTitle": "¡Autenticación exitosa!",
@@ -231,7 +231,7 @@
     "retry": "Reintentar",
     "email": "Correo electrónico",
     "password": "Contraseña",
-    "signingIn": "Iniciando sesión...",
+    "signingIn": "Iniciando sesión…",
     "signInWithEmail": "Iniciar sesión con correo electrónico"
   },
   "releaseNotes": {
@@ -255,10 +255,10 @@
   },
   "workspaces": {
     "title": "Espacios de trabajo",
-    "searchPlaceholder": "Buscar...",
+    "searchPlaceholder": "Buscar…",
     "active": "Activo",
     "archived": "Archivado",
-    "loading": "Cargando...",
+    "loading": "Cargando…",
     "notFound": "Espacio de trabajo no encontrado",
     "selectToStart": "Selecciona un espacio de trabajo para comenzar",
     "draft": "Borrador",
@@ -284,7 +284,7 @@
       "nameLabel": "Nombre",
       "placeholder": "Ingresa el nombre del espacio de trabajo",
       "action": "Renombrar",
-      "renaming": "Renombrando..."
+      "renaming": "Renombrando…"
     },
     "unlinkFromIssue": "Desvincular del problema",
     "deleteWorkspace": "Eliminar espacio de trabajo",
@@ -306,7 +306,7 @@
     "createDraftError": "No se pudo preparar el borrador del espacio de trabajo. Inténtalo de nuevo."
   },
   "fileTree": {
-    "searchPlaceholder": "Buscar archivos...",
+    "searchPlaceholder": "Buscar archivos…",
     "noResults": "No hay archivos coincidentes",
     "noChangedFiles": "No hay archivos modificados",
     "title": "Archivos",
@@ -381,7 +381,7 @@
     }
   },
   "notes": {
-    "placeholder": "Agregar notas sobre este espacio de trabajo...",
+    "placeholder": "Agregar notas sobre este espacio de trabajo…",
     "selectWorkspace": "Selecciona un espacio de trabajo para ver notas"
   },
   "actions": {
@@ -394,8 +394,8 @@
   },
   "comments": {
     "addReviewComment": "Agregar comentario de revisión",
-    "addPlaceholder": "Agregar un comentario...",
-    "editPlaceholder": "Editar comentario...",
+    "addPlaceholder": "Agregar un comentario…",
+    "editPlaceholder": "Editar comentario…",
     "copyToReview": "Copiar a revisión"
   },
   "confirm": {
@@ -454,7 +454,7 @@
     "title": "Barra de comandos",
     "noResults": "No se encontraron resultados.",
     "back": "Atrás",
-    "defaultPlaceholder": "Escribe un comando o busca...",
+    "defaultPlaceholder": "Escribe un comando o busca…",
     "selectBranch": "Seleccionar rama",
     "selectBranchFor": "Seleccionar rama para {{repoName}}",
     "selectionTitles": {
@@ -634,14 +634,14 @@
       "quickActions": "Acciones Rápidas",
       "navigation": "Navegación",
       "modifiers": "Modificadores",
-      "goTo": "Ir a (G ...)",
-      "workspace": "Espacio de trabajo (W ...)",
-      "view": "Vista (V ...)",
-      "issues": "Issues (I ...)",
-      "git": "Git (X ...)",
-      "yank": "Copiar (Y ...)",
-      "toggle": "Alternar (T ...)",
-      "run": "Ejecutar (R ...)"
+      "goTo": "Ir a (G …)",
+      "workspace": "Espacio de trabajo (W …)",
+      "view": "Vista (V …)",
+      "issues": "Issues (I …)",
+      "git": "Git (X …)",
+      "yank": "Copiar (Y …)",
+      "toggle": "Alternar (T …)",
+      "run": "Ejecutar (R …)"
     },
     "actions": {
       "showHelp": "Mostrar esta ayuda",
@@ -715,14 +715,14 @@
     "unassigned": "Sin asignar",
     "noTagsAvailable": "No hay etiquetas disponibles",
     "createNewIssue": "Crear nuevo issue",
-    "searchTags": "Buscar etiquetas...",
+    "searchTags": "Buscar etiquetas…",
     "selectColorFor": "Seleccionar color para",
     "createTag": "Crear",
     "noPrCreated": "No se creó PR",
     "noCommentsYet": "Sin comentarios aún",
     "createdBy": "Creado por",
     "comments": "Comentarios",
-    "enterCommentPlaceholder": "Ingresa tu comentario aquí...",
+    "enterCommentPlaceholder": "Ingresa tu comentario aquí…",
     "attachFile": "Adjuntar archivo",
     "attachFileHint": "Adjuntar archivos (máx. 20MB por archivo)",
     "dropFilesHere": "Suelta archivos aquí",
@@ -733,9 +733,9 @@
     "moreActions": "Más acciones",
     "closePanel": "Cerrar panel",
     "copyLink": "Copiar enlace",
-    "issueTitlePlaceholder": "Título del issue...",
+    "issueTitlePlaceholder": "Título del issue…",
     "deleteDraft": "Eliminar borrador",
-    "issueDescriptionPlaceholder": "Ingresa la descripción de la tarea...",
+    "issueDescriptionPlaceholder": "Ingresa la descripción de la tarea…",
     "createDraftWorkspaceImmediately": "Crear workspace borrador inmediatamente",
     "createDraftWorkspaceDescription": "Después de crear la incidencia, abrir el formulario de creación de workspace con los datos de la incidencia",
     "createIssue": "Crear tarea",
@@ -774,7 +774,7 @@
     },
     "team": "Equipo",
     "personal": "Personal",
-    "searchPlaceholder": "Buscar issues...",
+    "searchPlaceholder": "Buscar issues…",
     "filters": "Filtros",
     "clearFilters": "Limpiar filtros",
     "filtersDescription": "Ajusta los filtros y la ordenación de esta vista del tablero.",
@@ -813,13 +813,13 @@
     "subIssuesFilterLabel": "Subtareas",
     "workspacesFilterLabel": "Espacios de trabajo",
     "hideBlockedFilterLabel": "Ocultar bloqueados",
-    "selectAssignees": "Selecciona responsables...",
+    "selectAssignees": "Selecciona responsables…",
     "relationships": "Relaciones",
     "relationshipOptions": {
-      "blocks": "Bloquea...",
-      "blockedBy": "Bloqueada por...",
-      "relatedTo": "Relacionada con...",
-      "duplicateOf": "Duplicada de..."
+      "blocks": "Bloquea…",
+      "blockedBy": "Bloqueada por…",
+      "relatedTo": "Relacionada con…",
+      "duplicateOf": "Duplicada de…"
     },
     "selectStatus": "Seleccionar estado",
     "noPriority": "Sin prioridad",
@@ -832,7 +832,7 @@
     "noRelationships": "Sin relaciones",
     "openProjectsGuide": "Guía de proyectos",
     "editProjectSettings": "Editar configuración del proyecto",
-    "linkWorkspace": "Vincular espacio de trabajo...",
+    "linkWorkspace": "Vincular espacio de trabajo…",
     "createNewWorkspace": "Crear espacio de trabajo",
     "workspaces": "Espacios de trabajo",
     "showingWorkspaces": "Mostrando {{count}} de {{total}}",
@@ -874,7 +874,7 @@
     "navbarTitle": "Nuevo espacio de trabajo",
     "eyebrow": "AGENTOS / NUEVA EJECUCIÓN",
     "context": "Define el objetivo, el repositorio y el agente antes de lanzar cualquier proceso.",
-    "editorPlaceholder": "Describe la tarea...",
+    "editorPlaceholder": "Describe la tarea…",
     "repoSummary": {
       "none": "0 repositorios seleccionados",
       "selectBranch": "Seleccionar rama",
@@ -923,10 +923,10 @@
     "agent": "Agente",
     "default": "Predeterminado",
     "model": "Modelo",
-    "filterPlaceholder": "Filtrar por nombre o ID..."
+    "filterPlaceholder": "Filtrar por nombre o ID…"
   },
   "retryEditor": {
-    "placeholder": "Edita y vuelve a enviar tu mensaje..."
+    "placeholder": "Edita y vuelve a enviar tu mensaje…"
   },
   "editorSelection": {
     "title": "Elegir editor",
@@ -936,7 +936,7 @@
   },
   "remoteHome": {
     "organizations": "Organizaciones",
-    "loadingOrganizationsAndProjects": "Cargando organizaciones y proyectos...",
+    "loadingOrganizationsAndProjects": "Cargando organizaciones y proyectos…",
     "signInAgain": "Iniciar sesión de nuevo",
     "organizationCount_one": "{{count}} organización",
     "organizationCount_other": "{{count}} organizaciones",
@@ -963,7 +963,7 @@
     "title": "Workspaces",
     "connectingTo": "Conectando con",
     "selectedHost": "el host seleccionado",
-    "ellipsis": "...",
+    "ellipsis": "…",
     "connectFailed": "No se ha podido conectar con {{host}}.",
     "hostUnreachable": "Este host está desconectado o ya no es accesible desde este navegador.",
     "selectOnlineHost": "Selecciona un host conectado en la barra de aplicación para cargar los workspaces locales mediante relay.",
@@ -1166,7 +1166,7 @@
     "title": "El agente está haciendo una pregunta",
     "selectMultiple": "seleccionar varios",
     "confirmSelection": "Confirmar selección",
-    "submitting": "Enviando respuestas...",
+    "submitting": "Enviando respuestas…",
     "answeredCount": "Respondió {{count}} pregunta",
     "answeredCount_other": "Respondió {{count}} preguntas"
   },
