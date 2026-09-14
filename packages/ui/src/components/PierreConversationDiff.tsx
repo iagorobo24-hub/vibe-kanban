@@ -279,6 +279,7 @@ export function DiffViewCard({
 
   const FileIcon = fileIcon ?? DefaultFileIcon;
   const hasStats = additions > 0 || deletions > 0;
+  const { t } = useTranslation('common');
 
   return (
     <div className={cn('rounded-sm border overflow-hidden', className)}>
@@ -290,7 +291,12 @@ export function DiffViewCard({
             className="absolute inset-0 z-0 border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-brand"
             onClick={onToggle}
             aria-expanded={expanded}
-            aria-label={`${expanded ? 'Collapse' : 'Expand'} diff for ${filePath}`}
+            aria-label={t(
+              expanded
+                ? 'accessibility.collapseDiff'
+                : 'accessibility.expandDiff',
+              { filePath }
+            )}
           />
         )}
         <div

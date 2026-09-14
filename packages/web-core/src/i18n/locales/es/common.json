@@ -67,7 +67,12 @@
     "removeTag": "Eliminar etiqueta {{name}}",
     "linkPullRequest": "Vincular pull request",
     "closeDialog": "Cerrar diálogo",
-    "subIssueActions": "Acciones de la sub-issue"
+    "subIssueActions": "Acciones de la sub-issue",
+    "addRelationship": "Añadir relación",
+    "reorderColumn": "Reordenar {{name}}",
+    "collapseDiff": "Contraer diff de {{filePath}}",
+    "expandDiff": "Expandir diff de {{filePath}}",
+    "selectOption": "Seleccionar opción {{index}}"
   },
   "relativeTime": {
     "justNow": "ahora mismo",
@@ -597,6 +602,20 @@
     "workspacesFilterLabel": "Espacios de trabajo",
     "selectAssignees": "Selecciona responsables...",
     "relationships": "Relaciones",
+    "relationshipOptions": {
+      "blocks": "Bloquea...",
+      "blockedBy": "Bloqueada por...",
+      "relatedTo": "Relacionada con...",
+      "duplicateOf": "Duplicada de..."
+    },
+    "selectStatus": "Seleccionar estado",
+    "noPriority": "Sin prioridad",
+    "priorityLevels": {
+      "urgent": "Urgente",
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Baja"
+    },
     "noRelationships": "Sin relaciones",
     "openProjectsGuide": "Guía de proyectos",
     "editProjectSettings": "Editar configuración del proyecto",

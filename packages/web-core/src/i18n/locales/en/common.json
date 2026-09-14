@@ -48,7 +48,12 @@
     "removeTag": "Remove tag {{name}}",
     "linkPullRequest": "Link pull request",
     "closeDialog": "Close dialog",
-    "subIssueActions": "Sub-issue actions"
+    "subIssueActions": "Sub-issue actions",
+    "addRelationship": "Add relationship",
+    "reorderColumn": "Reorder {{name}}",
+    "collapseDiff": "Collapse diff for {{filePath}}",
+    "expandDiff": "Expand diff for {{filePath}}",
+    "selectOption": "Select option {{index}}"
   },
   "relativeTime": {
     "justNow": "just now",
@@ -662,6 +667,20 @@
     "workspacesFilterLabel": "Workspaces",
     "selectAssignees": "Select assignees...",
     "relationships": "Relationships",
+    "relationshipOptions": {
+      "blocks": "Blocks...",
+      "blockedBy": "Blocked by...",
+      "relatedTo": "Related to...",
+      "duplicateOf": "Duplicate of..."
+    },
+    "selectStatus": "Select status",
+    "noPriority": "No priority",
+    "priorityLevels": {
+      "urgent": "Urgent",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
     "noRelationships": "No relationships",
     "openProjectsGuide": "Projects guide",
     "editProjectSettings": "Edit project settings",

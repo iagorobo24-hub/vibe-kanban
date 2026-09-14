@@ -98,6 +98,8 @@ export const KanbanCard = ({
   dragDisabled = false,
   isMobile,
 }: KanbanCardProps) => {
+  const { t } = useTranslation('common');
+
   return (
     <Draggable draggableId={id} index={index} isDragDisabled={dragDisabled}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
@@ -159,7 +161,7 @@ export const KanbanCard = ({
                   {...provided.dragHandleProps}
                   className="flex items-start pt-half cursor-grab shrink-0 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
                   onClick={(e) => e.stopPropagation()}
-                  aria-label={`Reordenar ${name}`}
+                  aria-label={t('accessibility.reorderColumn', { name })}
                 >
                   <DotsSixVerticalIcon
                     className="size-icon-xs text-low"

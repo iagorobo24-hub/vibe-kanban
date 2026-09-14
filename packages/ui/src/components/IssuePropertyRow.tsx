@@ -14,13 +14,6 @@ export interface IssuePropertyStatus {
   color: string;
 }
 
-const priorityLabels: Record<PriorityLevel, string> = {
-  urgent: 'Urgent',
-  high: 'High',
-  medium: 'Medium',
-  low: 'Low',
-};
-
 export interface IssuePropertyRowProps {
   statusId: string;
   priority: PriorityLevel | null;
@@ -56,6 +49,9 @@ export function IssuePropertyRow({
   className,
 }: IssuePropertyRowProps) {
   const { t } = useTranslation('common');
+  const priorityLabel = priority
+    ? t(`kanban.priorityLevels.${priority}`)
+    : t('kanban.noPriority');
 
   return (
     <div
@@ -72,7 +68,8 @@ export function IssuePropertyRow({
         <StatusDot
           color={statuses.find((s) => s.id === statusId)?.color ?? '0 0% 50%'}
         />
-        {statuses.find((s) => s.id === statusId)?.name ?? 'Select status'}
+        {statuses.find((s) => s.id === statusId)?.name ??
+          t('kanban.selectStatus')}
       </PrimaryButton>
 
       <PrimaryButton
@@ -81,7 +78,7 @@ export function IssuePropertyRow({
         disabled={disabled}
       >
         <PriorityIcon priority={priority} />
-        {priority ? priorityLabels[priority] : 'No priority'}
+        {priorityLabel}
       </PrimaryButton>
 
       <PrimaryButton

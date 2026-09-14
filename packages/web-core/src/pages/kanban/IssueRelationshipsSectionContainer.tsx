@@ -1,4 +1,5 @@
 import { useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from '@tanstack/react-router';
 import {
   PlusIcon,
@@ -29,6 +30,7 @@ export function IssueRelationshipsSectionContainer({
   const { projectId } = useParams({ strict: false });
   const appNavigation = useAppNavigation();
   const { openRelationshipSelection } = useActions();
+  const { t } = useTranslation('common');
 
   const {
     getRelationshipsForIssue,
@@ -87,15 +89,11 @@ export function IssueRelationshipsSectionContainer({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label="Añadir relación"
+          aria-label={t('accessibility.addRelationship')}
           className="rounded-sm p-0.5 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
           onClick={(e) => e.stopPropagation()}
         >
-          <PlusIcon
-            aria-hidden="true"
-            className="size-icon-xs"
-            weight="bold"
-          />
+          <PlusIcon aria-hidden="true" className="size-icon-xs" weight="bold" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -103,25 +101,25 @@ export function IssueRelationshipsSectionContainer({
           icon={ArrowBendUpRightIcon}
           onSelect={() => handleSelectType('blocking', 'forward')}
         >
-          Blocks...
+          {t('kanban.relationshipOptions.blocks')}
         </DropdownMenuItem>
         <DropdownMenuItem
           icon={ProhibitIcon}
           onSelect={() => handleSelectType('blocking', 'reverse')}
         >
-          Blocked by...
+          {t('kanban.relationshipOptions.blockedBy')}
         </DropdownMenuItem>
         <DropdownMenuItem
           icon={ArrowsLeftRightIcon}
           onSelect={() => handleSelectType('related', 'forward')}
         >
-          Related to...
+          {t('kanban.relationshipOptions.relatedTo')}
         </DropdownMenuItem>
         <DropdownMenuItem
           icon={CopyIcon}
           onSelect={() => handleSelectType('has_duplicate', 'forward')}
         >
-          Duplicate of...
+          {t('kanban.relationshipOptions.duplicateOf')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
