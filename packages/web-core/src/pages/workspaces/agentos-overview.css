@@ -450,6 +450,10 @@
   color: var(--agentos-success);
 }
 
+.agentos-panel__empty--error svg {
+  color: var(--agentos-danger);
+}
+
 .agentos-panel__empty p {
   margin: 0;
   font-size: 13px;

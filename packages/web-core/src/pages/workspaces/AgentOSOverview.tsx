@@ -179,6 +179,8 @@ export function AgentOSOverview() {
     : isConnected
       ? { label: t('agentosOverview.status.online'), tone: 'online' }
       : { label: t('agentosOverview.status.offline'), tone: 'offline' };
+  const streamUnavailable = !isLoading && (!isConnected || Boolean(error));
+  const metricsUnavailable = isLoading || streamUnavailable;
   const locale = i18n.resolvedLanguage === 'es' ? 'es-ES' : 'en-US';
 
   const handleOpenWorkspace = useCallback(
@@ -298,27 +300,63 @@ export function AgentOSOverview() {
             <span className="agentos-metric-card__label">
               {t('agentosOverview.metrics.running')}
             </span>
-            <strong>{runningWorkspaces.length}</strong>
+            <strong
+              aria-label={
+                metricsUnavailable
+                  ? t('agentosOverview.metrics.unavailable')
+                  : undefined
+              }
+            >
+              {metricsUnavailable
+                ? t('agentosOverview.metrics.unavailable')
+                : runningWorkspaces.length}
+            </strong>
             <span className="agentos-metric-card__detail">
-              {t('agentosOverview.metrics.runningDetail')}
+              {metricsUnavailable
+                ? t('agentosOverview.metrics.unavailableDetail')
+                : t('agentosOverview.metrics.runningDetail')}
             </span>
           </article>
           <article className="agentos-metric-card">
             <span className="agentos-metric-card__label">
               {t('agentosOverview.metrics.attention')}
             </span>
-            <strong>{attentionWorkspaces.length}</strong>
+            <strong
+              aria-label={
+                metricsUnavailable
+                  ? t('agentosOverview.metrics.unavailable')
+                  : undefined
+              }
+            >
+              {metricsUnavailable
+                ? t('agentosOverview.metrics.unavailable')
+                : attentionWorkspaces.length}
+            </strong>
             <span className="agentos-metric-card__detail">
-              {t('agentosOverview.metrics.attentionDetail')}
+              {metricsUnavailable
+                ? t('agentosOverview.metrics.unavailableDetail')
+                : t('agentosOverview.metrics.attentionDetail')}
             </span>
           </article>
           <article className="agentos-metric-card">
             <span className="agentos-metric-card__label">
               {t('agentosOverview.metrics.completedToday')}
             </span>
-            <strong>{completedToday}</strong>
+            <strong
+              aria-label={
+                metricsUnavailable
+                  ? t('agentosOverview.metrics.unavailable')
+                  : undefined
+              }
+            >
+              {metricsUnavailable
+                ? t('agentosOverview.metrics.unavailable')
+                : completedToday}
+            </strong>
             <span className="agentos-metric-card__detail">
-              {t('agentosOverview.metrics.completedDetail')}
+              {metricsUnavailable
+                ? t('agentosOverview.metrics.unavailableDetail')
+                : t('agentosOverview.metrics.completedDetail')}
             </span>
           </article>
           <article className="agentos-metric-card">
@@ -337,7 +375,9 @@ export function AgentOSOverview() {
                   : t('agentosOverview.status.offlineShort')}
             </strong>
             <span className="agentos-metric-card__detail">
-              {t('agentosOverview.metrics.streams')}
+              {metricsUnavailable
+                ? t('agentosOverview.metrics.unavailableDetail')
+                : t('agentosOverview.metrics.streams')}
             </span>
           </article>
         </section>
@@ -365,6 +405,12 @@ export function AgentOSOverview() {
               <p className="agentos-panel__empty" aria-live="polite">
                 {t('agentosOverview.loadingWorkspaces')}
               </p>
+            ) : streamUnavailable ? (
+              <div className="agentos-panel__empty agentos-panel__empty--error">
+                <WarningCircleIcon aria-hidden="true" size={22} />
+                <p>{t('agentosOverview.streamUnavailableTitle')}</p>
+                <span>{t('agentosOverview.streamError')}</span>
+              </div>
             ) : recentWorkspaces.length === 0 ? (
               <div className="agentos-panel__empty">
                 <CheckCircleIcon aria-hidden="true" size={22} />

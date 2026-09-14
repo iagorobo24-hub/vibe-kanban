@@ -1035,6 +1035,8 @@
       "attentionDetail": "aprobaciones pendientes",
       "completedToday": "Completadas hoy",
       "completedDetail": "último proceso correcto",
+      "unavailable": "—",
+      "unavailableDetail": "datos no disponibles",
       "controlPlane": "Control plane",
       "streams": "streams locales"
     },
@@ -1042,6 +1044,7 @@
     "recentWorkspaces": "Workspaces recientes",
     "newWorkspace": "Nuevo",
     "loadingWorkspaces": "Cargando workspaces…",
+    "streamUnavailableTitle": "Los datos de workspaces no están disponibles.",
     "emptyTitle": "Aún no hay workspaces activos.",
     "emptyDescription": "Prepara una ejecución para crear el primero.",
     "signals": "SEÑALES",
