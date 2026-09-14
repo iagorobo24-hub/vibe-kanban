@@ -54,7 +54,7 @@ export type SerializedAttachmentNode = Spread<
 function truncatePath(path: string, maxLength = 24): string {
   const filename = path.split('/').pop() || path;
   if (filename.length <= maxLength) return filename;
-  return filename.slice(0, maxLength - 3) + '...';
+  return filename.slice(0, maxLength - 3) + '…';
 }
 
 function formatFileSize(bytes: bigint | number | null | undefined): string {
