@@ -44,7 +44,11 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
       executionProcessesById[selectedProcessId]
     : null;
 
-  const { logs, error: logsError } = useLogStream(selectedProcess?.id ?? '');
+  const {
+    logs,
+    error: logsError,
+    retry: retryLogs,
+  } = useLogStream(selectedProcess?.id ?? '');
 
   useEffect(() => {
     setLocalProcessDetails({});
@@ -318,7 +322,11 @@ function ProcessesTab({ sessionId }: ProcessesTabProps) {
           </div>
           <div className="flex-1 min-h-0 flex flex-col">
             {selectedProcess ? (
-              <ProcessLogsViewerContent logs={logs} error={logsError} />
+              <ProcessLogsViewerContent
+                logs={logs}
+                error={logsError}
+                onRetry={retryLogs}
+              />
             ) : loadingProcessId === selectedProcessId ? (
               <div className="text-center text-muted-foreground">
                 <p>{t('processes.loadingDetails')}</p>
