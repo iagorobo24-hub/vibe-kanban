@@ -134,7 +134,7 @@ const CreateRemoteProjectDialogImpl = create<CreateRemoteProjectDialogProps>(
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {t('createProjectDialog.title', 'Create Project')}
+              {t('createProjectDialog.title')}
             </DialogTitle>
             <DialogDescription>
               {t(
@@ -147,7 +147,7 @@ const CreateRemoteProjectDialogImpl = create<CreateRemoteProjectDialogProps>(
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="project-name">
-                {t('createProjectDialog.nameLabel', 'Project name')}
+              {t('createProjectDialog.nameLabel')}
               </Label>
               <div className="flex items-center gap-2">
                 <Input
@@ -202,15 +202,15 @@ const CreateRemoteProjectDialogImpl = create<CreateRemoteProjectDialogProps>(
               onClick={handleCancel}
               disabled={isCreating}
             >
-              {t('common:buttons.cancel', 'Cancel')}
+                {t('common:buttons.cancel')}
             </Button>
             <Button
               onClick={handleCreate}
               disabled={!name.trim() || isCreating}
             >
               {isCreating
-                ? t('createProjectDialog.creating', 'Creating...')
-                : t('createProjectDialog.createButton', 'Create Project')}
+                ? t('createProjectDialog.creating')
+                : t('createProjectDialog.createButton')}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -242,7 +242,7 @@ const ResolveConflictsDialogImpl = create<ResolveConflictsDialogProps>(
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              {t('resolveConflicts.dialog.title', 'Resolve Conflicts')}
+              {t('resolveConflicts.dialog.title')}
             </DialogTitle>
             <DialogDescription>
               {t(
@@ -323,14 +323,14 @@ const ResolveConflictsDialogImpl = create<ResolveConflictsDialogProps>(
                     htmlFor="new-session-switch"
                     className="text-sm cursor-pointer"
                   >
-                    {t('resolveConflicts.dialog.newSession', 'New Session')}
+                    {t('resolveConflicts.dialog.newSession')}
                   </Label>
                 </div>
               )}
               <Button onClick={handleSubmit} disabled={!canSubmit}>
                 {isSubmitting
-                  ? t('resolveConflicts.dialog.resolving', 'Starting...')
-                  : t('resolveConflicts.dialog.resolve', 'Resolve Conflicts')}
+                  ? t('resolveConflicts.dialog.resolving')
+                  : t('resolveConflicts.dialog.resolve')}
               </Button>
             </div>
           </DialogFooter>
