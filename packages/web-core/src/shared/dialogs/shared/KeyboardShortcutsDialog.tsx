@@ -259,7 +259,7 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
             <button
               type="button"
               onClick={handleClose}
-              aria-label="Close"
+              aria-label={t('buttons.close')}
               className="p-1 rounded-sm hover:bg-secondary text-low hover:text-normal"
             >
               <XIcon

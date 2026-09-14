@@ -180,8 +180,8 @@ export function RetryEditorInline({
             variant="outline"
             onClick={handleAttachClick}
             disabled={isSending}
-            title="Attach file"
-            aria-label="Attach file"
+            title={t('accessibility.attachFile')}
+            aria-label={t('accessibility.attachFile')}
           >
             <Paperclip className="h-3 w-3" />
           </Button>

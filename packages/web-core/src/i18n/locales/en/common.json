@@ -29,7 +29,15 @@
     "expandMessage": "Expand message",
     "markdownContent": "Markdown content",
     "markdownEditor": "Markdown editor",
-    "resizePanels": "Resize panels"
+    "resizePanels": "Resize panels",
+    "projectMenu": "Project menu",
+    "addTask": "Add task",
+    "selectAgent": "Select agent",
+    "noAgentsAvailable": "No agents available",
+    "configuration": "Configuration",
+    "selectConfiguration": "Select configuration",
+    "attachFile": "Attach file",
+    "closeNavigation": "Close navigation menu"
   },
   "relativeTime": {
     "justNow": "just now",

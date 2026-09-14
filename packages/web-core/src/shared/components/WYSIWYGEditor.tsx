@@ -653,7 +653,7 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
               {onEdit && (
                 <Button
                   type="button"
-                  aria-label="Edit"
+                  aria-label={t('buttons.edit')}
                   title="Edit"
                   variant="icon"
                   size="icon"
@@ -670,7 +670,7 @@ const WYSIWYGEditor = forwardRef<WYSIWYGEditorRef, WysiwygProps>(
               {onDelete && (
                 <Button
                   type="button"
-                  aria-label="Delete"
+                  aria-label={t('buttons.delete')}
                   title="Delete"
                   variant="icon"
                   size="icon"

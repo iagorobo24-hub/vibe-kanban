@@ -436,7 +436,7 @@ export function SharedAppLayout() {
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen(false)}
-                aria-label="Close navigation menu"
+                aria-label={t('accessibility.closeNavigation')}
                 className="agentos-mobile-drawer__close agentos-icon-button"
               >
                 <XIcon className="h-4 w-4" weight="bold" aria-hidden="true" />

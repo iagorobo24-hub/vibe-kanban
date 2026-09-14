@@ -48,7 +48,15 @@
     "expandMessage": "Expandir mensaje",
     "markdownContent": "Contenido Markdown",
     "markdownEditor": "Editor Markdown",
-    "resizePanels": "Redimensionar paneles"
+    "resizePanels": "Redimensionar paneles",
+    "projectMenu": "Menú del proyecto",
+    "addTask": "Añadir tarea",
+    "selectAgent": "Seleccionar agente",
+    "noAgentsAvailable": "No hay agentes disponibles",
+    "configuration": "Configuración",
+    "selectConfiguration": "Seleccionar configuración",
+    "attachFile": "Adjuntar archivo",
+    "closeNavigation": "Cerrar menú de navegación"
   },
   "relativeTime": {
     "justNow": "ahora mismo",

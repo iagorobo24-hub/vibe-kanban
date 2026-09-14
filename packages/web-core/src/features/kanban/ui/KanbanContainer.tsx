@@ -916,7 +916,7 @@ export function KanbanContainer() {
               <button
                 type="button"
                 className="agentos-project-board__menu-button rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
-                aria-label="Project menu"
+                aria-label={t('accessibility.projectMenu')}
                 data-agentos-control="project-menu"
               >
                 <DotsThreeIcon
@@ -1011,7 +1011,7 @@ export function KanbanContainer() {
                           type="button"
                           onClick={() => handleAddTask(status.id)}
                           className="agentos-kanban-column__add rounded-sm p-half text-low hover:bg-secondary hover:text-normal transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
-                          aria-label="Add task"
+                          aria-label={t('accessibility.addTask')}
                         >
                           <PlusIcon
                             className="size-icon-xs"

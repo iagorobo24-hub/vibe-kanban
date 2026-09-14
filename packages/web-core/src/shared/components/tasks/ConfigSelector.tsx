@@ -1,4 +1,5 @@
 import { Settings2, ArrowDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@vibe/ui/components/Button';
 import {
   DropdownMenu,
@@ -27,6 +28,7 @@ export function ConfigSelector({
   className = '',
   showLabel = false,
 }: ConfigSelectorProps) {
+  const { t } = useTranslation('common');
   const selectedAgent = selectedExecutorProfile?.executor;
   const configs = selectedAgent && profiles ? profiles[selectedAgent] : null;
   const configOptions = configs ? getSortedExecutorVariantKeys(configs) : [];
@@ -39,7 +41,7 @@ export function ConfigSelector({
     <div className="flex-1">
       {showLabel && (
         <Label htmlFor="executor-variant" className="text-sm font-medium">
-          Configuration
+          {t('accessibility.configuration')}
         </Label>
       )}
       <DropdownMenu>
@@ -49,7 +51,7 @@ export function ConfigSelector({
             size="sm"
             className={`w-full justify-between text-xs ${showLabel ? 'mt-1.5' : ''} ${className}`}
             disabled={disabled}
-            aria-label="Select configuration"
+            aria-label={t('accessibility.selectConfiguration')}
           >
             <div className="flex items-center gap-1.5 w-full">
               <Settings2 className="h-3 w-3" />
