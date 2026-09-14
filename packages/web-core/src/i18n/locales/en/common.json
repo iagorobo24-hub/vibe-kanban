@@ -324,7 +324,11 @@
   },
   "logs": {
     "searchLogs": "Search logs",
-    "selectProcessToView": "Select a process to view logs"
+    "selectProcessToView": "Select a process to view logs",
+    "previousMatch": "Previous match",
+    "previousMatchShortcut": "Previous match (Shift+Enter)",
+    "nextMatch": "Next match",
+    "nextMatchShortcut": "Next match (Enter)"
   },
   "processes": {
     "noProcesses": "No processes",

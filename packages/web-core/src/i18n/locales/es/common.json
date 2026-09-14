@@ -258,7 +258,11 @@
   },
   "logs": {
     "searchLogs": "Buscar registros",
-    "selectProcessToView": "Seleccione un proceso para ver los registros"
+    "selectProcessToView": "Seleccione un proceso para ver los registros",
+    "previousMatch": "Coincidencia anterior",
+    "previousMatchShortcut": "Coincidencia anterior (Mayús+Intro)",
+    "nextMatch": "Siguiente coincidencia",
+    "nextMatchShortcut": "Siguiente coincidencia (Intro)"
   },
   "processes": {
     "noProcesses": "Sin procesos",

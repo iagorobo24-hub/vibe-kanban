@@ -104,8 +104,8 @@ export function ProcessListContainer() {
               onClick={onPrevMatch}
               disabled={matchCount === 0}
               className="rounded-sm p-1 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
-              aria-label="Previous match"
-              title="Previous match (Shift+Enter)"
+              aria-label={t('logs.previousMatch')}
+              title={t('logs.previousMatchShortcut')}
             >
               <CaretUpIcon
                 className="size-icon-sm"
@@ -117,8 +117,8 @@ export function ProcessListContainer() {
               onClick={onNextMatch}
               disabled={matchCount === 0}
               className="rounded-sm p-1 text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
-              aria-label="Next match"
-              title="Next match (Enter)"
+              aria-label={t('logs.nextMatch')}
+              title={t('logs.nextMatchShortcut')}
             >
               <CaretDownIcon
                 className="size-icon-sm"
