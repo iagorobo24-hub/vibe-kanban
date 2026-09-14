@@ -223,7 +223,12 @@ const PendingApprovalEntry = ({
     dialogScopeActiveRef.current = dialogScopeActive;
   }, [dialogScopeActive]);
 
-  const { getPendingById } = useApprovals();
+  const {
+    getPendingById,
+    isLoading: isApprovalStreamLoading,
+    error: approvalStreamError,
+    retry: retryApprovalStream,
+  } = useApprovals();
   const approvalInfo = getPendingById(pendingStatus.approval_id);
 
   const { timeLeft, percent } = useApprovalCountdown(
@@ -235,10 +240,17 @@ const PendingApprovalEntry = ({
   const [responseStatus, setResponseStatus] = useState<
     'approved' | 'denied' | null
   >(null);
-  const isLoadingDetails = !approvalInfo && !hasResponded;
+  const isLoadingDetails =
+    !approvalInfo && !hasResponded && isApprovalStreamLoading;
+  const isApprovalStreamUnavailable =
+    !approvalInfo && !hasResponded && Boolean(approvalStreamError);
   const isExpired = !!approvalInfo && !hasResponded && timeLeft <= 0;
   const disabled =
-    isResponding || hasResponded || isLoadingDetails || isExpired;
+    isResponding ||
+    hasResponded ||
+    isLoadingDetails ||
+    isApprovalStreamUnavailable ||
+    isExpired;
   const requestedAtLabel = useMemo(() => {
     if (!approvalInfo?.created_at) return null;
     const date = new Date(approvalInfo.created_at);
@@ -252,11 +264,13 @@ const PendingApprovalEntry = ({
     ? responseStatus === 'approved'
       ? t('approvalEntry.approved')
       : t('approvalEntry.denied')
-    : isLoadingDetails
-      ? t('approvalEntry.loadingDetails')
-      : isExpired
-        ? t('approvalEntry.expired')
-        : t('approvalEntry.awaitingResponse');
+    : isApprovalStreamUnavailable
+      ? t('approvalEntry.streamUnavailable')
+      : isLoadingDetails
+        ? t('approvalEntry.loadingDetails')
+        : isExpired
+          ? t('approvalEntry.expired')
+          : t('approvalEntry.awaitingResponse');
 
   const shouldEnableApprovalsScope = shouldControlScopes && !disabled;
 
@@ -436,14 +450,23 @@ const PendingApprovalEntry = ({
                   </span>
                 )}
               </div>
-              {!isEnteringReason && (
-                <ActionButtons
-                  disabled={disabled}
-                  isResponding={isResponding}
-                  onApprove={handleApprove}
-                  onStartDeny={handleStartDeny}
-                />
-              )}
+              {!isEnteringReason &&
+                (isApprovalStreamUnavailable ? (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={retryApprovalStream}
+                  >
+                    {t('approvalEntry.retryStream')}
+                  </Button>
+                ) : isLoadingDetails ? null : (
+                  <ActionButtons
+                    disabled={disabled}
+                    isResponding={isResponding}
+                    onApprove={handleApprove}
+                    onStartDeny={handleStartDeny}
+                  />
+                ))}
             </div>
 
             {error && (

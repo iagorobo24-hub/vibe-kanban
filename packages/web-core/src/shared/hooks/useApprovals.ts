@@ -12,6 +12,9 @@ interface UseApprovalsResult {
   getPendingForProcess: (executionProcessId: string) => ApprovalInfo | null;
   getPendingById: (approvalId: string) => ApprovalInfo | null;
   isConnected: boolean;
+  isLoading: boolean;
+  error: string | null;
+  retry: () => void;
 }
 
 type ApprovalState = {
@@ -21,11 +24,12 @@ type ApprovalState = {
 export function useApprovals(): UseApprovalsResult {
   const approvalFixtureEnabled = isAgentOSQaFixtureEnabled('approval');
   const approvalFixtureResponse = useAgentOSQaApprovalResponse();
-  const { data, isConnected } = useJsonPatchWsStream<ApprovalState>(
-    '/api/approvals/stream/ws',
-    !approvalFixtureEnabled,
-    () => ({ pending: {} })
-  );
+  const { data, isConnected, isInitialized, error, retry } =
+    useJsonPatchWsStream<ApprovalState>(
+      '/api/approvals/stream/ws',
+      !approvalFixtureEnabled,
+      () => ({ pending: {} })
+    );
 
   const pendingById = useMemo(
     () =>
@@ -66,5 +70,8 @@ export function useApprovals(): UseApprovalsResult {
     getPendingForProcess,
     getPendingById,
     isConnected: approvalFixtureEnabled || isConnected,
+    isLoading: !approvalFixtureEnabled && !isInitialized && !error,
+    error,
+    retry,
   };
 }

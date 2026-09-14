@@ -364,6 +364,8 @@
   "approvalEntry": {
     "requestTitle": "Approval required",
     "loadingDetails": "Loading request details",
+    "streamUnavailable": "Approval details are unavailable. Actions remain blocked until the stream reconnects.",
+    "retryStream": "Retry approvals",
     "awaitingResponse": "Awaiting your response",
     "approved": "Approved",
     "denied": "Denied",

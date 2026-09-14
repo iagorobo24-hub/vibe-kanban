@@ -44,6 +44,8 @@
   "approvalEntry": {
     "requestTitle": "Se requiere aprobación",
     "loadingDetails": "Cargando detalles de la solicitud",
+    "streamUnavailable": "Los detalles de aprobación no están disponibles. Las acciones quedan bloqueadas hasta recuperar la conexión.",
+    "retryStream": "Reintentar aprobaciones",
     "awaitingResponse": "Esperando tu respuesta",
     "approved": "Aprobada",
     "denied": "Denegada",
