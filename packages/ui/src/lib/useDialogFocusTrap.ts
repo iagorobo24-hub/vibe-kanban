@@ -74,7 +74,9 @@ export function useDialogFocusTrap<T extends HTMLElement>(
       }
     };
 
-    dialog.addEventListener("keydown", handleTabKey);
-    return () => dialog.removeEventListener("keydown", handleTabKey);
+    // Listen at document level so a programmatic focus change outside the
+    // dialog cannot make the next Tab escape the modal surface.
+    document.addEventListener("keydown", handleTabKey, true);
+    return () => document.removeEventListener("keydown", handleTabKey, true);
   }, [dialogRef, open]);
 }
