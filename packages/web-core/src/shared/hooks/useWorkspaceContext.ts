@@ -47,6 +47,8 @@ export interface WorkspaceContextValue {
   selectSession: (sessionId: string) => void;
   selectLatestSession: () => void;
   isSessionsLoading: boolean;
+  sessionsError: string | null;
+  retrySessions: () => void;
   /** Whether user is creating a new session */
   isNewSessionMode: boolean;
   /** Enter new session mode */

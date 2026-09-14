@@ -60,6 +60,8 @@ export function WorkspacesLayout() {
     selectedSessionId,
     sessions,
     isSessionsLoading,
+    sessionsError,
+    retrySessions,
     selectSession,
     repos,
     isNewSessionMode,
@@ -259,6 +261,8 @@ export function WorkspacesLayout() {
                   onSelectSession={selectSession}
                   isLoading={isLoading}
                   isSessionsLoading={isSessionsLoading}
+                  sessionsError={sessionsError}
+                  onRetrySessions={retrySessions}
                   isNewSessionMode={isNewSessionMode}
                   onStartNewSession={startNewSession}
                 />
@@ -358,6 +362,8 @@ export function WorkspacesLayout() {
                     onSelectSession={selectSession}
                     isLoading={isLoading}
                     isSessionsLoading={isSessionsLoading}
+                    sessionsError={sessionsError}
+                    onRetrySessions={retrySessions}
                     isNewSessionMode={isNewSessionMode}
                     onStartNewSession={startNewSession}
                   />
