@@ -96,6 +96,7 @@ export function WorkspaceSummary({
           "absolute left-0 top-1 bottom-1 w-0.5 rounded-full transition-colors duration-100",
           isActive ? "bg-brand" : "bg-transparent",
         )}
+        aria-hidden="true"
       />
       <button
         onClick={onClick}
@@ -105,6 +106,7 @@ export function WorkspaceSummary({
             ? "text-normal"
             : "text-low sm:opacity-60 sm:hover:opacity-100 sm:hover:text-normal",
         )}
+        aria-pressed={isActive}
       >
         <div
           className={cn(

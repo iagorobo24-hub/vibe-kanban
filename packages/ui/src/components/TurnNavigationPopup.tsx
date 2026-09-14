@@ -155,9 +155,10 @@ export function TurnNavigationPopup({
                     className={cn(
                       "w-full text-left px-base py-half rounded transition-colors group",
                       isActive
-                        ? "bg-brand/10 border-l-2 border-brand"
+                        ? "bg-tertiary text-normal ring-1 ring-inset ring-brand/40"
                         : "hover:bg-secondary",
                     )}
+                    aria-current={isActive ? "step" : undefined}
                     onClick={() => handleNavigate(turn.patchKey)}
                   >
                     <div className="flex items-baseline gap-2">

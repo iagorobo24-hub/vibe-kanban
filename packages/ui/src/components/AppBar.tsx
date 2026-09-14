@@ -354,6 +354,7 @@ export function AppBar({
                 className: item.className,
               })}
               aria-label={item.label}
+              aria-current={item.isActive ? "page" : undefined}
             >
               <item.icon
                 className="size-icon-base"
@@ -389,6 +390,7 @@ export function AppBar({
                   isActive: item.isActive,
                 })}
                 aria-label={`${item.host.name} (${t(getHostStatusTranslationKey(item.host.status))})`}
+                aria-current={item.isActive ? "page" : undefined}
               >
                 {getProjectInitials(item.host.name)}
               </button>
@@ -502,6 +504,11 @@ export function AppBar({
                                   : undefined
                               }
                               aria-label={project.name}
+                              aria-current={
+                                item.activeProjectId === project.id
+                                  ? "page"
+                                  : undefined
+                              }
                             >
                               {getProjectInitials(project.name)}
                             </button>

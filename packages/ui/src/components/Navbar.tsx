@@ -77,6 +77,7 @@ function NavbarIconButton({
         className,
       )}
       {...props}
+      aria-pressed={isActive}
     >
       <IconComponent
         className="size-icon-base"
@@ -373,6 +374,7 @@ export function Navbar({
                         role="tab"
                         aria-label={tab.label}
                         aria-selected={isActive}
+                        aria-controls={getMobileTabPanelId(tab.id)}
                         tabIndex={isActive ? 0 : -1}
                         className={cn(
                           "flex items-center gap-1 rounded-sm px-1.5 py-1 text-xs whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
