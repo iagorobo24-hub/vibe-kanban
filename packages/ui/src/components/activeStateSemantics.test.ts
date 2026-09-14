@@ -47,6 +47,11 @@ assert.match(
   /aria-pressed=\{isActive\}/,
   "panel toggle buttons must expose their active boolean",
 );
+assert.doesNotMatch(
+  navbar,
+  /isActive\s*=\s*false/,
+  "plain action buttons must omit aria-pressed instead of exposing false",
+);
 assert.match(
   navbar,
   /aria-controls=\{getMobileTabPanelId\(tab\.id\)\}/,

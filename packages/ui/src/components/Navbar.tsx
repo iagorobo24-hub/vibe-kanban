@@ -60,7 +60,7 @@ interface NavbarIconButtonProps
 
 function NavbarIconButton({
   icon: IconComponent,
-  isActive = false,
+  isActive,
   tooltip,
   shortcut,
   className,
