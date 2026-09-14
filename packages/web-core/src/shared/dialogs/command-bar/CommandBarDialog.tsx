@@ -99,7 +99,8 @@ function CommandBarContent({
     currentPage,
     state.search,
     visibilityContext,
-    workspace
+    workspace,
+    getLabel
   );
 
   // Handle item selection with side effects

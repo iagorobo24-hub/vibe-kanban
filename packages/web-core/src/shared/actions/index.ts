@@ -241,6 +241,10 @@ export const Actions = {
   PinWorkspace: {
     id: 'pin-workspace',
     label: (workspace?: Workspace) => (workspace?.pinned ? 'Unpin' : 'Pin'),
+    getTranslationKey: (_ctx, workspace) =>
+      workspace?.pinned
+        ? 'commandBar.actions.unpinWorkspace'
+        : 'commandBar.actions.pinWorkspace',
     icon: PushPinIcon,
     shortcut: 'W P',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -257,6 +261,10 @@ export const Actions = {
     id: 'archive-workspace',
     label: (workspace?: Workspace) =>
       workspace?.archived ? 'Unarchive' : 'Archive',
+    getTranslationKey: (_ctx, workspace) =>
+      workspace?.archived
+        ? 'commandBar.actions.unarchiveWorkspace'
+        : 'commandBar.actions.archiveWorkspace',
     icon: ArchiveIcon,
     shortcut: 'W A',
     requiresTarget: ActionTargetType.WORKSPACE,
@@ -547,6 +555,10 @@ export const Actions = {
       useDiffViewStore.getState().mode === 'unified'
         ? 'Switch to Side-by-Side View'
         : 'Switch to Inline View',
+    getTranslationKey: () =>
+      useDiffViewStore.getState().mode === 'unified'
+        ? 'commandBar.actions.diffSideBySideView'
+        : 'commandBar.actions.diffInlineView',
     icon: ColumnsIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) =>
@@ -567,6 +579,10 @@ export const Actions = {
       useDiffViewStore.getState().ignoreWhitespace
         ? 'Show Whitespace Changes'
         : 'Ignore Whitespace Changes',
+    getTranslationKey: () =>
+      useDiffViewStore.getState().ignoreWhitespace
+        ? 'commandBar.actions.showWhitespaceChanges'
+        : 'commandBar.actions.ignoreWhitespaceChanges',
     icon: EyeSlashIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) =>
@@ -584,6 +600,10 @@ export const Actions = {
       useDiffViewStore.getState().wrapText
         ? 'Disable Line Wrapping'
         : 'Enable Line Wrapping',
+    getTranslationKey: () =>
+      useDiffViewStore.getState().wrapText
+        ? 'commandBar.actions.disableLineWrapping'
+        : 'commandBar.actions.enableLineWrapping',
     icon: TextAlignLeftIcon,
     shortcut: 'T W',
     requiresTarget: ActionTargetType.NONE,
@@ -603,6 +623,10 @@ export const Actions = {
       useUiPreferencesStore.getState().isLeftSidebarVisible
         ? 'Hide Left Sidebar'
         : 'Show Left Sidebar',
+    getTranslationKey: () =>
+      useUiPreferencesStore.getState().isLeftSidebarVisible
+        ? 'commandBar.actions.hideLeftSidebar'
+        : 'commandBar.actions.showLeftSidebar',
     icon: SidebarSimpleIcon,
     shortcut: 'V S',
     requiresTarget: ActionTargetType.NONE,
@@ -625,6 +649,10 @@ export const Actions = {
       !(ctx.isLeftMainPanelVisible && ctx.rightMainPanelMode === null),
     getLabel: (ctx) =>
       ctx.isLeftMainPanelVisible ? 'Hide Chat Panel' : 'Show Chat Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.isLeftMainPanelVisible
+        ? 'commandBar.actions.hideChatPanel'
+        : 'commandBar.actions.showChatPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -638,6 +666,10 @@ export const Actions = {
       useUiPreferencesStore.getState().isRightSidebarVisible
         ? 'Hide Right Sidebar'
         : 'Show Right Sidebar',
+    getTranslationKey: () =>
+      useUiPreferencesStore.getState().isRightSidebarVisible
+        ? 'commandBar.actions.hideRightSidebar'
+        : 'commandBar.actions.showRightSidebar',
     icon: RightSidebarIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) => ctx.layoutMode === 'workspaces',
@@ -661,6 +693,10 @@ export const Actions = {
       ctx.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.CHANGES
         ? 'Hide Changes Panel'
         : 'Show Changes Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.CHANGES
+        ? 'commandBar.actions.hideChangesPanel'
+        : 'commandBar.actions.showChangesPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -684,6 +720,10 @@ export const Actions = {
       ctx.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.LOGS
         ? 'Hide Logs Panel'
         : 'Show Logs Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.LOGS
+        ? 'commandBar.actions.hideLogsPanel'
+        : 'commandBar.actions.showLogsPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -708,6 +748,10 @@ export const Actions = {
       ctx.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.PREVIEW
         ? 'Hide Preview Panel'
         : 'Show Preview Panel',
+    getTranslationKey: (ctx) =>
+      ctx?.rightMainPanelMode === RIGHT_MAIN_PANEL_MODES.PREVIEW
+        ? 'commandBar.actions.hidePreviewPanel'
+        : 'commandBar.actions.showPreviewPanel',
     execute: (ctx) => {
       useUiPreferencesStore
         .getState()
@@ -729,6 +773,10 @@ export const Actions = {
         keys.length > 0 && keys.every((k) => expanded[k] !== false);
       return isAllExpanded ? 'Collapse All Diffs' : 'Expand All Diffs';
     },
+    getTranslationKey: (ctx) =>
+      ctx?.isAllDiffsExpanded
+        ? 'commandBar.actions.collapseAllDiffs'
+        : 'commandBar.actions.expandAllDiffs',
     icon: CaretDoubleUpIcon,
     requiresTarget: ActionTargetType.NONE,
     isVisible: (ctx) =>
@@ -851,6 +899,10 @@ export const Actions = {
     },
     getLabel: (ctx) =>
       ctx.devServerState === 'running' ? 'Stop Dev Server' : 'Start Dev Server',
+    getTranslationKey: (ctx) =>
+      ctx?.devServerState === 'running'
+        ? 'commandBar.actions.stopDevServer'
+        : 'commandBar.actions.startDevServer',
     execute: (ctx) => {
       if (ctx.runningDevServers.length > 0) {
         ctx.stopDevServer();

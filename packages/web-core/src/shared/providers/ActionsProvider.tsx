@@ -25,6 +25,7 @@ import {
   ActionTargetType,
   resolveLabel,
   getActionLabel,
+  getActionTranslationKey,
 } from '@/shared/types/actions';
 import { useWorkspaceContext } from '@/shared/hooks/useWorkspaceContext';
 import { UserContext } from '@/shared/hooks/useUserContext';
@@ -332,13 +333,19 @@ export function ActionsProvider({ children }: ActionsProviderProps) {
     ) => {
       if (ctx) {
         const label = getActionLabel(action, ctx, workspace);
-        return action.translationKey
-          ? t(action.translationKey, { defaultValue: label })
+        const translationKey = getActionTranslationKey(action, ctx, workspace);
+        return translationKey
+          ? t(translationKey, { defaultValue: label })
           : label;
       }
       const label = resolveLabel(action, workspace);
-      return action.translationKey
-        ? t(action.translationKey, { defaultValue: label })
+      const translationKey = getActionTranslationKey(
+        action,
+        undefined,
+        workspace
+      );
+      return translationKey
+        ? t(translationKey, { defaultValue: label })
         : label;
     },
     [t]

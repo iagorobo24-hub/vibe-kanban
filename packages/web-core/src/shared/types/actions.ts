@@ -164,6 +164,11 @@ interface ActionBase {
   label: string | ((workspace?: Workspace) => string);
   /** Optional common-namespace key for UI surfaces that render this action. */
   translationKey?: string;
+  /** Optional state-aware key for labels that change with the current action state. */
+  getTranslationKey?: (
+    ctx?: ActionVisibilityContext,
+    workspace?: Workspace
+  ) => string;
   icon: ActionIcon;
   shortcut?: string;
   variant?: 'default' | 'destructive';
@@ -283,4 +288,14 @@ export function getActionLabel(
   return action.getLabel
     ? action.getLabel(ctx)
     : resolveLabel(action, workspace);
+}
+
+export function getActionTranslationKey(
+  action: ActionDefinition,
+  ctx?: ActionVisibilityContext,
+  workspace?: Workspace
+): string | undefined {
+  return action.getTranslationKey
+    ? action.getTranslationKey(ctx, workspace)
+    : action.translationKey;
 }

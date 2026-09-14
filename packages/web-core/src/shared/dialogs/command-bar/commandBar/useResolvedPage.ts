@@ -18,6 +18,7 @@ import type {
 } from '@/shared/types/commandBar';
 import {
   isActionVisible,
+  type ActionDefinition,
   type ActionVisibilityContext,
 } from '@/shared/types/actions';
 import { isPageVisible } from '@/shared/command-bar/actions/useActionVisibility';
@@ -112,14 +113,19 @@ export function useResolvedPage(
   pageId: PageId,
   search: string,
   ctx: ActionVisibilityContext,
-  workspace: Workspace | undefined
+  workspace: Workspace | undefined,
+  getLabel: (
+    action: ActionDefinition,
+    workspace?: Workspace,
+    ctx?: ActionVisibilityContext
+  ) => string
 ): ResolvedCommandBarPage {
   const { t } = useTranslation('common');
 
   return useMemo(() => {
     const groups = buildPageGroups(pageId, ctx, t);
     if (pageId === 'root' && search.trim()) {
-      groups.push(...injectSearchMatches(search, ctx, workspace));
+      groups.push(...injectSearchMatches(search, ctx, workspace, getLabel));
     }
 
     return {
@@ -131,5 +137,5 @@ export function useResolvedPage(
         : undefined,
       groups,
     };
-  }, [pageId, search, ctx, workspace, t]);
+  }, [pageId, search, ctx, workspace, getLabel, t]);
 }
