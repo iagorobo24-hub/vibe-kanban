@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { cn } from "../lib/cn";
@@ -40,6 +41,8 @@ const DialogContent = React.forwardRef<
     hideCloseButton?: boolean;
   }
 >(({ className, children, hideCloseButton = false, ...props }, ref) => {
+  const { t } = useTranslation("common");
+
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -60,9 +63,12 @@ const DialogContent = React.forwardRef<
       >
         {children}
         {!hideCloseButton && (
-          <DialogPrimitive.Close className="agentos-dialog-close absolute right-base top-base rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:pointer-events-none">
+          <DialogPrimitive.Close
+            className="agentos-dialog-close absolute right-base top-base rounded-sm opacity-70 ring-offset-panel transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 disabled:pointer-events-none"
+            aria-label={t("accessibility.closeDialog")}
+          >
             <X className="h-4 w-4 text-normal" aria-hidden="true" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{t("buttons.close")}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>
