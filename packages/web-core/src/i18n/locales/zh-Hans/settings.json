@@ -57,6 +57,15 @@
           "label": "语言",
           "placeholder": "选择语言",
           "helper": "选择您喜欢的语言。浏览器默认将跟随您的系统语言。"
+        },
+        "mobileFontScale": {
+          "label": "移动端字体大小",
+          "description": "调整移动端文字大小，提升可读性。",
+          "options": {
+            "default": "默认 (100%)",
+            "small": "小 (95%)",
+            "smaller": "更小 (90%)"
+          }
         }
       },
       "taskExecution": {

@@ -57,6 +57,15 @@
           "label": "言語",
           "placeholder": "言語を選択",
           "helper": "お好みの言語を選択してください。ブラウザ設定では、システム言語に従います。"
+        },
+        "mobileFontScale": {
+          "label": "モバイルの文字サイズ",
+          "description": "モバイルで読みやすくするために文字サイズを調整します。",
+          "options": {
+            "default": "デフォルト (100%)",
+            "small": "小 (95%)",
+            "smaller": "より小 (90%)"
+          }
         }
       },
       "taskExecution": {

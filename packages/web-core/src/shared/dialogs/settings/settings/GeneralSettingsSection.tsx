@@ -304,18 +304,32 @@ export function GeneralSettingsSection() {
 
         {isMobile && (
           <SettingsField
-            label="Mobile Font Size"
-            description="Scale text size on mobile for better readability"
+            label={t('settings.general.appearance.mobileFontScale.label')}
+            description={t(
+              'settings.general.appearance.mobileFontScale.description'
+            )}
           >
             <SettingsSelect
               value={mobileFontScale}
               options={[
                 {
                   value: 'default' as MobileFontScale,
-                  label: 'Default (100%)',
+                  label: t(
+                    'settings.general.appearance.mobileFontScale.options.default'
+                  ),
                 },
-                { value: 'small' as MobileFontScale, label: 'Small (95%)' },
-                { value: 'smaller' as MobileFontScale, label: 'Smaller (90%)' },
+                {
+                  value: 'small' as MobileFontScale,
+                  label: t(
+                    'settings.general.appearance.mobileFontScale.options.small'
+                  ),
+                },
+                {
+                  value: 'smaller' as MobileFontScale,
+                  label: t(
+                    'settings.general.appearance.mobileFontScale.options.smaller'
+                  ),
+                },
               ]}
               onChange={(value: MobileFontScale) => setMobileFontScale(value)}
             />

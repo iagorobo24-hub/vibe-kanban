@@ -59,6 +59,15 @@
           "label": "Idioma",
           "placeholder": "Selecciona tu idioma",
           "helper": "Elige tu idioma preferido. El predeterminado del navegador sigue el idioma de tu sistema."
+        },
+        "mobileFontScale": {
+          "label": "Tamaño del texto en móvil",
+          "description": "Ajusta el tamaño del texto en el móvil para mejorar la legibilidad.",
+          "options": {
+            "default": "Predeterminado (100%)",
+            "small": "Pequeño (95%)",
+            "smaller": "Más pequeño (90%)"
+          }
         }
       },
       "taskExecution": {

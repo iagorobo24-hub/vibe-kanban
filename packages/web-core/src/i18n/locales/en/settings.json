@@ -67,6 +67,15 @@
           "label": "Language",
           "placeholder": "Select language",
           "helper": "Choose your preferred language. Browser Default follows your system language."
+        },
+        "mobileFontScale": {
+          "label": "Mobile font size",
+          "description": "Scale text size on mobile for better readability.",
+          "options": {
+            "default": "Default (100%)",
+            "small": "Small (95%)",
+            "smaller": "Smaller (90%)"
+          }
         }
       },
       "taskExecution": {

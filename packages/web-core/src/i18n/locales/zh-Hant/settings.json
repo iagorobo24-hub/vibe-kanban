@@ -57,6 +57,15 @@
           "label": "語言",
           "placeholder": "選擇語言",
           "helper": "選擇您偏好的語言。瀏覽器預設將跟隨系統語言。"
+        },
+        "mobileFontScale": {
+          "label": "行動版文字大小",
+          "description": "調整行動版文字大小，提升可讀性。",
+          "options": {
+            "default": "預設 (100%)",
+            "small": "小 (95%)",
+            "smaller": "更小 (90%)"
+          }
         }
       },
       "taskExecution": {
