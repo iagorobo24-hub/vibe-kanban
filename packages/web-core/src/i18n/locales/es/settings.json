@@ -11,6 +11,8 @@
       "cancel": "Seguir editando"
     },
     "layout": {
+      "close": "Cerrar configuración",
+      "mobileBack": "Volver a la navegación de configuración",
       "nav": {
         "title": "Configuración",
         "general": "General",
@@ -199,7 +201,8 @@
           "helper": "Reproduce un sonido cuando una tarea termina de ejecutarse.",
           "fileLabel": "Sonido",
           "filePlaceholder": "Seleccionar sonido",
-          "fileHelper": "Elige el sonido que se reproducirá al completar las tareas. Haz clic en el botón de volumen para escucharlo."
+          "fileHelper": "Elige el sonido que se reproducirá al completar las tareas. Haz clic en el botón de volumen para escucharlo.",
+          "preview": "Previsualizar sonido"
         },
         "push": {
           "label": "Notificaciones Push",
@@ -346,6 +349,18 @@
         "jsonPlaceholder": "Cargando perfiles...",
         "jsonLoading": "Cargando...",
         "pathLabel": "Ubicación del archivo de configuración:"
+      },
+      "environment": {
+        "key": "Clave de variable de entorno",
+        "value": "Valor",
+        "valueFor": "Valor de {{key}}",
+        "remove": "Eliminar {{key}}",
+        "keyPlaceholder": "CLAVE",
+        "valuePlaceholder": "valor",
+        "newKey": "Nueva clave de variable de entorno",
+        "newValue": "Nuevo valor de variable de entorno",
+        "add": "Añadir variable de entorno",
+        "removeItem": "Eliminar elemento"
       },
       "errors": {
         "deleteFailed": "Error al eliminar la configuración. Por favor, inténtalo de nuevo.",

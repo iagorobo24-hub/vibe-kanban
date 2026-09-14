@@ -738,8 +738,8 @@ export function GeneralSettingsSection() {
               <IconButton
                 icon={SpeakerHighIcon}
                 onClick={() => previewSound(draft.notifications.sound_file)}
-                aria-label="Preview sound"
-                title="Preview sound"
+                aria-label={t('settings:general.notifications.sound.preview')}
+                title={t('settings:general.notifications.sound.preview')}
               />
             </div>
             <p className="text-sm text-low">

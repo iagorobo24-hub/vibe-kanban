@@ -11,6 +11,8 @@
       "cancel": "Keep Editing"
     },
     "layout": {
+      "close": "Close settings",
+      "mobileBack": "Back to settings navigation",
       "nav": {
         "title": "Settings",
         "machineSettings": "Machine Settings",
@@ -207,7 +209,8 @@
           "helper": "Play a sound when workspaces finish running.",
           "fileLabel": "Sound",
           "filePlaceholder": "Select sound",
-          "fileHelper": "Choose the sound to play when tasks complete. Click the volume button to preview."
+          "fileHelper": "Choose the sound to play when tasks complete. Click the volume button to preview.",
+          "preview": "Preview sound"
         },
         "push": {
           "label": "Push Notifications",
@@ -354,6 +357,18 @@
         "jsonPlaceholder": "Loading profiles...",
         "jsonLoading": "Loading...",
         "pathLabel": "Configuration file location:"
+      },
+      "environment": {
+        "key": "Environment variable key",
+        "value": "Value",
+        "valueFor": "Value for {{key}}",
+        "remove": "Remove {{key}}",
+        "keyPlaceholder": "KEY",
+        "valuePlaceholder": "value",
+        "newKey": "New environment variable key",
+        "newValue": "New environment variable value",
+        "add": "Add environment variable",
+        "removeItem": "Remove item"
       },
       "errors": {
         "deleteFailed": "Failed to delete configuration. Please try again.",
