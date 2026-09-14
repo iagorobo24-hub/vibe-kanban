@@ -245,7 +245,17 @@ export function GeneralSettingsSection() {
 
   const soundOptions = Object.values(SoundFile).map((sound) => ({
     value: sound,
-    label: toPrettyCase(sound),
+    label: t(
+      `onboardingLanding.soundOptions.${sound
+        .toLowerCase()
+        .replace(/_([a-z0-9])/g, (_, character: string) =>
+          character.toUpperCase()
+        )}`,
+      {
+        ns: 'common',
+        defaultValue: toPrettyCase(sound),
+      }
+    ),
   }));
 
   return (
@@ -738,8 +748,8 @@ export function GeneralSettingsSection() {
               <IconButton
                 icon={SpeakerHighIcon}
                 onClick={() => previewSound(draft.notifications.sound_file)}
-                aria-label={t('settings:general.notifications.sound.preview')}
-                title={t('settings:general.notifications.sound.preview')}
+                aria-label={t('settings.general.notifications.sound.preview')}
+                title={t('settings.general.notifications.sound.preview')}
               />
             </div>
             <p className="text-sm text-low">

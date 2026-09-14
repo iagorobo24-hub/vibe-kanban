@@ -302,7 +302,7 @@ function SettingsDialogContent({
               <button
                 type="button"
                 onClick={handleCloseWithConfirmation}
-                aria-label={t('settings:layout.close')}
+                aria-label={t('settings.layout.close')}
                 className="agentos-icon-button flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <XIcon
@@ -332,7 +332,7 @@ function SettingsDialogContent({
               <button
                 type="button"
                 onClick={handleMobileBack}
-                aria-label={t('settings:layout.mobileBack')}
+                aria-label={t('settings.layout.mobileBack')}
                 className="flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <CaretLeftIcon
@@ -347,7 +347,7 @@ function SettingsDialogContent({
               <button
                 type="button"
                 onClick={handleCloseWithConfirmation}
-                aria-label={t('settings:layout.close')}
+                aria-label={t('settings.layout.close')}
                 className="ml-auto flex size-8 items-center justify-center rounded-sm text-low hover:bg-secondary hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
               >
                 <XIcon

@@ -2,7 +2,7 @@
   "settings": {
     "common": {
       "unsavedChanges": "• Tienes cambios sin guardar",
-      "discardChangesConfirm": "Discard unsaved changes?"
+      "discardChangesConfirm": "¿Descartar los cambios sin guardar?"
     },
     "unsavedChanges": {
       "title": "Cambios sin guardar",
@@ -25,16 +25,16 @@
         "agentsDesc": "Configuraciones de agentes",
         "mcp": "Servidores MCP",
         "mcpDesc": "Servidores de Protocolo de Contexto de Modelo (MCP)",
-        "organizations": "Organization Settings",
-        "organizationsDesc": "Manage organization members and permissions",
+        "organizations": "Configuración de organización",
+        "organizationsDesc": "Gestiona los miembros y permisos de la organización",
         "remote-projects": "Proyectos",
         "remote-projectsDesc": "Gestionar proyectos",
-        "relay": "Remote Access",
-        "relayDesc": "Relay tunnel and enrollment",
-        "machineSettings": "Machine Settings",
-        "accountSettings": "Account Settings",
-        "pairOtherMachines": "Pair other machines",
-        "selectHost": "Select host"
+        "relay": "Acceso remoto",
+        "relayDesc": "Túnel de relay y vinculación",
+        "machineSettings": "Ajustes del equipo",
+        "accountSettings": "Ajustes de cuenta",
+        "pairOtherMachines": "Vincular otros equipos",
+        "selectHost": "Seleccionar equipo"
       }
     },
     "general": {
@@ -89,7 +89,7 @@
           "host": {
             "label": "Host SSH Remoto (Opcional)",
             "placeholder": "ej., nombre de host o dirección IP",
-            "helper": "Configura esto si Vibe Kanban se ejecuta en un servidor remoto. Cuando se establece, al hacer clic en \"Abrir en Editor\" se generará una URL para abrir tu editor a través de SSH en lugar de ejecutar un comando local."
+            "helper": "Configura esto si AgentOS se ejecuta en un servidor remoto. Cuando se establece, al hacer clic en \"Abrir en Editor\" se generará una URL para abrir tu editor a través de SSH en lugar de ejecutar un comando local."
           },
           "user": {
             "label": "Usuario SSH Remoto (Opcional)",
@@ -98,8 +98,8 @@
           }
         },
         "autoInstallExtension": {
-          "label": "Auto-install VS Code Extension",
-          "helper": "Automatically install the Vibe Kanban extension when opening a project in VS Code or Cursor. This runs in the background and has no effect if the extension is already installed."
+          "label": "Instalar automáticamente la extensión de VS Code",
+          "helper": "Instala automáticamente la extensión de AgentOS al abrir un proyecto en VS Code o Cursor. Se ejecuta en segundo plano y no tiene efecto si la extensión ya está instalada."
         },
         "availability": {
           "checking": "Verificando disponibilidad...",
@@ -163,14 +163,14 @@
         "workspaceDir": {
           "label": "Directorio de Espacios de Trabajo",
           "placeholder": "~/",
-          "helper": "Los espacios de trabajo se crearán en un subdirectorio .vibe-kanban-workspaces dentro de esta ruta. Dejar vacío para usar el valor predeterminado del sistema. Los cambios requieren reiniciar la aplicación.",
+          "helper": "Los espacios de trabajo se crearán en un subdirectorio .vibe-kanban-workspaces dentro de esta ruta. Déjalo vacío para usar el valor predeterminado del sistema. Los cambios requieren reiniciar la aplicación.",
           "browse": "Explorar",
           "dialogTitle": "Seleccionar Directorio de Espacios de Trabajo",
-          "dialogDescription": "Elija un directorio. Los espacios de trabajo se crearán en un subdirectorio .vibe-kanban-workspaces dentro de él."
+          "dialogDescription": "Elige un directorio. Los espacios de trabajo se crearán en un subdirectorio .vibe-kanban-workspaces dentro de él."
         }
       },
       "pullRequests": {
-        "title": "Pull Requests",
+        "title": "Pull requests",
         "description": "Configura el comportamiento de creación de PR",
         "autoDescription": {
           "label": "Auto-generar descripción de PR por defecto",
@@ -220,7 +220,7 @@
       },
       "privacy": {
         "title": "Privacidad",
-        "description": "Ayuda a mejorar Vibe-Kanban compartiendo datos de uso anónimos.",
+        "description": "Ayuda a mejorar AgentOS compartiendo datos de uso anónimos.",
         "telemetry": {
           "label": "Habilitar Telemetría",
           "helper": "Habilita el seguimiento anónimo para ayudar a mejorar la aplicación. No se recopilan prompts ni información del proyecto."
@@ -418,7 +418,7 @@
         "unsavedChanges": "• Tienes cambios sin guardar"
       }
     },
-    "projects": {
+      "projects": {
       "title": "Configuración de Proyectos",
       "description": "Configura scripts y ajustes específicos del proyecto.",
       "loading": "Cargando proyectos...",
@@ -450,7 +450,7 @@
         "unsavedChanges": "• Tienes cambios sin guardar",
         "discard": "Descartar",
         "confirmSwitch": "Tienes cambios sin guardar. ¿Estás seguro de que quieres cambiar de proyecto? Tus cambios se perderán.",
-        "saving": "Saving..."
+        "saving": "Guardando..."
       },
       "repositories": {
         "title": "Repositorios",
@@ -537,11 +537,11 @@
       },
       "remove": {
         "title": "Eliminar Repositorio",
-        "description": "Desvincular este repositorio de Vibe Kanban. Los archivos en disco no se eliminarán.",
+        "description": "Desvincula este repositorio de AgentOS. Los archivos en disco no se eliminarán.",
         "button": "Eliminar",
         "confirm": "Eliminar Repositorio",
         "dialogTitle": "¿Eliminar \"{{name}}\"?",
-        "dialogDescription": "Esto desvinculará el repositorio de Vibe Kanban. Tus archivos en disco no se verán afectados. Puedes volver a agregarlo más tarde.",
+        "dialogDescription": "Esto desvinculará el repositorio de AgentOS. Tus archivos en disco no se verán afectados. Puedes volver a agregarlo más tarde.",
         "success": "Repositorio eliminado exitosamente.",
         "error": "Error al eliminar el repositorio."
       },
@@ -555,18 +555,18 @@
       }
     },
     "relay": {
-      "title": "Remote Access",
-      "description": "Allow access to this instance from the web via relay tunnel.",
+      "title": "Acceso remoto",
+      "description": "Permite acceder a esta instancia desde la web mediante un túnel de relay.",
       "enabled": {
-        "label": "Enable remote access",
-        "helper": "When enabled, this instance can be accessed remotely through a relay tunnel."
+        "label": "Habilitar acceso remoto",
+        "helper": "Al activarlo, se podrá acceder a esta instancia de forma remota mediante un túnel de relay."
       },
       "enrollmentCode": {
-        "label": "Pairing Code",
-        "helper": "Enter this code in the browser to pair with this instance.",
-        "loginRequired": "Log in to generate a pairing code.",
-        "fetchError": "Failed to fetch pairing code.",
-        "show": "Show pairing code"
+        "label": "Código de vinculación",
+        "helper": "Introduce este código en el navegador para vincularte con esta instancia.",
+        "loginRequired": "Inicia sesión para generar un código de vinculación.",
+        "fetchError": "No se pudo obtener el código de vinculación.",
+        "show": "Mostrar código de vinculación"
       },
       "host": {
         "label": "Host"
@@ -575,66 +575,66 @@
         "label": "Cliente"
       },
       "overview": {
-        "available": "Available",
-        "unavailable": "Unavailable"
+        "available": "Disponible",
+        "unavailable": "No disponible"
       }
     },
     "remoteProjects": {
-      "title": "Remote Projects",
-      "description": "Manage cloud-synced projects across organizations.",
-      "loading": "Loading remote projects...",
-      "loadError": "Failed to load organizations",
-      "noProjects": "No projects yet. Create one to get started.",
-      "selectOrg": "Select an organization",
-      "createSuccess": "Project created successfully",
-      "deleteSuccess": "Project deleted successfully",
-      "nameRequired": "Project name is required",
-      "saveSuccess": "Project updated successfully",
-      "saveError": "Failed to update project",
+      "title": "Proyectos remotos",
+      "description": "Gestiona proyectos sincronizados con la nube entre organizaciones.",
+      "loading": "Cargando proyectos remotos...",
+      "loadError": "No se pudieron cargar las organizaciones",
+      "noProjects": "Aún no hay proyectos. Crea uno para empezar.",
+      "selectOrg": "Seleccionar una organización",
+      "createSuccess": "Proyecto creado correctamente",
+      "deleteSuccess": "Proyecto eliminado correctamente",
+      "nameRequired": "El nombre del proyecto es obligatorio",
+      "saveSuccess": "Proyecto actualizado correctamente",
+      "saveError": "No se pudo actualizar el proyecto",
       "columns": {
-        "organizations": "Organizations",
-        "projects": "Projects"
+        "organizations": "Organizaciones",
+        "projects": "Proyectos"
       },
       "actions": {
-        "addProject": "Add Project"
+        "addProject": "Añadir proyecto"
       },
       "form": {
         "name": {
-          "label": "Project Name",
-          "placeholder": "Enter project name"
+          "label": "Nombre del proyecto",
+          "placeholder": "Introduce el nombre del proyecto"
         },
         "color": {
-          "label": "Project Color"
+          "label": "Color del proyecto"
         },
         "statuses": {
-          "label": "Project Statuses",
-          "description": "Manage kanban columns for this project."
+          "label": "Estados del proyecto",
+          "description": "Gestiona las columnas kanban de este proyecto."
         },
         "defaultRepos": {
-          "label": "Default Repositories",
-          "description": "Repositories that are automatically added when creating workspaces from this project's issues.",
-          "empty": "No default repositories configured",
-          "addButton": "Add",
-          "addNew": "Add new repository...",
-          "branchLabel": "Branch",
-          "noBranches": "No branches found for this repository",
-          "fetchError": "Could not load repositories",
-          "saveError": "Failed to save default repositories"
+          "label": "Repositorios predeterminados",
+          "description": "Repositorios que se añaden automáticamente al crear espacios de trabajo desde las incidencias de este proyecto.",
+          "empty": "No hay repositorios predeterminados configurados",
+          "addButton": "Añadir",
+          "addNew": "Añadir repositorio nuevo...",
+          "branchLabel": "Rama",
+          "noBranches": "No se encontraron ramas para este repositorio",
+          "fetchError": "No se pudieron cargar los repositorios",
+          "saveError": "No se pudieron guardar los repositorios predeterminados"
         }
       },
       "loginRequired": {
-        "title": "Sign in required",
-        "description": "Sign in to manage your remote projects.",
-        "action": "Sign in"
+        "title": "Se requiere iniciar sesión",
+        "description": "Inicia sesión para gestionar tus proyectos remotos.",
+        "action": "Iniciar sesión"
       }
     },
     "hostPicker": {
-      "thisMachine": "This machine",
-      "localHost": "Local host",
-      "remoteHost": "Remote host",
-      "noHostAvailable": "No host is available for host-specific settings yet.",
-      "pairMachineHint": "Pair a machine to open machine settings.",
-      "selectMachineHint": "Select a machine to open machine settings."
+      "thisMachine": "Este equipo",
+      "localHost": "Equipo local",
+      "remoteHost": "Equipo remoto",
+      "noHostAvailable": "Todavía no hay ningún equipo disponible para sus ajustes específicos.",
+      "pairMachineHint": "Vincula un equipo para abrir sus ajustes.",
+      "selectMachineHint": "Selecciona un equipo para abrir sus ajustes."
     }
   },
   "integrations": {
