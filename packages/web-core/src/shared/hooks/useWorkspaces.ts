@@ -4,6 +4,7 @@ import { useJsonPatchWsStream } from '@/shared/hooks/useJsonPatchWsStream';
 import { workspaceSummaryKeys } from '@/shared/hooks/workspaceSummaryKeys';
 import { makeLocalApiRequest } from '@/shared/lib/localApiTransport';
 import { useHostId } from '@/shared/providers/HostIdProvider';
+import { isAgentOSQaFixtureEnabled } from '@/shared/lib/agentOSQaFixtures';
 import type {
   WorkspaceWithStatus,
   WorkspaceSummary,
@@ -127,22 +128,11 @@ async function fetchWorkspaceSummariesByArchived(
   }
 }
 
-function isAgentOSStreamErrorFixtureEnabled(): boolean {
-  if (!import.meta.env.DEV || typeof window === 'undefined') {
-    return false;
-  }
-
-  return (
-    new URLSearchParams(window.location.search).get('agentosFixture') ===
-    'stream-error'
-  );
-}
-
 export function useWorkspaces(): UseWorkspacesResult {
   const hostId = useHostId();
   // Development-only fixture for reproducing a degraded workspace stream.
   // It never opens a socket or runs in a production build.
-  const streamErrorFixture = isAgentOSStreamErrorFixtureEnabled();
+  const streamErrorFixture = isAgentOSQaFixtureEnabled('stream-error');
 
   // Two separate WebSocket connections: one for active, one for archived
   // No limit param - we fetch all and slice on frontend so backfill works when archiving

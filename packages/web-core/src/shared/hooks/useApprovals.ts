@@ -1,6 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import type { ApprovalInfo } from 'shared/types';
 import { useJsonPatchWsStream } from './useJsonPatchWsStream';
+import {
+  AGENTOS_APPROVAL_FIXTURE_INFO,
+  isAgentOSQaFixtureEnabled,
+} from '@/shared/lib/agentOSQaFixtures';
 
 interface UseApprovalsResult {
   pendingApprovals: ApprovalInfo[];
@@ -14,13 +18,23 @@ type ApprovalState = {
 };
 
 export function useApprovals(): UseApprovalsResult {
+  const approvalFixtureEnabled = isAgentOSQaFixtureEnabled('approval');
   const { data, isConnected } = useJsonPatchWsStream<ApprovalState>(
     '/api/approvals/stream/ws',
-    true,
+    !approvalFixtureEnabled,
     () => ({ pending: {} })
   );
 
-  const pendingById = useMemo(() => data?.pending ?? {}, [data?.pending]);
+  const pendingById = useMemo(
+    () =>
+      approvalFixtureEnabled
+        ? {
+            [AGENTOS_APPROVAL_FIXTURE_INFO.approval_id]:
+              AGENTOS_APPROVAL_FIXTURE_INFO,
+          }
+        : (data?.pending ?? {}),
+    [approvalFixtureEnabled, data?.pending]
+  );
   const pendingApprovals = useMemo(
     () => Object.values(pendingById),
     [pendingById]
@@ -49,6 +63,6 @@ export function useApprovals(): UseApprovalsResult {
     pendingApprovals,
     getPendingForProcess,
     getPendingById,
-    isConnected,
+    isConnected: approvalFixtureEnabled || isConnected,
   };
 }

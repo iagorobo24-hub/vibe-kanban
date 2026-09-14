@@ -6,24 +6,26 @@ import {
   type NormalizedEntry,
   type PatchType,
 } from 'shared/types';
+import {
+  AGENTOS_TOOL_FIXTURE_PROCESS_ID,
+  AGENTOS_TOOL_FIXTURE_SESSION_ID,
+  AGENTOS_APPROVAL_FIXTURE_ID,
+  isAgentOSQaFixtureEnabled,
+} from '@/shared/lib/agentOSQaFixtures';
 import type {
   ConversationTimelineSource,
   ExecutionProcessState,
   PatchTypeWithKey,
 } from '@/shared/hooks/useConversationHistory/types';
 
-const FIXTURE_PROCESS_ID = 'agentos-fixture-tool-stream-process';
-const FIXTURE_SESSION_ID = 'agentos-fixture-tool-stream-session';
+const FIXTURE_PROCESS_ID = AGENTOS_TOOL_FIXTURE_PROCESS_ID;
+const FIXTURE_SESSION_ID = AGENTOS_TOOL_FIXTURE_SESSION_ID;
 const FIXTURE_TIMESTAMP = '2026-09-14T10:00:00.000Z';
 
 export function isAgentOSToolStreamFixtureEnabled(): boolean {
-  if (!import.meta.env.DEV || typeof window === 'undefined') {
-    return false;
-  }
-
   return (
-    new URLSearchParams(window.location.search).get('agentosFixture') ===
-    'tool-stream'
+    isAgentOSQaFixtureEnabled('tool-stream') ||
+    isAgentOSQaFixtureEnabled('approval')
   );
 }
 
@@ -47,11 +49,15 @@ const fixtureProcess: ExecutionProcess = {
     },
     next_action: null,
   },
-  status: ExecutionProcessStatus.completed,
+  status: isAgentOSQaFixtureEnabled('approval')
+    ? ExecutionProcessStatus.running
+    : ExecutionProcessStatus.completed,
   exit_code: 0n,
   dropped: false,
   started_at: FIXTURE_TIMESTAMP,
-  completed_at: '2026-09-14T10:00:08.000Z',
+  completed_at: isAgentOSQaFixtureEnabled('approval')
+    ? null
+    : '2026-09-14T10:00:08.000Z',
   created_at: FIXTURE_TIMESTAMP,
   updated_at: '2026-09-14T10:00:08.000Z',
 };
@@ -78,6 +84,39 @@ function normalizedEntry(
 }
 
 function buildFixtureEntries(): PatchTypeWithKey[] {
+  if (isAgentOSQaFixtureEnabled('approval')) {
+    return [
+      normalizedEntry(
+        0,
+        'Analiza este comando y espera confirmación antes de ejecutarlo.',
+        { type: 'user_message' }
+      ),
+      normalizedEntry(
+        1,
+        'He preparado la operación. Necesito aprobación humana antes de continuar.',
+        { type: 'assistant_message' }
+      ),
+      normalizedEntry(
+        2,
+        'Se solicita permiso para ejecutar una comprobación de solo lectura.',
+        {
+          type: 'tool_use',
+          tool_name: 'shell',
+          action_type: {
+            action: 'command_run',
+            command: 'pnpm test --filter auth',
+            category: 'read',
+            result: null,
+          },
+          status: {
+            status: 'pending_approval',
+            approval_id: AGENTOS_APPROVAL_FIXTURE_ID,
+          },
+        }
+      ),
+    ];
+  }
+
   return [
     normalizedEntry(
       0,
