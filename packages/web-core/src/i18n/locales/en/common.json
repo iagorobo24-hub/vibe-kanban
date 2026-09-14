@@ -30,6 +30,12 @@
     "markdownContent": "Markdown content",
     "markdownEditor": "Markdown editor"
   },
+  "relativeTime": {
+    "justNow": "just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  },
   "form": {
     "notSpecified": "Not specified",
     "selectOption": "Select an option..."

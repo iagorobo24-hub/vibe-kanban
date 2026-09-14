@@ -49,6 +49,12 @@
     "markdownContent": "Contenido Markdown",
     "markdownEditor": "Editor Markdown"
   },
+  "relativeTime": {
+    "justNow": "ahora mismo",
+    "minutesAgo": "hace {{count}} min",
+    "hoursAgo": "hace {{count}} h",
+    "daysAgo": "hace {{count}} d"
+  },
   "form": {
     "notSpecified": "No especificado",
     "selectOption": "Seleccionar una opción..."
