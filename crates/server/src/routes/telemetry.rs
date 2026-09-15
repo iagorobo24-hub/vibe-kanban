@@ -32,7 +32,7 @@ pub struct TelemetryListParams {
 /// does not own the context of.
 pub async fn record_telemetry(
     State(deployment): State<DeploymentImpl>,
-    Json(payload): Json<RecordExecutionTelemetry>,
+    Json(mut payload): Json<RecordExecutionTelemetry>,
 ) -> Result<ResponseJson<ApiResponse<ExecutionTelemetry>>, ApiError> {
     let pool = &deployment.db().pool;
 
@@ -46,6 +46,21 @@ pub async fn record_telemetry(
         .ok_or_else(|| {
             ApiError::BadRequest("Execution process has no parent session/workspace".to_string())
         })?;
+
+    if payload.duration_ms.is_none() {
+        if let Some(completed_at) = execution_process.completed_at {
+            let duration = (completed_at - execution_process.started_at).num_milliseconds();
+            if duration >= 0 {
+                payload.duration_ms = Some(duration);
+            }
+        }
+    }
+
+    if payload.total_tokens.is_none() {
+        if let (Some(in_tok), Some(out_tok)) = (payload.input_tokens, payload.output_tokens) {
+            payload.total_tokens = Some(in_tok + out_tok);
+        }
+    }
 
     let recorded = ExecutionTelemetry::record(pool, session.id, workspace.id, &payload).await?;
 
