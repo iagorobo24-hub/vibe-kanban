@@ -82,9 +82,17 @@ struct ForgetResponse {
     existed: bool,
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct BoundIdentity {
+    pub recipient_id: Option<String>,
+    pub session_id: Option<String>,
+    pub project_id: Option<String>,
+}
+
 #[derive(Clone)]
 pub struct EngramMcpServer {
     store: MemoryStore,
+    bound: BoundIdentity,
     tool_router: ToolRouter<EngramMcpServer>,
 }
 
@@ -93,14 +101,55 @@ impl EngramMcpServer {
     pub fn new(store: MemoryStore) -> Self {
         Self {
             store,
+            bound: BoundIdentity::default(),
             tool_router: Self::tool_router(),
         }
+    }
+
+    pub fn with_bound_identity(store: MemoryStore, bound: BoundIdentity) -> Self {
+        Self {
+            store,
+            bound,
+            tool_router: Self::tool_router(),
+        }
+    }
+
+    fn check_bound(&self, recipient_id: &str, session_id: &str, namespace: &str) -> Result<(), EngramError> {
+        if let Some(ref bound_recipient) = self.bound.recipient_id {
+            if bound_recipient.trim() != recipient_id.trim() {
+                return Err(EngramError::GrantDenied(format!(
+                    "caller recipient `{}` does not match server-bound recipient `{bound_recipient}`",
+                    recipient_id.trim()
+                )));
+            }
+        }
+        if let Some(ref bound_session) = self.bound.session_id {
+            if bound_session.trim() != session_id.trim() {
+                return Err(EngramError::GrantDenied(format!(
+                    "caller session `{}` does not match server-bound session `{bound_session}`",
+                    session_id.trim()
+                )));
+            }
+        }
+        if let Some(ref bound_project) = self.bound.project_id {
+            if bound_project.trim() != namespace.trim() {
+                return Err(EngramError::GrantDenied(format!(
+                    "caller namespace `{}` does not match server-bound project `{bound_project}`",
+                    namespace.trim()
+                )));
+            }
+        }
+        Ok(())
     }
 
     #[tool(
         description = "Write a memory entry to a project namespace using an explicit active ContextGrant. Fails cleanly (never crashes the caller) if Engram is unavailable or authorization is denied."
     )]
     async fn engram_write(&self, Parameters(req): Parameters<WriteRequest>) -> ToolCallResult {
+        if let Err(error) = self.check_bound(&req.recipient_id, &req.session_id, &req.namespace) {
+            return Self::err(error);
+        }
+
         match self
             .store
             .write_with_grant(
@@ -123,6 +172,10 @@ impl EngramMcpServer {
         description = "Read current (non-expired) memory entries using an explicit active ContextGrant. Never returns entries from another namespace."
     )]
     async fn engram_read(&self, Parameters(req): Parameters<ReadRequest>) -> ToolCallResult {
+        if let Err(error) = self.check_bound(&req.recipient_id, &req.session_id, &req.namespace) {
+            return Self::err(error);
+        }
+
         let limit = req.limit.unwrap_or(20);
         match self
             .store
@@ -144,6 +197,10 @@ impl EngramMcpServer {
         description = "Remove a memory entry by id using an explicit write ContextGrant — the correction mechanism for a wrong or stale entry."
     )]
     async fn engram_forget(&self, Parameters(req): Parameters<ForgetRequest>) -> ToolCallResult {
+        if let Err(error) = self.check_bound(&req.recipient_id, &req.session_id, &req.namespace) {
+            return Self::err(error);
+        }
+
         match self
             .store
             .forget_with_grant(

@@ -1,18 +1,31 @@
-use engram::{MemoryStore, default_db_path, mcp::EngramMcpServer};
+use engram::{MemoryStore, default_db_path, mcp::{BoundIdentity, EngramMcpServer}};
 use rmcp::{ServiceExt, transport::stdio};
 use tracing_subscriber::{EnvFilter, prelude::*};
+use uuid::Uuid;
 
 fn main() -> anyhow::Result<()> {
-    let mut args = std::env::args().skip(1);
+    let mut args: Vec<String> = std::env::args().skip(1).collect();
 
     tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
         .unwrap()
         .block_on(async move {
-            match args.next().as_deref() {
-                Some("grant") => run_grant_command(args.collect()).await,
-                _ => run_mcp_server().await,
+            let first = args.first().cloned();
+            match first.as_deref() {
+                Some("grant") => {
+                    args.remove(0);
+                    run_grant_command(args).await
+                }
+                Some("revoke") => {
+                    args.remove(0);
+                    run_revoke_command(args).await
+                }
+                Some("serve") => {
+                    args.remove(0);
+                    run_mcp_server(args).await
+                }
+                _ => run_mcp_server(args).await,
             }
         })
 }
@@ -42,6 +55,56 @@ async fn run_grant_command(raw_args: Vec<String>) -> anyhow::Result<()> {
 
     println!("{}", serde_json::to_string_pretty(&grant)?);
     Ok(())
+}
+
+async fn run_revoke_command(raw_args: Vec<String>) -> anyhow::Result<()> {
+    let flags = RevokeFlags::parse(&raw_args)?;
+
+    let db_path = default_db_path();
+    let store = MemoryStore::open(&db_path).await?;
+
+    let revoked = store.revoke_grant(flags.grant_id, &flags.revoked_by).await?;
+    if revoked {
+        println!("{}", serde_json::to_string_pretty(&serde_json::json!({
+            "status": "revoked",
+            "grant_id": flags.grant_id.to_string(),
+            "revoked_by": flags.revoked_by
+        }))?);
+    } else {
+        anyhow::bail!("grant {} not found or already revoked", flags.grant_id);
+    }
+    Ok(())
+}
+
+struct RevokeFlags {
+    grant_id: Uuid,
+    revoked_by: String,
+}
+
+impl RevokeFlags {
+    fn parse(args: &[String]) -> anyhow::Result<Self> {
+        let mut grant_id = None;
+        let mut revoked_by = None;
+
+        let mut it = args.iter();
+        while let Some(flag) = it.next() {
+            let mut value = || {
+                it.next()
+                    .cloned()
+                    .ok_or_else(|| anyhow::anyhow!("missing value for {flag}"))
+            };
+            match flag.as_str() {
+                "--grant" => grant_id = Some(Uuid::parse_str(&value()?)?),
+                "--revoked-by" => revoked_by = Some(value()?),
+                other => anyhow::bail!("unknown flag {other}"),
+            }
+        }
+
+        Ok(Self {
+            grant_id: grant_id.ok_or_else(|| anyhow::anyhow!("--grant is required"))?,
+            revoked_by: revoked_by.ok_or_else(|| anyhow::anyhow!("--revoked-by is required"))?,
+        })
+    }
 }
 
 struct GrantFlags {
@@ -97,7 +160,43 @@ impl GrantFlags {
     }
 }
 
-async fn run_mcp_server() -> anyhow::Result<()> {
+struct ServerFlags {
+    bound_recipient: Option<String>,
+    bound_session: Option<String>,
+    bound_project: Option<String>,
+}
+
+impl ServerFlags {
+    fn parse(args: &[String]) -> anyhow::Result<Self> {
+        let mut bound_recipient = None;
+        let mut bound_session = None;
+        let mut bound_project = None;
+
+        let mut it = args.iter();
+        while let Some(flag) = it.next() {
+            let mut value = || {
+                it.next()
+                    .cloned()
+                    .ok_or_else(|| anyhow::anyhow!("missing value for {flag}"))
+            };
+            match flag.as_str() {
+                "--bound-recipient" => bound_recipient = Some(value()?),
+                "--bound-session" => bound_session = Some(value()?),
+                "--bound-project" => bound_project = Some(value()?),
+                other => anyhow::bail!("unknown flag {other}"),
+            }
+        }
+
+        Ok(Self {
+            bound_recipient,
+            bound_session,
+            bound_project,
+        })
+    }
+}
+
+async fn run_mcp_server(raw_args: Vec<String>) -> anyhow::Result<()> {
+    let server_flags = ServerFlags::parse(&raw_args)?;
     init_process_logging();
 
     let db_path = default_db_path();
@@ -108,7 +207,13 @@ async fn run_mcp_server() -> anyhow::Result<()> {
         error
     })?;
 
-    let server = EngramMcpServer::new(store);
+    let bound = BoundIdentity {
+        recipient_id: server_flags.bound_recipient,
+        session_id: server_flags.bound_session,
+        project_id: server_flags.bound_project,
+    };
+
+    let server = EngramMcpServer::with_bound_identity(store, bound);
     let service = server.serve(stdio()).await.map_err(|error| {
         tracing::error!("[engram-mcp] serving error: {:?}", error);
         error

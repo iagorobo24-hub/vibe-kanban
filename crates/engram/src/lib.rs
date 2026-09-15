@@ -270,6 +270,30 @@ impl MemoryStore {
         })
     }
 
+    /// Revokes an active grant immediately. Subsequent attempts to read or
+    /// write with this grant will fail with `EngramError::GrantExpired`.
+    /// Returns true if the grant was found and revoked, or false if already revoked or not found.
+    pub async fn revoke_grant(
+        &self,
+        grant_id: Uuid,
+        revoked_by: &str,
+    ) -> Result<bool, EngramError> {
+        let revoked_by = revoked_by.trim();
+        if revoked_by.is_empty() {
+            return Err(EngramError::EmptyGrantedBy);
+        }
+        let now = Utc::now().to_rfc3339();
+        let result = sqlx::query(
+            "UPDATE context_grants SET revoked_at = ? WHERE id = ? AND revoked_at IS NULL",
+        )
+        .bind(&now)
+        .bind(grant_id.to_string())
+        .execute(&self.pool)
+        .await?;
+
+        Ok(result.rows_affected() > 0)
+    }
+
     async fn authorize_grant(
         &self,
         grant_id: Uuid,
@@ -310,7 +334,8 @@ impl MemoryStore {
         Ok(())
     }
 
-    /// Writes only after the persisted grant matches the caller and project.
+    /// Writes only after the persisted grant matches the caller and project,
+    /// and verifies that `origin` corresponds to the authorized `recipient_id`.
     #[allow(clippy::too_many_arguments)]
     pub async fn write_with_grant(
         &self,
@@ -330,6 +355,15 @@ impl MemoryStore {
             "memory:write",
         )
         .await?;
+
+        let origin_trimmed = origin.trim();
+        let recipient_trimmed = recipient_id.trim();
+        if !origin_trimmed.starts_with(recipient_trimmed) {
+            return Err(EngramError::GrantDenied(format!(
+                "origin `{origin_trimmed}` does not match recipient `{recipient_trimmed}`"
+            )));
+        }
+
         self.write(namespace, origin, content, ttl_seconds).await
     }
 
@@ -744,5 +778,118 @@ mod tests {
                 .await
                 .is_err()
         );
+    }
+
+    #[tokio::test]
+    async fn revoke_grant_immediately_invalidates_access() {
+        let (store, _dir) = open_temp_store().await;
+
+        let grant = store
+            .grant_context(
+                "agent-1",
+                "session-1",
+                "proj-a",
+                "memory:readwrite",
+                "testing revocation",
+                3600,
+                "human",
+            )
+            .await
+            .expect("grant context");
+
+        // First write succeeds
+        let entry = store
+            .write_with_grant(
+                grant.id,
+                "agent-1",
+                "session-1",
+                "proj-a",
+                "agent-1",
+                "valid fact",
+                None,
+            )
+            .await
+            .expect("write with active grant");
+
+        assert_eq!(entry.content, "valid fact");
+
+        // Revoke the grant
+        let revoked = store
+            .revoke_grant(grant.id, "human-operator")
+            .await
+            .expect("revoke grant");
+        assert!(revoked);
+
+        // Subsequent read or write must fail with GrantExpired
+        let read_result = store
+            .read_with_grant(grant.id, "agent-1", "session-1", "proj-a", 10)
+            .await;
+        assert!(matches!(read_result, Err(EngramError::GrantExpired)));
+
+        let write_result = store
+            .write_with_grant(
+                grant.id,
+                "agent-1",
+                "session-1",
+                "proj-a",
+                "agent-1",
+                "post-revocation fact",
+                None,
+            )
+            .await;
+        assert!(matches!(write_result, Err(EngramError::GrantExpired)));
+
+        // Revoking a second time returns false (already revoked)
+        let revoked_again = store
+            .revoke_grant(grant.id, "human-operator")
+            .await
+            .expect("revoke again");
+        assert!(!revoked_again);
+    }
+
+    #[tokio::test]
+    async fn origin_must_match_recipient_in_write_with_grant() {
+        let (store, _dir) = open_temp_store().await;
+
+        let grant = store
+            .grant_context(
+                "agent-1",
+                "session-1",
+                "proj-a",
+                "memory:readwrite",
+                "testing origin check",
+                3600,
+                "human",
+            )
+            .await
+            .expect("grant context");
+
+        // Writing with forged origin must be denied
+        let forged_result = store
+            .write_with_grant(
+                grant.id,
+                "agent-1",
+                "session-1",
+                "proj-a",
+                "human_supervisor",
+                "forged content",
+                None,
+            )
+            .await;
+        assert!(matches!(forged_result, Err(EngramError::GrantDenied(_))));
+
+        // Writing with valid recipient or recipient sub-identity succeeds
+        let valid_result = store
+            .write_with_grant(
+                grant.id,
+                "agent-1",
+                "session-1",
+                "proj-a",
+                "agent-1:subagent",
+                "legitimate content",
+                None,
+            )
+            .await;
+        assert!(valid_result.is_ok());
     }
 }
