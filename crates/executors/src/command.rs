@@ -22,8 +22,8 @@ pub enum CommandBuildError {
 
 #[derive(Debug, Clone)]
 pub struct CommandParts {
-    program: String,
-    args: Vec<String>,
+    pub program: String,
+    pub args: Vec<String>,
 }
 
 impl CommandParts {
