@@ -20,6 +20,7 @@ const nodeContracts = [
   "packages/web-core/src/pages/workspaces/workspaceListState.test.ts",
   "packages/web-core/src/shared/components/logStreamState.test.ts",
   "packages/ui/src/components/activeStateSemantics.test.ts",
+  "packages/ui/src/components/agentosBrandContract.test.ts",
 ];
 
 const vitestContracts = [
