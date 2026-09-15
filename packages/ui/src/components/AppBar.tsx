@@ -17,6 +17,7 @@ import {
 } from "@phosphor-icons/react";
 import { cn } from "../lib/cn";
 import { AppBarSocialLink } from "./AppBarSocialLink";
+import { AgentOSMark } from "./AgentOSMark";
 import {
   Popover,
   PopoverTrigger,
@@ -540,9 +541,7 @@ export function AppBar({
         aria-label="AgentOS"
         title="AgentOS"
       >
-        <div className="agentos-app-bar__brand-mark flex h-7 w-7 items-center justify-center rounded-md text-sm font-semibold">
-          A
-        </div>
+        <AgentOSMark className="agentos-app-bar__brand-mark flex h-7 w-7 items-center justify-center rounded-md text-sm font-semibold" />
         <span className="agentos-app-bar__brand-name text-[8px] font-medium leading-none tracking-wide">
           AgentOS
         </span>

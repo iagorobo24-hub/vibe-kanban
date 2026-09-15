@@ -1,4 +1,5 @@
 import { cn } from '@/shared/lib/utils';
+import { AgentOSMark } from '@vibe/ui/components/AgentOSMark';
 
 interface AgentOSWordmarkProps {
   className?: string;
@@ -23,12 +24,7 @@ export function AgentOSWordmark({
       role="img"
       aria-label={alt}
     >
-      <span
-        className="agentos-brand-wordmark__mark flex h-8 w-8 items-center justify-center rounded-md text-sm font-semibold"
-        aria-hidden="true"
-      >
-        A
-      </span>
+      <AgentOSMark className="agentos-brand-wordmark__mark flex h-8 w-8 items-center justify-center rounded-md text-sm font-semibold" />
       <span className="agentos-brand-wordmark__name text-sm font-semibold tracking-tight">
         AgentOS
       </span>

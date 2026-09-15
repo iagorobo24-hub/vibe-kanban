@@ -18,7 +18,7 @@ const result = spawnSync(
 );
 
 assert.equal(result.status, 0, result.stderr || result.stdout);
-assert.match(result.stdout, /11 frontend contracts passed/);
+assert.match(result.stdout, /12 frontend contracts passed/);
 assert.match(result.stdout, /activeStateSemantics\.test\.ts: ok/);
 assert.match(result.stdout, /diffDataAdapter\.test\.ts: BLOCKED/);
 
