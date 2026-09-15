@@ -29,6 +29,7 @@ pub mod search;
 pub mod sessions;
 pub mod ssh_session;
 pub mod tags;
+pub mod telemetry;
 pub mod terminal;
 pub mod webrtc;
 pub mod workspaces;
@@ -52,6 +53,7 @@ pub fn router(deployment: DeploymentImpl) -> IntoMakeService<Router> {
         .merge(preview::api_router())
         .merge(releases::router())
         .merge(sessions::router(&deployment))
+        .merge(telemetry::router(&deployment))
         .merge(terminal::router())
         .route("/ssh-session", get(ssh_session::ssh_session_ws))
         .nest("/remote", remote::router())

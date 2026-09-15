@@ -146,6 +146,19 @@ impl From<WorktreeError> for ApiError {
     }
 }
 
+impl From<db::models::execution_telemetry::ExecutionTelemetryError> for ApiError {
+    fn from(err: db::models::execution_telemetry::ExecutionTelemetryError) -> Self {
+        match err {
+            db::models::execution_telemetry::ExecutionTelemetryError::Database(e) => {
+                ApiError::Database(e)
+            }
+            db::models::execution_telemetry::ExecutionTelemetryError::InvalidOutcome(_) => {
+                ApiError::BadRequest(err.to_string())
+            }
+        }
+    }
+}
+
 impl From<ContainerError> for ApiError {
     fn from(err: ContainerError) -> Self {
         match err {
