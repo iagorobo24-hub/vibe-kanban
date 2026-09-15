@@ -119,11 +119,7 @@ impl McpServer {
         })?;
 
         if !resp.status().is_success() {
-            let status = resp.status();
-            return Err(ToolError::message(format!(
-                "VK API returned error status: {}",
-                status
-            )));
+            return Err(Self::error_for_failed_response(resp).await);
         }
 
         let api_response = resp
@@ -149,11 +145,7 @@ impl McpServer {
         })?;
 
         if !resp.status().is_success() {
-            let status = resp.status();
-            return Err(ToolError::message(format!(
-                "VK API returned error status: {}",
-                status
-            )));
+            return Err(Self::error_for_failed_response(resp).await);
         }
 
         #[derive(Deserialize)]
@@ -172,6 +164,36 @@ impl McpServer {
         }
 
         Ok(())
+    }
+
+    /// Builds a `ToolError` for a non-2xx response, surfacing the VK API's own
+    /// `message` field (e.g. "Branch 'x' does not exist in repository 'y'")
+    /// instead of just the numeric status code. Without this, every 4xx —
+    /// which the server deliberately does not log as an error (see
+    /// `server::middleware::error_logging::log_server_errors`, which only
+    /// logs 5xx) — surfaced as an opaque "400 Bad Request" with no way to
+    /// tell a validation problem from a routing or connectivity bug.
+    async fn error_for_failed_response(resp: reqwest::Response) -> ToolError {
+        let status = resp.status();
+        let body = resp.text().await.unwrap_or_default();
+
+        let detail = serde_json::from_str::<ApiResponseEnvelope<serde_json::Value>>(&body)
+            .ok()
+            .and_then(|envelope| envelope.message)
+            .filter(|msg| !msg.trim().is_empty())
+            .unwrap_or_else(|| {
+                let trimmed = body.trim();
+                if trimmed.is_empty() {
+                    "<no response body>".to_string()
+                } else {
+                    trimmed.chars().take(500).collect()
+                }
+            });
+
+        ToolError::new(
+            format!("VK API returned error status: {}", status),
+            Some(detail),
+        )
     }
 
     fn resolve_workspace_id(&self, explicit: Option<Uuid>) -> Result<Uuid, ToolError> {

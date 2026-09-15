@@ -16,7 +16,9 @@ use super::McpServer;
 struct McpWorkspaceRepoInput {
     #[schemars(description = "The repository ID")]
     repo_id: Uuid,
-    #[schemars(description = "The branch for this repository")]
+    #[schemars(
+        description = "The EXISTING base branch to start this repository's workspace from (e.g. 'main'), not a new branch name — the server generates its own new branch for the workspace."
+    )]
     branch: String,
 }
 
