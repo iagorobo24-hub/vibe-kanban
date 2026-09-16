@@ -440,6 +440,28 @@ export type ListGrantsParams = { project_id: string | null, session_id: string |
 
 export type ListEntriesParams = { namespace: string, limit: bigint | null, };
 
+export type ModelProviderKind = "ANTHROPIC" | "OPENAI_COMPATIBLE" | "ANTHROPIC_COMPATIBLE_GATEWAY" | "NVIDIA_NIM" | "OPEN_CODE_ZEN" | "FREE_AGGREGATOR" | "CUSTOM";
+
+export type CostClass = "FREE" | "CHEAP" | "MID" | "PREMIUM";
+
+export type SpeedClass = "FAST" | "STANDARD" | "SLOW";
+
+export type CapabilityTag = "TOOL_USE" | "LONG_CONTEXT" | "VISION" | "STREAMING" | "REASONING";
+
+export type ModelRoute = { id: string, provider_id: string, route_name: string, real_model_id: string, executor: BaseCodingAgent, cost_class: CostClass, speed_class: SpeedClass, capabilities: Array<CapabilityTag>, cost_per_m_in: number, cost_per_m_out: number, description: string, verified_tool_use: boolean, };
+
+export type ProviderAccount = { id: string, provider_kind: ModelProviderKind, display_name: string, base_url: string | null, auth_method: string, status: string, cost_class: CostClass, routes: Array<ModelRoute>, };
+
+export type WorkModeRole = "PLANNING" | "EXECUTION" | "HYBRID";
+
+export type WorkMode = { id: string, name: string, description: string, role: WorkModeRole, preferred_routes: Array<string>, max_cost_usd_per_task: number | null, fallback_reasons_allowed: Array<string>, };
+
+export type RoutingRequest = { work_mode_id: string | null, task_type: string | null, max_budget_usd: number | null, required_capabilities: Array<CapabilityTag> | null, };
+
+export type RoutingRecommendation = { selected_route: ModelRoute, selected_executor: BaseCodingAgent, selected_model_id: string, work_mode: WorkMode, estimated_cost_usd: number, explanation: string, fallback_chain: Array<ModelRoute>, };
+
+export type ModelProviderCatalog = { providers: Array<ProviderAccount>, work_modes: Array<WorkMode>, };
+
 export type CreateEntryPayload = { namespace: string, origin: string, content: string, ttl_seconds: bigint | null, };
 
 export type RevokeGrantPayload = { revoked_by: string, };

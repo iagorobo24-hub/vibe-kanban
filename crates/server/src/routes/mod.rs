@@ -25,6 +25,7 @@ pub mod relay_auth;
 pub mod releases;
 pub mod remote;
 pub mod repo;
+pub mod routing;
 pub mod scratch;
 pub mod search;
 pub mod sessions;
@@ -56,6 +57,7 @@ pub fn router(deployment: DeploymentImpl) -> IntoMakeService<Router> {
         .merge(sessions::router(&deployment))
         .merge(telemetry::router(&deployment))
         .nest("/engram", engram::router())
+        .nest("/routing", routing::router())
         .merge(terminal::router())
         .route("/ssh-session", get(ssh_session::ssh_session_ws))
         .nest("/remote", remote::router())

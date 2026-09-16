@@ -24,6 +24,10 @@ import {
   ListEntriesParams,
   CreateEntryPayload,
   RevokeGrantPayload,
+  ModelProviderCatalog,
+  WorkMode,
+  RoutingRequest,
+  RoutingRecommendation,
   GitBranch,
   Repo,
   RepoWithTargetBranch,
@@ -1855,4 +1859,27 @@ export const engramApi = {
     return handleApiResponse<MemoryEntry>(response);
   },
 };
+
+// Explainable Routing & Model Provider Catalog API (Fase 6 / ADR-015)
+export const routingApi = {
+  getCatalog: async (): Promise<ModelProviderCatalog> => {
+    const response = await makeRequest('/api/routing/catalog');
+    return handleApiResponse<ModelProviderCatalog>(response);
+  },
+  getWorkModes: async (role?: string): Promise<WorkMode[]> => {
+    const searchParams = new URLSearchParams();
+    if (role) searchParams.append('role', role);
+    const qs = searchParams.toString();
+    const response = await makeRequest(`/api/routing/work-modes${qs ? `?${qs}` : ''}`);
+    return handleApiResponse<WorkMode[]>(response);
+  },
+  recommend: async (data: RoutingRequest): Promise<RoutingRecommendation> => {
+    const response = await makeRequest('/api/routing/recommend', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return handleApiResponse<RoutingRecommendation>(response);
+  },
+};
+
 
