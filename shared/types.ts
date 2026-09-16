@@ -462,6 +462,18 @@ export type RoutingRecommendation = { selected_route: ModelRoute, selected_execu
 
 export type ModelProviderCatalog = { providers: Array<ProviderAccount>, work_modes: Array<WorkMode>, };
 
+export type SwarmSubTaskStatus = "PENDING" | "READY" | "RUNNING" | "COMPLETED" | "FAILED" | "SKIPPED";
+
+export type SwarmPlanStatus = "DRAFT" | "APPROVED" | "EXECUTING" | "COMPLETED" | "FAILED";
+
+export type SwarmGoal = { goal_id: string, title: string, description: string, project_id: string | null, repo_id: string, target_branch: string, work_mode_id: string | null, max_budget_usd: number | null, };
+
+export type SwarmSubTask = { id: string, title: string, description: string, role: string, dependencies: Array<string>, recommended_executor: BaseCodingAgent, recommended_model: string, estimated_cost_usd: number, explanation: string, status: SwarmSubTaskStatus, workspace_id: string | null, execution_process_id: string | null, result_summary: string | null, };
+
+export type SwarmPlan = { goal: SwarmGoal, subtasks: Array<SwarmSubTask>, total_estimated_cost_usd: number, status: SwarmPlanStatus, created_at: string, };
+
+export type ConsolidationReport = { goal_id: string, total_subtasks: number, completed_subtasks: number, failed_subtasks: number, total_cost_usd: number, total_duration_ms: bigint, unified_branch: string, summary: string, requires_human_approval: boolean, };
+
 export type CreateEntryPayload = { namespace: string, origin: string, content: string, ttl_seconds: bigint | null, };
 
 export type RevokeGrantPayload = { revoked_by: string, };

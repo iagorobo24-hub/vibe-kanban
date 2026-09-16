@@ -28,6 +28,9 @@ import {
   WorkMode,
   RoutingRequest,
   RoutingRecommendation,
+  SwarmGoal,
+  SwarmPlan,
+  ConsolidationReport,
   GitBranch,
   Repo,
   RepoWithTargetBranch,
@@ -1881,5 +1884,23 @@ export const routingApi = {
     return handleApiResponse<RoutingRecommendation>(response);
   },
 };
+
+// Swarm Multi-Agent Orchestrator API (Fase 7)
+export const swarmApi = {
+  plan: async (data: SwarmGoal): Promise<SwarmPlan> => {
+    const response = await makeRequest('/api/swarm/plan', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return handleApiResponse<SwarmPlan>(response);
+  },
+  consolidate: async (goalId: string): Promise<ConsolidationReport> => {
+    const response = await makeRequest(`/api/swarm/consolidate/${goalId}`, {
+      method: 'POST',
+    });
+    return handleApiResponse<ConsolidationReport>(response);
+  },
+};
+
 
 

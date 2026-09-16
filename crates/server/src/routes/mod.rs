@@ -30,6 +30,7 @@ pub mod scratch;
 pub mod search;
 pub mod sessions;
 pub mod ssh_session;
+pub mod swarm;
 pub mod tags;
 pub mod telemetry;
 pub mod terminal;
@@ -58,6 +59,7 @@ pub fn router(deployment: DeploymentImpl) -> IntoMakeService<Router> {
         .merge(telemetry::router(&deployment))
         .nest("/engram", engram::router())
         .nest("/routing", routing::router())
+        .nest("/swarm", swarm::router())
         .merge(terminal::router())
         .route("/ssh-session", get(ssh_session::ssh_session_ws))
         .nest("/remote", remote::router())
