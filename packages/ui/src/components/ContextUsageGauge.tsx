@@ -6,6 +6,9 @@ import { Tooltip } from './Tooltip';
 export interface ContextUsageInfo {
   total_tokens: number;
   model_context_window: number;
+  input_tokens?: number | null;
+  output_tokens?: number | null;
+  cost_usd?: number | null;
 }
 
 function clamp(value: number, min: number, max: number) {
@@ -62,14 +65,19 @@ export function ContextUsageGauge({
 
   const progress = clamp(percentage / 100, 0, 1);
 
+  const costSuffix =
+    tokenUsageInfo?.cost_usd != null
+      ? ` • $${tokenUsageInfo.cost_usd.toFixed(4)}`
+      : '';
+
   const tooltip =
     status === 'empty'
       ? t('contextUsage.emptyTooltip')
-      : t('contextUsage.tooltip', {
+      : `${t('contextUsage.tooltip', {
           percentage: Math.round(percentage),
           used: formattedUsed,
           total: formattedTotal,
-        });
+        })}${costSuffix}`;
 
   const progressColor =
     status === 'empty'

@@ -164,6 +164,26 @@ impl ExecutionTelemetry {
         .fetch_all(pool)
         .await
     }
+
+    /// Find the latest telemetry record for an execution process, if one exists.
+    pub async fn find_by_execution_process_id(
+        pool: &SqlitePool,
+        execution_process_id: Uuid,
+    ) -> Result<Option<Self>, sqlx::Error> {
+        sqlx::query_as::<_, Self>(
+            r#"SELECT id, execution_process_id, session_id, workspace_id, executor,
+                      model_id, task_type, real_outcome, outcome_note, cost_usd,
+                      duration_ms, input_tokens, output_tokens, total_tokens,
+                      recorded_by, created_at
+               FROM execution_telemetry
+               WHERE execution_process_id = ?
+               ORDER BY created_at DESC
+               LIMIT 1"#,
+        )
+        .bind(execution_process_id)
+        .fetch_optional(pool)
+        .await
+    }
 }
 
 #[cfg(test)]
@@ -255,7 +275,13 @@ mod tests {
         assert_eq!(recorded.total_tokens, Some(4350));
         assert_eq!(recorded.cost_usd, Some(0.045));
 
-        // 3. Test summary query
+        // 3. Test summary query and find_by_execution_process_id
+        let found = ExecutionTelemetry::find_by_execution_process_id(&pool, process_id)
+            .await
+            .expect("find by exec id");
+        assert!(found.is_some());
+        assert_eq!(found.unwrap().cost_usd, Some(0.045));
+
         let summaries = ExecutionTelemetry::summary(&pool).await.expect("summary");
         assert_eq!(summaries.len(), 1);
         assert_eq!(summaries[0].count, 1);

@@ -1804,8 +1804,26 @@ impl ClaudeLogProcessor {
                 model_usage,
                 subtype,
                 result,
+                total_cost_usd,
+                usage,
                 ..
             } => {
+                let in_tok = usage.as_ref().and_then(|u| u.input_tokens).map(|t| t as u32);
+                let out_tok = usage.as_ref().and_then(|u| u.output_tokens).map(|t| t as u32);
+                let total_tok = match (in_tok, out_tok) {
+                    (Some(i), Some(o)) => i + o,
+                    _ => self.context_tokens_used,
+                };
+                if total_tok > 0 {
+                    self.context_tokens_used = total_tok;
+                }
+
+                let cost = total_cost_usd.or_else(|| {
+                    model_usage.as_ref().and_then(|mu| {
+                        mu.values().filter_map(|m| m.cost_usd).reduce(|a, b| a + b)
+                    })
+                });
+
                 // get the real model context window and correct the context usage entry
                 if let Some(context_window) = model_usage.as_ref().and_then(|model_usage| {
                     self.main_model_name
@@ -1814,8 +1832,29 @@ impl ClaudeLogProcessor {
                         .and_then(|usage| usage.context_window)
                 }) {
                     self.main_model_context_window = context_window;
-                    patches.push(self.add_token_usage_entry(entry_index_provider));
                 }
+
+                let token_entry = NormalizedEntry {
+                    timestamp: None,
+                    entry_type: NormalizedEntryType::TokenUsageInfo(crate::logs::TokenUsageInfo {
+                        total_tokens: self.context_tokens_used,
+                        model_context_window: self.main_model_context_window,
+                        input_tokens: in_tok,
+                        output_tokens: out_tok,
+                        cost_usd: cost,
+                    }),
+                    content: format!(
+                        "Tokens used: {} / Context window: {}{}",
+                        self.context_tokens_used,
+                        self.main_model_context_window,
+                        cost.map(|c| format!(" (Cost: ${:.4})", c)).unwrap_or_default()
+                    ),
+                    metadata: Some(
+                        serde_json::to_value(claude_json).unwrap_or(serde_json::Value::Null),
+                    ),
+                };
+                let idx = entry_index_provider.next();
+                patches.push(ConversationPatch::add_normalized_entry(idx, token_entry));
 
                 if matches!(self.strategy, HistoryStrategy::AmpResume) && is_error.unwrap_or(false)
                 {
@@ -2072,6 +2111,7 @@ impl ClaudeLogProcessor {
             entry_type: NormalizedEntryType::TokenUsageInfo(crate::logs::TokenUsageInfo {
                 total_tokens: self.context_tokens_used,
                 model_context_window: self.main_model_context_window,
+                ..Default::default()
             }),
             content: format!(
                 "Tokens used: {} / Context window: {}",
@@ -2350,6 +2390,8 @@ pub enum ClaudeJson {
         model_usage: Option<HashMap<String, ClaudeModelUsage>>,
         #[serde(default)]
         usage: Option<ClaudeUsage>,
+        #[serde(default, alias = "totalCostUsd", alias = "cost_usd", alias = "costUsd")]
+        total_cost_usd: Option<f64>,
     },
     ApprovalRequested {
         tool_call_id: String,
@@ -2525,6 +2567,12 @@ pub struct ClaudeUsage {
 pub struct ClaudeModelUsage {
     #[serde(default)]
     pub context_window: Option<u32>,
+    #[serde(default, alias = "input_tokens", alias = "inputTokens")]
+    pub input_tokens: Option<u64>,
+    #[serde(default, alias = "output_tokens", alias = "outputTokens")]
+    pub output_tokens: Option<u64>,
+    #[serde(default, alias = "cost_usd", alias = "costUSD")]
+    pub cost_usd: Option<f64>,
 }
 
 /// Structured tool data for Claude tools based on real samples

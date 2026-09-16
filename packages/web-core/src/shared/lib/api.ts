@@ -13,6 +13,10 @@ import {
   DirectoryEntry,
   ExecutionProcess,
   ExecutionProcessRepoState,
+  ExecutionTelemetry,
+  RecordExecutionTelemetry,
+  TelemetrySummaryRow,
+  TelemetryListParams,
   GitBranch,
   Repo,
   RepoWithTargetBranch,
@@ -1777,5 +1781,30 @@ export const searchApi = {
       options
     );
     return handleApiResponse<SearchResult[]>(response);
+  },
+};
+
+// Telemetry API (cost, tokens, durations, and outcomes)
+export const telemetryApi = {
+  list: async (params?: TelemetryListParams): Promise<ExecutionTelemetry[]> => {
+    const searchParams = new URLSearchParams();
+    if (params?.executor) searchParams.append('executor', params.executor);
+    if (params?.task_type) searchParams.append('task_type', params.task_type);
+    if (params?.real_outcome) searchParams.append('real_outcome', params.real_outcome);
+    const qs = searchParams.toString();
+    const url = `/api/telemetry${qs ? `?${qs}` : ''}`;
+    const response = await makeRequest(url);
+    return handleApiResponse<ExecutionTelemetry[]>(response);
+  },
+  summary: async (): Promise<TelemetrySummaryRow[]> => {
+    const response = await makeRequest('/api/telemetry/summary');
+    return handleApiResponse<TelemetrySummaryRow[]>(response);
+  },
+  record: async (data: RecordExecutionTelemetry): Promise<ExecutionTelemetry> => {
+    const response = await makeRequest('/api/telemetry', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return handleApiResponse<ExecutionTelemetry>(response);
   },
 };

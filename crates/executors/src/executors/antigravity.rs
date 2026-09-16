@@ -646,6 +646,7 @@ pub fn normalize_logs(
                                                 TokenUsageInfo {
                                                     total_tokens: total as u32,
                                                     model_context_window: 1_000_000,
+                                                    ..Default::default()
                                                 },
                                             ),
                                             content: format!("Tokens used: {}", total),

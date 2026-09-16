@@ -25,6 +25,8 @@
         "agentsDesc": "Configuraciones de agentes",
         "mcp": "Servidores MCP",
         "mcpDesc": "Servidores de Protocolo de Contexto de Modelo (MCP)",
+        "telemetry": "Telemetría y costes",
+        "telemetryDesc": "Uso de tokens, costes de ejecución y auditoría de calidad",
         "organizations": "Configuración de organización",
         "organizationsDesc": "Gestiona los miembros y permisos de la organización",
         "remote-projects": "Proyectos",

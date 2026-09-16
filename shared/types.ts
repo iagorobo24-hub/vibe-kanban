@@ -422,6 +422,14 @@ export type CreateFromPrError = { "type": "pr_not_found" } | { "type": "branch_f
 
 export type RepoBranchStatus = { repo_id: string, repo_name: string, commits_behind: number | null, commits_ahead: number | null, has_uncommitted_changes: boolean | null, head_oid: string | null, uncommitted_count: number | null, untracked_count: number | null, target_branch_name: string, remote_commits_behind: number | null, remote_commits_ahead: number | null, merges: Array<Merge>, is_rebase_in_progress: boolean, conflict_op: ConflictOp | null, conflicted_files: Array<string>, is_target_remote: boolean, };
 
+export type ExecutionTelemetry = { id: string, execution_process_id: string | null, session_id: string, workspace_id: string, executor: string, model_id: string | null, task_type: string, real_outcome: string, outcome_note: string | null, cost_usd: number | null, duration_ms: bigint | null, input_tokens: bigint | null, output_tokens: bigint | null, total_tokens: bigint | null, recorded_by: string, created_at: string, };
+
+export type RecordExecutionTelemetry = { execution_process_id: string, executor: string, model_id: string | null, task_type: string, real_outcome: string, outcome_note: string | null, cost_usd: number | null, duration_ms: bigint | null, input_tokens: bigint | null, output_tokens: bigint | null, total_tokens: bigint | null, recorded_by: string | null, };
+
+export type TelemetrySummaryRow = { executor: string, model_id: string | null, task_type: string, real_outcome: string, count: bigint, avg_duration_ms: number | null, total_cost_usd: number | null, };
+
+export type TelemetryListParams = { executor: string | null, task_type: string | null, real_outcome: string | null, };
+
 export type UpdateWorkspace = { archived: boolean | null, pinned: boolean | null, name: string | null, };
 
 export type UpdateSession = { name: string | null, };
@@ -657,7 +665,7 @@ auto_compact: boolean, base_command_override?: string | null, additional_params?
 
 export type QwenCode = { append_prompt: AppendPrompt, model?: string | null, agent?: string | null, yolo?: boolean | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
 
-export type Antigravity = { append_prompt: AppendPrompt, model?: string | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
+export type Antigravity = { append_prompt: AppendPrompt, model?: string | null, permission_policy?: PermissionPolicy | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
 
 export type Droid = { append_prompt: AppendPrompt, autonomy: Autonomy, model?: string | null, reasoning_effort?: DroidReasoningEffort | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
 
@@ -715,7 +723,7 @@ export type NormalizedEntry = { timestamp: string | null, entry_type: Normalized
 
 export type NormalizedEntryType = { "type": "user_message" } | { "type": "user_feedback", denied_tool: string, } | { "type": "assistant_message" } | { "type": "tool_use", tool_name: string, action_type: ActionType, status: ToolStatus, } | { "type": "system_message" } | { "type": "error_message", error_type: NormalizedEntryError, } | { "type": "thinking" } | { "type": "loading" } | { "type": "next_action", failed: boolean, execution_processes: number, needs_setup: boolean, } | { "type": "token_usage_info" } & TokenUsageInfo | { "type": "user_answered_questions", answers: Array<AnsweredQuestion>, };
 
-export type TokenUsageInfo = { total_tokens: number, model_context_window: number, };
+export type TokenUsageInfo = { total_tokens: number, model_context_window: number, input_tokens?: number | null, output_tokens?: number | null, cost_usd?: number | null, };
 
 export type FileChange = { "action": "write", content: string, } | { "action": "delete" } | { "action": "rename", new_path: string, } | { "action": "edit", 
 /**

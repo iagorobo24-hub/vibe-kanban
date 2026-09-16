@@ -17,6 +17,7 @@ use db::{
             ExecutionContext, ExecutionProcess, ExecutionProcessRunReason, ExecutionProcessStatus,
         },
         execution_process_repo_state::ExecutionProcessRepoState,
+        execution_telemetry::{ExecutionTelemetry, RecordExecutionTelemetry},
         repo::Repo,
         scratch::{DraftFollowUpData, Scratch, ScratchType},
         session::{Session, SessionError},
@@ -556,6 +557,11 @@ impl LocalContainerService {
                     tracing::warn!("Failed to update executor session summary: {}", e);
                 }
 
+                // Automatically capture execution telemetry
+                if let Err(e) = container.record_auto_telemetry(&ctx, exit_code).await {
+                    tracing::warn!("Failed to record auto execution telemetry: {}", e);
+                }
+
                 let success = matches!(
                     ctx.execution_process.status,
                     ExecutionProcessStatus::Completed
@@ -1002,6 +1008,213 @@ impl LocalContainerService {
                 }
             }
         }
+
+        Ok(())
+    }
+
+    /// Extract execution telemetry metrics (tokens, cost, detected model) from MsgStore history
+    fn extract_telemetry_metrics(
+        &self,
+        exec_id: &Uuid,
+    ) -> (
+        Option<i64>,
+        Option<i64>,
+        Option<i64>,
+        Option<f64>,
+        Option<String>,
+    ) {
+        let mut input_tokens = None;
+        let mut output_tokens = None;
+        let mut total_tokens = None;
+        let mut cost_usd = None;
+        let mut detected_model = None;
+
+        let Some(msg_stores) = self.msg_stores.try_read().ok() else {
+            return (None, None, None, None, None);
+        };
+        let Some(msg_store) = msg_stores.get(exec_id) else {
+            return (None, None, None, None, None);
+        };
+
+        let history = msg_store.get_history();
+
+        // Scan in reverse to catch the final token usage / result summary first
+        for msg in history.iter().rev() {
+            if let LogMsg::JsonPatch(patch) = msg {
+                if let Some((_, entry)) = extract_normalized_entry_from_patch(patch) {
+                    if let NormalizedEntryType::TokenUsageInfo(ref info) = entry.entry_type {
+                        if total_tokens.is_none() && info.total_tokens > 0 {
+                            total_tokens = Some(info.total_tokens as i64);
+                        }
+                        if input_tokens.is_none() && info.input_tokens.is_some() {
+                            input_tokens = info.input_tokens.map(|t| t as i64);
+                        }
+                        if output_tokens.is_none() && info.output_tokens.is_some() {
+                            output_tokens = info.output_tokens.map(|t| t as i64);
+                        }
+                        if cost_usd.is_none() && info.cost_usd.is_some() {
+                            cost_usd = info.cost_usd;
+                        }
+                    }
+
+                    // Also inspect entry metadata if present (contains ClaudeJson::Result)
+                    if let Some(ref meta) = entry.metadata {
+                        if cost_usd.is_none() {
+                            if let Some(c) = meta.get("total_cost_usd").and_then(|v| v.as_f64()) {
+                                cost_usd = Some(c);
+                            } else if let Some(c) = meta.get("cost_usd").and_then(|v| v.as_f64()) {
+                                cost_usd = Some(c);
+                            } else if let Some(model_usage) = meta.get("model_usage").and_then(|v| v.as_object()) {
+                                let sum: f64 = model_usage.values().filter_map(|m| {
+                                    m.get("cost_usd").or_else(|| m.get("costUSD")).and_then(|v| v.as_f64())
+                                }).sum();
+                                if sum > 0.0 {
+                                    cost_usd = Some(sum);
+                                }
+                            }
+                        }
+
+                        if detected_model.is_none() {
+                            if let Some(model_usage) = meta.get("model_usage").and_then(|v| v.as_object()) {
+                                if let Some(first_key) = model_usage.keys().next() {
+                                    detected_model = Some(first_key.clone());
+                                }
+                            } else if let Some(m) = meta.get("model").and_then(|v| v.as_str()) {
+                                detected_model = Some(m.to_string());
+                            }
+                        }
+
+                        if let Some(usage) = meta.get("usage").and_then(|v| v.as_object()) {
+                            if input_tokens.is_none() {
+                                input_tokens = usage.get("input_tokens").and_then(|v| v.as_i64());
+                            }
+                            if output_tokens.is_none() {
+                                output_tokens = usage.get("output_tokens").and_then(|v| v.as_i64());
+                            }
+                        }
+                    }
+
+                    // Stop early if we have all metrics
+                    if total_tokens.is_some() && cost_usd.is_some() && input_tokens.is_some() {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if total_tokens.is_none() {
+            if let (Some(i), Some(o)) = (input_tokens, output_tokens) {
+                total_tokens = Some(i + o);
+            }
+        }
+
+        (input_tokens, output_tokens, total_tokens, cost_usd, detected_model)
+    }
+
+    /// Automatically record execution telemetry on process completion.
+    async fn record_auto_telemetry(
+        &self,
+        ctx: &ExecutionContext,
+        exit_code: Option<i64>,
+    ) -> Result<(), anyhow::Error> {
+        let exec_id = ctx.execution_process.id;
+
+        // Skip if already recorded (prevents duplicate on repeated completion handler calls)
+        if ExecutionTelemetry::find_by_execution_process_id(&self.db.pool, exec_id).await?.is_some() {
+            return Ok(());
+        }
+
+        // Determine executor and model
+        let (executor_name, mut model_id) = match &ctx.execution_process.executor_action.0 {
+            db::models::execution_process::ExecutorActionField::ExecutorAction(action) => {
+                match action.typ() {
+                    ExecutorActionType::CodingAgentInitialRequest(req) => (
+                        req.executor_config.executor.to_string(),
+                        req.executor_config.model_id.clone(),
+                    ),
+                    ExecutorActionType::CodingAgentFollowUpRequest(req) => (
+                        req.executor_config.executor.to_string(),
+                        req.executor_config.model_id.clone(),
+                    ),
+                    _ => ("SCRIPT".to_string(), None),
+                }
+            }
+            db::models::execution_process::ExecutorActionField::Other(val) => {
+                let exec = val.get("executor").and_then(|v| v.as_str()).unwrap_or("UNKNOWN").to_string();
+                let model = val.get("model_id").and_then(|v| v.as_str()).map(String::from);
+                (exec, model)
+            }
+        };
+
+        // Extract tokens and cost from execution logs
+        let (input_tokens, output_tokens, total_tokens, cost_usd, detected_model) =
+            self.extract_telemetry_metrics(&exec_id);
+
+        if model_id.is_none() {
+            model_id = detected_model;
+        }
+
+        // Compute duration
+        let duration_ms = ctx
+            .execution_process
+            .completed_at
+            .map(|c| (c - ctx.execution_process.started_at).num_milliseconds())
+            .filter(|d| *d >= 0);
+
+        // Determine outcome
+        let real_outcome = if matches!(ctx.execution_process.status, ExecutionProcessStatus::Completed)
+            && exit_code == Some(0)
+        {
+            "success"
+        } else if exit_code != Some(0)
+            || matches!(ctx.execution_process.status, ExecutionProcessStatus::Failed)
+        {
+            "failure"
+        } else {
+            "unknown"
+        };
+
+        let task_type = match ctx.execution_process.run_reason {
+            ExecutionProcessRunReason::CodingAgent => "codingagent",
+            ExecutionProcessRunReason::SetupScript => "setupscript",
+            ExecutionProcessRunReason::CleanupScript => "cleanupscript",
+            ExecutionProcessRunReason::ArchiveScript => "archivescript",
+            ExecutionProcessRunReason::DevServer => "devserver",
+        };
+
+        let telemetry = RecordExecutionTelemetry {
+            execution_process_id: exec_id,
+            executor: executor_name,
+            model_id,
+            task_type: task_type.to_string(),
+            real_outcome: real_outcome.to_string(),
+            outcome_note: Some(format!(
+                "Auto-recorded by AgentOS runtime on process completion (status: {:?}, exit_code: {:?})",
+                ctx.execution_process.status, exit_code
+            )),
+            cost_usd,
+            duration_ms,
+            input_tokens,
+            output_tokens,
+            total_tokens,
+            recorded_by: Some("auto".to_string()),
+        };
+
+        ExecutionTelemetry::record(
+            &self.db.pool,
+            ctx.session.id,
+            ctx.workspace.id,
+            &telemetry,
+        )
+        .await?;
+
+        tracing::info!(
+            "Execution telemetry auto-recorded for execution {} (cost: {:?}, tokens: {:?}, outcome: {})",
+            exec_id,
+            cost_usd,
+            total_tokens,
+            real_outcome
+        );
 
         Ok(())
     }

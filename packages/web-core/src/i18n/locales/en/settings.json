@@ -29,6 +29,8 @@
         "agentsDesc": "Coding agent configurations",
         "mcp": "MCP Servers",
         "mcpDesc": "Model Context Protocol servers",
+        "telemetry": "Telemetry & Costs",
+        "telemetryDesc": "Token usage, execution costs, and quality auditing",
         "organizations": "Organization Settings",
         "organizationsDesc": "Manage organization members and permissions",
         "remote-projects": "Projects",
