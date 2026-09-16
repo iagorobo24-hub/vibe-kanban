@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { useDropzone } from 'react-dropzone';
@@ -63,7 +63,7 @@ import { useActionVisibilityContext } from '@/shared/hooks/useActionVisibilityCo
 import { PrCommentsDialog } from '@/shared/dialogs/tasks/PrCommentsDialog';
 import type { NormalizedComment } from '@vibe/ui/components/pr-comment-node';
 import { useAppNavigation } from '@/shared/hooks/useAppNavigation';
-import { sessionsApi } from '@/shared/lib/api';
+import { sessionsApi, workspacesApi, type OcrReviewResult } from '@/shared/lib/api';
 import { RenameSessionDialog } from '@vibe/ui/components/RenameSessionDialog';
 import type { TurnNavigationItem } from '@vibe/ui/components/TurnNavigationPopup';
 
@@ -897,6 +897,156 @@ export function SessionChatBoxContainer(props: SessionChatBoxContainerProps) {
     isAttemptRunning,
   });
 
+  // Alibaba OCR review state & intelligent suggestions
+  const [isOcrReviewing, setIsOcrReviewing] = useState(false);
+  const [ocrResult, setOcrResult] = useState<OcrReviewResult | null>(null);
+  const [hasDismissedOcrSuggestion, setHasDismissedOcrSuggestion] = useState(false);
+  const [isOcrAutoEnabled, setIsOcrAutoEnabled] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('agentos-ocr-auto-enabled') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleOcrReview = useCallback(async () => {
+    if (!workspaceId) return;
+    setIsOcrReviewing(true);
+    try {
+      const result = await workspacesApi.runOcrReview(workspaceId);
+      setOcrResult(result);
+
+      // Option A: feed OCR rules into the agent's review system
+      if (
+        sessionId &&
+        session?.executor &&
+        result.rule_groups.length > 0 &&
+        result.total_files > 0
+      ) {
+        // Build a structured prompt from OCR rules for the agent
+        const rulesPrompt = result.rule_groups
+          .map(
+            (g) =>
+              `### Grupo ${g.group_id} — ${g.pattern}\n` +
+              `Archivos: ${g.files.join(', ')}\n` +
+              `Regla: ${g.rule}`
+          )
+          .join('\n\n');
+
+        const filesSection = result.reviewable_files
+          .map(
+            (f) => `- ${f.path} (${f.status}, +${f.insertions}/-${f.deletions})`
+          )
+          .join('\n');
+
+        const additionalPrompt =
+          `## Auditoría de calidad — Alibaba Open Code Review\n\n` +
+          `Analiza estrictamente los siguientes cambios aplicando las reglas de calidad especializadas.\n` +
+          `Para cada hallazgo, indica: archivo, línea(s), severidad, regla incumplida y sugerencia concreta de mejora.\n\n` +
+          `### Archivos modificados (${result.total_files})\n` +
+          `${filesSection}\n\n` +
+          `### Reglas de calidad a aplicar\n\n` +
+          `${rulesPrompt}\n\n` +
+          `Responde con un resumen ejecutivo al final indicando la calidad general del código.`;
+
+        try {
+          await sessionsApi.startReview(sessionId, {
+            executor_config: {
+              executor: session.executor as import('shared/types').BaseCodingAgent,
+            },
+            additional_prompt: additionalPrompt,
+            use_all_workspace_commits: true,
+          });
+
+          // Invalidate process caches so UI picks up the new review process
+          queryClient.invalidateQueries({ queryKey: ['processes', workspaceId] });
+          queryClient.invalidateQueries({ queryKey: ['branchStatus', workspaceId] });
+        } catch (reviewErr) {
+          // Review might fail if a process is already running — that's OK,
+          // the OCR result is still shown in the banner.
+          console.warn('No se pudo iniciar la revisión del agente (puede haber un proceso activo):', reviewErr);
+        }
+      }
+    } catch (err) {
+      console.error('Error al ejecutar auditoría Alibaba OCR:', err);
+    } finally {
+      setIsOcrReviewing(false);
+    }
+  }, [workspaceId, sessionId, session?.executor, queryClient]);
+
+  const handleToggleOcrAuto = useCallback(() => {
+    setIsOcrAutoEnabled((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('agentos-ocr-auto-enabled', String(next));
+      } catch {}
+      if (next && workspaceId && !isAttemptRunning) {
+        void handleOcrReview();
+      }
+      return next;
+    });
+  }, [workspaceId, isAttemptRunning, handleOcrReview]);
+
+  // Automatic background audit whenever agent finishes execution
+  const prevAttemptRunningRef = useRef(isAttemptRunning);
+  useEffect(() => {
+    if (prevAttemptRunningRef.current && !isAttemptRunning) {
+      if (
+        isOcrAutoEnabled &&
+        workspaceId &&
+        ((filesChanged ?? 0) > 0 || (linesAdded ?? 0) > 0 || (linesRemoved ?? 0) > 0)
+      ) {
+        void handleOcrReview();
+      }
+    }
+    prevAttemptRunningRef.current = isAttemptRunning;
+  }, [
+    isAttemptRunning,
+    isOcrAutoEnabled,
+    workspaceId,
+    filesChanged,
+    linesAdded,
+    linesRemoved,
+    handleOcrReview,
+  ]);
+
+  const ocrSuggestion = useMemo(() => {
+    if (isOcrAutoEnabled || ocrResult || hasDismissedOcrSuggestion || isAttemptRunning || isSending) return undefined;
+    const totalLines = (linesAdded ?? 0) + (linesRemoved ?? 0);
+    const turnsCount = userMessageTurns?.length ?? 0;
+    const hasEnoughWork = turnsCount >= 3 || (filesChanged ?? 0) >= 3 || totalLines >= 60;
+    if (!hasEnoughWork) return undefined;
+
+    return {
+      message: `El agente ha realizado modificaciones (+${totalLines} líneas, ${filesChanged} archivos). ¿Deseas auditar con Alibaba OCR?`,
+      onReview: handleOcrReview,
+      onDismiss: () => setHasDismissedOcrSuggestion(true),
+    };
+  }, [
+    isOcrAutoEnabled,
+    ocrResult,
+    hasDismissedOcrSuggestion,
+    isAttemptRunning,
+    isSending,
+    linesAdded,
+    linesRemoved,
+    userMessageTurns,
+    filesChanged,
+    handleOcrReview,
+  ]);
+
+  const ocrSummary = useMemo(() => {
+    if (!ocrResult) return undefined;
+    const agentTriggered = ocrResult.rule_groups.length > 0 && ocrResult.total_files > 0;
+    const message = agentTriggered
+      ? `${ocrResult.summary} — Revisión del agente iniciada con ${ocrResult.rule_groups.length} grupo(s) de reglas.`
+      : ocrResult.summary;
+    return {
+      message,
+      onDismiss: () => setOcrResult(null),
+    };
+  }, [ocrResult]);
+
   // During loading, render with empty editor to preserve container UI
   // In approval mode, don't show queued message - it's for follow-up, not approval response
   const editorValue = useMemo(() => {
@@ -1132,6 +1282,11 @@ export function SessionChatBoxContainer(props: SessionChatBoxContainerProps) {
             }
           : undefined
       }
+      onOcrReview={workspaceId ? handleToggleOcrAuto : undefined}
+      isOcrReviewing={isOcrReviewing}
+      isOcrAutoEnabled={isOcrAutoEnabled}
+      ocrSuggestion={ocrSuggestion}
+      ocrSummary={ocrSummary}
       localAttachments={localAttachments}
       dropzone={{ getRootProps, getInputProps, isDragActive }}
       modelSelector={modelSelectorNode}

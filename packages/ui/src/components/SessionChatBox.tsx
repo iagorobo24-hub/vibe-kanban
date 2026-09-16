@@ -14,8 +14,10 @@ import {
   ArrowsOutIcon,
   GithubLogoIcon,
   PencilSimpleIcon,
+  ShieldCheckIcon,
 } from "@phosphor-icons/react";
 import { useTranslation } from "react-i18next";
+import { cn } from "../lib/cn";
 import { ChatBoxBase, VisualVariant, type DropzoneProps } from "./ChatBoxBase";
 import { type EditorProps, type ExecutorProps } from "./CreateChatBox";
 import type { AskUserQuestionItem, QuestionAnswer } from "shared/types";
@@ -193,6 +195,18 @@ interface SessionChatBoxProps<TExecutor extends string = string> {
   tokenUsageInfo?: ContextUsageInfo | null;
   supportsContextUsage?: boolean;
   dropzone?: DropzoneProps;
+  onOcrReview?: () => void;
+  isOcrReviewing?: boolean;
+  ocrSuggestion?: {
+    message: string;
+    onReview: () => void;
+    onDismiss: () => void;
+  };
+  ocrSummary?: {
+    message: string;
+    onDismiss: () => void;
+  };
+  isOcrAutoEnabled?: boolean;
 }
 
 function defaultExecutorLabel(executor: string) {
@@ -255,6 +269,11 @@ export function SessionChatBox<TExecutor extends string = string>({
   tokenUsageInfo,
   supportsContextUsage,
   dropzone,
+  onOcrReview,
+  isOcrReviewing,
+  ocrSuggestion,
+  ocrSummary,
+  isOcrAutoEnabled = false,
 }: SessionChatBoxProps<TExecutor>) {
   const { t } = useTranslation("tasks");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -639,6 +658,67 @@ export function SessionChatBox<TExecutor extends string = string>({
       );
     }
 
+    // OCR suggestion banner
+    if (ocrSuggestion) {
+      banners.push(
+        <div
+          key="ocr-suggestion"
+          className="bg-accent/10 border-b border-brand/20 px-double py-1.5 flex items-center justify-between gap-base text-xs"
+        >
+          <div className="flex items-center gap-1.5 text-normal">
+            <ShieldCheckIcon
+              className="h-4 w-4 text-brand flex-shrink-0"
+              aria-hidden="true"
+            />
+            <span>{ocrSuggestion.message}</span>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              type="button"
+              onClick={ocrSuggestion.onReview}
+              className="text-xs font-semibold text-brand hover:underline cursor-pointer"
+            >
+              {t("conversation.ocr.reviewNow", "Auditar ahora")}
+            </button>
+            <button
+              type="button"
+              onClick={ocrSuggestion.onDismiss}
+              className="p-0.5 text-low hover:text-normal rounded focus:outline-none cursor-pointer"
+              aria-label={t("common.close", "Cerrar")}
+            >
+              <XIcon className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+          </div>
+        </div>,
+      );
+    }
+
+    // OCR summary banner
+    if (ocrSummary) {
+      banners.push(
+        <div
+          key="ocr-summary"
+          className="bg-brand/5 border-b border-brand/20 px-double py-1.5 flex items-center justify-between gap-base text-xs"
+        >
+          <div className="flex items-center gap-1.5 text-normal truncate">
+            <ShieldCheckIcon
+              className="h-4 w-4 text-brand flex-shrink-0"
+              aria-hidden="true"
+            />
+            <span className="truncate">{ocrSummary.message}</span>
+          </div>
+          <button
+            type="button"
+            onClick={ocrSummary.onDismiss}
+            className="p-0.5 text-low hover:text-normal rounded focus:outline-none flex-shrink-0 cursor-pointer"
+            aria-label={t("common.close", "Cerrar")}
+          >
+            <XIcon className="h-3.5 w-3.5" aria-hidden="true" />
+          </button>
+        </div>,
+      );
+    }
+
     return banners.length > 0 ? <>{banners}</> : null;
   };
 
@@ -901,6 +981,30 @@ export function SessionChatBox<TExecutor extends string = string>({
             onClick={handleAttachClick}
             disabled={areContentInsertActionsDisabled}
           />
+          {onOcrReview && (
+            <ToolbarIconButton
+              icon={isOcrReviewing ? SpinnerIcon : ShieldCheckIcon}
+              aria-label={
+                isOcrAutoEnabled
+                  ? "Auditoría Alibaba OCR automática activada (clic para desactivar)"
+                  : "Activar auditoría Alibaba OCR automática en segundo plano"
+              }
+              title={
+                isOcrAutoEnabled
+                  ? "Auditoría Alibaba OCR: ACTIVA (audita en segundo plano al terminar cada tarea)"
+                  : "Auditoría Alibaba OCR: DESACTIVADA (haz clic para activar modo automático)"
+              }
+              onClick={onOcrReview}
+              aria-pressed={isOcrAutoEnabled}
+              disabled={isDisabled || isOcrReviewing}
+              className={cn(
+                isOcrReviewing && "animate-spin",
+                isOcrAutoEnabled
+                  ? "text-brand bg-brand/15 ring-1 ring-brand/40 rounded-sm hover:text-brand hover:bg-brand/25"
+                  : "text-low hover:text-normal"
+              )}
+            />
+          )}
           <input
             ref={fileInputRef}
             type="file"
