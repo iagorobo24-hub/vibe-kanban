@@ -767,7 +767,11 @@ provider_id?: string | null,
 /**
  * Configurable reasoning options if supported
  */
-reasoning_options: Array<ReasoningOption>, };
+reasoning_options: Array<ReasoningOption>, 
+/**
+ * Whether this model belongs to secondary / more models section
+ */
+is_secondary?: boolean | null, };
 
 export type ReasoningOption = { id: string, label: string, is_default: boolean, };
 

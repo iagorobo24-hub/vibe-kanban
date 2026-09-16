@@ -203,26 +203,20 @@ impl StandardCodingAgentExecutor for Gemini {
     ) -> Result<futures::stream::BoxStream<'static, json_patch::Patch>, ExecutorError> {
         let options = ExecutorDiscoveredOptions {
             model_selector: ModelSelectorConfig {
-                models: vec![
-                    ModelInfo {
-                        id: "gemini-3.1-pro-preview".to_string(),
-                        name: "Gemini 3.1 Pro Preview".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3-pro-preview".to_string(),
-                        name: "Gemini 3 Pro".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3-flash-preview".to_string(),
-                        name: "Gemini 3 Flash".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                ],
+                models: [
+                    ("gemini-3.1-pro-preview", "Gemini 3.1 Pro Preview"),
+                    ("gemini-3-pro-preview", "Gemini 3 Pro"),
+                    ("gemini-3-flash-preview", "Gemini 3 Flash"),
+                ]
+                .into_iter()
+                .map(|(id, name)| ModelInfo {
+                    id: id.to_string(),
+                    name: name.to_string(),
+                    provider_id: None,
+                    reasoning_options: vec![],
+                    is_secondary: None,
+                })
+                .collect(),
                 default_model: Some("gemini-3-pro-preview".to_string()),
                 permissions: vec![PermissionPolicy::Auto, PermissionPolicy::Supervised],
                 ..Default::default()

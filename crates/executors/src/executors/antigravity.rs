@@ -240,92 +240,31 @@ impl StandardCodingAgentExecutor for Antigravity {
     ) -> Result<futures::stream::BoxStream<'static, json_patch::Patch>, ExecutorError> {
         let options = ExecutorDiscoveredOptions {
             model_selector: ModelSelectorConfig {
-                models: vec![
-                    ModelInfo {
-                        id: "gemini-3.8-flash-high".to_string(),
-                        name: "Gemini 3.8 Flash (High)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.8-flash-medium".to_string(),
-                        name: "Gemini 3.8 Flash (Medium)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.8-flash-low".to_string(),
-                        name: "Gemini 3.8 Flash (Low)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.7-flash-high".to_string(),
-                        name: "Gemini 3.7 Flash (High)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.7-flash-medium".to_string(),
-                        name: "Gemini 3.7 Flash (Medium)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.7-flash-low".to_string(),
-                        name: "Gemini 3.7 Flash (Low)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.6-flash-high".to_string(),
-                        name: "Gemini 3.6 Flash (High)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.6-flash-medium".to_string(),
-                        name: "Gemini 3.6 Flash (Medium)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.6-flash-low".to_string(),
-                        name: "Gemini 3.6 Flash (Low)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.1-pro-high".to_string(),
-                        name: "Gemini 3.1 Pro (High)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gemini-3.1-pro-low".to_string(),
-                        name: "Gemini 3.1 Pro (Low)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "claude-sonnet-4-6".to_string(),
-                        name: "Claude Sonnet 4.6 (Thinking)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "claude-opus-4-6-thinking".to_string(),
-                        name: "Claude Opus 4.6 (Thinking)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                    ModelInfo {
-                        id: "gpt-oss-120b-medium".to_string(),
-                        name: "GPT-OSS 120B (Medium)".to_string(),
-                        provider_id: None,
-                        reasoning_options: vec![],
-                    },
-                ],
+                models: [
+                    ("gemini-3.8-flash-high", "Gemini 3.8 Flash (High)"),
+                    ("gemini-3.8-flash-medium", "Gemini 3.8 Flash (Medium)"),
+                    ("gemini-3.8-flash-low", "Gemini 3.8 Flash (Low)"),
+                    ("gemini-3.7-flash-high", "Gemini 3.7 Flash (High)"),
+                    ("gemini-3.7-flash-medium", "Gemini 3.7 Flash (Medium)"),
+                    ("gemini-3.7-flash-low", "Gemini 3.7 Flash (Low)"),
+                    ("gemini-3.6-flash-high", "Gemini 3.6 Flash (High)"),
+                    ("gemini-3.6-flash-medium", "Gemini 3.6 Flash (Medium)"),
+                    ("gemini-3.6-flash-low", "Gemini 3.6 Flash (Low)"),
+                    ("gemini-3.1-pro-high", "Gemini 3.1 Pro (High)"),
+                    ("gemini-3.1-pro-low", "Gemini 3.1 Pro (Low)"),
+                    ("claude-sonnet-4-6", "Claude Sonnet 4.6 (Thinking)"),
+                    ("claude-opus-4-6-thinking", "Claude Opus 4.6 (Thinking)"),
+                    ("gpt-oss-120b-medium", "GPT-OSS 120B (Medium)"),
+                ]
+                .into_iter()
+                .map(|(id, name)| ModelInfo {
+                    id: id.to_string(),
+                    name: name.to_string(),
+                    provider_id: None,
+                    reasoning_options: vec![],
+                    is_secondary: None,
+                })
+                .collect(),
                 default_model: Some("gemini-3.8-flash-high".to_string()),
                 permissions: vec![
                     PermissionPolicy::Auto,

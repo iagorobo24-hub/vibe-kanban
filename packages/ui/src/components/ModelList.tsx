@@ -1,4 +1,4 @@
-import type { Ref } from 'react';
+import { useState, useEffect, type Ref } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrainIcon, CaretDownIcon, CheckIcon } from '@phosphor-icons/react';
 import { cn } from '../lib/cn';
@@ -20,6 +20,7 @@ export interface ModelListModel {
   name: string;
   provider_id?: string | null;
   reasoning_options: ModelReasoningOption[];
+  is_secondary?: boolean | null;
 }
 
 function toPrettyCase(value: string): string {
@@ -148,6 +149,26 @@ export function ModelList({
   const isDefaultSelected = selectedModelId === null;
   const normalizedSelectedId = selectedModelId?.toLowerCase() ?? null;
 
+  const hasSecondaryModels = models.some((m) => Boolean(m.is_secondary));
+  const primaryModels = hasSecondaryModels
+    ? filteredModels.filter((m) => !m.is_secondary)
+    : filteredModels;
+  const secondaryModels = hasSecondaryModels
+    ? filteredModels.filter((m) => Boolean(m.is_secondary))
+    : [];
+
+  const isSecondarySelected =
+    Boolean(normalizedSelectedId) &&
+    secondaryModels.some((m) => m.id.toLowerCase() === normalizedSelectedId);
+
+  const [isMoreExpanded, setIsMoreExpanded] = useState(isSecondarySelected);
+
+  useEffect(() => {
+    if (isSecondarySelected) {
+      setIsMoreExpanded(true);
+    }
+  }, [isSecondarySelected]);
+
   const defaultRow = showDefaultOption ? (
     <div
       key="__default__"
@@ -180,6 +201,77 @@ export function ModelList({
     </div>
   ) : null;
 
+  const renderModelRow = (model: ModelListModel) => {
+    const modelKey = getModelKey(model);
+    const isSelected =
+      Boolean(normalizedSelectedId) &&
+      model.id.toLowerCase() === normalizedSelectedId;
+    const isReasoningConfigurable = model.reasoning_options.length > 0;
+    const showReasoningSelector =
+      isSelected &&
+      isReasoningConfigurable &&
+      reasoningOptions.length > 0;
+
+    return (
+      <div
+        key={`${model.provider_id ?? 'default'}/${model.id}`}
+        data-model-key={modelKey}
+        data-model-id={model.id}
+        data-provider-id={model.provider_id ?? ''}
+        className={cn(
+          'group flex items-center rounded-sm mx-half',
+          'transition-colors duration-100',
+          'focus-within:bg-secondary',
+          isSelected
+            ? 'bg-secondary text-high'
+            : cn('text-normal', 'hover:bg-secondary/60')
+        )}
+      >
+        <button
+          type="button"
+          onClick={() =>
+            onSelect(model.id, model.provider_id ?? undefined)
+          }
+          className={cn(
+            'flex-1 min-w-0 py-half pl-base pr-half text-left',
+            'focus:outline-none focus-visible:ring-1 focus-visible:ring-brand'
+          )}
+        >
+          <span
+            className={cn(
+              'block text-sm truncate',
+              isSelected && 'font-semibold'
+            )}
+            title={model.name}
+          >
+            {model.name}
+          </span>
+        </button>
+        <div className="flex items-center justify-end gap-half pr-base">
+          {showReasoningSelector && (
+            <ReasoningDropdown
+              options={reasoningOptions}
+              selectedId={selectedReasoningId}
+              onSelect={onReasoningSelect}
+            />
+          )}
+          {!showReasoningSelector && isReasoningConfigurable ? (
+            <span
+              className={cn(
+                'inline-flex items-center justify-center',
+                'size-5 rounded-sm bg-border/80 text-normal',
+                'dark:bg-secondary/70'
+              )}
+              title={t('accessibility.reasoningSupported')}
+            >
+              <BrainIcon className="size-icon-xs" weight="fill" />
+            </span>
+          ) : null}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       ref={scrollRef}
@@ -199,76 +291,39 @@ export function ModelList({
             justifyEnd && 'justify-end'
           )}
         >
-          {filteredModels.map((model) => {
-            const modelKey = getModelKey(model);
-            const isSelected =
-              Boolean(normalizedSelectedId) &&
-              model.id.toLowerCase() === normalizedSelectedId;
-            const isReasoningConfigurable = model.reasoning_options.length > 0;
-            const showReasoningSelector =
-              isSelected &&
-              isReasoningConfigurable &&
-              reasoningOptions.length > 0;
-
-            return (
-              <div
-                key={`${model.provider_id ?? 'default'}/${model.id}`}
-                data-model-key={modelKey}
-                data-model-id={model.id}
-                data-provider-id={model.provider_id ?? ''}
-                className={cn(
-                  'group flex items-center rounded-sm mx-half',
-                  'transition-colors duration-100',
-                  'focus-within:bg-secondary',
-                  isSelected
-                    ? 'bg-secondary text-high'
-                    : cn('text-normal', 'hover:bg-secondary/60')
-                )}
-              >
-                <button
-                  type="button"
-                  onClick={() =>
-                    onSelect(model.id, model.provider_id ?? undefined)
-                  }
-                  className={cn(
-                    'flex-1 min-w-0 py-half pl-base pr-half text-left',
-                    'focus:outline-none focus-visible:ring-1 focus-visible:ring-brand'
-                  )}
-                >
-                  <span
+          {normalizedSearch || !hasSecondaryModels ? (
+            filteredModels.map((model) => renderModelRow(model))
+          ) : (
+            <>
+              {primaryModels.map((model) => renderModelRow(model))}
+              {secondaryModels.length > 0 && (
+                <div className="pt-1 mt-1 border-t border-border/40">
+                  <button
+                    type="button"
+                    onClick={() => setIsMoreExpanded((prev) => !prev)}
                     className={cn(
-                      'block text-sm truncate',
-                      isSelected && 'font-semibold'
+                      'w-full flex items-center justify-between px-base py-1 rounded-sm text-xs font-medium text-low',
+                      'hover:bg-secondary/60 hover:text-normal transition-colors cursor-pointer',
+                      'focus:outline-none focus-visible:ring-1 focus-visible:ring-brand'
                     )}
-                    title={model.name}
                   >
-                    {model.name}
-                  </span>
-                </button>
-                <div className="flex items-center justify-end gap-half pr-base">
-                  {showReasoningSelector && (
-                    <ReasoningDropdown
-                      options={reasoningOptions}
-                      selectedId={selectedReasoningId}
-                      onSelect={onReasoningSelect}
-                    />
-                  )}
-                  {!showReasoningSelector && isReasoningConfigurable ? (
-                    <span
+                    <span>{t('modelSelector.moreModels', 'Más modelos...')}</span>
+                    <CaretDownIcon
                       className={cn(
-                        'inline-flex items-center justify-center',
-                        'size-5 rounded-sm bg-border/80 text-normal',
-                        'dark:bg-secondary/70'
+                        'size-icon-2xs transition-transform duration-150',
+                        isMoreExpanded && 'rotate-180'
                       )}
-                      title={t('accessibility.reasoningSupported')}
-                    >
-                      <BrainIcon className="size-icon-xs" weight="fill" />
-                    </span>
-                  ) : null}
+                    />
+                  </button>
+                  {isMoreExpanded && (
+                    <div className="flex flex-col gap-0.5 pt-0.5">
+                      {secondaryModels.map((model) => renderModelRow(model))}
+                    </div>
+                  )}
                 </div>
-              </div>
-            );
-          })}
+              )}
+            </>
+          )}
           {defaultRow}
         </div>
       )}

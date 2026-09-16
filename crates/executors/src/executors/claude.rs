@@ -278,13 +278,20 @@ fn default_discovered_options() -> crate::executor_discovery::ExecutorDiscovered
         model_selector: ModelSelectorConfig {
             providers: vec![],
             models: [
-                ("opus", "Opus"),
-                ("opus[1m]", "Opus (1M context)"),
-                ("sonnet", "Sonnet"),
-                ("haiku", "Haiku"),
+                // Modelos Principales (Actualizados)
+                ("sonnet", "Claude 5 Sonnet", false),
+                ("opus", "Claude 5 Opus", false),
+                ("haiku", "Claude 4.5 Haiku", false),
+                // Más Modelos (Anteriores y Alternativas)
+                ("claude-sonnet-4-6", "Claude Sonnet 4.6", true),
+                ("opus[1m]", "Claude 5 Opus (1M context)", true),
+                ("claude-3-7-sonnet", "Claude 3.7 Sonnet", true),
+                ("claude-3-5-sonnet", "Claude 3.5 Sonnet", true),
+                ("claude-3-opus", "Claude 3 Opus", true),
+                ("claude-3-5-haiku", "Claude 3.5 Haiku", true),
             ]
             .into_iter()
-            .map(|(id, name)| ModelInfo {
+            .map(|(id, name, is_sec)| ModelInfo {
                 id: id.to_string(),
                 name: name.to_string(),
                 provider_id: None,
@@ -293,9 +300,10 @@ fn default_discovered_options() -> crate::executor_discovery::ExecutorDiscovered
                 } else {
                     vec![]
                 },
+                is_secondary: if is_sec { Some(true) } else { None },
             })
             .collect(),
-            default_model: Some("opus".to_string()),
+            default_model: Some("sonnet".to_string()),
             agents: vec![],
             permissions: vec![
                 PermissionPolicy::Auto,

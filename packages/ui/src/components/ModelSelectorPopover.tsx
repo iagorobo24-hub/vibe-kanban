@@ -62,6 +62,14 @@ function getModelSortLabel(model: ModelListModel): string {
 
 function sortModelsAlphabetically(models: ModelListModel[]): ModelListModel[] {
   return [...models].sort((a, b) => {
+    const aSecondary = Boolean(a.is_secondary);
+    const bSecondary = Boolean(b.is_secondary);
+    if (aSecondary !== bSecondary) {
+      return aSecondary ? 1 : -1;
+    }
+    if (!aSecondary && !bSecondary) {
+      return 0;
+    }
     const labelComparison = getModelSortLabel(a).localeCompare(
       getModelSortLabel(b),
       undefined,

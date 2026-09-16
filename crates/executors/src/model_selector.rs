@@ -24,6 +24,9 @@ pub struct ModelInfo {
     /// Configurable reasoning options if supported
     #[serde(default)]
     pub reasoning_options: Vec<ReasoningOption>,
+    /// Whether this model belongs to secondary / more models section
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub is_secondary: Option<bool>,
 }
 
 /// Reasoning option (simple selectable choice).

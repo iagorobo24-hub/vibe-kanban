@@ -264,6 +264,7 @@ impl StandardCodingAgentExecutor for Droid {
                     name: name.to_string(),
                     provider_id: None,
                     reasoning_options: vec![],
+                    is_secondary: None,
                 })
                 .collect(),
                 ..Default::default()

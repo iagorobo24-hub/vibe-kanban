@@ -326,56 +326,25 @@ impl StandardCodingAgentExecutor for Codex {
 
         let options = ExecutorDiscoveredOptions {
             model_selector: ModelSelectorConfig {
-                models: vec![
-                    ModelInfo {
-                        id: "gpt-5.5".to_string(),
-                        name: "GPT-5.5".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options.clone(),
-                    },
-                    ModelInfo {
-                        id: "gpt-5.5-fast".to_string(),
-                        name: "GPT-5.5 Fast".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options.clone(),
-                    },
-                    ModelInfo {
-                        id: "gpt-5.4".to_string(),
-                        name: "GPT-5.4".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options.clone(),
-                    },
-                    ModelInfo {
-                        id: "gpt-5.4-fast".to_string(),
-                        name: "GPT-5.4 Fast".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options.clone(),
-                    },
-                    ModelInfo {
-                        id: "gpt-5.4-mini".to_string(),
-                        name: "GPT-5.4 Mini".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options.clone(),
-                    },
-                    ModelInfo {
-                        id: "gpt-5.3-codex".to_string(),
-                        name: "GPT-5.3 Codex".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options.clone(),
-                    },
-                    ModelInfo {
-                        id: "gpt-5.3-codex-spark".to_string(),
-                        name: "GPT-5.3 Codex Spark".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options.clone(),
-                    },
-                    ModelInfo {
-                        id: "gpt-5.2".to_string(),
-                        name: "GPT-5.2".to_string(),
-                        provider_id: None,
-                        reasoning_options: xhigh_reasoning_options,
-                    },
-                ],
+                models: [
+                    ("gpt-5.5", "GPT-5.5"),
+                    ("gpt-5.5-fast", "GPT-5.5 Fast"),
+                    ("gpt-5.4", "GPT-5.4"),
+                    ("gpt-5.4-fast", "GPT-5.4 Fast"),
+                    ("gpt-5.4-mini", "GPT-5.4 Mini"),
+                    ("gpt-5.3-codex", "GPT-5.3 Codex"),
+                    ("gpt-5.3-codex-spark", "GPT-5.3 Codex Spark"),
+                    ("gpt-5.2", "GPT-5.2"),
+                ]
+                .into_iter()
+                .map(|(id, name)| ModelInfo {
+                    id: id.to_string(),
+                    name: name.to_string(),
+                    provider_id: None,
+                    reasoning_options: xhigh_reasoning_options.clone(),
+                    is_secondary: None,
+                })
+                .collect(),
                 permissions: vec![
                     PermissionPolicy::Auto,
                     PermissionPolicy::Supervised,

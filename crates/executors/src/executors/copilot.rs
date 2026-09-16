@@ -222,6 +222,7 @@ impl StandardCodingAgentExecutor for Copilot {
                     name: name.to_string(),
                     provider_id: None,
                     reasoning_options: vec![],
+                    is_secondary: None,
                 })
                 .collect(),
                 permissions: vec![PermissionPolicy::Auto, PermissionPolicy::Supervised],
