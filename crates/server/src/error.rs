@@ -56,6 +56,8 @@ pub enum ApiError {
     #[error(transparent)]
     Database(#[from] sqlx::Error),
     #[error(transparent)]
+    Engram(#[from] engram::EngramError),
+    #[error(transparent)]
     Worktree(WorktreeError),
     #[error(transparent)]
     Config(#[from] ConfigError),
@@ -521,6 +523,32 @@ impl IntoResponse for ApiError {
                     ErrorInfo::with_status(StatusCode::BAD_GATEWAY, "WebRtcError", err.to_string())
                 }
                 WebRtcError::SerializeMessage(_) => ErrorInfo::internal("WebRtcError"),
+            },
+            ApiError::Engram(err) => match err {
+                engram::EngramError::GrantNotFound => {
+                    ErrorInfo::with_status(StatusCode::NOT_FOUND, "EngramError", err.to_string())
+                }
+                engram::EngramError::GrantExpired => {
+                    ErrorInfo::with_status(StatusCode::GONE, "EngramError", err.to_string())
+                }
+                engram::EngramError::GrantDenied(_) => {
+                    ErrorInfo::with_status(StatusCode::FORBIDDEN, "EngramError", err.to_string())
+                }
+                engram::EngramError::EmptyNamespace
+                | engram::EngramError::EmptyOrigin
+                | engram::EngramError::EmptyContent
+                | engram::EngramError::EmptyRecipient
+                | engram::EngramError::EmptySession
+                | engram::EngramError::EmptyProject
+                | engram::EngramError::EmptyScope
+                | engram::EngramError::EmptyPurpose
+                | engram::EngramError::EmptyGrantedBy
+                | engram::EngramError::InvalidGrantTtl => {
+                    ErrorInfo::bad_request("EngramError", err.to_string())
+                }
+                engram::EngramError::Unavailable(_) | engram::EngramError::Migration(_) => {
+                    ErrorInfo::with_status(StatusCode::SERVICE_UNAVAILABLE, "EngramError", err.to_string())
+                }
             },
         };
 

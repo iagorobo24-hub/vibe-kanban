@@ -20,6 +20,7 @@ use sqlx::{
     sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions},
 };
 use uuid::Uuid;
+use ts_rs::TS;
 
 #[derive(Debug, thiserror::Error)]
 pub enum EngramError {
@@ -58,7 +59,7 @@ pub enum EngramError {
 /// Una entrada de memoria: proyecto (namespace), origen y caducidad opcional,
 /// tal como exige el contrato en `docs/agentos/02-ARQUITECTURA.md` (sección
 /// "MemoryEntry").
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, TS)]
 pub struct MemoryEntry {
     pub id: Uuid,
     pub namespace: String,
@@ -72,7 +73,7 @@ pub struct MemoryEntry {
 /// Caducable authorization for one recipient, session, project and purpose.
 /// The grant is persisted so every read/write can be checked independently of
 /// the caller's in-memory claims.
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, TS)]
 pub struct ContextGrant {
     pub id: Uuid,
     pub recipient_id: String,
@@ -294,6 +295,40 @@ impl MemoryStore {
         Ok(result.rows_affected() > 0)
     }
 
+    /// Lists currently active (non-expired and not revoked) grants, optionally filtered
+    /// by project_id or session_id.
+    pub async fn list_active_grants(
+        &self,
+        project_id: Option<&str>,
+        session_id: Option<&str>,
+    ) -> Result<Vec<ContextGrant>, EngramError> {
+        let now = Utc::now().to_rfc3339();
+        let mut query = String::from(
+            "SELECT id, recipient_id, session_id, project_id, scope, purpose,
+                    expires_at, granted_by, created_at, revoked_at
+             FROM context_grants
+             WHERE expires_at > ? AND revoked_at IS NULL",
+        );
+        if project_id.is_some() {
+            query.push_str(" AND project_id = ?");
+        }
+        if session_id.is_some() {
+            query.push_str(" AND session_id = ?");
+        }
+        query.push_str(" ORDER BY created_at DESC");
+
+        let mut q = sqlx::query_as::<_, ContextGrantRow>(&query).bind(&now);
+        if let Some(pid) = project_id {
+            q = q.bind(pid);
+        }
+        if let Some(sid) = session_id {
+            q = q.bind(sid);
+        }
+
+        let rows = q.fetch_all(&self.pool).await?;
+        rows.into_iter().map(ContextGrant::try_from).collect()
+    }
+
     async fn authorize_grant(
         &self,
         grant_id: Uuid,
@@ -384,7 +419,7 @@ impl MemoryStore {
     /// Escribe una entrada nueva. `ttl_seconds` es opcional: `None` significa
     /// que la entrada no caduca por sí sola (sigue siendo borrable vía
     /// `forget`).
-    pub(crate) async fn write(
+    pub async fn write(
         &self,
         namespace: &str,
         origin: &str,
@@ -436,7 +471,7 @@ impl MemoryStore {
     /// Lee las entradas vigentes (no caducadas) de un namespace, más
     /// recientes primero. Otro namespace nunca aparece en el resultado —
     /// es el criterio de aislamiento del gate G5.
-    pub(crate) async fn read(
+    pub async fn read(
         &self,
         namespace: &str,
         limit: i64,

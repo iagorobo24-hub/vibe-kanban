@@ -17,6 +17,13 @@ import {
   RecordExecutionTelemetry,
   TelemetrySummaryRow,
   TelemetryListParams,
+  ContextGrant,
+  MemoryEntry,
+  CreateGrantPayload,
+  ListGrantsParams,
+  ListEntriesParams,
+  CreateEntryPayload,
+  RevokeGrantPayload,
   GitBranch,
   Repo,
   RepoWithTargetBranch,
@@ -1808,3 +1815,44 @@ export const telemetryApi = {
     return handleApiResponse<ExecutionTelemetry>(response);
   },
 };
+
+// Engram Shared Memory API (Fase 5)
+export const engramApi = {
+  createGrant: async (data: CreateGrantPayload): Promise<ContextGrant> => {
+    const response = await makeRequest('/api/engram/grants', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return handleApiResponse<ContextGrant>(response);
+  },
+  listGrants: async (params?: ListGrantsParams): Promise<ContextGrant[]> => {
+    const searchParams = new URLSearchParams();
+    if (params?.project_id) searchParams.append('project_id', params.project_id);
+    if (params?.session_id) searchParams.append('session_id', params.session_id);
+    const qs = searchParams.toString();
+    const url = `/api/engram/grants${qs ? `?${qs}` : ''}`;
+    const response = await makeRequest(url);
+    return handleApiResponse<ContextGrant[]>(response);
+  },
+  revokeGrant: async (grantId: string, payload?: RevokeGrantPayload): Promise<boolean> => {
+    const response = await makeRequest(`/api/engram/grants/${grantId}/revoke`, {
+      method: 'POST',
+      body: JSON.stringify(payload ?? {}),
+    });
+    return handleApiResponse<boolean>(response);
+  },
+  listEntries: async (params: ListEntriesParams): Promise<MemoryEntry[]> => {
+    const searchParams = new URLSearchParams({ namespace: params.namespace });
+    if (params.limit != null) searchParams.append('limit', params.limit.toString());
+    const response = await makeRequest(`/api/engram/entries?${searchParams.toString()}`);
+    return handleApiResponse<MemoryEntry[]>(response);
+  },
+  createEntry: async (data: CreateEntryPayload): Promise<MemoryEntry> => {
+    const response = await makeRequest('/api/engram/entries', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return handleApiResponse<MemoryEntry>(response);
+  },
+};
+

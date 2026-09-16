@@ -2680,6 +2680,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+ "ts-rs 11.0.1",
  "utils",
  "uuid",
 ]
@@ -8904,6 +8905,7 @@ dependencies = [
  "dotenv",
  "ed25519-dalek",
  "embedded-ssh",
+ "engram",
  "executors",
  "futures-util",
  "git",

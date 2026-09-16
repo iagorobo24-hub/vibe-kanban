@@ -12,6 +12,7 @@ pub mod containers;
 pub mod filesystem;
 // pub mod github;
 pub mod attachments;
+pub mod engram;
 pub mod events;
 pub mod execution_processes;
 pub mod frontend;
@@ -54,6 +55,7 @@ pub fn router(deployment: DeploymentImpl) -> IntoMakeService<Router> {
         .merge(releases::router())
         .merge(sessions::router(&deployment))
         .merge(telemetry::router(&deployment))
+        .nest("/engram", engram::router())
         .merge(terminal::router())
         .route("/ssh-session", get(ssh_session::ssh_session_ws))
         .nest("/remote", remote::router())

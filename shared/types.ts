@@ -430,6 +430,20 @@ export type TelemetrySummaryRow = { executor: string, model_id: string | null, t
 
 export type TelemetryListParams = { executor: string | null, task_type: string | null, real_outcome: string | null, };
 
+export type ContextGrant = { id: string, recipient_id: string, session_id: string, project_id: string, scope: string, purpose: string, expires_at: string, granted_by: string, created_at: string, };
+
+export type MemoryEntry = { id: string, namespace: string, origin: string, content: string, created_at: string, updated_at: string, expires_at: string | null, };
+
+export type CreateGrantPayload = { recipient_id: string, session_id: string, project_id: string, scope: string, purpose: string, ttl_seconds: bigint, granted_by: string, };
+
+export type ListGrantsParams = { project_id: string | null, session_id: string | null, };
+
+export type ListEntriesParams = { namespace: string, limit: bigint | null, };
+
+export type CreateEntryPayload = { namespace: string, origin: string, content: string, ttl_seconds: bigint | null, };
+
+export type RevokeGrantPayload = { revoked_by: string, };
+
 export type UpdateWorkspace = { archived: boolean | null, pinned: boolean | null, name: string | null, };
 
 export type UpdateSession = { name: string | null, };

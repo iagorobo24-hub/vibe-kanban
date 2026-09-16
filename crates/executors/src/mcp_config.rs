@@ -43,6 +43,35 @@ fn sibling_mcp_binary() -> Option<String> {
         .then(|| candidate.to_string_lossy().into_owned())
 }
 
+/// Ruta al binario `engram-mcp` que acompaña al ejecutable en marcha o en desarrollo.
+pub fn sibling_engram_binary() -> Option<String> {
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(parent) = exe.parent() {
+            let name = if cfg!(windows) {
+                "engram-mcp.exe"
+            } else {
+                "engram-mcp"
+            };
+            let candidate = parent.join(name);
+            if candidate.is_file() {
+                return Some(candidate.to_string_lossy().into_owned());
+            }
+        }
+    }
+    let fallback = if cfg!(windows) {
+        "target/debug/engram-mcp.exe"
+    } else {
+        "target/debug/engram-mcp"
+    };
+    let candidate = std::path::PathBuf::from(fallback);
+    if candidate.is_file() {
+        return std::fs::canonicalize(&candidate)
+            .ok()
+            .map(|p| p.to_string_lossy().into_owned());
+    }
+    None
+}
+
 pub static PRECONFIGURED_MCP_SERVERS: LazyLock<Value> = LazyLock::new(|| {
     let mut catalog =
         serde_json::from_str::<Value>(DEFAULT_MCP_JSON).expect("Failed to parse default MCP JSON");
@@ -55,6 +84,25 @@ pub static PRECONFIGURED_MCP_SERVERS: LazyLock<Value> = LazyLock::new(|| {
             "args": ["--mode", "global"],
         });
         tracing::debug!("MCP propio resuelto al binario local: {path}");
+    }
+
+    if let Some(path) = sibling_engram_binary() {
+        catalog["engram"] = serde_json::json!({
+            "command": path,
+            "args": ["serve"],
+        });
+        if let Some(meta) = catalog.get_mut("meta").and_then(|m| m.as_object_mut()) {
+            meta.insert(
+                "engram".to_string(),
+                serde_json::json!({
+                    "name": "Engram Memory",
+                    "description": "Shared agent memory store with explicit, scoped ContextGrants",
+                    "url": "https://github.com/iagorobo24-hub/AgentOS",
+                    "icon": "mcp/engram_logo.svg"
+                }),
+            );
+        }
+        tracing::debug!("MCP engram resuelto al binario local: {path}");
     }
 
     catalog

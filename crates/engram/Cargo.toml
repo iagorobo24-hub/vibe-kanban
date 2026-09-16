@@ -26,6 +26,7 @@ sqlx = { version = "0.8.6", features = ["runtime-tokio", "tls-rustls-aws-lc-rs",
 rmcp = { version = "1.2.0", features = ["server", "transport-io"] }
 schemars = { workspace = true }
 rustls = { workspace = true }
+ts-rs = { workspace = true }
 
 [dev-dependencies]
 tempfile = "3"
