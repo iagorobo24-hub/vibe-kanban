@@ -77,7 +77,23 @@ impl RepoService {
 
         let display_name = display_name.unwrap_or(&name);
 
-        let repo = RepoModel::find_or_create(pool, &normalized_path, display_name).await?;
+        let mut repo = RepoModel::find_or_create(pool, &normalized_path, display_name).await?;
+        if repo.setup_script.is_none() && repo.cleanup_script.is_none() {
+            let detected = super::script_detection::ScriptDetectionService::detect_scripts(&normalized_path);
+            if detected.confidence != super::script_detection::DetectionConfidence::Low {
+                let update = db::models::repo::UpdateRepo {
+                    setup_script: Some(detected.setup_script),
+                    cleanup_script: Some(detected.cleanup_script),
+                    dev_server_script: Some(detected.dev_server_script),
+                    copy_files: Some(detected.copy_files),
+                    parallel_setup_script: Some(Some(detected.parallel_setup_script)),
+                    ..Default::default()
+                };
+                if let Ok(updated) = RepoModel::update(pool, repo.id, &update).await {
+                    repo = updated;
+                }
+            }
+        }
         Ok(repo)
     }
 

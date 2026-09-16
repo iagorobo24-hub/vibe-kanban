@@ -191,3 +191,30 @@ pub async fn mark_seen(
     CodingAgentTurn::mark_seen_by_workspace_id(pool, workspace.id).await?;
     Ok(ResponseJson(ApiResponse::success(())))
 }
+
+#[axum::debug_handler]
+pub async fn run_ocr_review(
+    Extension(workspace): Extension<Workspace>,
+) -> Result<ResponseJson<ApiResponse<services::services::ocr_review::OcrReviewResult>>, ApiError> {
+    let container_ref = workspace.container_ref.as_deref().ok_or_else(|| {
+        ApiError::BadRequest("El espacio de trabajo no tiene un contenedor o worktree activo".to_string())
+    })?;
+
+    let worktree_path = std::path::Path::new(container_ref);
+    if !worktree_path.exists() {
+        return Err(ApiError::BadRequest(format!(
+            "El directorio del worktree no existe: {}",
+            container_ref
+        )));
+    }
+
+    let path_buf = worktree_path.to_path_buf();
+    let result = tokio::task::spawn_blocking(move || {
+        services::services::ocr_review::OcrReviewService::run_preview_and_rules(&path_buf)
+    })
+    .await
+    .map_err(|e| ApiError::BadRequest(format!("Error en tarea de auditoría OCR: {}", e)))?
+    .map_err(|e| ApiError::BadRequest(e.to_string()))?;
+
+    Ok(ResponseJson(ApiResponse::success(result)))
+}

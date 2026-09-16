@@ -1053,7 +1053,33 @@ pub trait ContainerService {
         // Create container
         self.create(workspace).await?;
 
-        let repos = WorkspaceRepo::find_repos_for_workspace(&self.db().pool, workspace.id).await?;
+        let mut repos = WorkspaceRepo::find_repos_for_workspace(&self.db().pool, workspace.id).await?;
+
+        // Auto-detect and configure scripts for repos lacking setup and cleanup scripts
+        for r in &mut repos {
+            if r.setup_script.is_none() && r.cleanup_script.is_none() {
+                let detected = super::script_detection::ScriptDetectionService::detect_scripts(&r.path);
+                if detected.confidence != super::script_detection::DetectionConfidence::Low {
+                    tracing::info!(
+                        repo_id = %r.id,
+                        stack = %detected.stack_description,
+                        "Auto-configured setup/cleanup scripts for repo '{}'",
+                        r.name
+                    );
+                    let update = db::models::repo::UpdateRepo {
+                        setup_script: Some(detected.setup_script.clone()),
+                        cleanup_script: Some(detected.cleanup_script.clone()),
+                        dev_server_script: Some(detected.dev_server_script.clone()),
+                        copy_files: Some(detected.copy_files.clone()),
+                        parallel_setup_script: Some(Some(detected.parallel_setup_script)),
+                        ..Default::default()
+                    };
+                    if let Ok(updated) = db::models::repo::Repo::update(&self.db().pool, r.id, &update).await {
+                        *r = updated;
+                    }
+                }
+            }
+        }
 
         let workspace = Workspace::find_by_id(&self.db().pool, workspace.id)
             .await?

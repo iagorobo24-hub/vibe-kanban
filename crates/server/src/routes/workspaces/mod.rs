@@ -31,6 +31,7 @@ pub fn router(deployment: &DeploymentImpl) -> Router<DeploymentImpl> {
         )
         .route("/messages/first", get(core::get_first_user_message))
         .route("/seen", axum::routing::put(core::mark_seen))
+        .route("/ocr-review", post(core::run_ocr_review))
         .nest("/git", git::router())
         .nest("/execution", execution::router())
         .nest("/integration", integration::router())

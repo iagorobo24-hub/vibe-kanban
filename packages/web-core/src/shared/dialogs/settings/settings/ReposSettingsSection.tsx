@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { isEqual } from 'lodash';
-import { GitBranchIcon, PlusIcon, SpinnerIcon } from '@phosphor-icons/react';
+import { GitBranchIcon, PlusIcon, SparkleIcon, SpinnerIcon } from '@phosphor-icons/react';
 import { Loader2 } from 'lucide-react';
 import { create, useModal } from '@ebay/nice-modal-react';
 import { useMachineRepoBranches } from '@/shared/hooks/useRepoBranches';
@@ -11,6 +11,7 @@ import { useAllOrganizationProjects } from '@/shared/hooks/useAllOrganizationPro
 import { getProjectRepoDefaults } from '@/shared/hooks/useProjectRepoDefaults';
 import { ApiError } from '@/shared/lib/api';
 import { defineModal } from '@/shared/lib/modals';
+import { AutoDetectScriptsDialog } from '@/shared/dialogs/scripts/AutoDetectScriptsDialog';
 import type { Repo, UpdateRepo } from 'shared/types';
 import { SearchableDropdownContainer } from '@/shared/components/ui-new/containers/SearchableDropdownContainer';
 import { FolderPickerDialog } from '@/shared/dialogs/shared/FolderPickerDialog';
@@ -627,6 +628,26 @@ export function ReposSettingsSection({
           <SettingsCard
             title={t('settings.repos.scripts.title')}
             description={t('settings.repos.scripts.description')}
+            headerAction={
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 rounded-sm bg-brand/15 px-2.5 py-1 text-xs font-semibold text-brand hover:bg-brand/25 transition-colors cursor-pointer"
+                onClick={() => {
+                  if (selectedRepoId) {
+                    void AutoDetectScriptsDialog.show({
+                      repoId: selectedRepoId,
+                      repoName: selectedRepo?.display_name || selectedRepo?.name,
+                      onApplied: () => {
+                        void queryClient.invalidateQueries({ queryKey: reposQueryKey });
+                      },
+                    });
+                  }
+                }}
+              >
+                <SparkleIcon className="size-3.5" weight="fill" />
+                Auto-detectar scripts
+              </button>
+            }
           >
             <SettingsField
               label={t('settings.repos.scripts.devServer.label')}

@@ -5,6 +5,7 @@ import {
   GitBranchIcon,
   MagnifyingGlassIcon,
   PlusIcon,
+  SparkleIcon,
   SpinnerIcon,
   XIcon,
 } from '@phosphor-icons/react';
@@ -16,6 +17,7 @@ import { cn } from '@/shared/lib/utils';
 import { useCreateMode } from '@/features/create-mode/model/useCreateMode';
 import { FolderPickerDialog } from '@/shared/dialogs/shared/FolderPickerDialog';
 import { SettingsDialog } from '@/shared/dialogs/settings/SettingsDialog';
+import { AutoDetectScriptsDialog } from '@/shared/dialogs/scripts/AutoDetectScriptsDialog';
 import { PrimaryButton } from '@vibe/ui/components/PrimaryButton';
 import { CreateRepoDialog } from '@vibe/ui/components/CreateRepoDialog';
 import {
@@ -399,32 +401,56 @@ export function CreateModeRepoPickerBar({
       {showSetupHint && (
         <div className="agentos-create-workspace__setup-hint mx-plusfifty mt-half flex items-start gap-half rounded-sm border border-brand/20 bg-brand/5 px-base py-base">
           <div className="flex-1">
-            <p className="text-sm font-medium text-normal">
-              {t('createMode.repoPicker.setupHintTitle')}
+            <p className="text-sm font-medium text-normal flex items-center gap-1.5">
+              <SparkleIcon className="size-4 text-brand" weight="fill" />
+              {t('createMode.repoPicker.setupHintTitle', 'Scripts de arranque y limpieza')}
             </p>
             <p className="mt-quarter text-sm text-low">
-              {t('createMode.repoPicker.setupHint')}
+              {t(
+                'createMode.repoPicker.setupHint',
+                'Puedes auto-detectar los scripts según el stack del proyecto o configurarlos manualmente.'
+              )}
             </p>
-            <button
-              type="button"
-              className="mt-quarter cursor-pointer rounded-sm text-sm font-medium text-brand underline hover:text-brand/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
-              onClick={() => {
-                const unconfiguredRepo = repos.find(
-                  (repo) => !repo.setup_script
-                );
-                SettingsDialog.show({
-                  initialSection: 'repos',
-                  initialState: { repoId: unconfiguredRepo?.id },
-                });
-              }}
-            >
-              {t('createMode.repoPicker.setupHintLink')}
-            </button>
+            <div className="mt-2 flex items-center gap-3">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 rounded-sm bg-brand/15 px-2.5 py-1 text-xs font-semibold text-brand hover:bg-brand/25 transition-colors cursor-pointer"
+                onClick={() => {
+                  const unconfiguredRepo = repos.find(
+                    (repo) => !repo.setup_script
+                  );
+                  if (unconfiguredRepo) {
+                    void AutoDetectScriptsDialog.show({
+                      repoId: unconfiguredRepo.id,
+                      repoName: unconfiguredRepo.display_name || unconfiguredRepo.name,
+                    });
+                  }
+                }}
+              >
+                <SparkleIcon className="size-3.5" weight="fill" />
+                Auto-detectar scripts
+              </button>
+              <button
+                type="button"
+                className="cursor-pointer text-xs font-medium text-low underline hover:text-normal"
+                onClick={() => {
+                  const unconfiguredRepo = repos.find(
+                    (repo) => !repo.setup_script
+                  );
+                  SettingsDialog.show({
+                    initialSection: 'repos',
+                    initialState: { repoId: unconfiguredRepo?.id },
+                  });
+                }}
+              >
+                {t('createMode.repoPicker.setupHintLink', 'Configurar en Ajustes')}
+              </button>
+            </div>
           </div>
           <button
             type="button"
             onClick={() => setSetupHintDismissed(true)}
-            className="shrink-0 rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand"
+            className="shrink-0 rounded-sm text-low hover:text-normal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand cursor-pointer"
             aria-label={t('createMode.repoPicker.setupHintDismiss')}
           >
             <XIcon className="size-icon-2xs" weight="bold" aria-hidden="true" />

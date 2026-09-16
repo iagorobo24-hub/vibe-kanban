@@ -208,6 +208,54 @@ export interface OrganizationBillingStatusResponse {
   } | null;
 }
 
+export interface OcrReviewableFile {
+  path: string;
+  status: string;
+  insertions: number;
+  deletions: number;
+}
+
+export interface OcrRuleGroup {
+  group_id: number;
+  pattern: string;
+  files: string[];
+  rule: string;
+}
+
+export interface OcrFinding {
+  file: string;
+  line_start?: number | null;
+  line_end?: number | null;
+  severity: string;
+  rule?: string | null;
+  message: string;
+  suggestion?: string | null;
+}
+
+export interface OcrReviewResult {
+  mode: string;
+  total_files: number;
+  total_insertions: number;
+  total_deletions: number;
+  reviewable_files: OcrReviewableFile[];
+  rule_groups: OcrRuleGroup[];
+  findings: OcrFinding[];
+  summary: string;
+}
+
+export type DetectionConfidence = 'high' | 'medium' | 'low';
+
+export interface DetectedScripts {
+  setup_script?: string | null;
+  cleanup_script?: string | null;
+  dev_server_script?: string | null;
+  copy_files?: string | null;
+  parallel_setup_script: boolean;
+  confidence: DetectionConfidence;
+  stack_description: string;
+  detection_notes: string[];
+}
+
 // Special handler for Result-returning endpoints
 const handleApiResponseAsResult = async <T, E>(
   response: Response
@@ -783,6 +831,17 @@ export const workspacesApi = {
       CreateFromPrError
     >(response);
   },
+
+  /** Run Alibaba OCR code review on the workspace worktree */
+  runOcrReview: async (workspaceId: string): Promise<OcrReviewResult> => {
+    const response = await makeRequest(
+      `/api/workspaces/${workspaceId}/ocr-review`,
+      {
+        method: 'POST',
+      }
+    );
+    return handleApiResponse<OcrReviewResult>(response);
+  },
 };
 
 // Execution Process APIs
@@ -886,6 +945,27 @@ export const repoApi = {
       method: 'POST',
       body: JSON.stringify(data),
     });
+    return handleApiResponse<Repo>(response);
+  },
+
+  detectScripts: async (repoId: string): Promise<DetectedScripts> => {
+    const response = await makeRequest(`/api/repos/${repoId}/detect-scripts`, {
+      method: 'POST',
+    });
+    return handleApiResponse<DetectedScripts>(response);
+  },
+
+  applyDetectedScripts: async (
+    repoId: string,
+    detected?: DetectedScripts | null
+  ): Promise<Repo> => {
+    const response = await makeRequest(
+      `/api/repos/${repoId}/apply-detected-scripts`,
+      {
+        method: 'POST',
+        body: JSON.stringify(detected ?? null),
+      }
+    );
     return handleApiResponse<Repo>(response);
   },
 

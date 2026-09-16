@@ -12,7 +12,10 @@ use deployment::Deployment;
 use git::{GitBranch, GitRemote};
 use git_host::{GitHostError, GitHostProvider, GitHostService, ProviderKind, PullRequestDetail};
 use serde::{Deserialize, Serialize};
-use services::services::file_search::SearchQuery;
+use services::services::{
+    file_search::SearchQuery,
+    script_detection::{DetectedScripts, ScriptDetectionService},
+};
 use ts_rs::TS;
 use utils::response::ApiResponse;
 use uuid::Uuid;
@@ -146,6 +149,72 @@ pub async fn update_repo(
 ) -> Result<ResponseJson<ApiResponse<Repo>>, ApiError> {
     let repo = Repo::update(&deployment.db().pool, repo_id, &payload).await?;
     Ok(ResponseJson(ApiResponse::success(repo)))
+}
+
+pub async fn detect_repo_scripts(
+    State(deployment): State<DeploymentImpl>,
+    Path(repo_id): Path<Uuid>,
+) -> Result<ResponseJson<ApiResponse<DetectedScripts>>, ApiError> {
+    let repo = deployment
+        .repo()
+        .get_by_id(&deployment.db().pool, repo_id)
+        .await?;
+    let detected = ScriptDetectionService::detect_scripts(&repo.path);
+    Ok(ResponseJson(ApiResponse::success(detected)))
+}
+
+pub async fn apply_detected_repo_scripts(
+    State(deployment): State<DeploymentImpl>,
+    Path(repo_id): Path<Uuid>,
+    ResponseJson(payload): ResponseJson<Option<DetectedScripts>>,
+) -> Result<ResponseJson<ApiResponse<Repo>>, ApiError> {
+    let repo = deployment
+        .repo()
+        .get_by_id(&deployment.db().pool, repo_id)
+        .await?;
+
+    let update = match payload {
+        Some(d) => UpdateRepo {
+            setup_script: Some(d.setup_script),
+            cleanup_script: Some(d.cleanup_script),
+            dev_server_script: Some(d.dev_server_script),
+            copy_files: Some(d.copy_files),
+            parallel_setup_script: Some(Some(d.parallel_setup_script)),
+            ..Default::default()
+        },
+        None => {
+            let detected = ScriptDetectionService::detect_scripts(&repo.path);
+            UpdateRepo {
+                setup_script: if repo.setup_script.is_some() {
+                    None
+                } else {
+                    Some(detected.setup_script)
+                },
+                cleanup_script: if repo.cleanup_script.is_some() {
+                    None
+                } else {
+                    Some(detected.cleanup_script)
+                },
+                dev_server_script: if repo.dev_server_script.is_some() {
+                    None
+                } else {
+                    Some(detected.dev_server_script)
+                },
+                copy_files: if repo.copy_files.is_some() {
+                    None
+                } else {
+                    Some(detected.copy_files)
+                },
+                parallel_setup_script: Some(Some(
+                    repo.parallel_setup_script || detected.parallel_setup_script,
+                )),
+                ..Default::default()
+            }
+        }
+    };
+
+    let updated = Repo::update(&deployment.db().pool, repo_id, &update).await?;
+    Ok(ResponseJson(ApiResponse::success(updated)))
 }
 
 pub async fn open_repo_in_editor(
@@ -374,6 +443,11 @@ pub fn router() -> Router<DeploymentImpl> {
         .route(
             "/repos/{repo_id}",
             get(get_repo).put(update_repo).delete(delete_repo),
+        )
+        .route("/repos/{repo_id}/detect-scripts", post(detect_repo_scripts))
+        .route(
+            "/repos/{repo_id}/apply-detected-scripts",
+            post(apply_detected_repo_scripts),
         )
         .route("/repos/{repo_id}/branches", get(get_repo_branches))
         .route("/repos/{repo_id}/remotes", get(get_repo_remotes))
