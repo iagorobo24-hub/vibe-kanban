@@ -487,7 +487,9 @@
       "clickToViewLogs": "Haz clic para ver registros",
       "completedSuccessfully": "Completado exitosamente",
       "exitCode": "Código de salida: {{code}}",
-      "running": "Ejecutando…"
+      "running": "Ejecutando…",
+      "retry": "Reintentar",
+      "retrying": "Reintentando…"
     },
     "scriptPlaceholder": {
       "setupTitle": "Script de Configuración",

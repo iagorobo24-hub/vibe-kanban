@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TerminalIcon, WrenchIcon } from '@phosphor-icons/react';
+import { ArrowClockwiseIcon, TerminalIcon, WrenchIcon } from '@phosphor-icons/react';
 import { cn } from '../lib/cn';
 import { ToolStatusDot, type ToolStatusLike } from './ToolStatusDot';
 
@@ -12,6 +12,8 @@ interface ChatScriptEntryProps {
   status: ToolStatusLike;
   onViewProcess: (processId: string) => void;
   onFix?: () => void;
+  onRetry?: () => void;
+  isRetrying?: boolean;
 }
 
 export function ChatScriptEntry({
@@ -23,6 +25,8 @@ export function ChatScriptEntry({
   status,
   onViewProcess,
   onFix,
+  onRetry,
+  isRetrying,
 }: ChatScriptEntryProps) {
   const { t } = useTranslation('tasks');
   const isRunning = status.status === 'created';
@@ -80,16 +84,42 @@ export function ChatScriptEntry({
           <span className="text-low text-xs">{getSubtitle()}</span>
         </span>
       </button>
-      {isFailed && onFix && (
-        <button
-          type="button"
-          onClick={handleFixClick}
-          className="shrink-0 flex items-center gap-1 px-2 py-1 text-xs text-brand hover:text-brand-hover hover:bg-secondary rounded transition-colors"
-          title={t('scriptFixer.fixScript')}
-        >
-          <WrenchIcon className="size-icon-xs" aria-hidden="true" />
-          <span>{t('scriptFixer.fixScript')}</span>
-        </button>
+      {isFailed && (
+        <div className="shrink-0 flex items-center gap-1.5">
+          {onRetry && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRetry();
+              }}
+              disabled={isRetrying}
+              className="flex items-center gap-1 px-2 py-1 text-xs text-brand hover:text-brand-hover hover:bg-secondary rounded transition-colors disabled:opacity-50"
+              title={t('conversation.script.retry', { defaultValue: 'Reintentar' })}
+            >
+              <ArrowClockwiseIcon
+                className={cn('size-icon-xs', isRetrying && 'animate-spin')}
+                aria-hidden="true"
+              />
+              <span>
+                {isRetrying
+                  ? t('conversation.script.retrying', { defaultValue: 'Reintentando…' })
+                  : t('conversation.script.retry', { defaultValue: 'Reintentar' })}
+              </span>
+            </button>
+          )}
+          {onFix && (
+            <button
+              type="button"
+              onClick={handleFixClick}
+              className="flex items-center gap-1 px-2 py-1 text-xs text-low hover:text-normal hover:bg-secondary rounded transition-colors"
+              title={t('scriptFixer.fixScript')}
+            >
+              <WrenchIcon className="size-icon-xs" aria-hidden="true" />
+              <span>{t('scriptFixer.fixScript')}</span>
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

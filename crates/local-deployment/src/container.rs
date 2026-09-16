@@ -45,6 +45,7 @@ use services::services::{
     config::{Config, DEFAULT_COMMIT_REMINDER_PROMPT},
     container::{ContainerError, ContainerRef, ContainerService},
     diff_stream::{self, DiffStreamHandle},
+    execution_process,
     file::FileService,
     notification::NotificationService,
     queued_message::QueuedMessageService,
@@ -609,6 +610,65 @@ impl LocalContainerService {
                         // Manually finalize task since we're bypassing normal execution flow
                         container.finalize_task(&ctx).await;
                         already_finalized = true;
+                    }
+                } else if !success
+                    && matches!(
+                        ctx.execution_process.run_reason,
+                        ExecutionProcessRunReason::SetupScript
+                    )
+                {
+                    // Auto-retry setup script once on failure (mitigates Windows Defender / transient EBUSY locks)
+                    let session_processes =
+                        ExecutionProcess::find_by_session_id(&db.pool, ctx.session.id, false)
+                            .await
+                            .unwrap_or_default();
+                    let setup_attempts = session_processes
+                        .iter()
+                        .filter(|p| matches!(p.run_reason, ExecutionProcessRunReason::SetupScript))
+                        .count();
+
+                    if setup_attempts < 2 {
+                        tracing::info!(
+                            "Setup script for session {} failed with exit code {:?}. Auto-retrying once after 2s delay (transient lock mitigation)...",
+                            ctx.session.id,
+                            exit_code
+                        );
+
+                        let code_str = exit_code
+                            .map(|c| c.to_string())
+                            .unwrap_or_else(|| "desconocido".to_string());
+                        let msg = format!(
+                            "⚠️ El script de configuración finalizó con código {}. Reintentando automáticamente en 2 segundos...\n",
+                            code_str
+                        );
+                        let log_message = LogMsg::Stderr(msg);
+                        let _ = execution_process::append_log_message(
+                            ctx.session.id,
+                            ctx.execution_process.id,
+                            &log_message,
+                        )
+                        .await;
+
+                        tokio::time::sleep(Duration::from_secs(2)).await;
+
+                        if let Ok(action) = ctx.execution_process.executor_action() {
+                            match container
+                                .start_execution(
+                                    &ctx.workspace,
+                                    &ctx.session,
+                                    &action,
+                                    &ExecutionProcessRunReason::SetupScript,
+                                )
+                                .await
+                            {
+                                Ok(_) => {
+                                    already_finalized = true;
+                                }
+                                Err(e) => {
+                                    tracing::error!("Failed to auto-retry setup script: {}", e);
+                                }
+                            }
+                        }
                     }
                 }
 

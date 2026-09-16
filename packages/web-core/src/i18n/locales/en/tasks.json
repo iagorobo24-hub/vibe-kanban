@@ -222,7 +222,9 @@
       "running": "Running…",
       "exitCode": "Exit code: {{code}}",
       "completedSuccessfully": "Completed successfully",
-      "clickToViewLogs": "Click to view logs"
+      "clickToViewLogs": "Click to view logs",
+      "retry": "Retry",
+      "retrying": "Retrying…"
     },
     "scriptPlaceholder": {
       "setupTitle": "Setup Script",

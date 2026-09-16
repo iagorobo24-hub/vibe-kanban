@@ -280,7 +280,7 @@ pub async fn run_setup_script(
         .await?;
 
     let repos = WorkspaceRepo::find_repos_for_workspace(pool, workspace.id).await?;
-    let executor_action = match deployment.container().setup_actions_for_repos(&repos) {
+    let mut executor_action = match deployment.container().setup_actions_for_repos(&repos) {
         Some(action) => action,
         None => {
             return Ok(ResponseJson(ApiResponse::error_with_data(
@@ -288,6 +288,34 @@ pub async fn run_setup_script(
             )));
         }
     };
+
+    // If no coding agent has run yet for this session, check if there was an initial coding
+    // agent prompt in a previous failed setup script, and chain it so it runs once setup succeeds.
+    let has_run_agent = ExecutionProcess::find_by_session_id(pool, session.id, false)
+        .await
+        .unwrap_or_default()
+        .iter()
+        .any(|p| matches!(p.run_reason, ExecutionProcessRunReason::CodingAgent));
+
+    if !has_run_agent {
+        if let Ok(processes) = ExecutionProcess::find_by_session_id(pool, session.id, false).await {
+            for proc in processes.iter().rev() {
+                if let Ok(action) = proc.executor_action() {
+                    let mut curr = action.next_action();
+                    while let Some(next) = curr {
+                        if matches!(next.typ(), ExecutorActionType::CodingAgentInitialRequest(_)) {
+                            executor_action = executor_action.append_action(next.clone());
+                            break;
+                        }
+                        curr = next.next_action();
+                    }
+                    if executor_action.next_action().is_some() {
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     let execution_process = deployment
         .container()

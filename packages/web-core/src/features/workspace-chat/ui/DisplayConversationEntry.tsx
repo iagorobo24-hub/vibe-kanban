@@ -26,6 +26,7 @@ import type { UseResetProcessResult } from '../model/hooks/useResetProcess';
 import { useChangesViewActions } from '@/shared/hooks/useChangesView';
 import { useLogsPanelActions } from '@/shared/hooks/useLogsPanel';
 import { cn } from '@/shared/lib/utils';
+import { sessionsApi, workspacesApi } from '@/shared/lib/api';
 import {
   ScriptFixerDialog,
   type ScriptType,
@@ -1069,23 +1070,24 @@ function ScriptEntryWithFix({
   repos: RepoWithTargetBranch[];
 }) {
   const { viewProcessInPanel } = useLogsPanelActions();
+  const [isRetrying, setIsRetrying] = useState(false);
 
   const reposRef = useRef(repos);
   reposRef.current = repos;
 
+  // Determine script type based on title
+  const scriptType: ScriptType =
+    title === 'Setup Script'
+      ? 'setup'
+      : title === 'Cleanup Script'
+        ? 'cleanup'
+        : title === 'Archive Script'
+          ? 'archive'
+          : 'dev_server';
+
   const handleFix = useCallback(() => {
     const currentRepos = reposRef.current;
     if (!workspaceId || currentRepos.length === 0) return;
-
-    // Determine script type based on title
-    const scriptType: ScriptType =
-      title === 'Setup Script'
-        ? 'setup'
-        : title === 'Cleanup Script'
-          ? 'cleanup'
-          : title === 'Archive Script'
-            ? 'archive'
-            : 'dev_server';
 
     ScriptFixerDialog.show({
       scriptType,
@@ -1094,10 +1096,33 @@ function ScriptEntryWithFix({
       sessionId,
       initialRepoId: currentRepos.length === 1 ? currentRepos[0].id : undefined,
     });
-  }, [title, workspaceId, sessionId]);
+  }, [scriptType, workspaceId, sessionId]);
+
+  const handleRetry = useCallback(async () => {
+    if (isRetrying) return;
+    setIsRetrying(true);
+    try {
+      if (scriptType === 'setup') {
+        if (sessionId) {
+          await sessionsApi.runSetupScript(sessionId);
+        } else if (workspaceId) {
+          await workspacesApi.runSetupScript(workspaceId);
+        }
+      } else if (scriptType === 'cleanup') {
+        if (workspaceId) {
+          await workspacesApi.runCleanupScript(workspaceId);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to retry script:', err);
+    } finally {
+      setIsRetrying(false);
+    }
+  }, [scriptType, sessionId, workspaceId, isRetrying]);
 
   // Only show fix button if we have the necessary context
   const canFix = workspaceId && repos.length > 0;
+  const canRetry = Boolean((workspaceId || sessionId) && (scriptType === 'setup' || scriptType === 'cleanup'));
 
   return (
     <ChatScriptEntry
@@ -1108,6 +1133,8 @@ function ScriptEntryWithFix({
       status={status}
       onViewProcess={viewProcessInPanel}
       onFix={canFix ? handleFix : undefined}
+      onRetry={canRetry ? handleRetry : undefined}
+      isRetrying={isRetrying}
     />
   );
 }
