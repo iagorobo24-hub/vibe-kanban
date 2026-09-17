@@ -448,7 +448,13 @@ export type SpeedClass = "FAST" | "STANDARD" | "SLOW";
 
 export type CapabilityTag = "TOOL_USE" | "LONG_CONTEXT" | "VISION" | "STREAMING" | "REASONING";
 
-export type ModelRoute = { id: string, provider_id: string, route_name: string, real_model_id: string, executor: BaseCodingAgent, cost_class: CostClass, speed_class: SpeedClass, capabilities: Array<CapabilityTag>, cost_per_m_in: number, cost_per_m_out: number, description: string, verified_tool_use: boolean, };
+export type ModelRoute = { id: string, provider_id: string, route_name: string, real_model_id: string, executor: BaseCodingAgent, cost_class: CostClass, speed_class: SpeedClass, capabilities: Array<CapabilityTag>, cost_per_m_in: number, cost_per_m_out: number, description: string, verified_tool_use: boolean, 
+/**
+ * `true` for previous-generation models that are still selectable but are
+ * not the default recommendation for new work. Kept in the catalog so a
+ * `WorkMode` can fall back to them explicitly, never by accident.
+ */
+is_secondary: boolean, };
 
 export type ProviderAccount = { id: string, provider_kind: ModelProviderKind, display_name: string, base_url: string | null, auth_method: string, status: string, cost_class: CostClass, routes: Array<ModelRoute>, };
 

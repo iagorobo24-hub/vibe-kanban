@@ -8,6 +8,7 @@ use async_trait::async_trait;
 use client_info::ClientInfo;
 use db::DBService;
 use deployment::{Deployment, DeploymentError, RelayHostsNotConfigured, RemoteClientNotConfigured};
+use executors::catalog::ModelProviderCatalog;
 use executors::profile::ExecutorConfigs;
 use git::GitService;
 use preview_proxy::PreviewProxyService;
@@ -30,6 +31,7 @@ use services::services::{
     queued_message::QueuedMessageService,
     remote_client::{RemoteClient, RemoteClientError},
     repo::RepoService,
+    swarm::SwarmStore,
 };
 use tokio::sync::{Notify, RwLock};
 use tokio_util::sync::CancellationToken;
@@ -79,6 +81,11 @@ pub struct LocalDeployment {
     ssh_config: Arc<russh::server::Config>,
     pty: PtyService,
     pr_sync_notify: Arc<Notify>,
+    /// Fase 6 (Routing): built once at startup and shared, so no handler
+    /// rebuilds the catalog on every request (review R1).
+    model_catalog: Arc<ModelProviderCatalog>,
+    /// Fase 7 (Swarm): in-memory store for swarm plans (review S2/S3).
+    swarm_store: SwarmStore,
 }
 
 #[derive(Debug, Clone)]
@@ -293,6 +300,8 @@ impl Deployment for LocalDeployment {
             ssh_config,
             pty,
             pr_sync_notify,
+            model_catalog: Arc::new(ModelProviderCatalog::new()),
+            swarm_store: SwarmStore::new(),
         };
 
         Ok(deployment)
@@ -484,5 +493,17 @@ impl LocalDeployment {
 
     pub fn trigger_pr_sync(&self) {
         self.pr_sync_notify.notify_one();
+    }
+
+    /// Shared model/provider catalog (Fase 6 — Routing). Built once at startup
+    /// and shared, so handlers never rebuild it per request (review R1).
+    pub fn model_catalog(&self) -> Arc<ModelProviderCatalog> {
+        self.model_catalog.clone()
+    }
+
+    /// Shared swarm plan store (Fase 7 — Swarm). In-memory, process-scoped
+    /// (review S2/S3).
+    pub fn swarm_store(&self) -> &SwarmStore {
+        &self.swarm_store
     }
 }
