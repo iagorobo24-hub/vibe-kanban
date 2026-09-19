@@ -27,7 +27,7 @@ function KeyboardShortcutsHandler() {
     () => {
       KeyboardShortcutsDialog.show();
     },
-    { scope: Scope.GLOBAL }
+    { scope: Scope.GLOBAL, useKey: true }
   );
   useWorkspaceShortcuts();
   useIssueShortcuts();

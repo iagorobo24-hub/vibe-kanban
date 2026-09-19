@@ -10,6 +10,7 @@ export interface SemanticKeyOptions {
   enableOnContentEditable?: boolean;
   enableOnFormTags?: EnableOnFormTags;
   preventDefault?: boolean;
+  useKey?: boolean;
 }
 
 type Handler = (e?: KeyboardEvent) => void;
@@ -29,6 +30,7 @@ export function createSemanticHook<A extends Action>(action: A) {
       enableOnContentEditable,
       enableOnFormTags,
       preventDefault,
+      useKey,
     } = options;
 
     // Use 'when' as alias for 'enabled' if provided
@@ -55,6 +57,7 @@ export function createSemanticHook<A extends Action>(action: A) {
         enableOnContentEditable,
         enableOnFormTags,
         preventDefault,
+        useKey,
         scopes: scope ? [scope] : ['*'],
       },
       [
@@ -63,6 +66,7 @@ export function createSemanticHook<A extends Action>(action: A) {
         enableOnContentEditable,
         enableOnFormTags,
         preventDefault,
+        useKey,
         handler,
         isEnabled,
       ]

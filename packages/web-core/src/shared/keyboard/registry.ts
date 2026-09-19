@@ -457,7 +457,7 @@ export const keyBindings: KeyBinding[] = [
   // Global actions
   {
     action: Action.SHOW_HELP,
-    keys: 'shift+slash',
+    keys: '?',
     scopes: [Scope.GLOBAL],
     description: 'Show keyboard shortcuts help',
     group: 'Global',
