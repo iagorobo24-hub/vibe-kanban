@@ -77,8 +77,10 @@ vibe-kanban-*.tgz
 
 # Development ports file
 .dev-ports.json
+.sandbox-ports.json
 
 dev_assets
+sandbox_assets
 /packages/web/.env.sentry-build-plugin
 .ssh
 
