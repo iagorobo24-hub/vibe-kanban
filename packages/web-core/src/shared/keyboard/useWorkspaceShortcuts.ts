@@ -79,4 +79,5 @@ export function useWorkspaceShortcuts() {
 
   useHotkeys('r>s', () => execute(Actions.RunSetupScript), OPTIONS);
   useHotkeys('r>c', () => execute(Actions.RunCleanupScript), OPTIONS);
+  useHotkeys('r>a', () => execute(Actions.RunArchiveScript), OPTIONS);
 }
