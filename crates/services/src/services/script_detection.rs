@@ -75,6 +75,10 @@ impl ScriptDetectionService {
         // 1. Detect copy_files (.env.example / .env.sample)
         let copy_files = Self::detect_copy_files(repo_path, &mut notes);
 
+        // 1b. Detect env example for inline copy (copy_files has no backend
+        // consumer, so the setup script must do the copy itself).
+        let env_copy = Self::detect_env_copy(repo_path, &mut notes);
+
         // 2. Detect language stacks
         let node_info = Self::detect_node(repo_path, &mut notes);
         let rust_info = Self::detect_rust(repo_path, &mut notes);
@@ -113,6 +117,9 @@ impl ScriptDetectionService {
             stacks.push(Box::leak(node_label.into_boxed_str()));
 
             setup_lines.push(node.install_cmd);
+            if let Some(env) = &env_copy {
+                setup_lines.push(env.clone());
+            }
             if let Some(cleanup) = node.cleanup_cmd {
                 cleanup_lines.push(cleanup);
             }
@@ -157,7 +164,10 @@ impl ScriptDetectionService {
         let setup_script = if setup_lines.is_empty() {
             None
         } else {
-            Some(setup_lines.join("\n"))
+            // Single cmd-safe line: setup runs as `cmd /C`, where `&&`
+            // chains preserve real exit codes. Steps carry their own
+            // `if not exist` guards so retries never fight a previous run.
+            Some(setup_lines.join(" && "))
         };
 
         let cleanup_script = if cleanup_lines.is_empty() {
@@ -201,6 +211,20 @@ impl ScriptDetectionService {
         }
     }
 
+    /// Inline env copy for the setup script itself (`copy_files` is stored
+    /// for the UI but has no backend consumer).
+    fn detect_env_copy(repo_path: &Path, notes: &mut Vec<String>) -> Option<String> {
+        let example = if repo_path.join(".env.example").is_file() {
+            ".env.example"
+        } else if repo_path.join(".env.sample").is_file() {
+            ".env.sample"
+        } else {
+            return None;
+        };
+        notes.push(format!("Detectado {example}; copia inline con guard en setup"));
+        Some(format!("if not exist .env copy {example} .env"))
+    }
+
     fn detect_node(repo_path: &Path, notes: &mut Vec<String>) -> Option<NodeInfo> {
         let pkg_path = repo_path.join("package.json");
         if !pkg_path.is_file() {
@@ -221,6 +245,28 @@ impl ScriptDetectionService {
             "npm"
         };
 
+        // Frozen installs for reproducible fresh worktrees; guarded so
+        // retries never reinstall over a previous run (lock contention).
+        let has_lockfile = repo_path.join("pnpm-lock.yaml").exists()
+            || repo_path.join("yarn.lock").exists()
+            || repo_path.join("bun.lockb").exists()
+            || repo_path.join("bun.lock").exists()
+            || repo_path.join("package-lock.json").exists();
+        let raw_install = match package_manager {
+            "pnpm" if has_lockfile => "pnpm install --frozen-lockfile",
+            "pnpm" => "pnpm install",
+            "yarn" if has_lockfile => "yarn install --frozen-lockfile",
+            "yarn" => "yarn install",
+            "bun" if has_lockfile => "bun install --frozen-lockfile",
+            "bun" => "bun install",
+            _ if has_lockfile => "npm ci",
+            _ => "npm install",
+        };
+        if has_lockfile {
+            notes.push("Detectado lockfile; instalación frozen reproducible".to_string());
+        }
+        let install_cmd = format!("if not exist node_modules {raw_install}");
+
         let is_typescript = repo_path.join("tsconfig.json").is_file();
         let is_monorepo = repo_path.join("turbo.json").is_file()
             || repo_path.join("pnpm-workspace.yaml").is_file()
@@ -229,13 +275,6 @@ impl ScriptDetectionService {
         if is_monorepo {
             notes.push("Detectado monorepo Node.js".to_string());
         }
-
-        let install_cmd = match package_manager {
-            "pnpm" => "pnpm install".to_string(),
-            "yarn" => "yarn install".to_string(),
-            "bun" => "bun install".to_string(),
-            _ => "npm install".to_string(),
-        };
 
         let mut dev_cmd = None;
         let mut cleanup_cmd = None;
@@ -445,7 +484,10 @@ mod tests {
 
         let result = ScriptDetectionService::detect_scripts(dir.path());
         assert_eq!(result.confidence, DetectionConfidence::High);
-        assert_eq!(result.setup_script, Some("pnpm install".to_string()));
+        assert_eq!(
+            result.setup_script,
+            Some("if not exist node_modules pnpm install --frozen-lockfile".to_string())
+        );
         assert_eq!(result.dev_server_script, Some("pnpm dev".to_string()));
         assert_eq!(
             result.cleanup_script,
@@ -508,6 +550,42 @@ edition = "2024"
             result.cleanup_script,
             Some("ruff format . && ruff check --fix .".to_string())
         );
+    }
+
+    #[test]
+    fn test_npm_ci_with_lockfile_and_env_copy() {
+        let dir = tempdir().unwrap();
+        fs::write(dir.path().join("package.json"), r#"{"name": "test"}"#).unwrap();
+        fs::write(dir.path().join("package-lock.json"), "{}").unwrap();
+        fs::write(dir.path().join(".env.example"), "PORT=3000").unwrap();
+
+        let result = ScriptDetectionService::detect_scripts(dir.path());
+        assert_eq!(result.confidence, DetectionConfidence::High);
+        assert_eq!(
+            result.setup_script,
+            Some(
+                "if not exist node_modules npm ci && if not exist .env copy .env.example .env"
+                    .to_string()
+            )
+        );
+        assert_eq!(result.copy_files, Some(".env".to_string()));
+    }
+
+    #[test]
+    fn test_setup_script_is_single_cmd_line() {
+        let dir = tempdir().unwrap();
+        fs::write(dir.path().join("Cargo.toml"), "[package]\nname = \"test\"").unwrap();
+        fs::write(
+            dir.path().join("package.json"),
+            r#"{"name": "test", "scripts": {"lint:fix": "eslint --fix ."}}"#,
+        )
+        .unwrap();
+
+        let result = ScriptDetectionService::detect_scripts(dir.path());
+        let setup = result.setup_script.unwrap();
+        assert!(!setup.contains('\n'), "setup must be a single cmd line");
+        assert!(setup.contains("cargo build"));
+        assert!(setup.contains("if not exist node_modules"));
     }
 
     #[test]

@@ -382,6 +382,11 @@ fn generate_mock_logs(prompt: &str) -> Vec<String> {
             session_id: Some(session_id),
             model_usage: None,
             usage: None,
+            // The mock costs nothing and says so explicitly. `Some(0.0)` rather
+            // than `None` on purpose: the Claude log parser falls back to
+            // `model_usage` when this is `None`, and the mock has no model
+            // usage to report. A declared zero is the honest value.
+            total_cost_usd: Some(0.0),
         },
     ];
 
@@ -449,6 +454,32 @@ mod tests {
             }
         } else {
             panic!("Expected Assistant variant");
+        }
+    }
+
+    /// The mock must *declare* a zero cost rather than omit the field.
+    ///
+    /// `ClaudeJson::Result.total_cost_usd` is `Option<f64>` and the log parser
+    /// falls back to `model_usage` when it is `None`. The mock reports no model
+    /// usage, so `None` would leave the cost undetermined; `Some(0.0)` states
+    /// the truth — a QA run spends nothing.
+    ///
+    /// This test only compiles under `--features qa-mode`. That is precisely
+    /// how the field addition that broke this file went unnoticed: nothing in
+    /// the default feature set compiles `qa_mock.rs` at all.
+    #[test]
+    fn the_mock_declares_a_zero_cost_instead_of_omitting_it() {
+        let logs = generate_mock_logs("test prompt");
+        let last: ClaudeJson =
+            serde_json::from_str(logs.last().expect("el mock emite logs")).unwrap();
+
+        match last {
+            ClaudeJson::Result { total_cost_usd, .. } => assert_eq!(
+                total_cost_usd,
+                Some(0.0),
+                "el mock debe declarar coste cero explícito, no omitirlo"
+            ),
+            other => panic!("el último log del mock debe ser un Result, fue {other:?}"),
         }
     }
 }

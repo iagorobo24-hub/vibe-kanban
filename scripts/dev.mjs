@@ -42,11 +42,15 @@ const children = [
     cwd: repoRoot,
     env,
     stdio: "inherit",
+    // Windows: .cmd shims (pnpm.cmd) only spawn with a shell.
+    shell: isWindows,
   }),
   spawn(packageManager, ["run", "local-web:dev"], {
     cwd: repoRoot,
     env,
     stdio: "inherit",
+    // Windows: .cmd shims (pnpm.cmd) only spawn with a shell.
+    shell: isWindows,
   }),
 ];
 

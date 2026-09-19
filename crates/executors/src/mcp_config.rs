@@ -484,7 +484,8 @@ impl CodingAgent {
             CodingAgent::ClaudeCode(_)
             | CodingAgent::Amp(_)
             | CodingAgent::Droid(_)
-            | CodingAgent::Antigravity(_) => Passthrough,
+            | CodingAgent::Antigravity(_)
+            | CodingAgent::Freebuff(_) => Passthrough,
             CodingAgent::QwenCode(_) | CodingAgent::Gemini(_) => Gemini,
             CodingAgent::CursorAgent(_) => Cursor,
             CodingAgent::Codex(_) => Codex,

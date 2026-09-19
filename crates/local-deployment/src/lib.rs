@@ -270,6 +270,12 @@ impl Deployment for LocalDeployment {
             PrMonitorService::spawn(db, analytics, container, rc, pr_sync_notify.clone()).await;
         }
 
+        // Built before the struct literal because `db` is moved into it below,
+        // and the swarm store needs the pool. ADR-017 required this migration
+        // as soon as the swarm started executing real subtasks: a plan lost on
+        // restart would leave a live process with nothing to explain it.
+        let swarm_store = SwarmStore::new(db.pool.clone());
+
         let deployment = Self {
             config,
             user_id,
@@ -301,7 +307,7 @@ impl Deployment for LocalDeployment {
             pty,
             pr_sync_notify,
             model_catalog: Arc::new(ModelProviderCatalog::new()),
-            swarm_store: SwarmStore::new(),
+            swarm_store,
         };
 
         Ok(deployment)

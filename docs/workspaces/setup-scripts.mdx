@@ -1,0 +1,51 @@
+---
+title: "Repository Setup Scripts"
+description: "Format rules for per-repository setup scripts run before agent sessions"
+---
+
+Each repository can define a **setup script** that runs once in a fresh worktree before the coding agent starts. A red setup step blocks the session, so the script must be correct and idempotent.
+
+## Execution environment (Windows)
+
+- The script runs as `cmd /C "<script>"` — **CMD syntax, not PowerShell, not Bash**.
+- Working directory is the **repository worktree itself** (e.g. `.../worktrees/<session>/tirada`), not its parent. Do **not** `cd` into the repo by name.
+- `stdout`/`stderr` are captured; any non-zero exit code fails the step. The server auto-retries once after 2s, then stops.
+
+## Format rules
+
+1. **No `cd <repo-name>`**. You are already inside the repo. (A `cd` into a non-existent subfolder fails with "The system cannot find the path specified".)
+2. **Prefer flat `&&` chains**. Avoid nested parentheses and quoted sub-commands where possible — they parse differently across shells and hide failures.
+3. **Guard expensive steps** so retries are fast and never fight a previous run:
+   `if not exist node_modules npm ci`
+4. **Guard file creation** the same way:
+   `if not exist .env.local copy .env.example .env.local`
+5. **Preserve real exit codes**. Do not append `& exit 0` to mask failures; a green step with a broken install only moves the failure into the agent turn.
+
+## Copy-paste templates
+
+Node + optional env file:
+
+```bat
+if not exist node_modules npm ci && if not exist .env.local copy .env.example .env.local
+```
+
+Python:
+
+```bat
+if not exist .venv python -m venv .venv && .venv\Scripts\pip install -r requirements.txt
+```
+
+## Auto-detection (`detect-scripts`)
+
+When a repository has no scripts yet, the server proposes them automatically via `ScriptDetectionService` (`POST /repos/{id}/detect-scripts`, applied with `/apply-detected-scripts`). Detection is heuristic static analysis, not an LLM: lockfiles, manifests and env examples decide the output. Guarantees of generated setup scripts:
+
+- Frozen installs when a lockfile exists (`npm ci`, `pnpm install --frozen-lockfile`, …).
+- Every install step guarded (`if not exist node_modules …`) so retries never reinstall over a live run.
+- Single `&&`-chained `cmd` line (no embedded newlines), real exit codes preserved.
+- `.env.example`/`.env.sample` inlined as `if not exist .env copy …` (`copy_files` is stored for the UI but has no backend consumer, so the copy must live in the script).
+
+Review the proposal before applying — detection cannot know custom bootstrap steps (codegen, native toolchains, auth).
+
+- **Exit 1 with no output**: run the exact line manually with `cmd /C "..."` from the worktree. `npm ci` failing under the server but passing in your terminal usually means a transient file lock (Defender/antivirus) — the guarded form above makes the retry cheap.
+- **"The system cannot find the path specified"**: the script `cd`s somewhere that does not exist relative to the worktree.
+- Scripts start as manual per-repository configuration or as reviewed `detect-scripts` proposals. Keep them minimal — environment bootstrap only, never task logic.

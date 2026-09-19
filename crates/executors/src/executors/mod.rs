@@ -23,7 +23,8 @@ use crate::{
     env::ExecutionEnv,
     executors::{
         amp::Amp, antigravity::Antigravity, claude::ClaudeCode, codex::Codex, copilot::Copilot,
-        cursor::CursorAgent, droid::Droid, gemini::Gemini, opencode::Opencode, qwen::QwenCode,
+        cursor::CursorAgent, droid::Droid, freebuff::Freebuff, gemini::Gemini, opencode::Opencode,
+        qwen::QwenCode,
     },
     logs::utils::patch,
     mcp_config::McpConfig,
@@ -38,6 +39,7 @@ pub mod codex;
 pub mod copilot;
 pub mod cursor;
 pub mod droid;
+pub mod freebuff;
 pub mod gemini;
 pub mod opencode;
 #[cfg(feature = "qa-mode")]
@@ -111,6 +113,7 @@ pub enum CodingAgent {
     ClaudeCode,
     Amp,
     Antigravity,
+    Freebuff,
     Gemini,
     Codex,
     Opencode,
@@ -161,6 +164,14 @@ impl CodingAgent {
                 self.preconfigured_mcp(),
                 false,
             ),
+            Self::Freebuff(_) => McpConfig::new(
+                vec!["mcpServers".to_string()],
+                serde_json::json!({
+                    "mcpServers": {}
+                }),
+                self.preconfigured_mcp(),
+                false,
+            ),
             _ => McpConfig::new(
                 vec!["mcpServers".to_string()],
                 serde_json::json!({
@@ -183,6 +194,10 @@ impl CodingAgent {
                 BaseAgentCapability::ContextUsage,
             ],
             Self::Opencode(_) => vec![
+                BaseAgentCapability::SessionFork,
+                BaseAgentCapability::ContextUsage,
+            ],
+            Self::Freebuff(_) => vec![
                 BaseAgentCapability::SessionFork,
                 BaseAgentCapability::ContextUsage,
             ],

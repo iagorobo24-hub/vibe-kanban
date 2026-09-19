@@ -474,9 +474,32 @@ export type SwarmPlanStatus = "DRAFT" | "APPROVED" | "EXECUTING" | "COMPLETED" |
 
 export type SwarmGoal = { goal_id: string, title: string, description: string, project_id: string | null, repo_id: string, target_branch: string, work_mode_id: string | null, max_budget_usd: number | null, };
 
-export type SwarmSubTask = { id: string, title: string, description: string, role: string, dependencies: Array<string>, recommended_executor: BaseCodingAgent, recommended_model: string, estimated_cost_usd: number, explanation: string, status: SwarmSubTaskStatus, workspace_id: string | null, execution_process_id: string | null, result_summary: string | null, };
+export type SwarmSubTask = { id: string, title: string, description: string, role: string, dependencies: Array<string>, recommended_executor: BaseCodingAgent, recommended_model: string, estimated_cost_usd: number, explanation: string, status: SwarmSubTaskStatus, workspace_id: string | null, execution_process_id: string | null, result_summary: string | null, 
+/**
+ * When the real `ExecutionProcess` backing this subtask started. `None`
+ * until it actually runs — never invented from the plan's creation time.
+ */
+started_at: string | null, 
+/**
+ * When that process reached a terminal state.
+ */
+completed_at: string | null, 
+/**
+ * Why the subtask is not a clean success. Always present for `Failed`,
+ * including when the process was killed rather than genuinely failing.
+ */
+failure_reason: string | null, };
 
-export type SwarmPlan = { goal: SwarmGoal, subtasks: Array<SwarmSubTask>, total_estimated_cost_usd: number, status: SwarmPlanStatus, created_at: string, };
+export type SwarmPlan = { goal: SwarmGoal, subtasks: Array<SwarmSubTask>, total_estimated_cost_usd: number, status: SwarmPlanStatus, created_at: string, 
+/**
+ * The single worktree every subtask of this goal runs in.
+ *
+ * One workspace per goal, not per subtask: the subtasks of a goal are a
+ * dependency chain over the same branch, and the consolidation report
+ * already advertises a single `unified_branch`. `None` until the plan is
+ * first executed.
+ */
+workspace_id: string | null, };
 
 export type ConsolidationReport = { goal_id: string, total_subtasks: number, completed_subtasks: number, failed_subtasks: number, total_cost_usd: number, total_duration_ms: bigint, unified_branch: string, summary: string, requires_human_approval: boolean, };
 
@@ -635,9 +658,9 @@ working_dir: string | null, };
 
 export type ScriptRequestLanguage = "Bash";
 
-export enum BaseCodingAgent { CLAUDE_CODE = "CLAUDE_CODE", AMP = "AMP", ANTIGRAVITY = "ANTIGRAVITY", GEMINI = "GEMINI", CODEX = "CODEX", OPENCODE = "OPENCODE", CURSOR_AGENT = "CURSOR_AGENT", QWEN_CODE = "QWEN_CODE", COPILOT = "COPILOT", DROID = "DROID" }
+export enum BaseCodingAgent { CLAUDE_CODE = "CLAUDE_CODE", AMP = "AMP", ANTIGRAVITY = "ANTIGRAVITY", FREEBUFF = "FREEBUFF", GEMINI = "GEMINI", CODEX = "CODEX", OPENCODE = "OPENCODE", CURSOR_AGENT = "CURSOR_AGENT", QWEN_CODE = "QWEN_CODE", COPILOT = "COPILOT", DROID = "DROID" }
 
-export type CodingAgent = { "CLAUDE_CODE": ClaudeCode } | { "AMP": Amp } | { "ANTIGRAVITY": Antigravity } | { "GEMINI": Gemini } | { "CODEX": Codex } | { "OPENCODE": Opencode } | { "CURSOR_AGENT": CursorAgent } | { "QWEN_CODE": QwenCode } | { "COPILOT": Copilot } | { "DROID": Droid };
+export type CodingAgent = { "CLAUDE_CODE": ClaudeCode } | { "AMP": Amp } | { "ANTIGRAVITY": Antigravity } | { "FREEBUFF": Freebuff } | { "GEMINI": Gemini } | { "CODEX": Codex } | { "OPENCODE": Opencode } | { "CURSOR_AGENT": CursorAgent } | { "QWEN_CODE": QwenCode } | { "COPILOT": Copilot } | { "DROID": Droid };
 
 export type SlashCommandDescription = { 
 /**
@@ -677,7 +700,7 @@ models?: Array<string>,
  */
 reasoning_by_model?: { [key in string]?: string }, };
 
-export type ExecutorProfile = { recently_used_models?: ExecutorRecentModels | null, } & ({ [key in string]?: { "CLAUDE_CODE": ClaudeCode } | { "AMP": Amp } | { "ANTIGRAVITY": Antigravity } | { "GEMINI": Gemini } | { "CODEX": Codex } | { "OPENCODE": Opencode } | { "CURSOR_AGENT": CursorAgent } | { "QWEN_CODE": QwenCode } | { "COPILOT": Copilot } | { "DROID": Droid } });
+export type ExecutorProfile = { recently_used_models?: ExecutorRecentModels | null, } & ({ [key in string]?: { "CLAUDE_CODE": ClaudeCode } | { "AMP": Amp } | { "ANTIGRAVITY": Antigravity } | { "FREEBUFF": Freebuff } | { "GEMINI": Gemini } | { "CODEX": Codex } | { "OPENCODE": Opencode } | { "CURSOR_AGENT": CursorAgent } | { "QWEN_CODE": QwenCode } | { "COPILOT": Copilot } | { "DROID": Droid } });
 
 export type ExecutorConfigs = { executors: { [key in BaseCodingAgent]?: ExecutorProfile }, };
 
@@ -688,6 +711,13 @@ export type ClaudeEffort = "low" | "medium" | "high" | "xhigh" | "max";
 export type ClaudeCode = { append_prompt: AppendPrompt, claude_code_router?: boolean | null, plan?: boolean | null, approvals?: boolean | null, model?: string | null, effort?: ClaudeEffort | null, agent?: string | null, dangerously_skip_permissions?: boolean | null, disable_api_key?: boolean | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
 
 export type Gemini = { append_prompt: AppendPrompt, model?: string | null, yolo?: boolean | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
+
+export type Freebuff = { append_prompt: AppendPrompt, 
+/**
+ * Model id used to steer the TUI model picker (e.g. `glm-5-3-flash`).
+ * The CLI accepts no `--model` flag; `None` keeps the TUI default.
+ */
+model?: string | null, permission_policy?: PermissionPolicy | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
 
 export type Amp = { append_prompt: AppendPrompt, dangerously_allow_all?: boolean | null, base_command_override?: string | null, additional_params?: Array<string> | null, env?: { [key in string]?: string } | null, };
 

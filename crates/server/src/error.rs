@@ -23,6 +23,7 @@ use services::services::{
     file::FileError,
     remote_client::RemoteClientError,
     repo::RepoError as RepoServiceError,
+    swarm::SwarmStoreError,
 };
 use thiserror::Error;
 use trusted_key_auth::error::TrustedKeyAuthError;
@@ -55,6 +56,8 @@ pub enum ApiError {
     Executor(#[from] ExecutorError),
     #[error(transparent)]
     Database(#[from] sqlx::Error),
+    #[error(transparent)]
+    SwarmStore(#[from] SwarmStoreError),
     #[error(transparent)]
     Engram(#[from] engram::EngramError),
     #[error(transparent)]
@@ -505,6 +508,10 @@ impl IntoResponse for ApiError {
             ApiError::Executor(_) => ErrorInfo::internal("ExecutorError"),
             ApiError::CommandBuilder(_) => ErrorInfo::internal("CommandBuildError"),
             ApiError::Database(_) => ErrorInfo::internal("DatabaseError"),
+            // A swarm-store failure means either the database refused the write
+            // or a stored plan no longer decodes. Both are server-side
+            // integrity problems, never something the caller did wrong.
+            ApiError::SwarmStore(_) => ErrorInfo::internal("SwarmStoreError"),
             ApiError::Worktree(err) => ErrorInfo::with_status(
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "WorktreeError",
