@@ -18,6 +18,7 @@ export const Pages: Record<StaticPageId, CommandBarPage> = {
           { type: 'action', action: Actions.CopyWorkspacePath },
           { type: 'action', action: Actions.CopyRawLogs },
           { type: 'action', action: Actions.ToggleDevServer },
+          { type: 'action', action: Actions.OpenDesignStudio },
 
           { type: 'childPages', id: 'workspaceActions' },
           { type: 'childPages', id: 'repoActions' },
@@ -60,6 +61,7 @@ export const Pages: Record<StaticPageId, CommandBarPage> = {
         label: 'Workspace',
         items: [
           { type: 'action', action: Actions.StartReview },
+          { type: 'action', action: Actions.OpenDesignStudio },
           { type: 'action', action: Actions.RenameWorkspace },
           { type: 'action', action: Actions.DuplicateWorkspace },
           { type: 'action', action: Actions.SpinOffWorkspace },

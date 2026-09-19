@@ -759,6 +759,24 @@ export type DroidReasoningEffort = "none" | "dynamic" | "off" | "low" | "medium"
 
 export type AppendPrompt = string | null;
 
+export type UIStyleInfo = { name: string, keywords: string | null, best_for: string | null, performance: string | null, accessibility: string | null, };
+
+export type ColorPaletteInfo = { primary: string, secondary: string, cta: string, background: string, text: string, notes: string | null, };
+
+export type TypographyInfo = { heading: string, body: string, mood: string | null, best_for: string | null, google_fonts: string | null, css_import: string | null, };
+
+export type ChecklistItem = { rule: string, passed: boolean, };
+
+export type DesignSystemTokens = { project_name: string, pattern_name: string | null, style: UIStyleInfo, colors: ColorPaletteInfo, typography: TypographyInfo, key_effects: string | null, avoid_anti_patterns: Array<string>, checklist: Array<ChecklistItem>, raw_markdown: string, };
+
+export type GenerateDesignSystemRequest = { prompt: string, project_name: string | null, stack: string | null, };
+
+export type DesignViolation = { file: string, line: number | null, rule: string, message: string, };
+
+export type AuditDesignSystemResult = { compliant: boolean, total_violations: number, violations: Array<DesignViolation>, };
+
+export type SaveDesignSystemBody = { content: string, };
+
 export type CodingAgentInitialRequest = { prompt: string, 
 /**
  * Unified executor identity + overrides

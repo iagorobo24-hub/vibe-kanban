@@ -118,6 +118,10 @@ import {
   OpenRemoteWorkspaceInEditorRequest,
   OpenRemoteEditorResponse,
   ProfileResponse,
+  DesignSystemTokens,
+  GenerateDesignSystemRequest,
+  AuditDesignSystemResult,
+  SaveDesignSystemBody,
 } from 'shared/types';
 import type { Project as RemoteProject } from 'shared/remote-types';
 import type { WorkspaceWithSession } from '@/shared/types/attempt';
@@ -1899,6 +1903,38 @@ export const swarmApi = {
       method: 'POST',
     });
     return handleApiResponse<ConsolidationReport>(response);
+  },
+};
+
+
+export const designApi = {
+  get: async (workspaceId: string): Promise<DesignSystemTokens | null> => {
+    const response = await makeRequest(`/api/workspaces/${workspaceId}/design-system`);
+    return handleApiResponse<DesignSystemTokens | null>(response);
+  },
+  save: async (workspaceId: string, content: string): Promise<DesignSystemTokens> => {
+    const body: SaveDesignSystemBody = { content };
+    const response = await makeRequest(`/api/workspaces/${workspaceId}/design-system`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    });
+    return handleApiResponse<DesignSystemTokens>(response);
+  },
+  generate: async (
+    workspaceId: string,
+    data: GenerateDesignSystemRequest
+  ): Promise<DesignSystemTokens> => {
+    const response = await makeRequest(`/api/workspaces/${workspaceId}/design-system/generate`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return handleApiResponse<DesignSystemTokens>(response);
+  },
+  audit: async (workspaceId: string): Promise<AuditDesignSystemResult> => {
+    const response = await makeRequest(`/api/workspaces/${workspaceId}/design-system/audit`, {
+      method: 'POST',
+    });
+    return handleApiResponse<AuditDesignSystemResult>(response);
   },
 };
 

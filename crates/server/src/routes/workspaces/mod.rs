@@ -3,6 +3,7 @@ pub mod codex_setup;
 pub mod core;
 pub mod create;
 pub mod cursor_setup;
+pub mod design;
 pub mod execution;
 pub mod gh_cli_setup;
 pub mod git;
@@ -33,6 +34,7 @@ pub fn router(deployment: &DeploymentImpl) -> Router<DeploymentImpl> {
         .route("/seen", axum::routing::put(core::mark_seen))
         .route("/ocr-review", post(core::run_ocr_review))
         .nest("/git", git::router())
+        .nest("/design-system", design::router())
         .nest("/execution", execution::router())
         .nest("/integration", integration::router())
         .nest("/repos", repos::router())

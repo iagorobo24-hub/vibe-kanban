@@ -625,7 +625,8 @@
       "collapseAllDiffs": "Collapse all diffs",
       "expandAllDiffs": "Expand all diffs",
       "startDevServer": "Start dev server",
-      "stopDevServer": "Stop dev server"
+      "stopDevServer": "Stop dev server",
+      "openDesignStudio": "Open Design Studio"
     }
   },
   "guide": {

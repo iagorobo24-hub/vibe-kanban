@@ -31,6 +31,7 @@ import {
   ArrowsClockwiseIcon,
   CrosshairIcon,
   DesktopIcon,
+  PaletteIcon,
   PencilSimpleIcon,
   ArrowUpIcon,
   HighlighterIcon,
@@ -69,6 +70,7 @@ import { CreatePRDialog } from '@/shared/dialogs/command-bar/CreatePRDialog';
 import { getIdeName } from '@/shared/lib/ideName';
 import { EditorSelectionDialog } from '@/shared/dialogs/command-bar/EditorSelectionDialog';
 import { StartReviewDialog } from '@/shared/dialogs/command-bar/StartReviewDialog';
+import { DesignStudioDialog } from '@/shared/dialogs/design/DesignStudioDialog';
 import posthog from 'posthog-js';
 import { WorkspacesGuideDialog } from '@/shared/dialogs/shared/WorkspacesGuideDialog';
 import { SettingsDialog } from '@/shared/dialogs/settings/SettingsDialog';
@@ -760,6 +762,24 @@ export const Actions = {
           RIGHT_MAIN_PANEL_MODES.PREVIEW,
           ctx.currentWorkspaceId ?? undefined
         );
+    },
+  },
+
+  OpenDesignStudio: {
+    id: 'open-design-studio',
+    label: 'Design Studio',
+    translationKey: 'commandBar.actions.openDesignStudio',
+    icon: PaletteIcon,
+    shortcut: 'V D',
+    requiresTarget: ActionTargetType.NONE,
+    isVisible: (ctx) => ctx.hasWorkspace,
+    getTooltip: () => 'Open Design Studio',
+    execute: async (ctx) => {
+      const workspaceId = ctx.currentWorkspaceId;
+      if (!workspaceId) return;
+      await DesignStudioDialog.show({
+        workspaceId,
+      });
     },
   },
 
@@ -1633,6 +1653,7 @@ export const NavbarActionGroups = {
     Actions.ToggleChangesMode,
     Actions.ToggleLogsMode,
     Actions.TogglePreviewMode,
+    Actions.OpenDesignStudio,
     Actions.ToggleRightSidebar,
     NavbarDivider,
     Actions.OpenCommandBar,
@@ -1650,5 +1671,6 @@ export const ContextBarActionGroups = {
     Actions.ToggleDevServer,
     Actions.TogglePreviewMode,
     Actions.ToggleChangesMode,
+    Actions.OpenDesignStudio,
   ] as ActionDefinition[],
 };

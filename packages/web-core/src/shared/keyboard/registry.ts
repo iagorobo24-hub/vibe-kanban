@@ -148,6 +148,14 @@ export const sequentialBindings: SequentialBinding[] = [
     actionId: 'toggle-preview-mode',
   },
   {
+    id: 'seq-view-design',
+    keys: ['v', 'd'],
+    scopes: [Scope.WORKSPACE],
+    description: 'Open Design Studio',
+    group: 'View',
+    actionId: 'open-design-studio',
+  },
+  {
     id: 'seq-view-sidebar',
     keys: ['v', 's'],
     description: 'Toggle Left Sidebar',

@@ -553,7 +553,8 @@
       "collapseAllDiffs": "Contraer todas las diferencias",
       "expandAllDiffs": "Expandir todas las diferencias",
       "startDevServer": "Iniciar servidor de desarrollo",
-      "stopDevServer": "Detener servidor de desarrollo"
+      "stopDevServer": "Detener servidor de desarrollo",
+      "openDesignStudio": "Abrir Design Studio"
     }
   },
   "guide": {
