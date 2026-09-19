@@ -97,7 +97,7 @@ function useShortcutGroups(): ShortcutGroup[] {
         binding.scopes?.includes(Scope.WORKSPACE) ?? false;
 
       sequentialByFirstKey.get(firstKey)!.push({
-        keys: formatSequentialKeys(binding.keys),
+        keys: binding.keys.map((k) => k.toUpperCase()),
         description: t(
           `shortcuts.actions.${binding.actionId}`,
           binding.description
@@ -151,22 +151,24 @@ function ShortcutRow({ item }: { item: ShortcutItem }) {
   const keysArray = Array.isArray(item.keys) ? item.keys : [item.keys];
 
   return (
-    <div className="flex items-center justify-between py-1">
-      <span className="text-normal text-sm flex items-center gap-1">
-        {item.description}
+    <div className="flex items-center justify-between gap-3 py-1.5">
+      <div className="min-w-0 flex-1 text-normal text-sm flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+        <span>{item.description}</span>
         {item.hasScope && (
-          <span className="text-low text-xs">{t('shortcuts.inWorkspace')}</span>
+          <span className="text-low text-xs shrink-0">
+            {t('shortcuts.inWorkspace')}
+          </span>
         )}
         {item.useHintKey && (
           <Tooltip content={t('shortcuts.configurableHint')} side="top">
             <GearIcon
-              className="size-icon-xs text-low cursor-help"
+              className="size-icon-xs text-low cursor-help shrink-0"
               aria-hidden="true"
             />
           </Tooltip>
         )}
-      </span>
-      <div className="flex items-center gap-1">
+      </div>
+      <div className="flex items-center gap-1 shrink-0">
         {keysArray.map((key, i) => (
           <kbd
             key={i}
@@ -174,7 +176,7 @@ function ShortcutRow({ item }: { item: ShortcutItem }) {
               'inline-flex items-center justify-center',
               'min-w-[24px] h-6 px-1.5',
               'rounded-sm border border-border bg-secondary',
-              'font-ibm-plex-mono text-xs text-high'
+              'font-ibm-plex-mono text-xs text-high whitespace-nowrap select-none shrink-0'
             )}
           >
             {key}
@@ -247,7 +249,7 @@ const KeyboardShortcutsDialogImpl = create<NoProps>(() => {
         <div
           ref={dialogRef}
           className={cn(
-            'agentos-dialog-content w-[calc(100vw-2rem)] max-w-[700px] max-h-[calc(100dvh-2rem)]',
+            'agentos-dialog-content w-[calc(100vw-2rem)] max-w-[760px] max-h-[calc(100dvh-2rem)]',
             'bg-panel/95 backdrop-blur-sm rounded-sm border border-border/50 shadow-lg',
             'animate-in fade-in-0 slide-in-from-bottom-4 duration-200',
             'flex flex-col overflow-hidden'
